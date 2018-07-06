@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+<!--
+  ~ Copyright (c) 2016,2017, tfk All Rights Reserved. 深圳市天定康科技有限公司 版权所有.
+  -->
+
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping default-access="field" default-cascade="all" >
+    <class name="com.tfk.ts.domain.model.school.staff.Position" abstract="true" lazy="true" dynamic-update="false" >
+        <id name="uuid" type="java.lang.String" column="id" unsaved-value="-1">
+            <generator class="uuid" />
+        </id>
+        <component name="schoolId" class="com.tfk.ts.domain.model.school.SchoolId">
+            <property name="id" column="schoolId" type="java.lang.String"/>
+        </component>
+        <component name="period" class="com.tfk.ts.domain.model.school.common.Period">
+            <property name="starts" column="periodStarts" type="java.util.Date"/>
+            <property name="ends" column="periodEnds" type="java.util.Date"/>
+        </component>
+        <property name="name" column="name" type="java.lang.String"/>
+        <property name="identity" column="identity" type="java.lang.String"/>
+
+        <union-subclass name="com.tfk.ts.domain.model.school.staff.Teacher" table="ts_teacher">
+            <component name="course" class="com.tfk.ts.domain.model.school.Course">
+                <property name="name" column="courseName" type="java.lang.String"/>
+                <property name="subjectId" column="subjectId" type="java.lang.String"/>
+            </component>
+        </union-subclass>
+        <union-subclass name="com.tfk.ts.domain.model.school.staff.ClazzMaster" table="ts_clazz_master">
+            <component name="clazzId" class="com.tfk.ts.domain.model.school.clazz.ClazzId">
+                <property name="id" column="clazzId" type="java.lang.String"/>
+            </component>
+        </union-subclass>
+        <union-subclass name="com.tfk.ts.domain.model.school.staff.ClazzTeacher" table="ts_clazz_teacher">
+            <component name="clazzId" class="com.tfk.ts.domain.model.school.clazz.ClazzId">
+                <property name="id" column="clazzId" type="java.lang.String"/>
+            </component>
+            <component name="teacher" class="com.tfk.ts.domain.model.school.staff.Teacher">
+                <component name="course" class="com.tfk.ts.domain.model.school.Course">
+                    <property name="name" column="subjectName" type="java.lang.String"/>
+                    <property name="subjectId" column="subjectId" type="java.lang.String"/>
+                </component>
+            </component>
+        </union-subclass>
+        <union-subclass name="com.tfk.ts.domain.model.school.staff.HeadMaster" table="ts_leader">
+            <property name="post" column="post" type="java.lang.String"/>
+        </union-subclass>
+        <union-subclass name="com.tfk.ts.domain.model.school.staff.TeachingMaster" table="ts_leader">
+            <property name="positionName" column="post" type="java.lang.String"/>
+        </union-subclass>
+        <union-subclass name="com.tfk.ts.domain.model.school.staff.GradeMaster" table="ts_grade_master">
+            <component name="grade" class="com.tfk.ts.domain.model.school.Grade">
+                <property name="name" column="gradeName" type="java.lang.String"/>
+                <property name="seq" column="gradeSeq" >
+                    <type name="com.tfk.commons.port.adapter.persistence.hibernate.FieldEnumType">
+                        <param name="enumClass">com.tfk.ts.domain.model.school.GradeLevel</param>
+                        <param name="field">seq</param>
+                    </type>
+                </property>
+                <component name="year" class="com.tfk.ts.domain.model.school.StudyYear">
+                    <property name="name" column="yearName" type="java.lang.String"/>
+                    <property name="startsYear" column="yearStarts" type="java.lang.Integer"/>
+                    <property name="endsYear" column="yearEnds" type="java.lang.Integer"/>
+                </component>
+            </component>
+        </union-subclass>
+        <union-subclass name="com.tfk.ts.domain.model.school.staff.SubjectMaster" table="ts_subject_master">
+            <property name="subjectName" column="subjectName" type="java.lang.String"/>
+            <property name="subjectId" column="subjectId" type="java.lang.String"/>
+        </union-subclass>
+    </class>
+</hibernate-mapping>

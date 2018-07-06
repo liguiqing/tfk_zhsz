@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping default-access="field" default-cascade="all" >
+    <class name="com.tfk.ts.domain.model.school.staff.Staff" table="ts_staff" lazy="true" dynamic-update="false">
+        <id name="id" type="long" column="id" unsaved-value="-1">
+            <generator class="native" />
+        </id>
+        <component name="schoolId" class="com.tfk.ts.domain.model.school.SchoolId">
+            <property name="id" column="schoolId" type="java.lang.String"/>
+        </component>
+
+        <component name="staffId" class="com.tfk.ts.domain.model.school.staff.StaffId">
+            <property name="id" column="staffId" type="java.lang.String"/>
+        </component>
+
+        <property name="name" column="name" type="java.lang.String"/>
+        <property name="gender" column="gender" >
+            <type name="com.tfk.commons.port.adapter.persistence.hibernate.FieldEnumType">
+                <param name="enumClass">com.tfk.ts.domain.model.school.common.Gender</param>
+                <param name="field">name</param>
+            </type>
+        </property>
+
+        <set name="identity"  cascade="all" fetch="join" lazy="true" order-by="id">
+            <key column="staffId" property-ref="staffId" update="false"/>
+            <one-to-many class="com.tfk.ts.domain.model.school.staff.StaffIdentity"/>
+        </set>
+
+        <component name="period" class="com.tfk.ts.domain.model.school.common.Period">
+            <property name="starts" column="periodStarts" type="java.util.Date"/>
+            <property name="ends" column="periodEnds" type="java.util.Date"/>
+        </component>
+
+        <set name="positions" cascade="all"  fetch="join" lazy="true">
+            <key column="identity" property-ref="staffId" update="false"/>
+            <one-to-many class="com.tfk.ts.domain.model.school.staff.Position"/>
+        </set>
+
+    </class>
+
+
+    <class name="com.tfk.ts.domain.model.school.staff.StaffIdentity" table="ts_staff_identity" lazy="true">
+        <id name="id" type="long" column="id" unsaved-value="-1">
+            <generator class="identity" />
+        </id>
+        <component name="entityId" class="com.tfk.ts.domain.model.school.staff.StaffId">
+            <property name="id" column="staffId" type="java.lang.String"/>
+        </component>
+        <property name="value" column="identity" type="java.lang.String"/>
+        <property name="type" column="identityTypeName" >
+            <type name="com.tfk.commons.port.adapter.persistence.hibernate.FieldEnumType">
+                <param name="enumClass">com.tfk.ts.domain.model.school.common.IdentityType</param>
+                <param name="field">name</param>
+            </type>
+        </property>
+
+        <component name="validity" class="com.tfk.ts.domain.model.school.common.Period">
+            <property name="starts" column="validityStarts" type="java.util.Date"/>
+            <property name="ends" column="validityEnds" type="java.util.Date"/>
+        </component>
+    </class>
+</hibernate-mapping>

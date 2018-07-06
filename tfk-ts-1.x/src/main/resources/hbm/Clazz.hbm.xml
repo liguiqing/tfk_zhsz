@@ -1,0 +1,91 @@
+<?xml version="1.0"?>
+<!--
+  ~ Copyright (c) 2016,2017, tfk All Rights Reserved. 深圳市天定康科技有限公司 版权所有.
+  -->
+
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping default-access="field" default-cascade="all" >
+    <class name="com.tfk.ts.domain.model.school.clazz.Clazz" abstract="true" table="ts_clazz" lazy="true" dynamic-update="false">
+        <id name="id" type="long" column="id" unsaved-value="-1">
+            <generator class="native" />
+        </id>
+        <!-- 设置鉴别器，column：在数据库中的列。根据该列的值判断是什么类型 -->
+        <discriminator column="adminType" type="string"></discriminator>
+        <component name="schoolId" class="com.tfk.ts.domain.model.school.SchoolId">
+            <property name="id" column="schoolId" type="java.lang.String"/>
+        </component>
+        <component name="clazzId" class="com.tfk.ts.domain.model.school.clazz.ClazzId">
+            <property name="id" column="clazzId" type="java.lang.String"/>
+        </component>
+        <property name="name" column="name" type="java.lang.String" />
+        <property name="clazzNo" column="clazzNo" type="java.lang.String"/>
+        <property name="createDate" column="createDate" type="java.lang.String"/>
+        <set name="catagories"  cascade="all" fetch="join" lazy="true" order-by="id">
+            <key column="clazzId" property-ref="clazzId" update="false"/>
+            <one-to-many class="com.tfk.ts.domain.model.school.clazz.ClazzCatagory"/>
+        </set>
+        <set name="histories"  cascade="all" fetch="join" lazy="true" order-by="id">
+            <key column="clazzId" property-ref="clazzId" update="false"/>
+            <one-to-many class="com.tfk.ts.domain.model.school.clazz.ClazzHistory"/>
+        </set>
+
+        <subclass name="com.tfk.ts.domain.model.school.clazz.AdminClazz" discriminator-value="Admin" />
+        <subclass name="com.tfk.ts.domain.model.school.clazz.TeachClazz" discriminator-value="Teach"/>
+        <subclass name="com.tfk.ts.domain.model.school.clazz.MixtureClazz" discriminator-value="Mixture"/>
+    </class>
+
+    <class name="com.tfk.ts.domain.model.school.clazz.ClazzCatagory" table="ts_clazz_catagory" lazy="true" dynamic-update="false">
+        <id name="id" type="long" column="id" unsaved-value="-1">
+            <generator class="identity" />
+        </id>
+        <component name="clazzId" class="com.tfk.ts.domain.model.school.clazz.ClazzId" >
+            <property name="id" column="clazzId" type="java.lang.String"/>
+        </component>
+        <property name="code" column="code" type="java.lang.String" />
+        <property name="name" column="name" type="java.lang.String"/>
+    </class>
+
+    <class name="com.tfk.ts.domain.model.school.clazz.ClazzHistory" table="ts_clazz_term_history" lazy="true" dynamic-update="false">
+        <id name="id" type="long" column="id" unsaved-value="-1">
+            <generator class="identity" />
+        </id>
+        <component name="clazzId" class="com.tfk.ts.domain.model.school.clazz.ClazzId" >
+            <property name="id" column="clazzId" type="java.lang.String"/>
+        </component>
+        <component name="termId" class="com.tfk.ts.domain.model.school.term.TermId">
+            <property name="id" column="termId" type="java.lang.String"/>
+        </component>
+        <property name="termOrder" column="termName" >
+            <type name="org.hibernate.type.EnumType">
+                <param name="enumClass">com.tfk.ts.domain.model.school.term.TermOrder</param>
+                <param name="usedName">true</param>
+            </type>
+        </property>
+        <component name="period" class="com.tfk.ts.domain.model.school.common.Period">
+            <property name="starts" column="starts" type="java.util.Date"/>
+            <property name="ends" column="ends" type="java.util.Date"/>
+        </component>
+        <component name="grade" class="com.tfk.ts.domain.model.school.Grade">
+            <property name="name" column="gradeName" type="java.lang.String"/>
+            <property name="seq" column="gradeSeq" >
+                <type name="com.tfk.commons.port.adapter.persistence.hibernate.FieldEnumType">
+                    <param name="enumClass">com.tfk.ts.domain.model.school.GradeLevel</param>
+                    <param name="field">seq</param>
+                </type>
+            </property>
+            <component name="year" class="com.tfk.ts.domain.model.school.StudyYear">
+                <property name="name" column="yearName" type="java.lang.String"/>
+                <property name="startsYear" column="yearStarts" type="java.lang.Integer"/>
+                <property name="endsYear" column="yearEnds" type="java.lang.Integer"/>
+            </component>
+        </component>
+        <property name="wl" column="wl" >
+            <type name="org.hibernate.type.EnumType">
+                <param name="enumClass">com.tfk.ts.domain.model.school.common.WLType</param>
+                <param name="field">value</param>
+            </type>
+        </property>
+    </class>
+
+</hibernate-mapping>
