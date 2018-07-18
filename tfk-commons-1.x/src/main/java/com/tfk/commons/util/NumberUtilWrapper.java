@@ -60,13 +60,13 @@ public class NumberUtilWrapper {
      *
      * @param x
      * @param y
-     * @return
+     * @return [x...y]
      */
     public static long randomBetween(long x,long y){
-        long rtn = x + (long) (Math.random() * (y - x));
-        if (rtn == x || rtn == y) {
-            return randomBetween(x, y);
-        }
+        if(x == y)
+            return x;
+
+        long rtn = x + (long) (Math.ceil((Math.random() * (y - x))));
         return rtn;
     }
 
@@ -75,13 +75,13 @@ public class NumberUtilWrapper {
      *
      * @param x
      * @param y
-     * @return
+     * @return [x...y]
      */
     public static int randomBetween(int x,int y){
-        int rtn = x + (int) (Math.random() * (y - x));
-        if (rtn == x || rtn == y) {
-            return randomBetween(x, y);
-        }
+        if(x == y)
+            return x;
+
+        int rtn = x + (int)(Math.ceil((Math.random() * (y - x))));
         return rtn;
     }
 
@@ -90,13 +90,13 @@ public class NumberUtilWrapper {
      *
      * @param x
      * @param y
-     * @return
+     * @return [x...y]
      */
     public static float randomBetween(float x,float y){
-        float rtn = x + (float) (Math.random() * (y - x));
-        if (rtn == x || rtn == y) {
-            return randomBetween(x, y);
-        }
+        if(x == y)
+            return x;
+
+        float rtn = x + (float) (Math.random() * (y - x + 1));
         return rtn;
     }
     /**
@@ -104,14 +104,45 @@ public class NumberUtilWrapper {
      *
      * @param x
      * @param y
-     * @return
+     * @return [x...y]
      */
     public static double randomBetween(double x,double y){
-        double rtn = x + (double) (Math.random() * (y - x));
-        if (rtn == x || rtn == y) {
-            return randomBetween(x, y);
+        if(x == y)
+            return x;
+        double rtn = x + (double) (Math.random() * (y - x + 1));
+        return rtn;
+    }
+
+    /**
+     * 生产两Number类型数据间的随机数
+     *
+     * @param x
+     * @param y
+     * @param leftOpened
+     * @param rightOpend
+     * @return leftOpened=true and rightOpend=false->[x...y];leftOpened=false and rightOpend=false ->(x...y)
+     * otherwise (x...y] or [x...y)
+     */
+    public  static Number randomBetween(Number x,Number y,boolean leftOpened,boolean rightOpend){
+        if(x.equals(y))
+            return x;
+
+        double rtn = x.doubleValue() + (double) (Math.random() * (x.doubleValue() - y.doubleValue() +1 ));
+        if (leftOpened) {
+            if(rtn == x.doubleValue())
+                return rtn;
+            else
+                return randomBetween(x, y,leftOpened,rightOpend);
+        }
+
+        if (rightOpend) {
+            if(rtn == y.doubleValue())
+                return rtn;
+            else
+                return randomBetween(x, y,leftOpened,rightOpend);
         }
         return rtn;
     }
+
 
 }
