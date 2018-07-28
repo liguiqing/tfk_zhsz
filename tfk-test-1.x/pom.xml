@@ -6,10 +6,10 @@
 	<parent>
 		<groupId>tfk</groupId>
 		<artifactId>tfk</artifactId>
-		<version>3.0.0-SNAPSHOT</version>
+		<version>1.0.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>tfk.test</artifactId>
+	<artifactId>tfk-test</artifactId>
 	<packaging>jar</packaging>
 
 	<name>Testing</name>

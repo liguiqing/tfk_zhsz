@@ -6,24 +6,22 @@
     <parent>
         <groupId>tfk</groupId>
         <artifactId>tfk</artifactId>
-        <version>3.0.0-SNAPSHOT</version>
+        <version>1.0.0-SNAPSHOT</version>
     </parent>
-    <artifactId>tfk.share</artifactId>
+    <artifactId>tfk-share</artifactId>
     <packaging>jar</packaging>
     <name>Domain Share</name>
     <url>http://maven.apache.org</url>
-    <properties>
-        <tfk.version>3.0.0-SNAPSHOT</tfk.version>
-    </properties>
+
     <dependencies>
         <dependency>
             <groupId>tfk</groupId>
-            <artifactId>tfk.test</artifactId>
+            <artifactId>tfk-test</artifactId>
             <version>${tfk.version}</version>
         </dependency>
         <dependency>
             <groupId>tfk</groupId>
-            <artifactId>tfk.commons</artifactId>
+            <artifactId>tfk-commons</artifactId>
             <version>${tfk.version}</version>
         </dependency>
 

@@ -15,27 +15,12 @@ package com.tfk.share.domain.id;
  */
 
 public class IdPrefixes {
+    //个人唯一标识
     public static final String PersonIdPrefix = "PER";
 
-    public static final String ExamIdPrefix = "EXA";
+    //学校唯一标识
+    public static final String SchoolIdPrefix = "SCH";
 
-    public static final String ProjectIdPrefix = "PRO";
-
-    public static final String TargetOrgIdPrefix = "TAO";
-
-    public static final String BatchScanIdPrefix = "BAS";
-
-    public static final String SheetScanIdPrefix = "SHS";
-
-    public static final String AnswerSheetIdPrefix = "ANS";
-
-    public static final String PaperIdPrefix = "PAP";
-
-    public static final String SubjectIdPrefix = "SUB";
-
-    public static final String MarkItemIdPrefix = "MIT";
-
-    public static final String MarkerIdPrefix = "Mar";
-
-    public static final String MarkerTeamIdPrefix = "MTE";
+    //班级唯一标识
+    public static final String ClazzIdPrefix = "CLA";
 }
