@@ -1,5 +1,7 @@
 package com.tfk.share.domain.person;
 
+import com.tfk.commons.domain.ValueObject;
+
 /**
  * 人的证件
  *
@@ -7,7 +9,7 @@ package com.tfk.share.domain.person;
  * @since V3.0
  */
 
-public class Credentials {
+public class Credentials extends ValueObject {
 
 
 }

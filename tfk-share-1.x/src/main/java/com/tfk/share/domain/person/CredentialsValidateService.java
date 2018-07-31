@@ -9,5 +9,5 @@ package com.tfk.share.domain.person;
 
 public interface CredentialsValidateService {
 
-
+    boolean validate(Credentials credentials);
 }
