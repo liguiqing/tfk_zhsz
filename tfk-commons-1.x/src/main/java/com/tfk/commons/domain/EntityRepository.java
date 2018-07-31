@@ -4,6 +4,10 @@
 
 package com.tfk.commons.domain;
 
+
+import org.springframework.data.repository.NoRepositoryBean;
+import org.springframework.data.repository.Repository;
+
 /**
  * 实体仓储
  *
@@ -11,10 +15,10 @@ package com.tfk.commons.domain;
  * @since V3.0
  */
 
-public interface EntityRepository<E extends Entity,ID extends AbstractId> {
-    public ID nextIdentity();
+@NoRepositoryBean
+public interface EntityRepository<T extends IdentifiedDomainObject,ID extends AbstractId> extends Repository<T,ID> {
+    ID nextIdentity();
 
-    public E loadOfId(ID id);
+    void save(T t);
 
-    public void save(E e);
 }
