@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c) 2016,2017, easytnt All Rights Reserved. 深圳市易考试乐学测评有限公司 版权所有.
+  -->
+
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:cache="http://www.springframework.org/schema/cache"
+       xmlns:task="http://www.springframework.org/schema/task"
+       xmlns:repository="http://www.springframework.org/schema/data/repository"
+       xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop
+		http://www.springframework.org/schema/aop/spring-aop.xsd
+       	http://www.springframework.org/schema/cache
+       	http://www.springframework.org/schema/cache/spring-cache.xsd
+       	http://www.springframework.org/schema/data/jpa
+       	http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
+       	http://www.springframework.org/schema/data/repository
+       	http://www.springframework.org/schema/data/repository/spring-repository.xsd
+       	http://www.springframework.org/schema/task
+        http://www.springframework.org/schema/task/spring-task.xsd">
+
+    <jpa:repositories base-package="com.tfk.sm.domain.model.**.*" >
+        <repository:include-filter type="annotation" expression="org.springframework.stereotype.Repository" />
+    </jpa:repositories>
+</beans>

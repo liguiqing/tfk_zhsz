@@ -17,6 +17,8 @@ import com.tfk.share.domain.school.StudyYear;
  */
 
 public class Study extends ValueObject {
+
+
     private PersonId studentId;
 
     private ClazzId clazzId;

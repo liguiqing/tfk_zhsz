@@ -89,12 +89,12 @@
 		<appender-ref ref='ASYNC' />
 	</logger>
 
-	<logger name="com.ez" additivity="false">
+	<logger name="com.tfk" additivity="false">
 		<level value="${logger.com.ez}" />
 		<appender-ref ref="ASYNC" />
 	</logger>
 
-	<logger name="com.ez.exception" additivity="false">
+	<logger name="com.tfk.exception" additivity="false">
 		<level value="${logger.com.ez.exception}" />
 		<appender-ref ref="ASYNC" />
 	</logger>

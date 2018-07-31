@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping/hibernate-mapping-3.0.dtd">
+<hibernate-mapping default-access="field" default-cascade="all" >
+    <class name="com.tfk.sm.domain.model.school.School" table="sm_school" lazy="true" dynamic-update="false">
+        <id name="id" type="long" column="id" unsaved-value="-1">
+            <generator class="native" />
+        </id>
+        <component name="schoolId" class="com.tfk.share.domain.id.school.SchoolId">
+            <property name="id" column="schoolId" type="java.lang.String"/>
+        </component>
+        <component name="tenantId" class="com.tfk.share.domain.id.identityaccess.TenantId">
+            <property name="id" column="tenantId" type="java.lang.String"/>
+        </component>
+        <property name="name" column="name" type="java.lang.String"/>
+        <property name="alias" column="alias" type="java.lang.String"/>
+        <property name="scope" column="scope" >
+            <type name="org.hibernate.type.EnumType">
+                <param name="enumClass">com.tfk.share.domain.school.SchoolScope</param>
+                <param name="useNamed">true</param>
+            </type>
+        </property>
+    </class>
+</hibernate-mapping>

@@ -1,5 +1,6 @@
 package com.tfk.sm.domain.model.clazz;
 
+import com.tfk.commons.domain.IdentifiedDomainObject;
 import com.tfk.commons.domain.ValueObject;
 import com.tfk.share.domain.id.school.ClazzId;
 import com.tfk.share.domain.school.Grade;
@@ -12,7 +13,7 @@ import com.tfk.share.domain.school.StudyYear;
  * @since V3.0
  */
 
-public class ClazzHistory extends ValueObject {
+public class ClazzHistory extends IdentifiedDomainObject {
     private ClazzId clazzId;
 
     private Grade grade;

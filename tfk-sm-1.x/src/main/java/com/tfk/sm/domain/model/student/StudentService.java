@@ -2,12 +2,11 @@ package com.tfk.sm.domain.model.student;
 
 import com.tfk.commons.AssertionConcerns;
 import com.tfk.share.domain.common.Period;
-import com.tfk.share.domain.id.school.ClazzId;
 import com.tfk.share.domain.school.Course;
 import com.tfk.share.domain.school.Grade;
 import com.tfk.share.domain.school.StudyYear;
 import com.tfk.sm.domain.model.clazz.Clazz;
-import com.tfk.sm.domain.model.clazz.ClazzRepository;
+import com.tfk.sm.domain.model.clazz.LearningClazzRepository;
 import com.tfk.sm.domain.model.school.School;
 import com.tfk.sm.domain.model.school.SchoolRepository;
 
@@ -22,14 +21,14 @@ import java.util.List;
 
 public class StudentService {
 
-    private ClazzRepository clazzRepository;
+    private LearningClazzRepository learningClazzRepository;
 
     private StudentRepository studentRepository;
 
     private SchoolRepository schoolRepository;
 
-    public StudentService(ClazzRepository clazzRepository, StudentRepository studentRepository, SchoolRepository schoolRepository) {
-        this.clazzRepository = clazzRepository;
+    public StudentService(LearningClazzRepository learningClazzRepository, StudentRepository studentRepository, SchoolRepository schoolRepository) {
+        this.learningClazzRepository = learningClazzRepository;
         this.studentRepository = studentRepository;
         this.schoolRepository = schoolRepository;
     }
@@ -38,11 +37,11 @@ public class StudentService {
 
         AssertionConcerns.assertArgumentFalse(clazz.canBeStudyAt(),"行政班不能学习课程");
 
-        List<Course> studiedCourses = clazzRepository.findCanBeStudedCourses(clazz.clazzId());
+        List<Course> studiedCourses = null;//clazzRepository.findCanBeStudedCourses(clazz.clazzId());
         boolean canStudyHere = studiedCourses.contains(course);
         AssertionConcerns.assertArgumentFalse(canStudyHere,"班级目前未开能此课程:"+course.name());
 
-        School school = schoolRepository.loadOfId(clazz.schoolId());
+        School school = schoolRepository.loadOf(clazz.schoolId());
 
         Period period = school.getThisTermStartsAndEnds();
         Grade grade = clazz.currentGrade();
@@ -58,7 +57,7 @@ public class StudentService {
     public ManagedClazz managedAt(Clazz clazz, Student student){
         AssertionConcerns.assertArgumentFalse(clazz.canBeManagedAt(),"教学班不能管理学生");
 
-        School school = schoolRepository.loadOfId(clazz.schoolId());
+        School school = schoolRepository.loadOf(clazz.schoolId());
 
         Period period = school.getThisTermStartsAndEnds();
         Grade grade = clazz.currentGrade();

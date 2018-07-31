@@ -11,5 +11,4 @@ import com.tfk.share.domain.person.Person;
 
 public class Student extends Person {
 
-
 }
