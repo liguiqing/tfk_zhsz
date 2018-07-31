@@ -3,7 +3,7 @@
  * 
  **/
 
-package com.ez.test.controller;
+package com.tfk.test.controller;
 
 import org.junit.After;
 import org.junit.Before;

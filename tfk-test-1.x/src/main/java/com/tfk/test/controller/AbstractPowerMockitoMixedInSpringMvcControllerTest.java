@@ -2,7 +2,7 @@
  * <p><b>© 2016 深圳市天定康科技有限公司</b></p>
  * 
  **/
-package com.ez.test.controller;
+package com.tfk.test.controller;
 
 import org.junit.Before;
 import org.junit.runner.RunWith;

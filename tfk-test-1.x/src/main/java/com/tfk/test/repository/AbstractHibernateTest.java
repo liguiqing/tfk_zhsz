@@ -1,4 +1,4 @@
-package com.ez.test.repository;
+package com.tfk.test.repository;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
