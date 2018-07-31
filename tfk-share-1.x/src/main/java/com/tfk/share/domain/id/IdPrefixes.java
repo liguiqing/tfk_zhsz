@@ -23,4 +23,28 @@ public class IdPrefixes {
 
     //班级唯一标识
     public static final String ClazzIdPrefix = "CLA";
+
+    //教师唯一标识
+    public static final String TeacherIdPrefix = "TEA";
+
+    //教师管理经历唯一标识
+    public static final String ClazzManagementIdPrefix = "CMA";
+
+    //教师教学经历唯一标识
+    public static final String ClazzTeachingIdPrefix = "CTE";
+
+    //学生唯一标识
+    public static final String StudentIdPrefix = "STU";
+
+    //学生学习经历唯一标识
+    public static final String StudyIdPrefix = "STD";
+
+    //学生受管经历唯一标识
+    public static final String ManagedIdPrefix = "MAN";
+
+    //家长唯一标识
+    public static final String ParentIdPrefix = "PAR";
+
+    //客户唯一标识
+    public static final String TenantIdPrefix = "TEN";
 }

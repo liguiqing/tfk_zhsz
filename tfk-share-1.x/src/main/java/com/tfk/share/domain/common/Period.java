@@ -34,6 +34,14 @@ public class Period {
     }
 
 
+    public Period newPeriodSameStarts(Date ends){
+        return new Period(this.starts, ends);
+    }
+
+    public Period newPeriodSameEnds(Date starts){
+        return new Period(starts, this.ends);
+    }
+
     public Date starts() {
         return starts;
     }

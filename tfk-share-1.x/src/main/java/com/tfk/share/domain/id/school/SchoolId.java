@@ -22,7 +22,7 @@ public class SchoolId extends AbstractId {
         super(id);
     }
 
-    protected  SchoolId(){
+    public  SchoolId(){
         super(Identities.genIdNone(SchoolIdPrefix));
     }
 }
