@@ -46,10 +46,10 @@
 			<artifactId>spring-data-jpa</artifactId>
 		</dependency>
 
-
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
+			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
@@ -136,10 +136,7 @@
 			<groupId>commons-collections</groupId>
 			<artifactId>commons-collections</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>javax.servlet-api</artifactId>
-		</dependency>
+
 		<dependency>
 		  <groupId>com.jayway.jsonpath</groupId>
 		  <artifactId>json-path</artifactId>
