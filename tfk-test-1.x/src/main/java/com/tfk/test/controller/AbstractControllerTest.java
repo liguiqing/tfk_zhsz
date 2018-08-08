@@ -5,6 +5,7 @@
 
 package com.tfk.test.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.After;
 import org.junit.Before;
 import org.mockito.MockitoAnnotations;
@@ -42,6 +43,12 @@ public abstract class AbstractControllerTest extends AbstractJUnit4SpringContext
 	@After
 	public void after() throws Exception{
 		
+	}
+
+	protected String toJsonString(Object o)throws Exception{
+		ObjectMapper mapper = new ObjectMapper();
+		String content = mapper.writeValueAsString(o);
+		return content;
 	}
 }
 
