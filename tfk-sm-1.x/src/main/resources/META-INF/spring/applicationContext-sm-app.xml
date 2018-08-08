@@ -26,4 +26,35 @@
     <jpa:repositories base-package="com.tfk.sm.domain.model.**.*" >
         <repository:include-filter type="annotation" expression="org.springframework.stereotype.Repository" />
     </jpa:repositories>
+    <bean id="SMContactValidations" class="com.tfk.share.infrastructure.validate.contact.ContactValidations">
+        <constructor-arg index="0">
+            <list >
+                <bean class="com.tfk.share.infrastructure.validate.contact.EmailValidator"></bean>
+                <bean class="com.tfk.share.infrastructure.validate.contact.MobileValidator"></bean>
+                <bean class="com.tfk.share.infrastructure.validate.contact.PhoneValidator"></bean>
+                <bean class="com.tfk.share.infrastructure.validate.contact.QQValidator"></bean>
+                <bean class="com.tfk.share.infrastructure.validate.contact.WeixinValidator"></bean>
+            </list>
+        </constructor-arg>
+    </bean>
+
+
+    <bean id="SchoolApplicationService" class="com.tfk.sm.application.school.SchoolApplicationService">
+        <constructor-arg index="0" ref="SchoolRepository"></constructor-arg>
+    </bean>
+
+    <bean id="ClazzApplicationService" class="com.tfk.sm.application.clazz.ClazzApplicationService">
+        <constructor-arg index="0">
+            <list>
+                <ref bean="LearningClazzRepository"/>
+                <ref bean="SuperviseClazzRepository"/>
+                <ref bean="UnitedClazzRepository"/>
+            </list>
+        </constructor-arg>
+    </bean>
+    <bean id="TeacherApplicationService" class="com.tfk.sm.application.teacher.TeacherApplicationService">
+        <constructor-arg index="0" ref="TeacherRepository"/>
+        <constructor-arg index="1" ref="SMContactValidations"/>
+    </bean>
+
 </beans>

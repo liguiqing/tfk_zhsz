@@ -39,6 +39,8 @@
             <list>
                 <value>hbm/School.hbm.xml</value>
                 <value>hbm/Clazz.hbm.xml</value>
+                <value>hbm/Teacher.hbm.xml</value>
+                <value>hbm/Student.hbm.xml</value>
             </list>
         </property>
         <property name="jpaProperties">

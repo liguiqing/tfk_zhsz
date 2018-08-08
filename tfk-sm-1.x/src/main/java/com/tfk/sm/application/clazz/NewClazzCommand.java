@@ -1,8 +1,13 @@
 package com.tfk.sm.application.clazz;
 
 import com.google.common.base.MoreObjects;
+import com.tfk.share.domain.id.school.ClazzId;
+import com.tfk.share.domain.id.school.SchoolId;
 import com.tfk.share.domain.school.Grade;
 import com.tfk.share.domain.school.StudyYear;
+import com.tfk.sm.domain.model.clazz.Clazz;
+import com.tfk.sm.domain.model.clazz.ClazzHistory;
+import com.tfk.sm.domain.model.clazz.UnitedClazz;
 
 import java.util.Date;
 
@@ -35,11 +40,25 @@ public class NewClazzCommand {
         this.gradeLevel = gradeLevel;
     }
 
-    public Grade getGrade(){
+
+    public Clazz toClazz() {
+        //TODO other Clazz
+        return toUnitedClazz();
+    }
+
+    private  UnitedClazz toUnitedClazz(){
+        ClazzId clazzId = new ClazzId();
+        UnitedClazz clazz = new UnitedClazz(clazzId,new SchoolId(this.schoolId),this.openedTime);
+        ClazzHistory history = new ClazzHistory(clazzId,grade(),studyYear(),this.clazzName);
+        clazz.addHistory(history);
+        return clazz;
+    }
+
+    public Grade grade(){
         return Grade.newWithLevel(this.gradeLevel);
     }
 
-    public StudyYear getStudyYear(){
+    public StudyYear studyYear(){
         return new StudyYear(yearStarts, yearEnds);
     }
 
@@ -102,4 +121,5 @@ public class NewClazzCommand {
                 .add("gradeLevel", gradeLevel)
                 .toString();
     }
+
 }

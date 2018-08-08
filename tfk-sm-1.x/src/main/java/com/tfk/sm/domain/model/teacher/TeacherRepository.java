@@ -1,26 +1,27 @@
 package com.tfk.sm.domain.model.teacher;
 
 import com.tfk.commons.domain.EntityRepository;
-import com.tfk.share.domain.id.PersonId;
-import com.tfk.sm.domain.model.teacher.management.ClazzManagement;
-import com.tfk.sm.domain.model.teacher.teach.ClazzTeaching;
+import com.tfk.share.domain.id.school.TeacherId;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
 
 /**
  * @author Liguiqing
  * @since V3.0
  */
-
-public interface TeacherRepository extends EntityRepository<Teacher,PersonId> {
+@Repository("TeacherRepository")
+public interface TeacherRepository extends EntityRepository<Teacher,TeacherId> {
 
     @Override
-    default PersonId nextIdentity() {
-        return new PersonId();
+    default TeacherId nextIdentity() {
+        return new TeacherId();
     }
 
-    List<ClazzTeaching> findTeaching(PersonId personId);
+    @Query("from Teacher where teacherId=?1 and removed=0")
+    Teacher loadOf(TeacherId teacherId);
 
-    List<ClazzManagement> findManagement(PersonId personId);
+    //@Query("")
+    //List<ClazzTeaching> findTeaching(PersonId personId);
+
+    //List<ClazzManagement> findManagement(PersonId personId);
 }

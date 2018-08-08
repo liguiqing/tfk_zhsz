@@ -6,6 +6,7 @@ import com.tfk.sm.domain.model.school.School;
 import com.tfk.sm.domain.model.school.SchoolRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author Liguiqing
@@ -17,9 +18,17 @@ public class SchoolApplicationService {
 
     private SchoolRepository schoolRepository;
 
+    public SchoolApplicationService(SchoolRepository schoolRepository) {
+        this.schoolRepository = schoolRepository;
+    }
 
+    @Transactional(rollbackFor = Exception.class)
     public void newSchool(NewSchoolCommand command){
         logger.debug("New School {} ",command);
+        School old = this.schoolRepository.findSchoolByNameEquals(command.getName());
+        if(old != null)
+            return;
+
         SchoolId schoolId = schoolRepository.nextIdentity();
         SchoolScope scope = SchoolScope.get(command.getScop());
         School school = new School(schoolId,command.getName(),command.getAlias(),scope);

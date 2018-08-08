@@ -47,14 +47,14 @@ public class StudentService {
         Grade grade = clazz.currentGrade();
         StudyYear year = StudyYear.now();
 
-        Study study =  new Study(student.personId(), clazz.clazzId(), period, course, grade,year);
-        List<Study> studies =  studentRepository.findStudentStudies(student);
-        boolean hasStuded = studies.size() == 0?false:studies.contains(study);
-        AssertionConcerns.assertArgumentFalse(hasStuded,"课程不能重复学习:"+course.name());
-        return study;
+        //Study study =  new Study(student.personId(), clazz.clazzId(), period, course, grade,year);
+        //List<Study> studies =  studentRepository.findStudentStudies(student);
+        //boolean hasStuded = studies.size() == 0?false:studies.contains(study);
+        //AssertionConcerns.assertArgumentFalse(hasStuded,"课程不能重复学习:"+course.name());
+        return null;
     }
 
-    public ManagedClazz managedAt(Clazz clazz, Student student){
+    public ClazzManaged managedAt(Clazz clazz, Student student){
         AssertionConcerns.assertArgumentFalse(clazz.canBeManagedAt(),"教学班不能管理学生");
 
         School school = schoolRepository.loadOf(clazz.schoolId());
@@ -63,6 +63,6 @@ public class StudentService {
         Grade grade = clazz.currentGrade();
         StudyYear year = StudyYear.now();
 
-        return new ManagedClazz(student.personId(), clazz.clazzId(),period,grade,year);
+        return null;//new ClazzManaged(student.personId(), clazz.clazzId(),period,grade,year);
     }
 }

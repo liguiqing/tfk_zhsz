@@ -33,6 +33,9 @@
         <component name="clazzId" class="com.tfk.share.domain.id.school.ClazzId" >
             <property name="id" column="clazzId" type="java.lang.String"/>
         </component>
+        <component name="schoolId" class="com.tfk.share.domain.id.school.SchoolId">
+            <property name="id" column="schoolId" type="java.lang.String"/>
+        </component>
         <component name="grade" class="com.tfk.share.domain.school.Grade">
             <property name="name" column="gradeName" type="java.lang.String"/>
             <property name="level" column="gradeLevel" type="java.lang.Integer" />

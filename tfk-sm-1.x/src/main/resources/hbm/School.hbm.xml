@@ -3,6 +3,7 @@
         "http://www.hibernate.org/dtd/hibernate-mapping/hibernate-mapping-3.0.dtd">
 <hibernate-mapping default-access="field" default-cascade="all" >
     <class name="com.tfk.sm.domain.model.school.School" table="sm_school" lazy="true" dynamic-update="false">
+
         <id name="id" type="long" column="id" unsaved-value="-1">
             <generator class="native" />
         </id>

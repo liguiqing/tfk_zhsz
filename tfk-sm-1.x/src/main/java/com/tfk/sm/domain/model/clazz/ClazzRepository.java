@@ -18,6 +18,10 @@ public interface ClazzRepository<T extends Clazz> extends EntityRepository<T,Cla
         return new ClazzId();
     }
 
+    boolean supports(Clazz clazz);
+
+    boolean supports(Class<? extends T> clazz);
+
     @Query(value = "from Clazz where clazzId=?1 and removed=0")
     T loadOf(ClazzId clazzId);
 

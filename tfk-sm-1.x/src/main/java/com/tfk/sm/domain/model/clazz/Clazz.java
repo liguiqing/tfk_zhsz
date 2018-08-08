@@ -1,16 +1,17 @@
 package com.tfk.sm.domain.model.clazz;
 
 import com.google.common.base.Objects;
+import com.google.common.collect.Sets;
 import com.tfk.commons.AssertionConcerns;
 import com.tfk.commons.domain.Entity;
 import com.tfk.commons.util.DateUtilWrapper;
 import com.tfk.share.domain.id.school.ClazzId;
 import com.tfk.share.domain.id.school.SchoolId;
 import com.tfk.share.domain.school.Grade;
+import com.tfk.share.domain.school.StudyYear;
 
-import javax.xml.crypto.Data;
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
 
 /**
  * 班级
@@ -28,8 +29,7 @@ public abstract class Clazz extends Entity {
 
     private Date closedTime; //结束时间,未结束为null,
 
-    private List<ClazzHistory> histories;
-
+    private Set<ClazzHistory> histories;
 
     public Clazz(ClazzId clazzId, SchoolId schoolId) {
         this.clazzId = clazzId;
@@ -39,7 +39,15 @@ public abstract class Clazz extends Entity {
     public Clazz(ClazzId clazzId, SchoolId schoolId, Date openedTime) {
         this.clazzId = clazzId;
         this.schoolId = schoolId;
-        this.openedTime = openedTime;
+        this.openedTime = openedTime == null?DateUtilWrapper.now():openedTime;
+    }
+
+    public void addHistory(ClazzHistory aHistory){
+        if(this.histories == null){
+            this.histories = Sets.newHashSet();
+        }
+        aHistory.toSchool(this.schoolId);
+        this.histories.add(aHistory);
     }
 
     public void open(){
@@ -73,7 +81,12 @@ public abstract class Clazz extends Entity {
     public abstract boolean canBeManagedAt();
 
     public Grade currentGrade(){
-        //TODO
+        StudyYear year = StudyYear.now();
+        for(ClazzHistory history:this.histories){
+            if(history.sameYearOf(year)){
+                return history.grade();
+            }
+        }
         return null;
     }
 
@@ -107,5 +120,9 @@ public abstract class Clazz extends Entity {
     }
 
     protected Clazz() {
+    }
+
+    protected boolean isTypeOf(Class<? extends Clazz> clazz){
+        return this.getClass().equals(clazz.getClass());
     }
 }

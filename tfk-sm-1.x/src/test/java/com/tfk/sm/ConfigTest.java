@@ -4,6 +4,8 @@ import com.tfk.commons.util.DateUtilWrapper;
 import com.tfk.share.domain.id.school.ClazzId;
 import com.tfk.share.domain.id.school.SchoolId;
 import com.tfk.share.domain.school.SchoolScope;
+import com.tfk.sm.application.clazz.ClazzApplicationService;
+import com.tfk.sm.application.school.SchoolApplicationService;
 import com.tfk.sm.domain.model.clazz.*;
 import com.tfk.sm.domain.model.school.School;
 import com.tfk.sm.domain.model.school.SchoolRepository;
@@ -28,7 +30,7 @@ import static org.junit.Assert.assertTrue;
 
 
 @ContextConfiguration(locations = {
-        "classpath:applicationContext-sm-app.xml",
+        "classpath:META-INF/spring/applicationContext-sm-app.xml",
         "classpath:applicationContext-sm-test-ds.xml",
         "classpath:applicationContext-sm-test-app.xml",
         "classpath:applicationContext-test-jndi.xml",
@@ -52,6 +54,12 @@ public class ConfigTest extends AbstractTransactionalJUnit4SpringContextTests{
 
     @Autowired
     private UnitedClazzRepository unitedClazzRepository;
+
+    @Autowired
+    private SchoolApplicationService achoolApplicationService;
+
+    @Autowired
+    private ClazzApplicationService clazzApplicationService;
 
     @Test
     public void test()throws Exception{
@@ -91,5 +99,9 @@ public class ConfigTest extends AbstractTransactionalJUnit4SpringContextTests{
         assertNotNull(clazz3_);
         assertTrue(clazz3.equals(clazz3_));
         unitedClazzRepository.delete(clazzId3.id());
+
+
+        assertNotNull(achoolApplicationService);
+        assertNotNull(clazzApplicationService);
     }
 }

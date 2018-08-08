@@ -27,6 +27,10 @@ public class School extends Entity {
 
     private SchoolScope scope;
 
+    public School(SchoolId schoolId, String name, SchoolScope scope) {
+        this(schoolId, name, name, scope);
+    }
+
     public School(SchoolId schoolId, String name, String alias, SchoolScope scope) {
         this.schoolId = schoolId;
         this.name = name;
@@ -70,5 +74,11 @@ public class School extends Entity {
                 .toString();
     }
 
-    protected School(){};
+    protected School(){}
+
+    @Override
+    public  String getCacheKey(){
+        return this.schoolId.id();
+    }
+
 }

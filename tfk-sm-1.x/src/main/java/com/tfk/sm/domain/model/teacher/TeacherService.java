@@ -8,10 +8,6 @@ import com.tfk.sm.domain.model.clazz.Clazz;
 import com.tfk.sm.domain.model.clazz.ClazzRepository;
 import com.tfk.sm.domain.model.school.School;
 import com.tfk.sm.domain.model.school.SchoolRepository;
-import com.tfk.sm.domain.model.teacher.management.ClazzManagement;
-import com.tfk.sm.domain.model.teacher.teach.ClazzTeaching;
-
-import java.util.List;
 
 /**
  * @author Liguiqing
@@ -39,11 +35,11 @@ public class TeacherService {
         Period period = school.getThisTermStartsAndEnds();
         Grade grade = clazz.currentGrade();
 
-        ClazzTeaching teaching = new ClazzTeaching(teacher,period,school.schoolId(),clazz.clazzId(),grade, course);
+        ClazzTeaching teaching = new ClazzTeaching(teacher,period,grade,clazz.clazzId(), course);
 
-        List<ClazzTeaching> hasTeaching = teacherRepository.findTeaching(teacher.personId());
-        boolean canBeTeached = hasTeaching.size()>0?hasTeaching.contains(teaching):true;
-        AssertionConcerns.assertArgumentFalse(canBeTeached,"已在本班教授课程");
+        //List<ClazzTeaching> hasTeaching = teacherRepository.findTeaching(teacher.personId());
+        //boolean canBeTeached = hasTeaching.size()>0?hasTeaching.contains(teachingAt):true;
+        //AssertionConcerns.assertArgumentFalse(canBeTeached,"已在本班教授课程");
 
         return teaching;
     }
@@ -54,12 +50,12 @@ public class TeacherService {
         Period period = school.getThisTermStartsAndEnds();
         Grade grade = clazz.currentGrade();
 
-        ClazzManagement management = new ClazzManagement(teacher,period,school.schoolId(),clazz.clazzId(),grade);
+        //ClazzManagement management = new ClazzManagement(teacher,period,school.schoolId(),clazz.clazzId(),grade);
 
-        List<ClazzManagement> hasManages = teacherRepository.findManagement(teacher.personId());
-        boolean canBeTeached = hasManages.size()>0?hasManages.contains(management):true;
-        AssertionConcerns.assertArgumentFalse(canBeTeached,"已在本班教授课程");
+        //List<ClazzManagement> hasManages = teacherRepository.findManagement(teacher.personId());
+        //boolean canBeTeached = hasManages.size()>0?hasManages.contains(management):true;
+        //AssertionConcerns.assertArgumentFalse(canBeTeached,"已在本班教授课程");
 
-        return management;
+        return null;
     }
 }

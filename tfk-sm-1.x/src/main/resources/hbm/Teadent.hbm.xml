@@ -1,0 +1,88 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping/hibernate-mapping-3.0.dtd">
+<hibernate-mapping default-access="field" default-cascade="all" >
+
+    <class name="com.tfk.share.domain.person.Contact" table="sm_teacher_contact" abstract="true"
+           entity-name="TeacherContacts"  >
+        <id name="id" type="long" column="id" unsaved-value="-1">
+            <generator class="identity" />
+        </id>
+        <!-- 设置鉴别器，column：在数据库中的列。根据该列的值判断是什么类型 -->
+        <discriminator column="category" type="java.lang.String"></discriminator>
+        <component name="personId" class="com.tfk.share.domain.id.PersonId">
+            <property name="id" column="personId" type="java.lang.String"/>
+        </component>
+
+        <property name="name" column="name" type="java.lang.String"/>
+        <property name="info" column="info" type="java.lang.String"/>
+        <subclass name="com.tfk.share.domain.person.contact.Email" entity-name="TeacherContactsEmail" discriminator-value="Email" />
+        <subclass name="com.tfk.share.domain.person.contact.QQ" entity-name="TeacherContactsQQ" discriminator-value="QQ" />
+        <subclass name="com.tfk.share.domain.person.contact.Weixin" entity-name="TeacherContactsWeixin"  discriminator-value="Weixin" />
+        <subclass name="com.tfk.share.domain.person.contact.Mobile" entity-name="TeacherContactsMobile"  discriminator-value="Mobile" />
+        <subclass name="com.tfk.share.domain.person.contact.Phone" entity-name="TeacherContactsPhone"  discriminator-value="Phone" />
+    </class>
+
+    <class name="com.tfk.share.domain.person.Contact" table="sm_student_contact" abstract="true"
+           entity-name="StudentContacts" polymorphism="explicit">
+        <id name="id" type="long" column="id" unsaved-value="-1">
+            <generator class="identity" />
+        </id>
+        <!-- 设置鉴别器，column：在数据库中的列。根据该列的值判断是什么类型 -->
+        <discriminator column="category" type="java.lang.String"></discriminator>
+        <component name="personId" class="com.tfk.share.domain.id.PersonId">
+            <property name="id" column="personId" type="java.lang.String"/>
+        </component>
+
+        <property name="name" column="name" type="java.lang.String"/>
+        <property name="info" column="info" type="java.lang.String"/>
+        <subclass name="com.tfk.share.domain.person.contact.Email" entity-name="StudentContactsEmail" discriminator-value="Email" />
+        <subclass name="com.tfk.share.domain.person.contact.QQ" entity-name="StudentContactsQQ" discriminator-value="QQ" />
+        <subclass name="com.tfk.share.domain.person.contact.Weixin" entity-name="StudentContactsWeixin"  discriminator-value="Weixin" />
+        <subclass name="com.tfk.share.domain.person.contact.Mobile" entity-name="StudentContactsMobile"  discriminator-value="Mobile" />
+        <subclass name="com.tfk.share.domain.person.contact.Phone" entity-name="StudentContactsPhone"  discriminator-value="Phone" />
+    </class>
+
+    <class name="com.tfk.share.domain.school.Teadent"  abstract="true">
+        <id name="id" type="long" column="id" unsaved-value="-1">
+            <generator class="native" />
+        </id>
+
+        <component name="personId" class="com.tfk.share.domain.id.PersonId">
+            <property name="id" column="personId" type="java.lang.String"/>
+        </component>
+
+        <component name="schoolId" class="com.tfk.share.domain.id.school.SchoolId">
+            <property name="id" column="schoolId" type="java.lang.String"/>
+        </component>
+
+        <property name="name" column="name" type="java.lang.String"/>
+        <property name="gender" column="gender" >
+            <type name="org.hibernate.type.EnumType">
+                <param name="enumClass">com.tfk.share.domain.person.Gender</param>
+                <param name="useNamed">true</param>
+            </type>
+        </property>
+        <property name="birthday" column="birthday" type="java.util.Date"/>
+
+        <property name="joinDate" column="joinDate" type="java.util.Date"/>
+        <property name="offDate" column="offDate" type="java.util.Date"/>
+
+        <joined-subclass name="com.tfk.sm.domain.model.teacher.Teacher"  table="sm_teacher" lazy="true">
+            <key column="teacherId"></key>
+            <set name="contacts"  cascade="all" fetch="join" lazy="true" order-by="id" >
+                <key column="personId"  update="false"/>
+                <one-to-many entity-name="StudentContacts"/>
+            </set>
+        </joined-subclass>
+        <joined-subclass name="com.tfk.sm.domain.model.student.Student" table="sm_student" lazy="true">
+            <key column="studentId"></key>
+            <set name="contacts"  cascade="all" fetch="join" lazy="true" order-by="id" >
+                <key column="personId"  update="false"/>
+                <one-to-many entity-name="StudentContacts"/>
+            </set>
+        </joined-subclass>
+
+    </class>
+
+</hibernate-mapping>

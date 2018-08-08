@@ -1,21 +1,23 @@
 package com.tfk.sm.domain.model.student;
 
 import com.tfk.commons.domain.EntityRepository;
-import com.tfk.share.domain.id.PersonId;
+import com.tfk.share.domain.id.school.StudentId;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
 
 /**
  * @author Liguiqing
  * @since V3.0
  */
+@Repository
+public interface StudentRepository extends EntityRepository<Student,StudentId> {
 
-public interface StudentRepository extends EntityRepository<Student,PersonId> {
-
-    default PersonId nextIdentity() {
-        return new PersonId();
+    default StudentId nextIdentity() {
+        return new StudentId();
     }
 
-    List<Study> findStudentStudies(Student student);
+    @Query("FROM Student  where removed=0 and studentId=?1")
+    Student loadOf(StudentId studentId);
+
+    //List<Study> findStudentStudies(Student student);
 }

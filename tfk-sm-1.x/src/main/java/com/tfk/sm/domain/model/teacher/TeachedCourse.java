@@ -2,7 +2,9 @@ package com.tfk.sm.domain.model.teacher;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
+import com.tfk.commons.domain.IdentifiedValueObject;
 import com.tfk.commons.domain.ValueObject;
+import com.tfk.share.domain.id.school.TeacherId;
 import com.tfk.share.domain.school.Course;
 import com.tfk.share.domain.school.Grade;
 
@@ -13,7 +15,8 @@ import com.tfk.share.domain.school.Grade;
  * @since V3.0
  */
 
-public class TeachedCourse extends ValueObject {
+public class TeachedCourse extends IdentifiedValueObject {
+    private TeacherId teacherId;
 
     private Grade grade;
 
@@ -21,9 +24,11 @@ public class TeachedCourse extends ValueObject {
 
     private String courseAlias; //课程简称
 
-    public TeachedCourse(Grade grade, Course course) {
+    protected TeachedCourse(Teacher teacher,Grade grade, Course course) {
+        this.teacherId = teacher.teacherId();
         this.grade = grade;
         this.course = course;
+        this.courseAlias = grade.name() + course.aliais();
     }
 
     public boolean sameOf(Grade grade, Course course) {
@@ -67,4 +72,6 @@ public class TeachedCourse extends ValueObject {
                 .add("course", course)
                 .toString();
     }
+
+    protected TeachedCourse(){}
 }
