@@ -16,6 +16,8 @@ import java.io.Serializable;
 public abstract class IdentifiedDomainObject implements Serializable {
     private static final long serialVersionUID = 1L;
 
+    private String cacheKey;
+
     //使用整型持久化
     private long id;
 
@@ -33,6 +35,7 @@ public abstract class IdentifiedDomainObject implements Serializable {
     }
 
     protected void setId(long anId) {
+        this.cacheKey = anId + "";
         this.id = anId;
     }
 
@@ -41,6 +44,11 @@ public abstract class IdentifiedDomainObject implements Serializable {
     }
 
     protected void setUuid(String uuid) {
+        this.cacheKey = uuid;
         this.uuid = uuid;
+    }
+
+    public String getCacheKey() {
+        return cacheKey;
     }
 }

@@ -67,4 +67,8 @@ public abstract class AbstractId implements Identity,Serializable{
 
         this.id = anId;
     }
+
+    public String getId(){
+        return this.id();
+    }
 }
