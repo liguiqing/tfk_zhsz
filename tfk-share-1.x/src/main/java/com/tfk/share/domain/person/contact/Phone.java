@@ -1,5 +1,7 @@
 package com.tfk.share.domain.person.contact;
 
+import com.tfk.share.domain.person.Contact;
+
 /**
  * 联系电话
  *
@@ -9,16 +11,13 @@ package com.tfk.share.domain.person.contact;
 
 public class Phone extends Contact {
 
-    private int Type = 1;
-
     public Phone(String number) {
-        this.name = "电话号码";
-        this.info = number;
+        super("电话号码",number);
     }
 
     public Phone(int prefix, int number) {
-        this.name = "电话号码";
-        this.info = prefix+"-"+number;
+        super("电话号码",prefix+"-"+number);
     }
 
+    protected Phone(){}
 }

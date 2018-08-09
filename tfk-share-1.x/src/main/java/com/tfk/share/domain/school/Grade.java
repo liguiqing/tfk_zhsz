@@ -33,17 +33,17 @@ public class Grade extends ValueObject {
     public static Grade newWithLevel(int level){
         switch (level){
             case 1:return G1();
-            case 2:return G1();
-            case 3:return G1();
-            case 4:return G1();
-            case 5:return G1();
-            case 6:return G1();
-            case 7:return G1();
-            case 8:return G1();
-            case 9:return G1();
-            case 10:return G1();
-            case 11:return G1();
-            case 12:return G1();
+            case 2:return G2();
+            case 3:return G3();
+            case 4:return G4();
+            case 5:return G5();
+            case 6:return G6();
+            case 7:return G7();
+            case 8:return G8();
+            case 9:return G9();
+            case 10:return G10();
+            case 11:return G11();
+            case 12:return G12();
             default:return G1();
         }
     }
@@ -102,6 +102,10 @@ public class Grade extends ValueObject {
 
     public String name() {
         return name;
+    }
+
+    public int level(){
+        return this.level;
     }
 
     public StudyYear studyYear() {

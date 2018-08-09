@@ -1,5 +1,7 @@
 package com.tfk.share.domain.person.contact;
 
+import com.tfk.share.domain.person.Contact;
+
 /**
  * 微信
  *
@@ -9,11 +11,9 @@ package com.tfk.share.domain.person.contact;
 
 public class Weixin extends Contact {
 
-    private int type = 4;
-
     public Weixin(String number){
-        this.name = "微信号";
-        this.info = number;
+        super("微信号", number);
     }
 
+    protected Weixin() {}
 }

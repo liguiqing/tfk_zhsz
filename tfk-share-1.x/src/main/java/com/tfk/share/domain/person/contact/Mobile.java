@@ -1,5 +1,7 @@
 package com.tfk.share.domain.person.contact;
 
+import com.tfk.share.domain.person.Contact;
+
 /**
  * 移动电话
  *
@@ -9,11 +11,9 @@ package com.tfk.share.domain.person.contact;
 
 public class Mobile extends Contact {
 
-    private int type = 2;
-
     public Mobile(String number) {
-        this.name = "手机号码";
-        this.info = number;
+        super("手机号码",number);
     }
 
+    protected Mobile(){}
 }

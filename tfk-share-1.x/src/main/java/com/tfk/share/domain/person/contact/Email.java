@@ -1,5 +1,7 @@
 package com.tfk.share.domain.person.contact;
 
+import com.tfk.share.domain.person.Contact;
+
 /**
  * 电子信箱
  *
@@ -9,10 +11,9 @@ package com.tfk.share.domain.person.contact;
 
 public class Email extends Contact {
 
-    private int type = 5;
-
     public Email(String number) {
-        this.name = "电子邮箱";
-        this.info = number;
+        super("电子邮箱",number);
     }
+
+    protected Email(){}
 }

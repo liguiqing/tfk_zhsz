@@ -21,6 +21,9 @@ public class IdPrefixes {
     //学校唯一标识
     public static final String SchoolIdPrefix = "SCH";
 
+    //学科唯一标识
+    public static final String SubjectIdPrefix = "SUB";
+
     //班级唯一标识
     public static final String ClazzIdPrefix = "CLA";
 

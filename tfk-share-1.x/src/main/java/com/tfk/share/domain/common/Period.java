@@ -68,4 +68,6 @@ public class Period {
     public int hashCode() {
         return Objects.hashCode(starts, ends);
     }
+
+    protected Period(){}
 }

@@ -1,5 +1,7 @@
 package com.tfk.share.domain.person.contact;
 
+import com.tfk.share.domain.person.Contact;
+
 /**
  * QQ联系方式
  *
@@ -9,11 +11,9 @@ package com.tfk.share.domain.person.contact;
 
 public class QQ extends Contact {
 
-    private int type = 3;
-
-    public QQ(int number){
-        this.name = "QQ号";
-        this.info = number+"";
+    public QQ(String number){
+        super("QQ号",number+"");
     }
 
+    protected QQ() {}
 }
