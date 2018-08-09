@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.beans.factory.support.GenericBeanDefinition;
 import org.springframework.context.ApplicationContext;
@@ -50,5 +51,10 @@ public class SpringContextUtil implements ApplicationContextAware {
 
 		DefaultListableBeanFactory fty = (DefaultListableBeanFactory) applicationContext.getAutowireCapableBeanFactory();
 		fty.registerBeanDefinition(beanId, bdef);
+	}
+
+	public static void removeBean(String beanName){
+		BeanDefinitionRegistry registry = (BeanDefinitionRegistry) applicationContext.getAutowireCapableBeanFactory();
+		registry.removeBeanDefinition(beanName);
 	}
 }
