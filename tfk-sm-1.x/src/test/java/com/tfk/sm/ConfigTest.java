@@ -6,6 +6,8 @@ import com.tfk.share.domain.id.school.SchoolId;
 import com.tfk.share.domain.school.SchoolScope;
 import com.tfk.sm.application.clazz.ClazzApplicationService;
 import com.tfk.sm.application.school.SchoolApplicationService;
+import com.tfk.sm.application.student.StudentApplicationService;
+import com.tfk.sm.application.teacher.TeacherApplicationService;
 import com.tfk.sm.domain.model.clazz.*;
 import com.tfk.sm.domain.model.school.School;
 import com.tfk.sm.domain.model.school.SchoolRepository;
@@ -61,6 +63,13 @@ public class ConfigTest extends AbstractTransactionalJUnit4SpringContextTests{
     @Autowired
     private ClazzApplicationService clazzApplicationService;
 
+    @Autowired
+    private TeacherApplicationService teacherApplicationService;
+
+    @Autowired
+    private StudentApplicationService studentApplicationService;
+
+
     @Test
     public void test()throws Exception{
         assertNotNull(jdbcTemplate);
@@ -103,5 +112,7 @@ public class ConfigTest extends AbstractTransactionalJUnit4SpringContextTests{
 
         assertNotNull(achoolApplicationService);
         assertNotNull(clazzApplicationService);
+        assertNotNull(teacherApplicationService);
+        assertNotNull(studentApplicationService);
     }
 }

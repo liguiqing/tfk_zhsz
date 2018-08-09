@@ -1,4 +1,4 @@
-package com.tfk.sm.application.teacher;
+package com.tfk.sm.application.student;
 
 import com.tfk.share.domain.person.Gender;
 import com.tfk.sm.application.NewTeadentCommand;
@@ -11,11 +11,11 @@ import java.util.Date;
  * @since V3.0
  */
 
-public class NewTeacherCommand extends NewTeadentCommand {
+public class NewStudentCommand extends NewTeadentCommand {
 
-    public NewTeacherCommand(){}
+    public NewStudentCommand(){}
 
-    public NewTeacherCommand(String schoolId, Date joinDate, Date offDate, String name,
+    public NewStudentCommand(String schoolId, Date joinDate, Date offDate, String name,
                              Date birthday, Gender gender, Contacts[] contacts) {
         super(schoolId,joinDate,offDate,name,birthday,gender,contacts);
     }

@@ -1,60 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-  ~ Copyright (c) 2016,2017, easytnt All Rights Reserved. 深圳市易考试乐学测评有限公司 版权所有.
-  -->
-
 <beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns="http://www.springframework.org/schema/beans"
-       xmlns:aop="http://www.springframework.org/schema/aop"
-       xmlns:cache="http://www.springframework.org/schema/cache"
-       xmlns:task="http://www.springframework.org/schema/task"
+       xmlns:context="http://www.springframework.org/schema/context"
        xmlns:repository="http://www.springframework.org/schema/data/repository"
        xmlns:jpa="http://www.springframework.org/schema/data/jpa"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
 		http://www.springframework.org/schema/beans/spring-beans.xsd
-		http://www.springframework.org/schema/aop
-		http://www.springframework.org/schema/aop/spring-aop.xsd
-       	http://www.springframework.org/schema/cache
-       	http://www.springframework.org/schema/cache/spring-cache.xsd
        	http://www.springframework.org/schema/data/jpa
        	http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
        	http://www.springframework.org/schema/data/repository
        	http://www.springframework.org/schema/data/repository/spring-repository.xsd
-       	http://www.springframework.org/schema/task
-        http://www.springframework.org/schema/task/spring-task.xsd">
+       	http://www.springframework.org/schema/context
+	    http://www.springframework.org/schema/context/spring-context.xsd">
 
     <jpa:repositories base-package="com.tfk.sm.domain.model.**.*" >
         <repository:include-filter type="annotation" expression="org.springframework.stereotype.Repository" />
     </jpa:repositories>
+
+    <context:annotation-config />
+    <context:component-scan base-package="com.tfk.sm.application.**" >
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Service"></context:include-filter>
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Component"></context:include-filter>
+    </context:component-scan>
+
     <bean id="SMContactValidations" class="com.tfk.share.infrastructure.validate.contact.ContactValidations">
         <constructor-arg index="0">
             <list >
-                <bean class="com.tfk.share.infrastructure.validate.contact.EmailValidator"></bean>
-                <bean class="com.tfk.share.infrastructure.validate.contact.MobileValidator"></bean>
-                <bean class="com.tfk.share.infrastructure.validate.contact.PhoneValidator"></bean>
-                <bean class="com.tfk.share.infrastructure.validate.contact.QQValidator"></bean>
-                <bean class="com.tfk.share.infrastructure.validate.contact.WeixinValidator"></bean>
+                <bean class="com.tfk.share.infrastructure.validate.contact.EmailValidator"/>
+                <bean class="com.tfk.share.infrastructure.validate.contact.MobileValidator"/>
+                <bean class="com.tfk.share.infrastructure.validate.contact.PhoneValidator"/>
+                <bean class="com.tfk.share.infrastructure.validate.contact.QQValidator"/>
+                <bean class="com.tfk.share.infrastructure.validate.contact.WeixinValidator"/>
             </list>
         </constructor-arg>
-    </bean>
-
-
-    <bean id="SchoolApplicationService" class="com.tfk.sm.application.school.SchoolApplicationService">
-        <constructor-arg index="0" ref="SchoolRepository"></constructor-arg>
-    </bean>
-
-    <bean id="ClazzApplicationService" class="com.tfk.sm.application.clazz.ClazzApplicationService">
-        <constructor-arg index="0">
-            <list>
-                <ref bean="LearningClazzRepository"/>
-                <ref bean="SuperviseClazzRepository"/>
-                <ref bean="UnitedClazzRepository"/>
-            </list>
-        </constructor-arg>
-    </bean>
-    <bean id="TeacherApplicationService" class="com.tfk.sm.application.teacher.TeacherApplicationService">
-        <constructor-arg index="0" ref="TeacherRepository"/>
-        <constructor-arg index="1" ref="SMContactValidations"/>
     </bean>
 
 </beans>

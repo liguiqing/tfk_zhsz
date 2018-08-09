@@ -22,7 +22,7 @@ public class TeacherController extends AbstractHttpController {
     @RequestMapping(method = RequestMethod.POST)
     public ModelAndView onNewTeacher(@RequestBody NewTeacherCommand command){
         logger.debug("New Teacher with name {} to schoole {}",command.getName(),command.getSchoolId());
-        this.teacherApplicationService.newTeacher(command);
-        return newModelAndViewBuilder("/teacher/newTeacherSuccess").creat();
+        String teacherId = this.teacherApplicationService.newTeacher(command);
+        return newModelAndViewBuilder("/teacher/newTeacherSuccess").withData("teacherId",teacherId).creat();
     }
 }

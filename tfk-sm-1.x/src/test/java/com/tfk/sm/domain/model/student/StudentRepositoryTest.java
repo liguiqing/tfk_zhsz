@@ -12,6 +12,7 @@ import com.tfk.share.domain.person.contact.QQ;
 import com.tfk.share.domain.person.contact.Weixin;
 import com.tfk.share.domain.school.Course;
 import com.tfk.share.domain.school.Grade;
+import com.tfk.share.infrastructure.validate.contact.ContactValidations;
 import com.tfk.sm.domain.model.clazz.Clazz;
 import com.tfk.sm.domain.model.clazz.UnitedClazz;
 import org.junit.Test;
@@ -26,7 +27,8 @@ import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-
+import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
 /**
  * @author Liguiqing
  * @since V3.0
@@ -50,10 +52,13 @@ public class StudentRepositoryTest extends AbstractTransactionalJUnit4SpringCont
         PersonId personId = new PersonId("PER12345678");
         ClazzId clazzId = new ClazzId("CLA12345678");
         StudentId studentId = new StudentId("STU12345678");
+
+        ContactValidations contactValidations = mock(ContactValidations.class);
+        when(contactValidations.validate(any(Contact.class))).thenReturn(true).thenReturn(true).thenReturn(true);
         Student student = new Student(studentId,schoolId,personId,"Test");
-        student.addContact(new QQ(123564+""));
-        student.addContact(new QQ(123567+""));
-        student.addContact(new Weixin("123456@123.com"));
+        student.addContact(contactValidations,new QQ(123564+""));
+        student.addContact(contactValidations,new QQ(123567+""));
+        student.addContact(contactValidations,new Weixin("123456@123.com"));
 
         Course yw = new Course("语文",new SubjectId("SUB123456781"));
         ClazzId clazzId1 = new ClazzId("CLA123456781");

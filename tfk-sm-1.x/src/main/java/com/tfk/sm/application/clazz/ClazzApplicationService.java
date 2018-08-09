@@ -5,6 +5,8 @@ import com.tfk.sm.domain.model.clazz.Clazz;
 import com.tfk.sm.domain.model.clazz.ClazzRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
@@ -15,9 +17,11 @@ import java.util.List;
  * @since V3.0
  */
 
+@Service
 public class ClazzApplicationService {
     private static Logger logger = LoggerFactory.getLogger(ClazzApplicationService.class);
 
+    @Autowired
     private List<ClazzRepository> clazzRepositories;
 
     public ClazzApplicationService(List<ClazzRepository> clazzRepositories) {

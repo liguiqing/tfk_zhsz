@@ -68,11 +68,6 @@
 		<appender-ref ref='ASYNC' />
 	</logger>
 
-	<logger name="org.hibernate.SQL" additivity="false">
-		<level value="${logger.org.hibernate.SQL}" />
-		<appender-ref ref="ASYNC" />
-	</logger>
-
 	<logger name="org.hibernate.engine.QueryParameters" additivity="false">
 		<level value="${logger.org.hibernate.engine.QueryParameters}" />
 		<appender-ref ref='ASYNC' />

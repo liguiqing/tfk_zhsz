@@ -1,9 +1,9 @@
 DROP TABLE IF EXISTS `cm_message`;
 CREATE TABLE `cm_message` (
   `id` BIGINT(20)  NOT NULL AUTO_INCREMENT ,
-  `code` varchar(32)  COMMENT '消息代码,编码格式:##-##-### 应用系统编码-模块编码-消息编码',
+  `code` varchar(16)  COMMENT '消息代码,编码格式:##-##-### 应用系统编码-模块编码-消息编码',
   `msg` varchar(256)  COMMENT '消息内容',
-  `level` smallint(1) DEFAULT 1 COMMENT '消息级别:1-debug;2-info;3-error',
+  `level` TINYINT(1) DEFAULT 1 COMMENT '消息级别:1-debug;2-info;3-error',
   `local` varchar(8) DEFAULT 'zh_cn' COMMENT '本地化标识',
   `app` varchar(16)  COMMENT '消息归属应用系统',
   PRIMARY KEY (`id`),
@@ -12,8 +12,35 @@ CREATE TABLE `cm_message` (
   INDEX `x_cm_message_app` (`app`)
 )ENGINE=INNODB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='系统输出的提示信息';
 INSERT INTO `cm_message` (`code`,`msg`,`level`,`local`,`app`)
-VALUES  ('00-00-000','系统未定义消息',1,'zh_cn',NULL), ('sm-03-001','学校查无此老师',3,'zh_cn',NULL);
+VALUES  ('00-00-000','系统未定义消息',1,'zh_cn',NULL),
+        ('cm-01-001','联系方法格式错误',3,'zh_cn',"CM"),
+        ('sm-02-001','学校查无此班级',3,'zh_cn',"SM"),
+        ('sm-03-001','学校查无此老师',3,'zh_cn',"SM"),
+        ('sm-04-001','学校查无此学生',3,'zh_cn',"SM");
 
+DROP TABLE IF EXISTS `cm_course`;
+CREATE TABLE `cm_course` (
+  `id` BIGINT(20)  NOT NULL AUTO_INCREMENT ,
+  `subjectId` varchar(36) NOT NULL COMMENT '消息代码,编码格式:##-##-### 应用系统编码-模块编码-消息编码',
+  `fullName` varchar(64)  COMMENT '学科全名称',
+  `alias` VARCHAR(16)  COMMENT '学科简名称',
+  `gbCode` VARCHAR(16) COMMENT '国标代码',
+  `studyStarts` TINYINT(2)  COMMENT '学科开始学习的年级,1-12',
+  `studyEnds` TINYINT(2)  COMMENT '学科完成学习的年级,1-12',
+  PRIMARY KEY (`id`),
+  INDEX `x_cm_course_subjectId` (`subjectId`)
+)ENGINE=INNODB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='学科信息表';
+INSERT INTO `cm_course` (`subjectId`,`fullName`,`alias`,`gbCode`,`studyStarts`,`studyEnds`)
+VALUES  ('SUBe563abfe42c545dbb3d600f6d512c707','语文','语文',NULL,1,12), ('SUB30c275bab0d0468f86dc13e68ddb032d','数学','数学',NULL,1,12),
+        ('SUBdd1954be392743938eefac1b5ed2e04d','英语','英语',NULL,1,12), ('SUB82cc43e0688441959a91c57d1ecdab10','物理','物理',NULL,8,12),
+        ('SUBb0e1a124fd6a4df8b6b48e3302ecbbe1','化学','化学',NULL,9,12), ('SUBaa7e27e57bb9416f96ed0e1b5ef14b1d','政治','政治',NULL,7,12),
+        ('SUB0254a9ad779d4dc4a2f87ae123527c4a','历史','历史',NULL,7,12), ('SUB4b680df0137b4564bc438fcb647373f4','地理','地理',NULL,7,12),
+        ('SUB818056b50c8446b2827d9ba76c164db2','生物','生物',NULL,7,12), ('SUBf2d8fe15a40b4f72bdaa21492a8ffb77','信息技术','信技',NULL,10,12),
+        ('SUBc1d12ca4cf9b4672b58c0cb4ce5e1629','备用课程1','备用1',NULL,1,12), ('SUB4bfab137366a42938b36670d62fa330a','备用课程2','备用2',NULL,1,12),
+        ('SUB44f727fa633b4681b958ea48b1a0c908','备用课程3','备用3',NULL,1,12), ('SUB1276abca27174ab9aae78eb2b34f7768','备用课程4','备用4',NULL,1,12),
+        ('SUBcb619a1578464e5f93459c52ccbc338e','备用课程5','备用5',NULL,1,12), ('SUB431acfd2196549ada3792823e0c0ad25','备用课程6','备用6',NULL,1,12),
+        ('SUB7919e3fb543e4566bedb801187362c59','备用课程7','备用7',NULL,1,12), ('SUBac4aed22199f410abb4d6bfe83888bc2','备用课程8','备用8',NULL,1,12),
+        ('SUBd1803b6f25a64d4d953e716b56bc5d9b','备用课程9','备用9',NULL,1,12), ('SUBb363304861234307968306cf11e84f29','备用课程10','备用10',NULL,1,12);
 
 DROP TABLE IF EXISTS `sm_school`;
 CREATE TABLE `sm_school` (

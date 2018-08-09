@@ -2,19 +2,24 @@ package com.tfk.sm.application.teacher;
 
 import com.tfk.sm.application.data.CourseData;
 
+import java.util.Date;
 /**
  * @author Liguiqing
  * @since V3.0
  */
 
 public class TeacherArrangingCommand {
-    String teacherId;
+    private String teacherId;
 
-    CourseData[] courses;
+    private Date dateStarts;
 
-    String[] managementClazzIds;
+    private Date dateEnds;
 
-    String[] teachingClazzIds;
+    private CourseData[] courses;
+
+    private String[] managementClazzIds;
+
+    private String[] teachingClazzIds;
 
     public TeacherArrangingCommand(){}
 
@@ -56,5 +61,21 @@ public class TeacherArrangingCommand {
 
     public void setTeachingClazzIds(String[] teachingClazzIds) {
         this.teachingClazzIds = teachingClazzIds;
+    }
+
+    public Date getDateStarts() {
+        return dateStarts;
+    }
+
+    public void setDateStarts(Date dateStarts) {
+        this.dateStarts = dateStarts;
+    }
+
+    public Date getDateEnds() {
+        return dateEnds;
+    }
+
+    public void setDateEnds(Date dateEnds) {
+        this.dateEnds = dateEnds;
     }
 }

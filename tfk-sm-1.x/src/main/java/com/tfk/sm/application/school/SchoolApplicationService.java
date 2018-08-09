@@ -6,16 +6,19 @@ import com.tfk.sm.domain.model.school.School;
 import com.tfk.sm.domain.model.school.SchoolRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author Liguiqing
  * @since V3.0
  */
-
+@Service
 public class SchoolApplicationService {
     private static Logger logger = LoggerFactory.getLogger(SchoolApplicationService.class);
 
+    @Autowired
     private SchoolRepository schoolRepository;
 
     public SchoolApplicationService(SchoolRepository schoolRepository) {

@@ -12,6 +12,7 @@ import com.tfk.share.domain.person.contact.QQ;
 import com.tfk.share.domain.person.contact.Weixin;
 import com.tfk.share.domain.school.Course;
 import com.tfk.share.domain.school.Grade;
+import com.tfk.share.infrastructure.validate.contact.ContactValidations;
 import com.tfk.sm.domain.model.clazz.Clazz;
 import com.tfk.sm.domain.model.clazz.UnitedClazz;
 import org.junit.Test;
@@ -25,6 +26,9 @@ import java.util.Date;
 import java.util.Set;
 
 import static org.junit.Assert.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * @author Liguiqing
@@ -50,9 +54,11 @@ public class TeacherRepositoryTest extends AbstractTransactionalJUnit4SpringCont
         PersonId personId = new PersonId("PER12345678");
         TeacherId teacherId = new TeacherId("TEA12345678");
         Teacher teacher = new Teacher(teacherId,personId,schoolId,"Test Teacher");
-        teacher.addContact(new QQ(123564+""));
-        teacher.addContact(new QQ(123567+""));
-        teacher.addContact(new Weixin("123456@123.com"));
+        ContactValidations contactValidations = mock(ContactValidations.class);
+        when(contactValidations.validate(any(Contact.class))).thenReturn(true).thenReturn(true).thenReturn(true);
+        teacher.addContact(contactValidations,new QQ(123564+""));
+        teacher.addContact(contactValidations,new QQ(123567+""));
+        teacher.addContact(contactValidations,new Weixin("123456@123.com"));
 
         Course yw = new Course("语文",new SubjectId("SUB123456781"));
 

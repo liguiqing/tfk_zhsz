@@ -1,6 +1,7 @@
 package com.tfk.sm.port.adapter.http.controller;
 
 import com.tfk.commons.util.DateUtilWrapper;
+import com.tfk.share.domain.id.school.TeacherId;
 import com.tfk.share.domain.person.Gender;
 import com.tfk.sm.application.data.Contacts;
 import com.tfk.sm.application.teacher.NewTeacherCommand;
@@ -16,10 +17,10 @@ import org.springframework.test.context.ContextHierarchy;
 
 import java.util.Date;
 
-import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
-import static org.powermock.api.mockito.PowerMockito.doNothing;
+import static org.powermock.api.mockito.PowerMockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
@@ -53,12 +54,14 @@ public class TeacherControllerTest extends AbstractControllerTest {
         contacts[1] = new Contacts("Weixin", "123456@aa.com");
 
         NewTeacherCommand command = new NewTeacherCommand("test school",joinDate,null,
-                "Test Teacher",null,Gender.Male,null);
+                "Test Teacher",null,Gender.Male,contacts);
         String content = toJsonString(command);
+        String teacherId = new TeacherId().id();
+        when(teacherApplicationService.newTeacher(any(NewTeacherCommand.class))).thenReturn(teacherId);
 
-        doNothing().when(teacherApplicationService).newTeacher(any(NewTeacherCommand.class));
         this.mvc.perform(post("/teacher").contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON).content(content))
-                .andExpect(jsonPath("$.status.success", is(Boolean.TRUE)));
+                .andExpect(jsonPath("$.status.success", is(Boolean.TRUE)))
+                .andExpect(jsonPath("$.teacherId", equalTo(teacherId)));
     }
 }
