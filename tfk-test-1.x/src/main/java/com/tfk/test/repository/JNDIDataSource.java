@@ -11,6 +11,7 @@ import org.springframework.mock.jndi.SimpleNamingContextBuilder;
 
 import javax.naming.NamingException;
 import javax.sql.DataSource;
+import java.sql.SQLException;
 
 /**
  * @author Liguiqing
@@ -24,18 +25,21 @@ public class JNDIDataSource {
     private String jdbcJndiName = "testJndiDs";
 
     @Autowired
-    private DataSource ds;
+    private DataSourceProperty dataSourceProperty;
 
     public JNDIDataSource() {
     }
 
     public void newJndiDataSource() {
         try {
+            DataSource dataSource = dataSourceProperty.getDataSource();
             SimpleNamingContextBuilder builder = new SimpleNamingContextBuilder();
-            builder.bind("java:comp/env/jdbc/" + this.jdbcJndiName, ds);
+            builder.bind("java:comp/env/jdbc/" + this.jdbcJndiName, dataSource);
             builder.activate();
         } catch (NamingException ex) {
             logger.error(ex.getLocalizedMessage());
+        }catch (SQLException ex){
+            logger.error(ex.getMessage());
         }
     }
 

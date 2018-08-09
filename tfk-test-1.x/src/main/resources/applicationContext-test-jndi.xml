@@ -5,7 +5,7 @@
         http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
 
     <bean id="jndiDataSource" class="com.tfk.test.repository.JNDIDataSource"
-          init-method="newJndiDataSource" depends-on="testDataSource">
+          init-method="newJndiDataSource" >
         <property name="jdbcJndiName" value="testJndiDs"></property>
     </bean>
 
