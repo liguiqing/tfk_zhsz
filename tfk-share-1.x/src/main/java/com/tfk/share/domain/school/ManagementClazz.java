@@ -1,5 +1,6 @@
 package com.tfk.share.domain.school;
 
+import com.google.common.base.MoreObjects;
 import com.tfk.share.domain.common.Period;
 import com.tfk.share.domain.id.school.ClazzId;
 import com.tfk.share.domain.id.school.SchoolId;
@@ -18,6 +19,13 @@ public class ManagementClazz extends GradClazz {
     public ManagementClazz(SchoolId schoolId, ClazzId clazzId, Grade grade, StudyYear year, Period period) {
         super(schoolId, clazzId, grade, year);
         this.period = period;
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this)
+                .add("period", period)
+                .toString();
     }
 
     ManagementClazz() {

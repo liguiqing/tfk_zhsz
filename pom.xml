@@ -17,6 +17,7 @@
 		<project.build.targetVersion>1.8</project.build.targetVersion>
 		<tfk.version>1.0.0-SNAPSHOT</tfk.version>
 		<spring.version>5.0.5.RELEASE</spring.version>
+		<spring.data-jpa.version>2.0.9.RELEASE</spring.data-jpa.version>
 		<hibernate.version>5.1.0.Final</hibernate.version>
         <mybatis.version>3.4.6</mybatis.version>
 		<junit.version>4.12</junit.version>
@@ -155,6 +156,12 @@
 				<scope>test</scope>
 			</dependency>
 
+			<dependency>
+				<groupId>org.springframework.data</groupId>
+				<artifactId>spring-data-jpa</artifactId>
+				<version>${spring.data-jpa.version}</version>
+			</dependency>
+
 			<!-- set hibernate -->
 			<dependency>
 				<groupId>org.hibernate</groupId>
@@ -166,7 +173,11 @@
 				<artifactId>hibernate-ehcache</artifactId>
 				<version>${hibernate.version}</version>
 			</dependency>
-
+			<dependency>
+				<groupId>org.hibernate</groupId>
+				<artifactId>hibernate-entitymanager</artifactId>
+				<version>${hibernate.version}</version>
+			</dependency>
 			<!-- set mybatis -->
             <dependency>
                 <groupId>org.mybatis</groupId>
@@ -190,7 +201,7 @@
 			<dependency>
 				<groupId>com.alibaba</groupId>
 				<artifactId>druid</artifactId>
-				<version>1.0.18</version>
+				<version>1.1.9</version>
 				<exclusions>
 					<exclusion>
 						<groupId>org.slf4j</groupId>
@@ -203,7 +214,7 @@
 			<dependency>
 				<groupId>mysql</groupId>
 				<artifactId>mysql-connector-java</artifactId>
-				<version>5.1.38</version>
+				<version>5.1.46</version>
 			</dependency>
 
 			<!-- set servlet -->

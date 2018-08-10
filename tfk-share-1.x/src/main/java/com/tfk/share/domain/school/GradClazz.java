@@ -1,5 +1,6 @@
 package com.tfk.share.domain.school;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.tfk.commons.domain.ValueObject;
 import com.tfk.share.domain.id.school.ClazzId;
@@ -61,6 +62,16 @@ public class GradClazz extends ValueObject {
     @Override
     public int hashCode() {
         return Objects.hashCode(schoolId, clazzId, grade, year);
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this)
+                .add("schoolId", schoolId)
+                .add("clazzId", clazzId)
+                .add("grade", grade)
+                .add("year", year)
+                .toString();
     }
 
     protected GradClazz(){}
