@@ -153,7 +153,7 @@ public class TeacherApplicationServiceTest {
 
         when(command.getManagementClazzIds()).thenReturn(ids).thenReturn(null);
         when(superviseClazzRepository.loadOf(any(ClazzId.class))).thenReturn(null).thenReturn((SuperviseClazz)c1).thenReturn((SuperviseClazz)c1).thenReturn(null);
-        when(unitedClazzRepository.loadOf(any(ClazzId.class))).thenReturn((UnitedClazz)c2).thenReturn(null);
+        when(unitedClazzRepository.loadOf(any(ClazzId.class))).thenReturn((UnitedClazz)c2).thenReturn((UnitedClazz)c2);
 
         when(command.getDateStarts()).thenReturn(new Date()).thenReturn(new Date()).thenReturn(new Date());
         when(command.getDateEnds()).thenReturn(new Date()).thenReturn(new Date()).thenReturn(new Date());
@@ -196,7 +196,7 @@ public class TeacherApplicationServiceTest {
         when(command.getDateEnds()).thenReturn(new Date()).thenReturn(new Date()).thenReturn(new Date());
 
         when(learningClazzRepository.loadOf(any(ClazzId.class))).thenReturn(c1).thenReturn(null).thenReturn(null).thenReturn(null);
-        when(unitedClazzRepository.loadOf(any(ClazzId.class))).thenReturn(c2).thenReturn(c2).thenReturn(null);
+        when(unitedClazzRepository.loadOf(any(ClazzId.class))).thenReturn(c2).thenReturn(c2).thenReturn(c2);
         doNothing().when(teacher).teachingAt(any(Period.class),any(Grade.class),any(Clazz.class),any(Course.class));
         teacherApplicationService.addTeachingClazzes(command,teacher);
         teacherApplicationService.addTeachingClazzes(command,teacher);

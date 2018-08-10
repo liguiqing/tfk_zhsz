@@ -73,7 +73,7 @@ public class ConfigTest extends AbstractTransactionalJUnit4SpringContextTests{
     @Test
     public void test()throws Exception{
         assertNotNull(jdbcTemplate);
-        jdbcTemplate.query("select 1 as r from dual", (rs,rowNum)->rs.getInt("r"));
+        jdbcTemplate.query("select 1 as r from dual where 1=?", (rs,rowNum)->rs.getInt("r"),1);
         assertNotNull(schoolRepository);
         assertNotNull(schoolRepository.nextIdentity());
         School school = new School(new SchoolId("12345678"), "name", "alias", SchoolScope.Middle);

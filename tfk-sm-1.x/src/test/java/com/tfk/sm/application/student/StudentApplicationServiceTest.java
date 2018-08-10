@@ -4,7 +4,6 @@ import com.tfk.commons.domain.Identities;
 import com.tfk.commons.util.DateUtilWrapper;
 import com.tfk.share.domain.id.IdPrefixes;
 import com.tfk.share.domain.id.school.StudentId;
-import com.tfk.share.domain.id.school.TeacherId;
 import com.tfk.share.domain.person.Contact;
 import com.tfk.share.domain.person.Gender;
 import com.tfk.share.infrastructure.validate.contact.ContactValidations;
@@ -92,5 +91,12 @@ public class StudentApplicationServiceTest {
         verify(contactValidations,times(5)).validate(any(Contact.class));
         verify(studentRepository,times(1)).save(any(Student.class));
         verify(studentRepository,times(1)).nextIdentity();
+    }
+
+
+    @Test
+    public void arrangingClazz()throws Exception{
+        StudentApplicationService studentApplicationService = getStudentApplicationService();
+
     }
 }

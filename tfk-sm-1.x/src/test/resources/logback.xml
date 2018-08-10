@@ -1,6 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <configuration scan="true" scanPeriod="60 seconds" debug="false">
-	<!-- <property resource="logger.properties" /> -->
+	<contextListener class="ch.qos.logback.classic.jul.LevelChangePropagator">
+		<resetJUL>true</resetJUL>
+	</contextListener>
+	<jmxConfigurator/>
 	<contextName>tfk</contextName>
 	<appender name='CONSOLE' class='ch.qos.logback.core.ConsoleAppender'>
 		<encoder>
@@ -32,7 +35,7 @@
 		<appender-ref ref="${logger.out}" />
 	</appender>
 
-	<root level="INFO">
+	<root level="${logger.root}">
 		<appender-ref ref="ASYNC" />
 	</root>
 
@@ -50,32 +53,23 @@
 		<level value="${logger.org.springframework.jdbc}" />
 		<appender-ref ref="ASYNC" />
 	</logger>
+	<logger name="org.springframework.jdbc.core.StatementCreatorUtils" additivity="false">
+		<level value="${logger.org.springframework.jdbc.core.StatementCreatorUtils}" />
+		<appender-ref ref="ASYNC" />
+	</logger>
 
 	<logger name="druid" additivity="false">
 		<level value="${logger.com.alibaba.druid}" />
 		<appender-ref ref="ASYNC" />
 	</logger>
 
-	<logger name="org.hibernate.type.descriptor.sql.BasicBinder"
-		additivity="false">
-		<level value="${logger.org.hibernate.type.descriptor.sql.BasicBinder}" />
+	<logger name="org.hibernate.type"
+			additivity="false">
+		<level value="${logger.org.hibernate.type}" />
 		<appender-ref ref='ASYNC' />
 	</logger>
-
-	<logger name="org.hibernate.type.descriptor.sql.BasicExtractor"
-		additivity="false">
-		<level value="${logger.org.hibernate.type.descriptor.sql.BasicExtractor}" />
-		<appender-ref ref='ASYNC' />
-	</logger>
-
-	<logger name="org.hibernate.engine.QueryParameters" additivity="false">
-		<level value="${logger.org.hibernate.engine.QueryParameters}" />
-		<appender-ref ref='ASYNC' />
-	</logger>
-
-	<logger name="org.hibernate.engine.query.HQLQueryPlan"
-		additivity="false">
-		<level value="${logger.org.hibernate.engine.query.HQLQueryPlan}" />
+	<logger name="org.hibernate.SQL" additivity="false">
+		<level value="${logger.org.hibernate.SQL}" />
 		<appender-ref ref='ASYNC' />
 	</logger>
 
@@ -85,12 +79,12 @@
 	</logger>
 
 	<logger name="com.tfk" additivity="false">
-		<level value="${logger.com.ez}" />
+		<level value="${logger.com.tfk}" />
+		<appender-ref ref="ASYNC" />
+	</logger>
+	<logger name="com.tfk.exception" additivity="false">
+		<level value="${logger.com.tfk.exception}" />
 		<appender-ref ref="ASYNC" />
 	</logger>
 
-	<logger name="com.tfk.exception" additivity="false">
-		<level value="${logger.com.ez.exception}" />
-		<appender-ref ref="ASYNC" />
-	</logger>
 </configuration>
