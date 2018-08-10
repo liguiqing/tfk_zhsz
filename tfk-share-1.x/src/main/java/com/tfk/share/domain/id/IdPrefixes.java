@@ -50,4 +50,7 @@ public class IdPrefixes {
 
     //客户唯一标识
     public static final String TenantIdPrefix = "TEN";
+
+    //评价参与者唯一标识
+    public static final String CollaboratorId = "COL";
 }

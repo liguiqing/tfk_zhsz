@@ -518,6 +518,6 @@
 		<module>tfk-commons-1.x</module>
 		<module>tfk-share-1.x</module>
 		<module>tfk-sm-1.x</module>
-
+		<module>tfk-assessment-1.x</module>
 	</modules>
 </project>
