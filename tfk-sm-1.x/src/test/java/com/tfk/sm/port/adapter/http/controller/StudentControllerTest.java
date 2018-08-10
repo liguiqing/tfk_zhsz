@@ -2,6 +2,7 @@ package com.tfk.sm.port.adapter.http.controller;
 
 import com.tfk.commons.domain.Identities;
 import com.tfk.share.domain.id.IdPrefixes;
+import com.tfk.sm.application.student.ArrangeStudentCommand;
 import com.tfk.sm.application.student.NewStudentCommand;
 import com.tfk.sm.application.student.StudentApplicationService;
 import com.tfk.test.controller.AbstractControllerTest;
@@ -16,7 +17,7 @@ import org.springframework.test.context.ContextHierarchy;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -49,5 +50,23 @@ public class StudentControllerTest extends AbstractControllerTest {
                 .accept(MediaType.APPLICATION_JSON).content(content))
                 .andExpect(jsonPath("$.status.success", is(Boolean.TRUE)))
                 .andExpect(jsonPath("$.studentId", equalTo(studentId)));
+        verify(studentApplicationService,times(1)).newStudent(ArgumentMatchers.any(NewStudentCommand.class));
+    }
+
+    @Test
+    public void onArrangeStudent() throws Exception{
+        assertNotNull(controller);
+        String studentId = Identities.genIdNone(IdPrefixes.StudentIdPrefix);
+        ArrangeStudentCommand command  = new ArrangeStudentCommand();
+        command.setStudentId(studentId);
+        String content = toJsonString(command);
+        doNothing().when(studentApplicationService).arrangingClazz(ArgumentMatchers.any(ArrangeStudentCommand.class));
+
+        this.mvc.perform(post("/student/arrange").contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON).content(content))
+                .andExpect(jsonPath("$.status.success", is(Boolean.TRUE)))
+                .andExpect(jsonPath("$.studentId", equalTo(studentId)));
+
+        verify(studentApplicationService,times(1)).arrangingClazz(ArgumentMatchers.any(ArrangeStudentCommand.class));
     }
 }

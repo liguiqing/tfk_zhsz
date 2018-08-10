@@ -1,6 +1,7 @@
 package com.tfk.sm.port.adapter.http.controller;
 
 import com.tfk.commons.port.adaptor.http.controller.AbstractHttpController;
+import com.tfk.sm.application.teacher.ArrangeTeacherCommand;
 import com.tfk.sm.application.teacher.NewTeacherCommand;
 import com.tfk.sm.application.teacher.TeacherApplicationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,5 +25,12 @@ public class TeacherController extends AbstractHttpController {
         logger.debug("New Teacher with name {} to schoole {}",command.getName(),command.getSchoolId());
         String teacherId = this.teacherApplicationService.newTeacher(command);
         return newModelAndViewBuilder("/teacher/newTeacherSuccess").withData("teacherId",teacherId).creat();
+    }
+
+    @RequestMapping(value = "/arrange",method = RequestMethod.POST)
+    public ModelAndView onArrangeTeacher(@RequestBody ArrangeTeacherCommand command){
+        logger.debug("Arrange Teacher  {} ",command.getTeacherId());
+        this.teacherApplicationService.arranging(command);
+        return newModelAndViewBuilder("/teacher/arrangeTeacherSuccess").withData("teacherId",command.getTeacherId()).creat();
     }
 }

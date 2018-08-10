@@ -3,7 +3,6 @@ package com.tfk.sm.domain.model.teacher;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.tfk.commons.domain.IdentifiedValueObject;
-import com.tfk.commons.domain.ValueObject;
 import com.tfk.share.domain.id.school.TeacherId;
 import com.tfk.share.domain.school.Course;
 import com.tfk.share.domain.school.Grade;

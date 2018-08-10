@@ -8,7 +8,6 @@ import com.tfk.share.domain.id.school.StudentId;
 import com.tfk.share.domain.school.Course;
 import com.tfk.share.domain.school.Grade;
 import com.tfk.sm.application.TeadentApplicationService;
-import com.tfk.sm.application.data.CourseData;
 import com.tfk.sm.application.data.StudyData;
 import com.tfk.sm.domain.model.clazz.Clazz;
 import com.tfk.sm.domain.model.student.Student;
@@ -35,7 +34,7 @@ public class StudentApplicationService  extends TeadentApplicationService {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public void arrangingClazz(StudentArrangingCommand command){
+    public void arrangingClazz(ArrangeStudentCommand command){
         logger.debug("Arranging student {} ",command.getStudentId());
         StudentId studentId = new StudentId(command.getStudentId());
         Student student = studentRepository.loadOf(studentId);
@@ -48,7 +47,7 @@ public class StudentApplicationService  extends TeadentApplicationService {
         arrangingStudies(command,student);
     }
 
-    protected void arrangingStudies(StudentArrangingCommand command,Student student){
+    protected void arrangingStudies(ArrangeStudentCommand command, Student student){
         StudyData[] courseData = command.getCourses();
         if(courseData != null){
             for(StudyData cd:courseData){

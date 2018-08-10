@@ -1,6 +1,5 @@
 package com.tfk.sm.port.adapter.http.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tfk.sm.application.school.NewSchoolCommand;
 import com.tfk.sm.application.school.SchoolApplicationService;
 import com.tfk.test.controller.AbstractControllerTest;
@@ -12,13 +11,12 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.ContextHierarchy;
 
-import static org.junit.Assert.*;
-
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
-import static org.powermock.api.mockito.PowerMockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.powermock.api.mockito.PowerMockito.doNothing;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 
 /**

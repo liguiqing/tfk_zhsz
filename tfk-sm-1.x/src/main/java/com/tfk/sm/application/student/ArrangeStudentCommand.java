@@ -1,6 +1,5 @@
 package com.tfk.sm.application.student;
 
-import com.tfk.sm.application.data.CourseData;
 import com.tfk.sm.application.data.StudyData;
 
 import java.util.Date;
@@ -10,7 +9,7 @@ import java.util.Date;
  * @since V3.0
  */
 
-public class StudentArrangingCommand {
+public class ArrangeStudentCommand {
 
     private String studentId;
 
@@ -22,9 +21,10 @@ public class StudentArrangingCommand {
 
     private String managedClazzId;
 
+    public ArrangeStudentCommand(){}
 
-    public StudentArrangingCommand(String studentId,Date dateStarts, Date dateEnds, StudyData[] courses,
-                                   String managedClazzId) {
+    public ArrangeStudentCommand(String studentId, Date dateStarts, Date dateEnds, StudyData[] courses,
+                                 String managedClazzId) {
         this.studentId = studentId;
         this.dateStarts = dateStarts;
         this.dateEnds = dateEnds;

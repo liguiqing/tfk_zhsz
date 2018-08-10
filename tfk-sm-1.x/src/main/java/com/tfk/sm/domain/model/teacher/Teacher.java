@@ -67,10 +67,12 @@ public class Teacher extends Teadent {
     }
 
     public boolean canTeach(Grade grade, Course course){
-        if(this.courses == null)
-            return false;
-        TeachedCourse tc = new TeachedCourse(this,grade, course);
-        return this.courses.contains(tc);
+        //TODO
+        return true;
+//        if(this.courses == null)
+//            return false;
+//        TeachedCourse tc = new TeachedCourse(this,grade, course);
+//        return this.courses.contains(tc);
     }
 
     public TeacherId teacherId() {

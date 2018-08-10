@@ -15,6 +15,15 @@ public class StudyData {
 
     private int gradeLevel;
 
+    public StudyData(){}
+
+    public StudyData(String clazzId, String courseName, String subjectId, int gradeLevel) {
+        this.clazzId = clazzId;
+        this.courseName = courseName;
+        this.subjectId = subjectId;
+        this.gradeLevel = gradeLevel;
+    }
+
     public String getClazzId() {
         return clazzId;
     }

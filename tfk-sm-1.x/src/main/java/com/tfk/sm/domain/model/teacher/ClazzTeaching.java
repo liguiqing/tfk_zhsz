@@ -4,7 +4,10 @@ import com.tfk.commons.domain.IdentifiedValueObject;
 import com.tfk.share.domain.common.Period;
 import com.tfk.share.domain.id.school.ClazzId;
 import com.tfk.share.domain.id.school.TeacherId;
-import com.tfk.share.domain.school.*;
+import com.tfk.share.domain.school.Course;
+import com.tfk.share.domain.school.Grade;
+import com.tfk.share.domain.school.StudyYear;
+import com.tfk.share.domain.school.TeachAndStudyClazz;
 
 /**
  * @author Liguiqing

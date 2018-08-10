@@ -1,9 +1,14 @@
 package com.tfk.sm.port.adapter.http.controller;
 
+import com.tfk.commons.domain.Identities;
 import com.tfk.commons.util.DateUtilWrapper;
+import com.tfk.share.domain.id.IdPrefixes;
+import com.tfk.share.domain.id.SubjectId;
 import com.tfk.share.domain.id.school.TeacherId;
 import com.tfk.share.domain.person.Gender;
 import com.tfk.sm.application.data.Contacts;
+import com.tfk.sm.application.data.CourseData;
+import com.tfk.sm.application.teacher.ArrangeTeacherCommand;
 import com.tfk.sm.application.teacher.NewTeacherCommand;
 import com.tfk.sm.application.teacher.TeacherApplicationService;
 import com.tfk.test.controller.AbstractControllerTest;
@@ -17,10 +22,11 @@ import org.springframework.test.context.ContextHierarchy;
 
 import java.util.Date;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
-import static org.powermock.api.mockito.PowerMockito.*;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
@@ -63,5 +69,40 @@ public class TeacherControllerTest extends AbstractControllerTest {
                 .accept(MediaType.APPLICATION_JSON).content(content))
                 .andExpect(jsonPath("$.status.success", is(Boolean.TRUE)))
                 .andExpect(jsonPath("$.teacherId", equalTo(teacherId)));
+
+        verify(teacherApplicationService,times(1)).newTeacher(any(NewTeacherCommand.class));
+    }
+
+    @Test
+    public void onArrangeTeacher()throws Exception{
+
+        String teacherId = Identities.genIdNone(IdPrefixes.TeacherIdPrefix);
+
+        SubjectId subjectId1 = new SubjectId();
+        SubjectId subjectId2 = new SubjectId();
+        SubjectId subjectId3 = new SubjectId();
+
+        CourseData[] courses = new CourseData[3];
+        courses[0] = new CourseData("语文",subjectId1.id());
+        courses[1] = new CourseData("数学",subjectId2.id());
+        courses[2] = new CourseData("英语",subjectId3.id());
+
+        String clazzId1 = Identities.genIdNone(IdPrefixes.ClazzIdPrefix);
+        String clazzId2 = Identities.genIdNone(IdPrefixes.ClazzIdPrefix);
+        String[] clazzIds = new String[]{clazzId1,clazzId2};
+
+        ArrangeTeacherCommand command = new ArrangeTeacherCommand(teacherId,courses,clazzIds,clazzIds);
+        command.setDateStarts(DateUtilWrapper.now());
+        command.setDateEnds(DateUtilWrapper.now());
+        String content = toJsonString(command);
+
+        doNothing().when(teacherApplicationService).arranging(any(ArrangeTeacherCommand.class));
+
+        this.mvc.perform(post("/teacher/arrange").contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON).content(content))
+                .andExpect(jsonPath("$.status.success", is(Boolean.TRUE)))
+                .andExpect(jsonPath("$.teacherId", equalTo(teacherId)));
+
+        verify(teacherApplicationService,times(1)).arranging(any(ArrangeTeacherCommand.class));
     }
 }

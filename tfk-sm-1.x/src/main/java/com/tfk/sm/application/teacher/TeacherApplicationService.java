@@ -35,7 +35,7 @@ public class TeacherApplicationService extends TeadentApplicationService {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public void arranging(TeacherArrangingCommand command){
+    public void arranging(ArrangeTeacherCommand command){
         logger.debug("Teacher join {}",command.getTeacherId());
         TeacherId teacherId = new TeacherId(command.getTeacherId());
         Teacher teacher = teacherRepository.loadOf(teacherId);
@@ -48,7 +48,7 @@ public class TeacherApplicationService extends TeadentApplicationService {
         teacherRepository.save(teacher);
     }
 
-    protected void addTeacherCourse(TeacherArrangingCommand command,Teacher teacher){
+    protected void addTeacherCourse(ArrangeTeacherCommand command, Teacher teacher){
         CourseData[] courseData = command.getCourses();
         if(courseData != null){
             for(CourseData cd:courseData){
@@ -59,7 +59,7 @@ public class TeacherApplicationService extends TeadentApplicationService {
         }
     }
 
-    protected void addManagementClazzes(TeacherArrangingCommand command,Teacher teacher){
+    protected void addManagementClazzes(ArrangeTeacherCommand command, Teacher teacher){
         String[] managementClazzIds  = command.getManagementClazzIds();
         if(managementClazzIds != null){
             for(String clazzId:managementClazzIds){
@@ -71,7 +71,7 @@ public class TeacherApplicationService extends TeadentApplicationService {
         }
     }
 
-    protected void addTeachingClazzes(TeacherArrangingCommand command,Teacher teacher){
+    protected void addTeachingClazzes(ArrangeTeacherCommand command, Teacher teacher){
         String[] teachingClazzIds = command.getTeachingClazzIds();
         CourseData[] courseData = command.getCourses();
         if(teachingClazzIds != null && courseData != null){

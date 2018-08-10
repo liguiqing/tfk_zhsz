@@ -2,13 +2,9 @@ package com.tfk.sm.domain.model.student;
 
 import com.google.common.base.Objects;
 import com.tfk.commons.domain.IdentifiedValueObject;
-import com.tfk.commons.domain.ValueObject;
 import com.tfk.share.domain.common.Period;
-import com.tfk.share.domain.id.PersonId;
 import com.tfk.share.domain.id.school.ClazzId;
 import com.tfk.share.domain.id.school.StudentId;
-import com.tfk.share.domain.person.Person;
-import com.tfk.share.domain.school.Course;
 import com.tfk.share.domain.school.Grade;
 import com.tfk.share.domain.school.ManagementClazz;
 import com.tfk.share.domain.school.StudyYear;

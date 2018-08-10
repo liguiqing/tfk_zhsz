@@ -31,7 +31,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.verify;
 
 /**
  * Copyright (c) 2016,$today.year, 深圳市易考试乐学测评有限公司
@@ -90,15 +89,15 @@ public class TeacherApplicationServiceTest {
     @Test
     public void arranging() throws Exception{
         TeacherApplicationService teacherApplicationService = getTeacherApplicationService();
-        doNothing().when(teacherApplicationService).addTeacherCourse(any(TeacherArrangingCommand.class),any(Teacher.class));
-        doNothing().when(teacherApplicationService).addManagementClazzes(any(TeacherArrangingCommand.class),any(Teacher.class));
-        doNothing().when(teacherApplicationService).addTeachingClazzes(any(TeacherArrangingCommand.class),any(Teacher.class));
+        doNothing().when(teacherApplicationService).addTeacherCourse(any(ArrangeTeacherCommand.class),any(Teacher.class));
+        doNothing().when(teacherApplicationService).addManagementClazzes(any(ArrangeTeacherCommand.class),any(Teacher.class));
+        doNothing().when(teacherApplicationService).addTeachingClazzes(any(ArrangeTeacherCommand.class),any(Teacher.class));
 
         Teacher teacher = mock(Teacher.class);
         TeacherId teacherId = new TeacherId();
         when(teacherRepository.loadOf(any(TeacherId.class))).thenReturn(teacher).thenReturn(null);
 
-        TeacherArrangingCommand command = mock(TeacherArrangingCommand.class);
+        ArrangeTeacherCommand command = mock(ArrangeTeacherCommand.class);
         when(command.getTeacherId()).thenReturn(teacherId.id());
         teacherApplicationService.arranging(command);
 
@@ -114,7 +113,7 @@ public class TeacherApplicationServiceTest {
     public void addTeacherCourse() throws Exception{
         TeacherApplicationService teacherApplicationService = getTeacherApplicationService();
 
-        TeacherArrangingCommand command = mock(TeacherArrangingCommand.class);
+        ArrangeTeacherCommand command = mock(ArrangeTeacherCommand.class);
         Teacher teacher = mock(Teacher.class);
 
         SubjectId subjectId1 = new SubjectId();
@@ -139,9 +138,10 @@ public class TeacherApplicationServiceTest {
     public void addManagementClazzes() throws Exception{
         TeacherApplicationService teacherApplicationService = getTeacherApplicationService();
 
-        TeacherArrangingCommand command = mock(TeacherArrangingCommand.class);
+        ArrangeTeacherCommand command = mock(ArrangeTeacherCommand.class);
         Teacher teacher = mock(Teacher.class);
-
+        Date dateStarts = DateUtilWrapper.now();
+        Date dateEnds = DateUtilWrapper.now();
         String[] ids = new String[4];
         ids[0] = Identities.genIdNone(IdPrefixes.ClazzIdPrefix);
         ids[1] = Identities.genIdNone(IdPrefixes.ClazzIdPrefix);
@@ -169,7 +169,7 @@ public class TeacherApplicationServiceTest {
     public void addTeachingClazzes() throws Exception{
         TeacherApplicationService teacherApplicationService = getTeacherApplicationService();
 
-        TeacherArrangingCommand command = mock(TeacherArrangingCommand.class);
+        ArrangeTeacherCommand command = mock(ArrangeTeacherCommand.class);
         Teacher teacher = mock(Teacher.class);
 
         SubjectId subjectId1 = new SubjectId();
