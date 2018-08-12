@@ -3,21 +3,21 @@
         "http://www.hibernate.org/dtd/hibernate-mapping/hibernate-mapping-3.0.dtd">
 <hibernate-mapping default-access="field" default-cascade="all" >
 
-    <class name="com.tfk.assessment.domain.model.collaborator.Assessor" table="as_Assessee" lazy="true" dynamic-update="false">
+    <class name="com.tfk.assessment.domain.model.collaborator.Assessor" table="as_Assessor"
+           lazy="true" dynamic-update="false">
         <id name="id" type="long" column="id" unsaved-value="-1">
             <generator class="native" />
         </id>
-        <component name="collaboratorId" class="com.tfk.share.domain.id.assessment.CollaboratorId">
-            <property name="id" column="collaboratorId" type="java.lang.String"/>
+        <component name="assessorId" class="com.tfk.share.domain.id.assessment.AssessorId">
+            <property name="id" column="assessorId" type="java.lang.String"/>
         </component>
-        <component name="teacherId" class="com.tfk.share.domain.id.school.TeacherId">
-            <property name="id" column="teacherId" type="java.lang.String"/>
-        </component>
-        <component name="personId" class="com.tfk.share.domain.id.PersonId">
-            <property name="id" column="personId" type="java.lang.String"/>
-        </component>
-        <component name="schoolId" class="com.tfk.share.domain.id.school.SchoolId">
-            <property name="id" column="schoolId" type="java.lang.String"/>
+        <component name="collaborator" class="com.tfk.assessment.domain.model.collaborator.Collaborator">
+            <component name="personId" class="com.tfk.share.domain.id.PersonId">
+                <property name="id" column="personId" type="java.lang.String"/>
+            </component>
+            <component name="schoolId" class="com.tfk.share.domain.id.school.SchoolId">
+                <property name="id" column="schoolId" type="java.lang.String"/>
+            </component>
         </component>
     </class>
 

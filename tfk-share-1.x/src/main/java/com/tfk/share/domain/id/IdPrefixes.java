@@ -51,6 +51,15 @@ public class IdPrefixes {
     //客户唯一标识
     public static final String TenantIdPrefix = "TEN";
 
-    //评价参与者唯一标识
-    public static final String CollaboratorId = "COL";
+    //评价指标唯一标识
+    public static final String IndexIdPrefix = "INX";
+
+    //评价活动唯一标识
+    public static final String AssessIdPrefix = "ASS";
+
+    //评价主评者唯一标识
+    public static final String AssessorIdPrefix = "ASR";
+
+    //评价被评者唯一标识
+    public static final String AssesseeIdPrefix = "ASE";
 }

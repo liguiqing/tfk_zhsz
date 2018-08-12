@@ -1,9 +1,9 @@
 package com.tfk.assessment.domain.model.collaborator;
 
+import com.tfk.commons.domain.Entity;
+import com.tfk.share.domain.id.assessment.AssesseeId;
 import com.tfk.share.domain.id.school.StudentId;
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import lombok.*;
 
 /**
  * 被评估计者
@@ -12,10 +12,14 @@ import lombok.ToString;
  * @since V3.0
  */
 @ToString
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = false)
 @Builder
-public class Assessee extends Collaborator {
-    private StudentId studentId;
+@AllArgsConstructor
+@Getter
+public class Assessee extends Entity {
+    private AssesseeId assesseeId;
 
-    protected Assessee(){}
+    private Collaborator collaborator;
+
+    public Assessee(){}
 }

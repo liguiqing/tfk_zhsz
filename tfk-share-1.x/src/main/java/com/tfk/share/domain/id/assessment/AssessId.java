@@ -11,13 +11,13 @@ import com.tfk.share.domain.id.IdPrefixes;
  * @since V3.0
  */
 
-public class CollaboratorId extends AbstractId {
+public class AssessId extends AbstractId {
 
-    public CollaboratorId(String anId) {
+    public AssessId(String anId) {
         super(anId);
     }
 
-    public CollaboratorId() {
-        super(Identities.genIdNone(IdPrefixes.CollaboratorId));
+    public AssessId() {
+        super(Identities.genIdNone(IdPrefixes.AssesseeIdPrefix));
     }
 }

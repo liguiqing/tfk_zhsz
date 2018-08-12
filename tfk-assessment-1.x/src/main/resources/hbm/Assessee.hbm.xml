@@ -7,17 +7,16 @@
         <id name="id" type="long" column="id" unsaved-value="-1">
             <generator class="native" />
         </id>
-        <component name="collaboratorId" class="com.tfk.share.domain.id.assessment.CollaboratorId">
-            <property name="id" column="collaboratorId" type="java.lang.String"/>
+        <component name="assesseeId" class="com.tfk.share.domain.id.assessment.AssesseeId">
+            <property name="id" column="assesseeId" type="java.lang.String"/>
         </component>
-        <component name="studentId" class="com.tfk.share.domain.id.school.StudentId">
-            <property name="id" column="studentId" type="java.lang.String"/>
-        </component>
-        <component name="personId" class="com.tfk.share.domain.id.PersonId">
-            <property name="id" column="personId" type="java.lang.String"/>
-        </component>
-        <component name="schoolId" class="com.tfk.share.domain.id.school.SchoolId">
-            <property name="id" column="schoolId" type="java.lang.String"/>
+        <component name="collaborator" class="com.tfk.assessment.domain.model.collaborator.Collaborator">
+            <component name="personId" class="com.tfk.share.domain.id.PersonId">
+                <property name="id" column="personId" type="java.lang.String"/>
+            </component>
+            <component name="schoolId" class="com.tfk.share.domain.id.school.SchoolId">
+                <property name="id" column="schoolId" type="java.lang.String"/>
+            </component>
         </component>
     </class>
 

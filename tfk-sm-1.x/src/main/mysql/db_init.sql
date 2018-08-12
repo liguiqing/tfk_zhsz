@@ -16,7 +16,8 @@ VALUES  ('00-00-000','系统未定义消息',1,'zh_cn',NULL),
         ('cm-01-001','联系方法格式错误',3,'zh_cn',"CM"),
         ('sm-02-001','学校查无此班级',3,'zh_cn',"SM"),
         ('sm-03-001','学校查无此老师',3,'zh_cn',"SM"),
-        ('sm-04-001','学校查无此学生',3,'zh_cn',"SM");
+        ('sm-04-001','学校查无此学生',3,'zh_cn',"SM"),
+        ('as-01-001','指标得分超过允许范围',3,'zh_cn',"AS");
 
 DROP TABLE IF EXISTS `cm_course`;
 CREATE TABLE `cm_course` (

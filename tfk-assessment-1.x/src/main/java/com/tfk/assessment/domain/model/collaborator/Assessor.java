@@ -1,5 +1,7 @@
 package com.tfk.assessment.domain.model.collaborator;
 
+import com.tfk.commons.domain.Entity;
+import com.tfk.share.domain.id.assessment.AssessorId;
 import com.tfk.share.domain.id.school.TeacherId;
 import lombok.*;
 
@@ -11,10 +13,11 @@ import lombok.*;
  */
 @Getter
 @ToString
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = false)
 @Builder
-public class Assessor extends Collaborator {
-    private TeacherId teacherId;
+public class Assessor extends Entity {
+    private AssessorId assessorId;
 
-    protected Assessor(){}
+    private Collaborator collaborator;
+
 }

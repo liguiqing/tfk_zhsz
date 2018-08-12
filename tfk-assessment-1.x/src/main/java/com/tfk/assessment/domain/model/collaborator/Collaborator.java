@@ -1,10 +1,10 @@
 package com.tfk.assessment.domain.model.collaborator;
 
-import com.tfk.commons.domain.Entity;
+import com.tfk.commons.domain.ValueObject;
 import com.tfk.share.domain.id.PersonId;
-import com.tfk.share.domain.id.assessment.CollaboratorId;
 import com.tfk.share.domain.id.school.SchoolId;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.ToString;
 
 /**
@@ -15,10 +15,9 @@ import lombok.ToString;
  */
 
 @ToString
-@EqualsAndHashCode
-public abstract class Collaborator extends Entity {
-
-    private CollaboratorId collaboratorId;
+@EqualsAndHashCode(of={"schoolId","personId"},callSuper = false)
+@Getter
+public class Collaborator extends ValueObject {
 
     private SchoolId schoolId;
 
