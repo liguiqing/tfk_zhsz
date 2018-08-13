@@ -6,6 +6,7 @@ import com.tfk.assessment.domain.model.index.Index;
 import com.tfk.assessment.domain.model.index.IndexRepository;
 import com.tfk.commons.util.DateUtilWrapper;
 import com.tfk.share.domain.id.index.IndexId;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -17,6 +18,7 @@ import java.util.Set;
  * @author Liguiqing
  * @since V3.0
  */
+@Slf4j
 @Component("AssesseService")
 public class AssesseService {
 

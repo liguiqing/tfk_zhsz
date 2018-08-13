@@ -52,5 +52,9 @@ public class IndexRepositoryTest extends AbstractTransactionalJUnit4SpringContex
         indexRepository.save(mIndex);
 
         Index dIndex_ = indexRepository.loadOf(id1);
+        Index lIndex_ = indexRepository.loadOf(id2);
+        Index mIndex_ = indexRepository.loadOf(id3);
+        Index zIndex_ = indexRepository.loadOf(id4);
+        Index tIndex_ = indexRepository.loadOf(id5);
     }
 }

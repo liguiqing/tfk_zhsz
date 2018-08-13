@@ -18,7 +18,7 @@
     </jpa:repositories>
 
     <context:annotation-config />
-    <context:component-scan base-package="com.tfk.assessment.application.**" >
+    <context:component-scan base-package="com.tfk.assessment.**" >
         <context:include-filter type="annotation" expression="org.springframework.stereotype.Service"></context:include-filter>
         <context:include-filter type="annotation" expression="org.springframework.stereotype.Component"></context:include-filter>
     </context:component-scan>

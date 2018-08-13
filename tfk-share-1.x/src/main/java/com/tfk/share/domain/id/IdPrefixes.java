@@ -62,4 +62,16 @@ public class IdPrefixes {
 
     //评价被评者唯一标识
     public static final String AssesseeIdPrefix = "ASE";
+
+    //评价勋章唯一标识
+    public static final String MedalIdPrefix = "MED";
+
+    //授勋唯一标识
+    public static final String AwardIdPrefix = "AWA";
+
+    //授勋证物唯一标识
+    public static final String EvidenceIdPrefix = "EVI";
+
+    //勋章晋级唯一标识
+    public static final String PromotionIdPrefix = "PRO";
 }

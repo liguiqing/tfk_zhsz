@@ -5,6 +5,12 @@
 package com.tfk.share.domain.school;
 
 import com.tfk.commons.domain.ValueObject;
+import com.tfk.commons.util.DateUtilWrapper;
+import com.tfk.share.domain.common.Period;
+
+import java.util.Date;
+import java.time.LocalTime;
+import java.util.Calendar;
 
 /**
  * @author Liguiqing
@@ -20,6 +26,26 @@ public class Term extends ValueObject{
     public Term(String name,Sequence seq) {
         this.name = name;
         this.seq = seq.seq;
+    }
+
+    public static Period defaultPeriodOfThisTerm(){
+        Date now = Calendar.getInstance().getTime();
+        int month = DateUtilWrapper.month(now);
+        Date dateStarts = null;
+        Date dateEnds = null;
+        int year = DateUtilWrapper.year(now);
+        if(month > 8 || month < 2){
+
+            dateStarts = DateUtilWrapper.toDate(year + "-09-01", "yyyy-MM-dd");
+            dateEnds = DateUtilWrapper.toDate((year+1) + "-01-31", "yyyy-MM-dd");
+            if(month <2) {
+                dateStarts = DateUtilWrapper.toDate((year-1) + "-09-01", "yyyy-MM-dd");
+            }
+        }else{
+            dateStarts = DateUtilWrapper.toDate(year + "-02-01", "yyyy-MM-dd");
+            dateEnds = DateUtilWrapper.toDate((year+1) + "-07-31", "yyyy-MM-dd");
+        }
+        return new Period(dateStarts,dateEnds);
     }
 
     public static Term First(){

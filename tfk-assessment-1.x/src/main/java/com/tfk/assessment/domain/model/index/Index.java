@@ -37,15 +37,9 @@ public abstract class Index extends IdentifiedValueObject {
 
     private Set<Index> children;
 
-    public Index(IndexId indexId, String name, double score, double weight, boolean customized) {
-        this.indexId = indexId;
-        this.name = name;
-        this.score = score;
-        this.weight = weight;
-        this.customized = customized;
-    }
 
-    public Index(IndexId indexId, String name, double score, double weight, boolean customized,String description) {
+    protected Index(IndexId indexId, String name, double score, double weight,
+                    boolean customized,String description) {
         this.indexId = indexId;
         this.name = name;
         this.score = score;

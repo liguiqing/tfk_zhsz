@@ -13,7 +13,8 @@ import lombok.Builder;
 public class EstheticsIndex extends Index {
 
     @Builder
-    private EstheticsIndex(IndexId indexId, String name, double score, double weight, boolean customized, String description) {
+    private EstheticsIndex(IndexId indexId, String name, double score, double weight,
+                           boolean customized, String description) {
         super(indexId, name, score, weight, customized, description);
     }
 

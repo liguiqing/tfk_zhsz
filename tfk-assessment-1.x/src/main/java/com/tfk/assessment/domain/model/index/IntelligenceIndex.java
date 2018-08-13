@@ -19,8 +19,8 @@ public class IntelligenceIndex extends Index {
 
     @Builder
     private IntelligenceIndex(IndexId indexId, String name, double score, double weight,
-                              boolean customized) {
-        super(indexId, name, score, weight, customized);
+                              boolean customized,String description) {
+        super(indexId, name, score, weight, customized, description);
     }
 
     public IntelligenceIndex() {
