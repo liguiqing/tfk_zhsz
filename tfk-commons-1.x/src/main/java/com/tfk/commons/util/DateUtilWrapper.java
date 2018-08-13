@@ -7,6 +7,8 @@ package com.tfk.commons.util;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.commons.lang3.time.DateUtils;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoField;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -315,5 +317,27 @@ public class DateUtilWrapper {
             return date;
         long time = date.getTime();
         return new Date(time - second*1000);
+    }
+
+    /**
+     * 计算日期在一年中的周次
+     *
+     * @param date
+     * @return
+     */
+    public static int weekOfYear(Date date){
+        Calendar day =  Calendar.getInstance();
+        day.setTime(date);
+        return day.get(Calendar.WEEK_OF_YEAR);
+    }
+
+    /**
+     * 计算当天是本周的第几天
+     *
+     * @return
+     */
+    public static int dayOfWeek(){
+        LocalDate today = LocalDate.now();
+        return today.get(ChronoField.DAY_OF_WEEK);
     }
 }
