@@ -2,22 +2,34 @@ package com.tfk.sm.domain.model.student;
 
 import com.tfk.commons.domain.EntityRepository;
 import com.tfk.share.domain.id.school.StudentId;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 /**
  * @author Liguiqing
  * @since V3.0
  */
-@Repository
+@Repository("StudentRepository")
 public interface StudentRepository extends EntityRepository<Student,StudentId> {
 
     default StudentId nextIdentity() {
         return new StudentId();
     }
 
+    @Override
+    @CacheEvict(value = "smCache", key="#p0.studentId().id")
+    void save(Student student);
+
+    @Cacheable(value = "smCache",key = "#p0.id",unless = "#result == null")
     @Query("FROM Student  where removed=0 and studentId=?1")
     Student loadOf(StudentId studentId);
 
-    //List<Study> findStudentStudies(Student student);
+    @CacheEvict(value = "smCache",key="#p0")
+    @Modifying
+    @Query(value = "update sm_student set removed = 1 where studentId=:studentId",nativeQuery = true)
+    void delete(@Param("studentId") String studentId);
 }

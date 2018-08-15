@@ -2,7 +2,11 @@ package com.tfk.sm.domain.model.teacher;
 
 import com.tfk.commons.domain.EntityRepository;
 import com.tfk.share.domain.id.school.TeacherId;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -17,11 +21,16 @@ public interface TeacherRepository extends EntityRepository<Teacher,TeacherId> {
         return new TeacherId();
     }
 
+    @Cacheable(value = "smCache",key = "#p0.id",unless = "#result == null")
     @Query("from Teacher where teacherId=?1 and removed=0")
     Teacher loadOf(TeacherId teacherId);
 
-    //@Query("")
-    //List<ClazzTeaching> findTeaching(PersonId personId);
+    @Override
+    @CacheEvict(value = "smCache", key="#p0.teacherId().id")
+    void save(Teacher teacher);
 
-    //List<ClazzManagement> findManagement(PersonId personId);
+    @CacheEvict(value = "smCache",key="#p0")
+    @Modifying
+    @Query(value = "update sm_teacher set removed = 1 where teacherId=:teacherId",nativeQuery = true)
+    void delete(@Param("teacherId") String teacherId);
 }

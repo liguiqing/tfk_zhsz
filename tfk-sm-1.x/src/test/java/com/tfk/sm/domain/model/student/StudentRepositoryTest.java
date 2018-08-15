@@ -19,6 +19,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.ContextHierarchy;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,12 +33,14 @@ import static org.mockito.Mockito.*;
  * @author Liguiqing
  * @since V3.0
  */
-@ContextConfiguration(locations = {
-        "classpath:META-INF/spring/applicationContext-sm-app.xml",
-        "classpath:applicationContext-sm-test-ds.xml",
-        "classpath:applicationContext-test-jndi.xml",
-        "classpath:applicationContext-sm-test-data.xml"}
-)
+@ContextHierarchy({
+        @ContextConfiguration(locations = {
+                "classpath:META-INF/spring/applicationContext-sm-app.xml",
+                "classpath:applicationContext-test-cache.xml",
+                "classpath:applicationContext-sm-test-ds.xml",
+                "classpath:applicationContext-test-jndi.xml",
+                "classpath:applicationContext-sm-test-data.xml"}
+        )})
 @Transactional
 @Rollback
 public class StudentRepositoryTest extends AbstractTransactionalJUnit4SpringContextTests {
@@ -50,7 +53,7 @@ public class StudentRepositoryTest extends AbstractTransactionalJUnit4SpringCont
         SchoolId schoolId = new SchoolId("SCH12345678");
         PersonId personId = new PersonId("PER12345678");
         ClazzId clazzId = new ClazzId("CLA12345678");
-        StudentId studentId = new StudentId("STU12345678");
+        StudentId studentId = studentRepository.nextIdentity();
 
         ContactValidations contactValidations = mock(ContactValidations.class);
         when(contactValidations.validate(any(Contact.class))).thenReturn(true).thenReturn(true).thenReturn(true);
@@ -73,9 +76,16 @@ public class StudentRepositoryTest extends AbstractTransactionalJUnit4SpringCont
         studentRepository.save(student);
 
         Student student1 = studentRepository.loadOf(studentId);
+        student1 = studentRepository.loadOf(studentId);
+        student1 = studentRepository.loadOf(studentId);
+        student1 = studentRepository.loadOf(studentId);
+
         assertEquals(student,student1);
 
         Set<Contact> contacts = student1.contacts();
         assertTrue(contacts.contains(new QQ(123564+"")));
+
+
     }
+
 }

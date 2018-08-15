@@ -19,6 +19,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.ContextHierarchy;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,12 +35,14 @@ import static org.mockito.Mockito.when;
  * @author Liguiqing
  * @since V3.0
  */
-@ContextConfiguration(locations = {
+@ContextHierarchy({
+    @ContextConfiguration(locations = {
         "classpath:META-INF/spring/applicationContext-sm-app.xml",
+        "classpath:applicationContext-test-cache.xml",
         "classpath:applicationContext-sm-test-ds.xml",
         "classpath:applicationContext-test-jndi.xml",
         "classpath:applicationContext-sm-test-data.xml"}
-)
+)})
 @Transactional
 @Rollback
 public class TeacherRepositoryTest extends AbstractTransactionalJUnit4SpringContextTests {
@@ -86,5 +89,12 @@ public class TeacherRepositoryTest extends AbstractTransactionalJUnit4SpringCont
         assertEquals(teacher,teacher1);
         Set<Contact> contacts = teacher1.contacts();
         assertTrue(contacts.contains(new QQ(123564+"")));
+        for(int i = 0;i<10000;i++){
+            teacher1 =  teacherRepository.loadOf(teacherId);
+        }
+        assertNotNull(teacher1);
+        teacherRepository.delete(teacherId.id());
+        teacher1 =  teacherRepository.loadOf(teacherId);
+        assertNull(teacher1);
     }
 }

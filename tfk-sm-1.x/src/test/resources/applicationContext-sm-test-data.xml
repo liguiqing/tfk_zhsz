@@ -10,7 +10,7 @@
 
         http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
 
-
+    <bean class="com.tfk.sm.domain.model.school.CacheMock"></bean>
 
     <bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean" depends-on="jndiDataSource" >
         <property name="jndiName" value="java:comp/env/jdbc/${jdbc.jndi.name}"/>
@@ -21,9 +21,6 @@
             <ref bean="dataSource" />
         </constructor-arg>
     </bean>
-
-    <!-- 1. 使用cglib进行动态代理 -->
-    <aop:aspectj-autoproxy proxy-target-class="true" />
 
     <!-- 2. 配置 JPA 的 EntityManagerFactory -->
     <bean id="entityManagerFactory"

@@ -75,10 +75,4 @@ public class School extends Entity {
     }
 
     protected School(){}
-
-    @Override
-    public  String getCacheKey(){
-        return this.schoolId.id();
-    }
-
 }

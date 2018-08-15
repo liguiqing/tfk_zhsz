@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.ContextHierarchy;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,12 +21,14 @@ import static org.junit.Assert.assertNull;
  * @author Liguiqing
  * @since V3.0
  */
-@ContextConfiguration(locations = {
-        "classpath:META-INF/spring/applicationContext-sm-app.xml",
-        "classpath:applicationContext-sm-test-ds.xml",
-        "classpath:applicationContext-test-jndi.xml",
-        "classpath:applicationContext-sm-test-data.xml"}
-)
+@ContextHierarchy({
+        @ContextConfiguration(locations = {
+                "classpath:META-INF/spring/applicationContext-sm-app.xml",
+                "classpath:applicationContext-test-cache.xml",
+                "classpath:applicationContext-sm-test-ds.xml",
+                "classpath:applicationContext-test-jndi.xml",
+                "classpath:applicationContext-sm-test-data.xml"}
+        )})
 @Transactional
 @Rollback
 public class ClazzRepositoryTest extends AbstractTransactionalJUnit4SpringContextTests {
@@ -47,12 +50,19 @@ public class ClazzRepositoryTest extends AbstractTransactionalJUnit4SpringContex
         ClazzHistory history = new ClazzHistory(clazzId,grade,studyYear,"一班");
         clazz.addHistory(history);
         clazzRepository1.save(clazz);
+
+        Clazz clazz1 = clazzRepository1.loadOf(clazzId);
+        clazz1 = clazzRepository1.loadOf(clazzId);
+        clazz1 = clazzRepository1.loadOf(clazzId);
+        clazz1 = clazzRepository1.loadOf(clazzId);
+        clazz1 = clazzRepository1.loadOf(clazzId);
+
+        assertNotNull(clazz1);
     }
 
     @Test
     public void loadOf(){
         assertNotNull(clazzRepository1);
-        Clazz clazz = clazzRepository1.loadOf(new ClazzId());
-        assertNull(clazz);
+
     }
 }

@@ -2,6 +2,7 @@
 <beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns="http://www.springframework.org/schema/beans"
        xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:util="http://www.springframework.org/schema/util"
        xmlns:repository="http://www.springframework.org/schema/data/repository"
        xmlns:jpa="http://www.springframework.org/schema/data/jpa"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
@@ -10,9 +11,12 @@
        	http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
        	http://www.springframework.org/schema/data/repository
        	http://www.springframework.org/schema/data/repository/spring-repository.xsd
+       	http://www.springframework.org/schema/util
+	    http://www.springframework.org/schema/util/spring-util.xsd
        	http://www.springframework.org/schema/context
 	    http://www.springframework.org/schema/context/spring-context.xsd">
 
+    <util:properties id="smConfig" location="classpath*:META-INF/spring/smConfig.properties"/>
     <jpa:repositories base-package="com.tfk.sm.domain.model.**.*" >
         <repository:include-filter type="annotation" expression="org.springframework.stereotype.Repository" />
     </jpa:repositories>
