@@ -25,4 +25,5 @@ public class SchoolId extends AbstractId {
     public  SchoolId(){
         super(Identities.genIdNone(SchoolIdPrefix));
     }
+
 }

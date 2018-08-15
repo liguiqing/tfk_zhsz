@@ -18,6 +18,6 @@ public class AssessId extends AbstractId {
     }
 
     public AssessId() {
-        super(Identities.genIdNone(IdPrefixes.AssesseeIdPrefix));
+        super(Identities.genIdNone(IdPrefixes.AssessIdPrefix));
     }
 }
