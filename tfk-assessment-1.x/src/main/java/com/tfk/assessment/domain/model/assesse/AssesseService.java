@@ -23,13 +23,13 @@ import java.util.Set;
 public class AssesseService {
 
     @Autowired
-    private AssesseRepository repository;
+    private AssessRepository repository;
 
     @Autowired
     private IndexRepository indexRepository;
 
-    public Assesse newAssesse(Index index, Assessor assessor, Assessee assessee, double score){
-        return Assesse.builder().assessId(repository.nextIdentity())
+    public Assess newAssesse(Index index, Assessor assessor, Assessee assessee, double score){
+        return Assess.builder().assessId(repository.nextIdentity())
                 .indexId(index.getIndexId())
                 .assessorId(assessor.getAssessorId())
                 .assesseeId(assessee.getAssesseeId())
@@ -39,7 +39,7 @@ public class AssesseService {
                 .build();
     }
 
-    public List<Assesse> newAssesses(IndexId indexId, Assessor assessor, Assessee assessee, double score){
+    public List<Assess> newAssesses(IndexId indexId, Assessor assessor, Assessee assessee, double score){
         Index topIndex = indexRepository.loadOf(indexId);
         if(!topIndex.isTop())
             return null;
@@ -47,11 +47,11 @@ public class AssesseService {
         return toChildrenAssess(topIndex, assessor, assessee, score);
     }
 
-    private List<Assesse> toChildrenAssess(Index topIndex, Assessor assessor, Assessee assessee,double score){
-        ArrayList<Assesse> tops = new ArrayList<>(topIndex.allSize());
+    private List<Assess> toChildrenAssess(Index topIndex, Assessor assessor, Assessee assessee, double score){
+        ArrayList<Assess> tops = new ArrayList<>(topIndex.allSize());
         tops.add(newAssesse(topIndex, assessor, assessee, score));
         if(topIndex.hasChildren()){
-            ArrayList<Assesse> assesses = new ArrayList(topIndex.size());
+            ArrayList<Assess> assesses = new ArrayList(topIndex.size());
             Set<Index> children = topIndex.getChildren();
             for(Index child:children){
                 double childScore = child.calRealScore(score);

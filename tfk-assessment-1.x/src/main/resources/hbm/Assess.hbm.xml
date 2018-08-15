@@ -3,7 +3,7 @@
         "http://www.hibernate.org/dtd/hibernate-mapping/hibernate-mapping-3.0.dtd">
 <hibernate-mapping default-access="field" default-cascade="all" >
 
-    <class name="com.tfk.assessment.domain.model.assesse.Assesse" table="as_Assesse" lazy="true" dynamic-update="false">
+    <class name="com.tfk.assessment.domain.model.assesse.Assess" table="as_Assess" lazy="true" dynamic-update="false">
         <id name="id" type="long" column="id" unsaved-value="-1">
             <generator class="native" />
         </id>

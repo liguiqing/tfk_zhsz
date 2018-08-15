@@ -5,7 +5,7 @@
 		diskPersistent="false" diskExpiryThreadIntervalSeconds="120"
 		memoryStoreEvictionPolicy="LRU" />
 
-	<cache name="assessmentCache" maxEntriesLocalHeap="2000"
+	<cache name="asCache" maxEntriesLocalHeap="2000"
 		   eternal="false" timeToIdleSeconds="3600" timeToLiveSeconds="0"
 		   overflowToDisk="false" statistics="true">
 	</cache>

@@ -40,6 +40,8 @@
                 <value>/hbm/Assessee.hbm.xml</value>
                 <value>/hbm/Assessor.hbm.xml</value>
                 <value>/hbm/Index.hbm.xml</value>
+                <value>/hbm/Award.hbm.xml</value>
+                <value>/hbm/Medal.hbm.xml</value>
             </list>
         </property>
         <property name="jpaProperties">
@@ -52,6 +54,8 @@
                 <prop key="hibernate.format_sql">${hibernate.show_sql}</prop>
                 <prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.auto}</prop>
                 <prop key="hibernate.jdbc.batch_size">${hibernate.jdbc.batch_size}</prop>
+                <prop key="hibernate.order_inserts">true</prop>
+                <prop key="hibernate.order_updates">true</prop>
             </props>
         </property>
     </bean>

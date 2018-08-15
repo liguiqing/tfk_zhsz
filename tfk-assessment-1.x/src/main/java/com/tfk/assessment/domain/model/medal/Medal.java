@@ -35,7 +35,7 @@ public class Medal extends IdentifiedValueObject {
 
     private Medal low;  //下一级勋章
 
-    private Set<IndexId> indexIds;//对应指标
+    private String indexIds="";//对应指标ID,多指标时以;隔离
 
     @Builder
     private Medal(MedalId medalId, SchoolId schoolId, String name, String category,
@@ -49,8 +49,14 @@ public class Medal extends IdentifiedValueObject {
         this.low = low;
     }
 
-    public Medal() {
+    public Medal() {}
 
+    public void addIndex(String indexId){
+        if(this.indexIds.length() >0){
+            this.indexIds += ";"+indexId;
+        }else{
+            this.indexIds = indexId;
+        }
     }
 
     public boolean canUp(){

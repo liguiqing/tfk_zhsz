@@ -2,7 +2,11 @@ package com.tfk.assessment.domain.model.index;
 
 import com.tfk.commons.domain.EntityRepository;
 import com.tfk.share.domain.id.index.IndexId;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -17,7 +21,16 @@ public interface IndexRepository extends EntityRepository<Index,IndexId> {
         return new IndexId();
     }
 
-    @Query("From Index where indexId=?1")
+    @Cacheable(value = "asCache",key = "#p0.id",unless = "#result == null")
+    @Query("From Index where indexId=?1 and removed=0")
     Index loadOf(IndexId indexId);
 
+    @Override
+    @CacheEvict(value = "asCache", key="#p0.indexId.id")
+    void save(Index index);
+
+    @CacheEvict(value = "asCache",key="#p0")
+    @Modifying
+    @Query(value = "update as_Index set removed = 1 where indexId=:indexId",nativeQuery = true)
+    void delete(@Param("indexId")String indexId);
 }

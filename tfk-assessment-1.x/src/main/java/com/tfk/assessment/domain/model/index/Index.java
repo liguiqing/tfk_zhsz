@@ -2,9 +2,13 @@ package com.tfk.assessment.domain.model.index;
 
 import com.google.common.collect.Sets;
 import com.tfk.commons.AssertionConcerns;
-import com.tfk.commons.domain.IdentifiedValueObject;
+import com.tfk.commons.domain.Entity;
+import com.tfk.share.domain.id.identityaccess.TenantId;
 import com.tfk.share.domain.id.index.IndexId;
-import lombok.*;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.ToString;
 
 import java.util.Set;
 
@@ -14,63 +18,72 @@ import java.util.Set;
  * @author Liguiqing
  * @since V3.0
  */
-@ToString(of = {"indexId","name","score","weight","description"})
+@ToString(of = {"indexId","name","score","description"})
 @EqualsAndHashCode(of = {"indexId"},callSuper = false)
 @Getter
-public abstract class Index extends IdentifiedValueObject {
+public class Index extends Entity {
 
     private IndexId indexId;
 
+    private Index parent; //上级指标
+
+    private IndexCategory category;
+
+    private TenantId owner;
+
     private String name;
 
-    private double score;
-
-    private double weight;
+    private IndexScore score;
 
     private String description;
 
-    private boolean customized; //是否定制指标
-
-    private Index parent; //上级指标
-
-    private Index mapped; //映射到标准指标
-
     private Set<Index> children;
 
+    private Set<IndexMapping> mappings; //映射到标准指标
 
-    protected Index(IndexId indexId, String name, double score, double weight,
-                    boolean customized,String description) {
+    @Builder
+    private Index(IndexId indexId, Index parent, IndexCategory category,
+                 TenantId owner, String name, double score, double weight, String description) {
         this.indexId = indexId;
-        this.name = name;
-        this.score = score;
-        this.weight = weight;
-        this.customized = customized;
-        this.description = description;
-    }
-
-    public void description(String description) {
-        this.description = description;
-    }
-
-    public void customized(boolean customized) {
-        this.customized = customized;
-    }
-
-    public void parent(Index parent) {
         this.parent = parent;
+        this.category = category;
+        this.owner = owner;
+        this.name = name;
+        this.score = new IndexScore(score,weight);
+        this.description = description;
     }
 
-    public void mappedTo(Index stIndex){
-        this.mapped = stIndex;
+    public boolean isCustomized(){
+        return this.owner != null;
     }
 
-    public void addChild(Index child){
-        if(child != null && child.typeOf(this))
+    public Index mappedTo(Index mapped,double score,double weight){
+        if(mapped.isCustomized())
+            return this;
+
+        if(this.mappings == null)
+            this.mappings = Sets.newHashSet();
+
+        this.mappings.add(new IndexMapping(this,mapped,new IndexScore(score,weight)));
+        return this;
+    }
+
+    public Index addChild(Index child){
+        if(child == null || !child.typeOf(this))
+            return this;
 
         if(this.children == null)
             this.children = Sets.newHashSet();
-
+        child.parent = this;
         this.children.add(child);
+        return this;
+    }
+
+    public Index removeChild(Index child){
+        if(this.children == null)
+            return this;
+        this.children.remove(child);
+        return this;
     }
 
     public boolean isTop(){
@@ -78,11 +91,17 @@ public abstract class Index extends IdentifiedValueObject {
     }
 
     public boolean typeOf(Index other){
-        return other.getClass().isAssignableFrom(getClass());
+        return this.category.equals(other.category);
     }
 
     public boolean hasChildren(){
         return this.size() > 0;
+    }
+
+    public int mappedSize(){
+        if(this.mappings == null)
+            return 0;
+        return this.mappings.size();
     }
 
     public int size(){
@@ -103,15 +122,24 @@ public abstract class Index extends IdentifiedValueObject {
     }
 
     public double calRealScore(double score) {
+        double convertScore = this.score.convert(score);
         if(parent != null)
-            AssertionConcerns.assertArgumentRange(score,0,parent.getScore(),"as-01-001");
-        else
-            AssertionConcerns.assertArgumentRange(score,0,this.getScore(),"as-01-001");
+            convertScore = parent.score.convert(score);
 
-        return this.weight * score;
+        AssertionConcerns.assertArgumentRange(convertScore,0,this.getMaxScore(),"as-01-001");
+
+        return convertScore;
     }
 
-    public abstract  String getCategory();
+    public double getMaxScore(){
+        if(this.parent != null)
+            return parent.getMaxScore();
+        return this.getScore().getScore();
+    }
+
+    public String getCategory(){
+        return this.category.name();
+    }
 
     public Index(){}
 

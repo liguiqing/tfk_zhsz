@@ -16,11 +16,9 @@ import java.util.Date;
  * @since V3.0
  */
 @ToString
-@EqualsAndHashCode(of={"assessId"},callSuper = false)
-@Builder
-@AllArgsConstructor
+@EqualsAndHashCode(of={"assessorId","assesseeId","indexId","doneDate"},callSuper = false)
 @Getter
-public class Assesse extends IdentifiedValueObject {
+public class Assess extends IdentifiedValueObject {
 
     private AssessId assessId;
 
@@ -36,6 +34,18 @@ public class Assesse extends IdentifiedValueObject {
 
     private double score;
 
-    public Assesse(){}
+    @Builder
+    private Assess(AssessId assessId, AssessorId assessorId, AssesseeId assesseeId,
+                   IndexId indexId, Date doneDate, String category, double score) {
+        this.assessId = assessId;
+        this.assessorId = assessorId;
+        this.assesseeId = assesseeId;
+        this.indexId = indexId;
+        this.doneDate = doneDate;
+        this.category = category;
+        this.score = score;
+    }
+
+    public Assess(){}
 
 }

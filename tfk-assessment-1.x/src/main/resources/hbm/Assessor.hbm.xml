@@ -18,6 +18,7 @@
             <component name="schoolId" class="com.tfk.share.domain.id.school.SchoolId">
                 <property name="id" column="schoolId" type="java.lang.String"/>
             </component>
+            <property name="role" column="role" type="java.lang.String"/>
         </component>
     </class>
 
