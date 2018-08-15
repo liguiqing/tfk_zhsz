@@ -228,4 +228,11 @@ public class DateUtilWrapperTest {
         s = DateUtilWrapper.toString(lgNow, "yyyy-MM-dd HH:mm:ss");
         assertEquals("2018-06-30 00:00:59",s);
     }
+
+    @Test
+    public void toDate()throws Exception{
+        Date date = DateUtilWrapper.toDate("2018-06-29 12:12:12","yyyy-MM-dd HH:mm:ss");
+        //Date newDate = DateUtilWrapper.toDate(date,"yyyy-MM-dd");
+
+    }
 }

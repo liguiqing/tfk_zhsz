@@ -7,7 +7,7 @@ package com.tfk.commons.util;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.commons.lang3.time.DateUtils;
 
-import java.time.LocalDate;
+import java.time.*;
 import java.time.temporal.ChronoField;
 import java.util.Calendar;
 import java.util.Date;
@@ -268,7 +268,7 @@ public class DateUtilWrapper {
     }
 
     /**
-     * 字符
+     * 字符串转换为日期
      * @param date
      * @return
      */
@@ -278,6 +278,18 @@ public class DateUtilWrapper {
         }catch (Exception e){
             throw new RuntimeException(e);
         }
+    }
+
+    /**
+     * 将日期转换成新的格式日期
+     * 如将 2018-01-01 12:58:58 -> 2018-01-01 12
+     * @param date
+     * @param pattern @see org.apache.commons.lang3.time.format
+     * @return
+     */
+    public static Date toDate(Date date,String pattern){
+        String sDate = toString(date, pattern);
+        return toDate(sDate);
     }
 
     /**
@@ -339,5 +351,30 @@ public class DateUtilWrapper {
     public static int dayOfWeek(){
         LocalDate today = LocalDate.now();
         return today.get(ChronoField.DAY_OF_WEEK);
+    }
+
+    /**
+     * 将日期转换到 LocalDate
+     * @param date
+     * @return
+     */
+    public static LocalDate toLocalDate(Date date){
+        Instant instant = date.toInstant();
+        ZoneId zone = ZoneId.systemDefault();
+        LocalDateTime localDateTime = LocalDateTime.ofInstant(instant, zone);
+        return localDateTime.toLocalDate();
+    }
+
+    /**
+     * 将日期转换到LocalTime
+     *
+     * @param date
+     * @return
+     */
+    public static LocalTime toLocalTime(Date date){
+        Instant instant = date.toInstant();
+        ZoneId zone = ZoneId.systemDefault();
+        LocalDateTime localDateTime = LocalDateTime.ofInstant(instant, zone);
+        return localDateTime.toLocalTime();
     }
 }
