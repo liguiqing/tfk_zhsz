@@ -5,10 +5,7 @@ import com.tfk.commons.AssertionConcerns;
 import com.tfk.commons.domain.Entity;
 import com.tfk.share.domain.id.identityaccess.TenantId;
 import com.tfk.share.domain.id.index.IndexId;
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.*;
 
 import java.util.Set;
 
@@ -27,14 +24,16 @@ public class Index extends Entity {
 
     private Index parent; //上级指标
 
+    @Setter
     private IndexCategory category;
 
     private TenantId owner;
 
+    @Setter
     private String name;
-
+    @Setter
     private IndexScore score;
-
+    @Setter
     private String description;
 
     private Set<Index> children;
@@ -45,12 +44,14 @@ public class Index extends Entity {
     private Index(IndexId indexId, Index parent, IndexCategory category,
                  TenantId owner, String name, double score, double weight, String description) {
         this.indexId = indexId;
-        this.parent = parent;
         this.category = category;
         this.owner = owner;
         this.name = name;
         this.score = new IndexScore(score,weight);
         this.description = description;
+        if(parent != null){
+            parent.addChild(this);
+        }
     }
 
     public boolean isCustomized(){
@@ -141,6 +142,6 @@ public class Index extends Entity {
         return this.category.name();
     }
 
-    public Index(){}
+    protected Index(){}
 
 }

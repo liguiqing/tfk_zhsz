@@ -13,12 +13,14 @@
         <component name="schoolId" class="com.tfk.share.domain.id.school.SchoolId">
             <property name="id" column="schoolId" type="java.lang.String"/>
         </component>
+        <component name="level" class="com.tfk.assessment.domain.model.medal.MedalLevel">
+            <property name="level" column="level" type="java.lang.Integer"/>
+            <property name="category" column="category" type="java.lang.String"/>
+        </component>
         <property name="name" column="name" type="java.lang.String"/>
-        <property name="category" column="category" type="java.lang.String"/>
         <property name="upLeast" column="upLeast" type="java.lang.Integer"/>
         <property name="indexIds" column="indexIds" type="java.lang.String"/>
-        <many-to-one name="high" column="highId" class="com.tfk.assessment.domain.model.medal.Medal" unique="true"/>
-        <many-to-one name="low" column="lowId" class="com.tfk.assessment.domain.model.medal.Medal" unique="true"/>
+        <many-to-one name="high" column="highId" property-ref="medalId" class="com.tfk.assessment.domain.model.medal.Medal" />
     </class>
 
 </hibernate-mapping>

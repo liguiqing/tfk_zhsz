@@ -1,9 +1,7 @@
 package com.tfk.assessment.application.medal;
 
-import com.tfk.assessment.domain.model.medal.Award;
-import com.tfk.assessment.domain.model.medal.AwardRepository;
-import com.tfk.assessment.domain.model.medal.Medal;
-import com.tfk.assessment.domain.model.medal.MedalRepository;
+import com.google.common.collect.Lists;
+import com.tfk.assessment.domain.model.medal.*;
 import com.tfk.assessment.infrastructure.school.SchoolService;
 import com.tfk.commons.util.DateUtilWrapper;
 import com.tfk.share.domain.common.Period;
@@ -42,14 +40,24 @@ public class AwardApplicationServiceTest {
     }
 
     @Test
+    public void promotionAllSchool()throws Exception{
+        AwardApplicationService awardApplicationService = getAwardApplicationService();
+        doNothing().when(awardApplicationService).promotion(any(PersonId.class),any(SchoolId.class));
+        List<PersonId> personIds = Lists.newArrayList();
+        when(schoolService.getAllStudentPersonIds(any(SchoolId.class))).thenReturn(personIds);
+        awardApplicationService.promotion(new SchoolId());
+    }
+
+    @Test
     public void promotion() throws Exception{
         AwardApplicationService awardApplicationService = getAwardApplicationService();
+        MedalLevel l1 = new MedalLevel(1, "B");
         PersonId personId = new PersonId();
         SchoolId schoolId = new SchoolId();
         Period period = new Period(DateUtilWrapper.toDate("2018-09-01", "yyyy-MM-dd"),
                 DateUtilWrapper.toDate("2019-01-31", "yyyy-MM-dd"));
         Medal medal = Medal.builder()
-                .category("c1")
+                .level(l1)
                 .name("C1")
                 .upLeast(3)
                 .schoolId(schoolId)
@@ -73,8 +81,10 @@ public class AwardApplicationServiceTest {
                 DateUtilWrapper.toDate("2019-01-31", "yyyy-MM-dd"));
         MedalId medalId = new MedalId();
         Medal high = mock(Medal.class);
+        when(high.getLevel()).thenReturn(new MedalLevel(2, "G"));
+        MedalLevel l1 = new MedalLevel(1, "B");
         Medal medal = Medal.builder()
-                .category("c1")
+                .level(l1)
                 .name("C1")
                 .upLeast(3)
                 .medalId(medalId)

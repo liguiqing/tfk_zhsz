@@ -1,7 +1,6 @@
 package com.tfk.assessment.domain.model.medal;
 
 import com.tfk.commons.domain.EntityRepository;
-import com.tfk.share.domain.id.medal.AwardId;
 import com.tfk.share.domain.id.medal.MedalId;
 import com.tfk.share.domain.id.school.SchoolId;
 import org.springframework.cache.annotation.CacheEvict;
@@ -36,8 +35,6 @@ public interface MedalRepository extends EntityRepository<Medal,MedalId> {
     @Modifying
     @Query(value = "DELETE from Medal where medalId=?1")
     void delete(MedalId medalId);
-
-
 
     List<Medal> findMedalsBySchoolId(SchoolId schoolId);
 }

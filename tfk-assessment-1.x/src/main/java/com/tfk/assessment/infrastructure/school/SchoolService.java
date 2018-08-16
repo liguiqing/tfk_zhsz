@@ -46,4 +46,14 @@ public class SchoolService {
     public List<PersonId> getAllStudentPersonIds(SchoolId schoolId) {
         return api().getAllStudentPersonIds(schoolId);
     }
+
+    public List<PersonId> getStudentPersonIds(SchoolId schoolId) {
+        //TODO
+        return null;
+    }
+
+    public List<PersonId> getTeacherPersonIds(SchoolId schoolId) {
+        //TODO
+        return null;
+    }
 }

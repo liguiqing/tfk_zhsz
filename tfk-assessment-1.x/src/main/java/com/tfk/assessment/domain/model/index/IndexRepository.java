@@ -1,13 +1,17 @@
 package com.tfk.assessment.domain.model.index;
 
 import com.tfk.commons.domain.EntityRepository;
+import com.tfk.share.domain.id.identityaccess.TenantId;
 import com.tfk.share.domain.id.index.IndexId;
+import com.tfk.share.domain.school.Teadent;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * @author Liguiqing
@@ -33,4 +37,14 @@ public interface IndexRepository extends EntityRepository<Index,IndexId> {
     @Modifying
     @Query(value = "update as_Index set removed = 1 where indexId=:indexId",nativeQuery = true)
     void delete(@Param("indexId")String indexId);
+
+    List<Index> findAllByNameAndOwnerAndCategory(String name, TenantId owner, IndexCategory category);
+
+    List<Index> findAllByOwnerAndParentIsNull(TenantId owner);
+
+    List<Index> findAllByNameAndCategoryAndOwnerIsNull(String name, IndexCategory category);
+
+    List<Index> findAllByNameAndCategoryAndOwnerIsNullAndParentIsNull(String name,IndexCategory category);
+
+    List<Index> findAllByOwnerIsNullAndParentIsNull();
 }

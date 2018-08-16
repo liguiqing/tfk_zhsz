@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -20,7 +21,7 @@ import java.util.Set;
  */
 @Slf4j
 @Component("AssesseService")
-public class AssesseService {
+public class AssessService {
 
     @Autowired
     private AssessRepository repository;
@@ -28,7 +29,7 @@ public class AssesseService {
     @Autowired
     private IndexRepository indexRepository;
 
-    public Assess newAssesse(Index index, Assessor assessor, Assessee assessee, double score){
+    public Assess newAssess(Index index, Assessor assessor, Assessee assessee, double score){
         return Assess.builder().assessId(repository.nextIdentity())
                 .indexId(index.getIndexId())
                 .assessorId(assessor.getAssessorId())
@@ -39,17 +40,18 @@ public class AssesseService {
                 .build();
     }
 
-    public List<Assess> newAssesses(IndexId indexId, Assessor assessor, Assessee assessee, double score){
-        Index topIndex = indexRepository.loadOf(indexId);
-        if(!topIndex.isTop())
-            return null;
+    public List<Assess> newAssesses(Index index, Assessor assessor, Assessee assessee, double score){
+        if(!index.isTop()) {
+            Assess assess = newAssess(index, assessor, assessee,score);
+            return Arrays.asList(assess);
+        }
 
-        return toChildrenAssess(topIndex, assessor, assessee, score);
+        return toChildrenAssess(index, assessor, assessee, score);
     }
 
     private List<Assess> toChildrenAssess(Index topIndex, Assessor assessor, Assessee assessee, double score){
         ArrayList<Assess> tops = new ArrayList<>(topIndex.allSize());
-        tops.add(newAssesse(topIndex, assessor, assessee, score));
+        tops.add(newAssess(topIndex, assessor, assessee, score));
         if(topIndex.hasChildren()){
             ArrayList<Assess> assesses = new ArrayList(topIndex.size());
             Set<Index> children = topIndex.getChildren();

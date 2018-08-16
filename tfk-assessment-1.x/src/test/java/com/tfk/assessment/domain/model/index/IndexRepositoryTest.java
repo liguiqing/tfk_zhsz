@@ -11,6 +11,8 @@ import org.springframework.test.context.ContextHierarchy;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 import static org.junit.Assert.*;
 
 /**
@@ -89,6 +91,27 @@ public class IndexRepositoryTest extends AbstractTransactionalJUnit4SpringContex
 
         load(10,false,id1,id2,id3,id4,id5);
 
+        List<Index> indexes = indexRepository.findAllByNameAndOwnerAndCategory("M Index",ownerId,IndexCategory.Esthetics);
+        assertEquals(1,indexes.size());
+        assertEquals(mIndex,indexes.get(0));
+
+        indexes = indexRepository.findAllByOwnerAndParentIsNull(ownerId);
+        assertEquals(5,indexes.size());
+        assertTrue(indexes.contains(mIndex));
+
+        indexes = indexRepository.findAllByOwnerIsNullAndParentIsNull();
+        assertEquals(2,indexes.size());
+        assertTrue(indexes.contains(mIndex5));
+        assertTrue(indexes.contains(mIndex6));
+
+        indexes = indexRepository.findAllByNameAndCategoryAndOwnerIsNull("M5 Index",IndexCategory.Esthetics);
+        assertEquals(1,indexes.size());
+        assertTrue(indexes.contains(mIndex5));
+
+        indexes = indexRepository.findAllByNameAndCategoryAndOwnerIsNullAndParentIsNull("M5 Index",IndexCategory.Esthetics);
+        assertEquals(1,indexes.size());
+        assertTrue(indexes.contains(mIndex5));
+
         indexRepository.delete(id1.id());
         indexRepository.delete(id2.id());
         indexRepository.delete(id3.id());
@@ -112,4 +135,5 @@ public class IndexRepositoryTest extends AbstractTransactionalJUnit4SpringContex
             }
         }
     }
+
 }

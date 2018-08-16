@@ -17,6 +17,14 @@ public enum IndexCategory {
         this.type = type;
     }
 
+    public static IndexCategory getByName(String name){
+        for(IndexCategory c:IndexCategory.values()){
+            if(c.name.equals(name))
+                return c;
+        }
+        return null;
+    }
+
     @Override
     public String toString(){
         return this.name;
