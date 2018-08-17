@@ -34,4 +34,8 @@ public class Identities {
         String uuid = UUID.randomUUID().toString();
         return prefix + uuid.replaceAll("-","");
     }
+
+    public static boolean isQualified(String id){
+        return id != null && id.length() > 7 && id.length() < 37;
+    }
 }

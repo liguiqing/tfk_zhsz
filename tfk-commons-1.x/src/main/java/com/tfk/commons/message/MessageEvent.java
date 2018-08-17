@@ -16,4 +16,8 @@ public class MessageEvent<T extends Messagingable> {
     public String getMessage(){
         return t.toMessge();
     }
+
+    public String getTarget(){
+        return this.t.target();
+    }
 }

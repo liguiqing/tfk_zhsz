@@ -13,6 +13,6 @@ public class WeixinMessageListener implements MessageListener {
 
     @Override
     public void addEvent(MessageEvent event) {
-        log.debug("Send Message to Weixin {}",event.getMessage());
+        log.debug("Send  {} to {} with Weixin",event.getMessage(),event.getTarget());
     }
 }
