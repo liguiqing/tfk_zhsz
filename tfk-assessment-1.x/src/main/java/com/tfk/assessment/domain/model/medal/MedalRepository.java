@@ -37,4 +37,6 @@ public interface MedalRepository extends EntityRepository<Medal,MedalId> {
     void delete(MedalId medalId);
 
     List<Medal> findMedalsBySchoolId(SchoolId schoolId);
+
+    List<Medal> findMedalsBySchoolIdAndHigh(SchoolId schoolId,Medal hight);
 }

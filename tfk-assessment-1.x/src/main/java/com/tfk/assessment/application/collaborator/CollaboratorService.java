@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -36,21 +37,40 @@ public class CollaboratorService {
 
     @Transactional(rollbackFor = Exception.class)
     public void toCollaborator(String schoolId){
-        log.debug("");
+        log.debug("School {} Teacher to Assessor,Student to Assessee",schoolId);
+        studentToAssessee(schoolId);
+        teacherToAssessor(schoolId);
+   }
 
-        SchoolId schoolId1 = new SchoolId(schoolId);
-        List<PersonId> teacherPersonIds = schoolService.getTeacherPersonIds(schoolId1);
-        List<PersonId> studentPersonIds = schoolService.getStudentPersonIds(schoolId1);
-        for(PersonId pid:teacherPersonIds){
-            AssessorId assessorId = assessorRepository.nextIdentity();
-            Assessor assessor = Assessor.builder().assessorId(assessorId).personId(pid).role("Teacher").schoolId(schoolId1).build();
-            assessorRepository.save(assessor);
-        }
+    @Transactional(rollbackFor = Exception.class)
+    public void studentToAssessee(String schoolId){
+        log.debug("School {} students to assessees");
+        SchoolId schoolId_ = new SchoolId(schoolId);
+        List<PersonId> studentPersonIds = schoolService.getAllStudentPersonIds(schoolId_);
+        toAssessee(studentPersonIds,schoolId_,"Student");
+    }
 
-        for(PersonId pid:studentPersonIds){
+    @Transactional(rollbackFor = Exception.class)
+    public void teacherToAssessor(String schoolId){
+        log.debug("School {} teacher to assessors");
+        SchoolId schoolId_ = new SchoolId(schoolId);
+        List<PersonId> teacherPersonIds = schoolService.getTeacherPersonIds(schoolId_);
+        toAssessor(teacherPersonIds, schoolId_, "Teacher");
+    }
+
+    private void toAssessee(Collection<PersonId> personIds,SchoolId schoolId,String role){
+        for(PersonId pid:personIds){
             AssesseeId assesseeId = assesseeRepository.nextIdentity();
-            Assessee assessee = Assessee.builder().assesseeId(assesseeId).personId(pid).role("Student").schoolId(schoolId1).build();
+            Assessee assessee = Assessee.builder().assesseeId(assesseeId).personId(pid).role(role).schoolId(schoolId).build();
             assesseeRepository.save(assessee);
+        }
+    }
+
+    private void toAssessor(Collection<PersonId> personIds,SchoolId schoolId,String role){
+        for(PersonId pid:personIds){
+            AssessorId assessorId = assessorRepository.nextIdentity();
+            Assessor assessor = Assessor.builder().assessorId(assessorId).personId(pid).role(role).schoolId(schoolId).build();
+            assessorRepository.save(assessor);
         }
     }
 }

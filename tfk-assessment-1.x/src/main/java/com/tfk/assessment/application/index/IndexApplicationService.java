@@ -21,19 +21,21 @@ public class IndexApplicationService {
     private IndexRepository indexRepository;
 
     @Transactional(rollbackFor = Exception.class)
-    public void newStIndex(NewIndexCommand command){
+    public String newStIndex(NewIndexCommand command){
         log.debug("New st index {}",command);
 
         Index index = command.toStIndex(indexRepository.nextIdentity());
         save(index,command);
+        return index.getIndexId().id();
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public void newTenantIndex(NewIndexCommand command){
+    public String newTenantIndex(NewIndexCommand command){
         log.debug("New index {}",command);
 
         Index index = command.toOwnerIndex(indexRepository.nextIdentity());
         save(index,command);
+        return index.getIndexId().id();
     }
 
     private void save(Index index,NewIndexCommand command){

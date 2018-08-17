@@ -10,6 +10,7 @@ import org.springframework.test.context.ContextHierarchy;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -54,12 +55,26 @@ public class MedalRepositoryTest extends AbstractTransactionalJUnit4SpringContex
         Medal medal2 = Medal.builder().medalId(medalId3).schoolId(schoolId).name("阳光少年").upLeast(5).level(l2).build();
         Medal medal3 = Medal.builder().medalId(medalId4).schoolId(schoolId).name("阳光少年").upLeast(5).level(l3).build();
         Medal medal4 = Medal.builder().medalId(medalId5).schoolId(schoolId).name("阳光少年").upLeast(5).level(l4).build();
+
+        medalRepository.save(medal2);
+        medalRepository.save(medal3);
+        medalRepository.save(medal4);
+
+        medal2 = medalRepository.loadOf(medal2.getMedalId());
+        medal3 = medalRepository.loadOf(medal3.getMedalId());
+        medal4 = medalRepository.loadOf(medal4.getMedalId());
+
         medal.setHigh(medal2);
         medal11.setHigh(medal2);
         medal2.setHigh(medal3);
         medal3.setHigh(medal4);
 
         medalRepository.save(medal);
+        medal = medalRepository.loadOf(medal.getMedalId());
+        assertEquals("阳光少年",medal.getName());
+        medal.setName("阳光少年2");
+        medalRepository.save(medal);
+        assertEquals("阳光少年2",medal.getName());
 
         Medal medal_ = medalRepository.loadOf(medalId1);
         assertNotNull(medal_);
@@ -78,25 +93,37 @@ public class MedalRepositoryTest extends AbstractTransactionalJUnit4SpringContex
     }
 
     @Test
-    public void findMedalsBySchoolId(){
+    public void find(){
         SchoolId schoolId1 = new SchoolId();
         SchoolId schoolId2 = new SchoolId();
-        creatMedalsForSchool(schoolId1, 5);
-        creatMedalsForSchool(schoolId2,8);
+        List<Medal> medals = createMedalsForSchool(schoolId1, 1,new MedalLevel(2,"G"),null);
+        Medal hight = medalRepository.loadOf(medals.get(0).getMedalId());
+        createMedalsForSchool(schoolId1, 5,null,hight);
+        createMedalsForSchool(schoolId2,8,null,null);
 
         List<Medal> medalList = medalRepository.findMedalsBySchoolId(new SchoolId());
         assertEquals(0,medalList.size());
         List<Medal> medalList1 = medalRepository.findMedalsBySchoolId(schoolId1);
         List<Medal> medalList2 = medalRepository.findMedalsBySchoolId(schoolId2);
-        assertEquals(5,medalList1.size());
+        assertEquals(6,medalList1.size());
         assertEquals(8,medalList2.size());
+
+        List<Medal> medalList3 = medalRepository.findMedalsBySchoolIdAndHigh(schoolId1,hight);
+        assertEquals(5,medalList3.size());
     }
 
-    void creatMedalsForSchool(SchoolId schoolId,int size){
+    List<Medal> createMedalsForSchool(SchoolId schoolId,int size,MedalLevel level,Medal hight){
+        ArrayList<Medal> medals = new ArrayList(size);
+        if(level == null)
+            level = new MedalLevel(1,"B");
+
         for(int i =0;i<size;i++){
             MedalId medalId = medalRepository.nextIdentity();
-            Medal medal = Medal.builder().medalId(medalId).schoolId(schoolId).name("阳光少年").upLeast(8).level(new MedalLevel(1,"B")).build();
+            Medal medal = Medal.builder().medalId(medalId)
+                    .schoolId(schoolId).name("阳光少年").upLeast(8).level(level).high(hight).build();
             medalRepository.save(medal);
+            medals.add(medal);
         }
+        return medals;
     }
 }

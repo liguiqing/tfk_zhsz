@@ -13,6 +13,7 @@ import lombok.*;
 @AllArgsConstructor
 @Setter
 @Getter
+@ToString(callSuper = true)
 public class UpdateIndexCommand extends NewIndexCommand {
 
     private String indexId;

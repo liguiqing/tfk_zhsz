@@ -32,11 +32,13 @@ public class Assess extends IdentifiedValueObject {
 
     private String category;
 
-    private double score;
+    private double score; //得分
+
+    private String word;//评语
 
     @Builder
     private Assess(AssessId assessId, AssessorId assessorId, AssesseeId assesseeId,
-                   IndexId indexId, Date doneDate, String category, double score) {
+                   IndexId indexId, Date doneDate, String category, double score,String word) {
         this.assessId = assessId;
         this.assessorId = assessorId;
         this.assesseeId = assesseeId;
@@ -44,6 +46,7 @@ public class Assess extends IdentifiedValueObject {
         this.doneDate = doneDate;
         this.category = category;
         this.score = score;
+        this.word = word;
     }
 
     public Assess(){}

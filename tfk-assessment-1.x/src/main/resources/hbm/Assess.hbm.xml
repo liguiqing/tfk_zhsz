@@ -22,6 +22,7 @@
         <property name="doneDate" column="doneDate" type="java.util.Date"/>
         <property name="score" column="score" type="java.lang.Double"/>
         <property name="category" column="category" type="java.lang.String"/>
+        <property name="word" column="word" type="java.lang.String"/>
     </class>
 
 

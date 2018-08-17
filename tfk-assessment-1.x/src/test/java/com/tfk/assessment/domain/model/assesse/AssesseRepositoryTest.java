@@ -46,6 +46,7 @@ public class AssesseRepositoryTest extends AbstractTransactionalJUnit4SpringCont
                 .assesseeId(assesseeId)
                 .category("D")
                 .score(10d)
+                .word("YAMADIE")
                 .doneDate(DateUtilWrapper.now())
                 .build();
         assessRepository.save(assess);
@@ -60,6 +61,7 @@ public class AssesseRepositoryTest extends AbstractTransactionalJUnit4SpringCont
                 .assesseeId(assesseeId)
                 .category("D")
                 .score(10d)
+                .word("YAMADIE")
                 .doneDate(DateUtilWrapper.now())
                 .build();
         assertNotEquals(assess2,assess);

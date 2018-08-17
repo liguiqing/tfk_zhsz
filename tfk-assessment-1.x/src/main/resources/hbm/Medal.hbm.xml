@@ -20,7 +20,8 @@
         <property name="name" column="name" type="java.lang.String"/>
         <property name="upLeast" column="upLeast" type="java.lang.Integer"/>
         <property name="indexIds" column="indexIds" type="java.lang.String"/>
-        <many-to-one name="high" column="highId" property-ref="medalId" class="com.tfk.assessment.domain.model.medal.Medal" />
+        <many-to-one name="high" column="highId" property-ref="medalId"
+                     class="com.tfk.assessment.domain.model.medal.Medal"  cascade="none" update="false"/>
     </class>
 
 </hibernate-mapping>

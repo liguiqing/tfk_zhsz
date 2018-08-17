@@ -18,12 +18,13 @@ import java.util.Set;
  */
 @Getter
 @EqualsAndHashCode(of={"medalId","schoolId"},callSuper = false)
-@ToString(of={"medalId","schoolId","name","category","upLeast","high","low"})
+@ToString(of={"medalId","schoolId","name","level","upLeast","high"})
 public class Medal extends IdentifiedValueObject {
     private MedalId medalId;
 
     private SchoolId schoolId;
 
+    @Setter
     private String name;
 
     private MedalLevel level;
@@ -49,12 +50,15 @@ public class Medal extends IdentifiedValueObject {
 
     public void setHigh(Medal high){
         if(high != null){
-            AssertionConcerns.assertArgumentTrue(high.getLevel().gt(level),"as-03-002");
+            AssertionConcerns.assertArgumentTrue(high.gt(this),"as-03-002");
             this.high = high;
         }
     }
 
     public void addIndex(Index index){
+        if(index == null)
+            return;
+
         String indexId = index.getIndexId().id();
         if(this.indexIds.length() >0){
             this.indexIds += ";"+indexId;
@@ -74,4 +78,24 @@ public class Medal extends IdentifiedValueObject {
         return null;
     }
 
+    /**
+     * 离升级的差
+     * @param amount
+     * @return
+     */
+    public int differenceToHigh(int amount){
+        if(amount<0)
+            return this.upLeast;
+        if(amount > this.upLeast)
+            return 0;
+        return this.upLeast - amount;
+    }
+
+    public void clearIndexes() {
+        this.indexIds = "";
+    }
+
+    public boolean gt(Medal other){
+        return this.level.gt(other.level);
+    }
 }

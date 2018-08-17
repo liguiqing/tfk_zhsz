@@ -23,4 +23,6 @@ public class NewAssessCommand {
 
     private double score;
 
+    private String word;
+
 }
