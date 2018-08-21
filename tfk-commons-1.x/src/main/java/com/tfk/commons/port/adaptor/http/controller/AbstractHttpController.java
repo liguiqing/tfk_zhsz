@@ -3,7 +3,6 @@ package com.tfk.commons.port.adaptor.http.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -13,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
  * @since V3.0
  */
 
-@Controller
+
 public abstract class AbstractHttpController {
     protected final Logger logger = LoggerFactory.getLogger(getClass());
 

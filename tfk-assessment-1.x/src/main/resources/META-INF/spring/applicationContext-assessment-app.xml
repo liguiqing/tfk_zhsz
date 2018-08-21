@@ -18,7 +18,7 @@
 
     <util:properties id="asConfig" location="classpath*:META-INF/spring/asConfig.properties"/>
 
-    <jpa:repositories base-package="com.tfk.assessment.domain.model.**.*" named-queries-location="classpath:META-INF/hibernate/*.xml" >
+    <jpa:repositories base-package="com.tfk.assessment.domain.model.**.*" >
         <repository:include-filter type="annotation" expression="org.springframework.stereotype.Repository" />
     </jpa:repositories>
 

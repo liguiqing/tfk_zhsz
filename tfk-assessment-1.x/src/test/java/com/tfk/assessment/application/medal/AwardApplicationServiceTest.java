@@ -81,7 +81,7 @@ public class AwardApplicationServiceTest {
                 DateUtilWrapper.toDate("2019-01-31", "yyyy-MM-dd"));
         MedalId medalId = new MedalId();
         Medal high = mock(Medal.class);
-        when(high.getLevel()).thenReturn(new MedalLevel(2, "G"));
+        when(high.gt(any(Medal.class))).thenReturn(true);
         MedalLevel l1 = new MedalLevel(1, "B");
         Medal medal = Medal.builder()
                 .level(l1)

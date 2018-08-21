@@ -21,10 +21,6 @@ public  class ShiroHelper {
     public static  Subject getSubject(){
         Subject subject = SecurityUtils.getSubject();
         logger.debug(subject.toString());
-        if(subject.isRunAs()) {
-            subject.releaseRunAs();
-        }
-
         return subject;
     }
 

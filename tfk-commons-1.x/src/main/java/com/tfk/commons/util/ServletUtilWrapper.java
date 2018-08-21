@@ -31,7 +31,11 @@ public class ServletUtilWrapper {
     }
 
     public static boolean isAjax(HttpServletRequest request) {
-        //TODO
-        return false;
+        return ((request.getHeader("accept") != null
+                && request.getHeader("accept").indexOf("application/json") > -1)
+                || (request.getHeader("X-Requested-With") != null
+                && request.getHeader("X-Requested-With").indexOf("XMLHttpRequest") > -1)
+                || (request.getHeader("Content-Type") != null
+                && request.getHeader("Content-Type").indexOf("multipart/form-data") > -1));
     }
 }

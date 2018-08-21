@@ -5,6 +5,7 @@ import com.tfk.sm.application.teacher.ArrangeTeacherCommand;
 import com.tfk.sm.application.teacher.NewTeacherCommand;
 import com.tfk.sm.application.teacher.TeacherApplicationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -14,6 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
  * @author Liguiqing
  * @since V3.0
  */
+@Controller
 @RequestMapping("/teacher")
 public class TeacherController extends AbstractHttpController {
 

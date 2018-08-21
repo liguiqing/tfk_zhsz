@@ -26,12 +26,12 @@ public class ModelAndViewBuilder {
 
     }
 
-    protected ModelAndViewBuilder(String viewName){
+    public ModelAndViewBuilder(String viewName){
         this();
         this.viewName = viewName;
     }
 
-    protected ModelAndViewBuilder(String viewName,MessageSource messageSource){
+    public ModelAndViewBuilder(String viewName,MessageSource messageSource){
         this(viewName);
         this.messageSource = messageSource;
     }
@@ -51,6 +51,10 @@ public class ModelAndViewBuilder {
         return this;
     }
 
+    public ModelAndViewBuilder failure(){
+        this.success = false;
+        return this;
+    }
 
     public ModelAndView creat(){
         HttpAdaptorResponse response = createResponse();

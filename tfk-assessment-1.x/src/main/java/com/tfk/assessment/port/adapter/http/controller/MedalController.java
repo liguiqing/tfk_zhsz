@@ -5,6 +5,7 @@ import com.tfk.assessment.application.medal.NewMedalCommand;
 import com.tfk.assessment.application.medal.UpdateMedalCommand;
 import com.tfk.commons.port.adaptor.http.controller.AbstractHttpController;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,6 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
  * @author Liguiqing
  * @since V3.0
  */
+@Controller
 @RequestMapping("/medal")
 public class MedalController extends AbstractHttpController {
 
