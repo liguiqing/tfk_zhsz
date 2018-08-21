@@ -7,6 +7,7 @@ import com.alibaba.fastjson.support.spring.FastJsonJsonView;
 import com.tfk.commons.spring.SpringContextUtil;
 import com.tfk.commons.spring.SpringMvcExceptionResolver;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -15,11 +16,14 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.servlet.View;
+import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 import org.springframework.web.servlet.view.ContentNegotiatingViewResolver;
+import org.springframework.web.servlet.view.freemarker.FreeMarkerView;
+import org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +36,9 @@ import java.util.List;
 @Configuration
 @ComponentScan(basePackages = {"com.tfk.**.controller"})
 public class SpringMvcConfiguration extends WebMvcConfigurationSupport {
+
+    @Autowired
+    public FreeMarkerViewResolver freeMarkerViewResolver;
 
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
@@ -102,8 +109,13 @@ public class SpringMvcConfiguration extends WebMvcConfigurationSupport {
         List<View> views = new ArrayList<View>();
         views.add(fastJsonJsonView());
 
+        ArrayList<ViewResolver> viewResolvers = new ArrayList<>();
+        viewResolvers.add(freeMarkerViewResolver);
+
         ContentNegotiatingViewResolver viewResolver = new ContentNegotiatingViewResolver();
+        viewResolver.setViewResolvers(viewResolvers);
         viewResolver.setDefaultViews(views);
+
         return viewResolver;
     }
 
@@ -127,6 +139,8 @@ public class SpringMvcConfiguration extends WebMvcConfigurationSupport {
 //        BufferedImageHttpMessageConverter c7 = new BufferedImageHttpMessageConverter();
 //        return new HttpMessageConverters(c1, c2, c3, c4, c5, c6, c7);
 //    }
+
+
 
     @Bean
     public FastJsonJsonView fastJsonJsonView() {
