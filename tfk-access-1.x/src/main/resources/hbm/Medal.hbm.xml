@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping/hibernate-mapping-3.0.dtd">
+<hibernate-mapping default-access="field" default-cascade="all" >
+
+    <class name="com.tfk.assessment.domain.model.medal.Medal" table="as_Medal" lazy="true">
+        <id name="id" type="long" column="id" unsaved-value="-1">
+            <generator class="native" />
+        </id>
+        <component name="medalId" class="com.tfk.share.domain.id.medal.MedalId">
+            <property name="id" column="medalId" type="java.lang.String"/>
+        </component>
+        <component name="schoolId" class="com.tfk.share.domain.id.school.SchoolId">
+            <property name="id" column="schoolId" type="java.lang.String"/>
+        </component>
+        <component name="level" class="com.tfk.assessment.domain.model.medal.MedalLevel">
+            <property name="level" column="level" type="java.lang.Integer"/>
+            <property name="category" column="category" type="java.lang.String"/>
+        </component>
+        <property name="name" column="name" type="java.lang.String"/>
+        <property name="upLeast" column="upLeast" type="java.lang.Integer"/>
+        <property name="indexIds" column="indexIds" type="java.lang.String"/>
+        <many-to-one name="high" column="highId" property-ref="medalId"
+                     class="com.tfk.assessment.domain.model.medal.Medal"  cascade="none" update="false"/>
+    </class>
+
+</hibernate-mapping>
