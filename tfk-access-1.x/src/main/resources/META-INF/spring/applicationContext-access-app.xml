@@ -16,9 +16,17 @@
        	http://www.springframework.org/schema/context
 	    http://www.springframework.org/schema/context/spring-context.xsd">
 
+    <bean id="messageHandler" class="com.tfk.access.infrastructure.OutMessageHandler"/>
+    <bean id="weChatConfig" class="com.tfk.access.domain.model.wechat.config.WeChatConfig">
+        <property name="apiKey" value="${wechat.apiKey}"/>
+        <property name="appId" value="${wechat.appId}"/>
+        <property name="aesKey" value="${wechat.aesKey}"/>
+        <property name="appSecret" value="${wechat.appSecret}"/>
+        <property name="mchId" value="${wechat.mchId}"/>
+    </bean>
     <util:properties id="accessConfig" location="classpath*:META-INF/spring/accessConfig.properties"/>
 
-    <jpa:repositories base-package="com.tfk.access.domain.model.**.*" named-queries-location="classpath:META-INF/hibernate/*.xml" >
+    <jpa:repositories base-package="com.tfk.access.domain.model.**.*" >
         <repository:include-filter type="annotation" expression="org.springframework.stereotype.Repository" />
     </jpa:repositories>
 

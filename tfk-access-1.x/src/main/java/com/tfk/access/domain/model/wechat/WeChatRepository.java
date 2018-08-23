@@ -1,0 +1,37 @@
+package com.tfk.access.domain.model.wechat;
+
+import com.tfk.commons.domain.EntityRepository;
+import com.tfk.share.domain.id.wechat.WeChatId;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
+
+/**
+ * @author Liguiqing
+ * @since V3.0
+ */
+@Repository
+public interface WeChatRepository extends EntityRepository<WeChat,WeChatId> {
+
+    @Override
+    default WeChatId nextIdentity(){
+        return new WeChatId();
+    }
+
+    @Cacheable(value = "accessCache",key = "#p0.id",unless = "#result == null")
+    @Query("From WeChat where weChatId=?1 and removed=0")
+    WeChat loadOf(WeChatId weChatId);
+
+    @Override
+    @CacheEvict(value = "accessCache", key="#p0.weChatId.id")
+    void save(WeChat weChat);
+
+
+    @CacheEvict(value = "accessCache",key="#p0.id")
+    @Modifying
+    @Query(value = "update WeChat set removed = 1 where weChatId=?1")
+    void delete(WeChatId weChatId);
+
+}

@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping/hibernate-mapping-3.0.dtd">
+<hibernate-mapping default-access="field" default-cascade="all" >
+
+    <class name="com.tfk.access.domain.model.wechat.WeChat" table="ac_WeChat" lazy="true">
+        <id name="id" type="long" column="id" unsaved-value="-1">
+            <generator class="native" />
+        </id>
+        <component name="weChatId" class="com.tfk.share.domain.id.wechat.WeChatId">
+            <property name="id" column="weChatId" type="java.lang.String"/>
+        </component>
+        <component name="personId" class="com.tfk.share.domain.id.PersonId">
+            <property name="id" column="personId" type="java.lang.String"/>
+        </component>
+        <property name="category" column="category" >
+            <type name="org.hibernate.type.EnumType">
+                <param name="enumClass">com.tfk.access.domain.model.wechat.WeChatCategory</param>
+                <param name="useNamed">true</param>
+            </type>
+        </property>
+        <property name="weChatOpenId" column="wechatOpenId" type="java.lang.String"/>
+        <property name="name" column="name" type="java.lang.String"/>
+        <property name="phone" column="phone" type="java.lang.String"/>
+        <property name="bindDate" column="bindDate" type="java.util.Date"/>
+        <set name="followers"  cascade="all" fetch="join" lazy="true" >
+            <key column="weChatId" property-ref="weChatId"  update="false"/>
+            <one-to-many entity-name="Follower"/>
+        </set>
+
+    </class>
+
+    <class name="com.tfk.access.domain.model.wechat.Follower"  table="ac_WeChatFollower" lazy="true" entity-name="Follower">
+        <id name="id" type="long" column="id" unsaved-value="-1">
+            <generator class="native" />
+        </id>
+        <component name="followerId" class="com.tfk.share.domain.id.wechat.WeChatFollowerId">
+            <property name="id" column="followerId" type="java.lang.String"/>
+        </component>
+        <component name="weChatId" class="com.tfk.share.domain.id.wechat.WeChatId">
+            <property name="id" column="weChatId" type="java.lang.String"/>
+        </component>
+        <component name="personId" class="com.tfk.share.domain.id.PersonId">
+            <property name="id" column="personId" type="java.lang.String"/>
+        </component>
+        <property name="followDate" column="followDate" type="java.util.Date"/>
+    </class>
+
+
+</hibernate-mapping>
+

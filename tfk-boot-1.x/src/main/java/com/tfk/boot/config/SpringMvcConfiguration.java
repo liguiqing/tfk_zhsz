@@ -4,11 +4,9 @@ import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.support.config.FastJsonConfig;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
 import com.alibaba.fastjson.support.spring.FastJsonJsonView;
-import com.tfk.commons.spring.SpringContextUtil;
 import com.tfk.commons.spring.SpringMvcExceptionResolver;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -22,7 +20,6 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 import org.springframework.web.servlet.view.ContentNegotiatingViewResolver;
-import org.springframework.web.servlet.view.freemarker.FreeMarkerView;
 import org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver;
 
 import java.util.ArrayList;
@@ -40,9 +37,12 @@ public class SpringMvcConfiguration extends WebMvcConfigurationSupport {
     @Autowired
     public FreeMarkerViewResolver freeMarkerViewResolver;
 
+    @Autowired
+    private SpringMvcExceptionResolver exceptionResolver;
+
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
-        log.debug("+++++++++++++++++++++++++++++++++++++++++++++++++++");
+        log.debug("Configure Message Converters");
         super.configureMessageConverters(converters);
         FastJsonConfig fastJsonConfig = new FastJsonConfig();
         fastJsonConfig.setSerializerFeatures(SerializerFeature.WriteDateUseDateFormat,
@@ -75,16 +75,13 @@ public class SpringMvcConfiguration extends WebMvcConfigurationSupport {
         converters.add(c1);
     }
 
-
-
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        log.debug("________________________________________________");
+        log.debug("Configure Resourece Handlers");
         registry.addResourceHandler("/resources/**").addResourceLocations("classpath:/static/resources/");
         registry.addResourceHandler("/**").addResourceLocations("classpath:/static/");
         super.addResourceHandlers(registry);
     }
-
 
     @Override
     protected void addInterceptors(InterceptorRegistry registry) {
@@ -94,14 +91,7 @@ public class SpringMvcConfiguration extends WebMvcConfigurationSupport {
     @Override
     protected void addCorsMappings(CorsRegistry registry) {
         super.addCorsMappings(registry);
-
-//        registry.addMapping("/**")
-//                .allowedOrigins("http://localhost:9000", "null")
-//                .allowedMethods("POST", "GET", "PUT", "OPTIONS", "DELETE")
-//                .maxAge(3600)
-//                .allowCredentials(true);
     }
-
 
     @Bean(name = "viewResolver")
     @Primary
@@ -119,29 +109,6 @@ public class SpringMvcConfiguration extends WebMvcConfigurationSupport {
         return viewResolver;
     }
 
-//    @Bean
-//    public HttpMessageConverters customConverters() {
-//        FastJsonConfig fastJsonConfig = new FastJsonConfig();
-//        fastJsonConfig.setSerializerFeatures(SerializerFeature.WriteDateUseDateFormat,
-//                SerializerFeature.WriteMapNullValue,
-//                SerializerFeature.WriteNullStringAsEmpty,
-//                SerializerFeature.WriteNullNumberAsZero,
-//                SerializerFeature.WriteNullBooleanAsFalse,
-//                SerializerFeature.WriteEnumUsingToString);
-//        FastJsonHttpMessageConverter4 c1 = new FastJsonHttpMessageConverter4();
-//        c1.setFastJsonConfig(fastJsonConfig);
-//
-//        FormHttpMessageConverter c2 = new FormHttpMessageConverter();
-//        ByteArrayHttpMessageConverter c3 = new ByteArrayHttpMessageConverter();
-//        StringHttpMessageConverter c4 = new StringHttpMessageConverter();
-//        ResourceHttpMessageConverter c5 = new ResourceHttpMessageConverter();
-//        SourceHttpMessageConverter c6 = new SourceHttpMessageConverter();
-//        BufferedImageHttpMessageConverter c7 = new BufferedImageHttpMessageConverter();
-//        return new HttpMessageConverters(c1, c2, c3, c4, c5, c6, c7);
-//    }
-
-
-
     @Bean
     public FastJsonJsonView fastJsonJsonView() {
 
@@ -156,11 +123,6 @@ public class SpringMvcConfiguration extends WebMvcConfigurationSupport {
         FastJsonJsonView view = new FastJsonJsonView();
         view.setFastJsonConfig(fastJsonConfig);
         return view;
-    }
-
-    @Bean
-    public SpringMvcExceptionResolver exceptionResolver() {
-        return new SpringMvcExceptionResolver();
     }
 
 }

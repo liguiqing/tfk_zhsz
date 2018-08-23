@@ -6,6 +6,9 @@ import org.springframework.web.context.request.ServletWebRequest;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 /**
  * @author Liguiqing
@@ -23,6 +26,22 @@ public class ServletUtilWrapper {
     public static HttpServletResponse getResponse() {
         HttpServletResponse resp = ((ServletWebRequest) RequestContextHolder.getRequestAttributes()).getResponse();
         return resp;
+    }
+
+    public static Map<String,String> getParameterMap(HttpServletRequest request){
+        Map<String,String[]> ps = request.getParameterMap();
+        HashMap<String,String> pss = new HashMap<>();
+        Iterator<String> keys = ps.keySet().iterator();
+        while(keys.hasNext()){
+            String key = keys.next();
+            String[] values = ps.get(key);
+            if(values == null || values.length == 0){
+                pss.put(key,"");
+            }else{
+                pss.put(key,values[0]);
+            }
+        }
+        return pss;
     }
 
     public static boolean isMobileApp(HttpServletRequest request) {

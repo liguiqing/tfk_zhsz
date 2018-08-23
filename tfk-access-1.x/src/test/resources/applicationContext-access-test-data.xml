@@ -36,12 +36,7 @@
         </property>
         <property name="mappingResources" >
             <list>
-                <value>/hbm/Assess.hbm.xml</value>
-                <value>/hbm/Assessee.hbm.xml</value>
-                <value>/hbm/Assessor.hbm.xml</value>
-                <value>/hbm/Index.hbm.xml</value>
-                <value>/hbm/Award.hbm.xml</value>
-                <value>/hbm/Medal.hbm.xml</value>
+                <value>/hbm/WeChat.hbm.xml</value>
             </list>
         </property>
         <property name="jpaProperties">

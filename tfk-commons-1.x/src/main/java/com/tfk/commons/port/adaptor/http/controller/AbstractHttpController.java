@@ -1,11 +1,14 @@
 package com.tfk.commons.port.adaptor.http.controller;
 
+import com.tfk.commons.lang.Throwables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 /**
  * @author Liguiqing
@@ -26,7 +29,17 @@ public abstract class AbstractHttpController {
     @Autowired(required=false)
     private MessageSourceFactory messageSourceFactory;
 
-
+    protected void output(String content,HttpServletResponse response){
+        if(response == null)
+            response = getResponse();
+        PrintWriter out = null;
+        try {
+            out = response.getWriter();
+            out.print(content);
+        } catch (IOException e) {
+            logger.error(Throwables.toString(e));
+        }
+    }
 
     protected ServletWrapper getServletWrapper(){
         if(this.servletWrapper == null){

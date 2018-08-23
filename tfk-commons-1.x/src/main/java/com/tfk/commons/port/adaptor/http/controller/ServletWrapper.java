@@ -4,6 +4,7 @@ import com.tfk.commons.util.ServletUtilWrapper;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Map;
 
 /**
  * @author Liguiqing
@@ -25,5 +26,11 @@ public interface ServletWrapper {
 
     default boolean isMobileApp(){
         return ServletUtilWrapper.isMobileApp(this.getRequest());
+    }
+
+    default Map<String,String> getParameterMap(HttpServletRequest request){
+        if(request == null)
+            request = this.getRequest();
+        return ServletUtilWrapper.getParameterMap(request);
     }
 }
