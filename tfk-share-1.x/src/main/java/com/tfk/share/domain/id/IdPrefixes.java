@@ -16,10 +16,13 @@ package com.tfk.share.domain.id;
 
 public class IdPrefixes {
     //微信用户唯一标识
-    public static final String WeChatIdPrefix = "WEC";
+    public static final String WeChatIdPrefix = "WCH";
 
     //微信用户关关注者唯一标识
-    public static final String WeChatFollowerIdPrefix = "WCF";
+    public static final String WeChatFollowerIdPrefix = "WCA";
+
+    //微信用户关关注审核唯一标识
+    public static final String FollowAuditIdPrefix = "FAu";
 
     //个人唯一标识
     public static final String PersonIdPrefix = "PER";

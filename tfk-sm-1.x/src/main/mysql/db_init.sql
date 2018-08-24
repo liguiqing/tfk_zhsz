@@ -70,11 +70,40 @@ CREATE TABLE `ac_WeChatFollower` (
   `weChatId` varchar(36) NOT NULL COMMENT '绑定唯一标识',
   `personId` varchar(36) NOT NULL COMMENT '绑定者人员唯一标识',
   `followDate` TIMESTAMP DEFAULT now() COMMENT '关注时间',
+  `auditorId` varchar(36)  COMMENT '审核人员唯一标识,PersonId',
+  `auditorName` varchar(16)  COMMENT '审核人员姓名',
+  `auditDate` TIMESTAMP DEFAULT now() COMMENT '审核时间',
+  `auditResult` varchar(16) DEFAULT 'Undo' COMMENT '审核结果:Undo;Yes,No',
   PRIMARY KEY (`id`),
-  KEY `x_ac_WeChatFollowerweChatId` (`weChatId`),
+  KEY `x_ac_WeChatFollower_weChatId` (`weChatId`),
   INDEX `x_ac_WeChatFollower_followerId` (`followerId`),
   INDEX `x_ac_WeChatFollower_personId` (`personId`)
 )ENGINE=INNODB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='被关注者信息';
+
+DROP TABLE IF EXISTS `ac_FollowAudit`;
+CREATE TABLE `ac_FollowAudit` (
+  `id` BIGINT(20)  NOT NULL AUTO_INCREMENT ,
+  `auditId` varchar(36) NOT NULL COMMENT '审核唯一标识',
+  `followerId` varchar(36) NOT NULL COMMENT '被关注者唯一标识',
+  `auditorId` varchar(36) NOT NULL COMMENT '审核人员唯一标识,PersonId',
+  `auditorSchoolId` varchar(36) NOT NULL COMMENT '审核人员所在学校唯一标识',
+  `auditorClazzId` varchar(36) NOT NULL COMMENT '审核人员所在班级唯一标识',
+  `auditorRole` varchar(36) NOT NULL COMMENT '审核人员角色:Teacher;Student;Parent',
+  `auditorName` varchar(16)  COMMENT '审核人员姓名',
+  `proposerWeChatId` varchar(36) NOT NULL COMMENT '审核申请人员唯一标识,WeChatId',
+  `proposerWeChatOpenId` varchar(36) NOT NULL COMMENT '审核申请人员微信号',
+  `proposerName` varchar(16)  COMMENT '审核申请人员姓名',
+  `defendantId` varchar(36) NOT NULL COMMENT '被核人员唯一标识,PersonId',
+  `defendantSchoolId` varchar(36) NOT NULL COMMENT '被核人员所在学校唯一标识',
+  `defendantClazzId` varchar(36) NOT NULL COMMENT '被核人员所在班级唯一标识',
+  `defendantRole` varchar(36) NOT NULL COMMENT '被核人员角色:Teacher;Student;Parent',
+  `defendantName` varchar(16)  COMMENT '被核人员唯一标识',
+  `auditDate` TIMESTAMP DEFAULT now() COMMENT '审核时间',
+  `ok`TINYINT(1)  COMMENT '审核结果',
+  `description` varchar(128)  COMMENT '审核说明',
+  PRIMARY KEY (`id`),
+  KEY `x_ac_FollowAudit_auditId` (`auditId`)
+)ENGINE=INNODB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='被关注者审核';
 
 DROP TABLE IF EXISTS `sm_school`;
 CREATE TABLE `sm_school` (

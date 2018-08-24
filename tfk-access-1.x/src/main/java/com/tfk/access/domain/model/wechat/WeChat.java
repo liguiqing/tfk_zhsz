@@ -1,6 +1,7 @@
 package com.tfk.access.domain.model.wechat;
 
 import com.google.common.collect.Sets;
+import com.tfk.access.domain.model.wechat.audit.FollowAudit;
 import com.tfk.commons.domain.Entity;
 import com.tfk.share.domain.id.PersonId;
 import com.tfk.share.domain.id.wechat.WeChatId;
@@ -49,6 +50,17 @@ public class WeChat extends Entity {
         if(this.followers == null)
             return 0;
         return this.followers.size();
+    }
+
+    public void followerAudited(FollowAudit audit) {
+        if(this.followers == null)
+            return;
+        this.followers.forEach(follower -> {
+            if(!follower.isAudited() && follower.sameOf(audit.getDefendant().getDefendantId())){
+                AuditResult result = audit.isOk()?AuditResult.Yes:AuditResult.No;
+                follower.audited(audit.getAuditor().getAuditorId(),audit.getAuditor().getName(),audit.getAuditDate(),result);
+            }
+        });
     }
 
 }

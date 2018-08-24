@@ -109,7 +109,7 @@ public class WeChatController extends AbstractHttpController {
     @RequestMapping(value ="/follower",method = RequestMethod.PUT)
     public ModelAndView onCancelFollower(@RequestBody BindCommand command){
         log.debug("URL /wechat/bind Method=GET {}",command.getWechatOpenId());
-        wechatApplicationService.bind(command);
+        wechatApplicationService.bindCancel(command);
         return newModelAndViewBuilder("/wechat/bindSuccess").creat();
     }
 

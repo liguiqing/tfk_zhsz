@@ -7,5 +7,5 @@ package com.tfk.access.domain.model.wechat.message;
 
 public interface MessageHandler {
 
-    XmlOutMessage findOutMessage(XmlMessage message);
+    XmlOutMessage messageHandle(XmlMessage message);
 }

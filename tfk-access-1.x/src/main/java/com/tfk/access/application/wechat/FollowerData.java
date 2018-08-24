@@ -1,9 +1,6 @@
 package com.tfk.access.application.wechat;
 
-
 import lombok.*;
-
-import java.util.List;
 
 /**
  * @author Liguiqing
@@ -13,14 +10,15 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @Setter
-@ToString(exclude = {"followers"})
+@ToString
 @Builder
-public class BindCommand {
-    private String wechatOpenId;
+public class FollowerData {
 
     private String name;
 
-    private String phone;
+    private String schoolId;
 
-    private List<FollowerData> followers;
+    private String clazzId;
+
+    private String gender;
 }

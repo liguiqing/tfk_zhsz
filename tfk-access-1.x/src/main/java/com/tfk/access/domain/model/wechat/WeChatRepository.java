@@ -34,4 +34,7 @@ public interface WeChatRepository extends EntityRepository<WeChat,WeChatId> {
     @Query(value = "update WeChat set removed = 1 where weChatId=?1")
     void delete(WeChatId weChatId);
 
+    @Query("From WeChat where weChatOpenId=?1 and removed=0")
+    WeChat findByWeChatOpenId(String weChatOpenId);
+
 }

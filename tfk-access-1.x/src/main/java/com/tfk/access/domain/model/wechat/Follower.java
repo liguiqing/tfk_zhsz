@@ -27,6 +27,20 @@ public class Follower extends IdentifiedValueObject {
 
     private Date followDate;
 
+    private FollowerAudit audited;
+
+    public void audited(PersonId auditorId,String auditorName,Date auditDate,AuditResult result){
+        this.audited = new FollowerAudit(auditorId, auditorName, auditDate, result);
+    }
+
+    public boolean isAudited(){
+        return this.audited != null;
+    }
+
+    public boolean sameOf(PersonId personId){
+        return this.personId.equals(personId);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

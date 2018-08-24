@@ -43,7 +43,22 @@
         <component name="personId" class="com.tfk.share.domain.id.PersonId">
             <property name="id" column="personId" type="java.lang.String"/>
         </component>
+        <component name="audited" class="com.tfk.access.domain.model.wechat.FollowerAudit">
+            <component name="auditorId" class="com.tfk.share.domain.id.PersonId">
+                <property name="id" column="auditorId" type="java.lang.String"/>
+            </component>
+            <property name="auditorName" column="auditorName" type="java.lang.String"/>
+            <property name="auditDate" column="auditDate" type="java.util.Date"/>
+            <property name="auditResult" column="auditResult" >
+                <type name="org.hibernate.type.EnumType">
+                    <param name="enumClass">com.tfk.access.domain.model.wechat.AuditResult</param>
+                    <param name="useNamed">true</param>
+                </type>
+            </property>
+        </component>
+
         <property name="followDate" column="followDate" type="java.util.Date"/>
+
     </class>
 
 

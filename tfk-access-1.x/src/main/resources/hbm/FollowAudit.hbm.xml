@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping/hibernate-mapping-3.0.dtd">
+<hibernate-mapping default-access="field" default-cascade="all" >
+
+    <class name="com.tfk.access.domain.model.wechat.audit.FollowAudit" table="ac_FollowAudit" lazy="true">
+        <id name="id" type="long" column="id" unsaved-value="-1">
+            <generator class="native" />
+        </id>
+        <component name="auditId" class="com.tfk.share.domain.id.wechat.FollowAuditId">
+            <property name="id" column="auditId" type="java.lang.String"/>
+        </component>
+        <component name="followerId" class="com.tfk.share.domain.id.wechat.WeChatFollowerId">
+            <property name="id" column="followerId" type="java.lang.String"/>
+        </component>
+        <component name="auditor" class="com.tfk.access.domain.model.wechat.audit.Auditor">
+            <component name="auditorId" class="com.tfk.share.domain.id.PersonId">
+                <property name="id" column="auditorId" type="java.lang.String"/>
+            </component>
+            <component name="schoolId" class="com.tfk.share.domain.id.school.SchoolId">
+                <property name="id" column="auditorSchoolId" type="java.lang.String"/>
+            </component>
+            <component name="clazzId" class="com.tfk.share.domain.id.school.ClazzId">
+                <property name="id" column="auditorClazzId" type="java.lang.String"/>
+            </component>
+            <property name="role" column="auditorRole" >
+                <type name="org.hibernate.type.EnumType">
+                    <param name="enumClass">com.tfk.access.domain.model.wechat.audit.AuditRole</param>
+                    <param name="useNamed">true</param>
+                </type>
+            </property>
+            <property name="name" column="auditorName" type="java.lang.String"/>
+        </component>
+
+        <component name="proposer" class="com.tfk.access.domain.model.wechat.audit.Proposer">
+            <component name="weChatId" class="com.tfk.share.domain.id.wechat.WeChatId">
+                <property name="id" column="proposerWeChatId" type="java.lang.String"/>
+            </component>
+            <property name="weChatOpenId" column="proposerWeChatOpenId" type="java.lang.String"/>
+            <property name="name" column="proposerName" type="java.lang.String"/>
+        </component>
+
+        <component name="defendant" class="com.tfk.access.domain.model.wechat.audit.Defendant">
+            <component name="defendantId" class="com.tfk.share.domain.id.PersonId">
+                <property name="id" column="defendantId" type="java.lang.String"/>
+            </component>
+            <component name="schoolId" class="com.tfk.share.domain.id.school.SchoolId">
+                <property name="id" column="defendantSchoolId" type="java.lang.String"/>
+            </component>
+            <component name="clazzId" class="com.tfk.share.domain.id.school.ClazzId">
+                <property name="id" column="defendantClazzId" type="java.lang.String"/>
+            </component>
+            <property name="role" column="defendantRole" >
+                <type name="org.hibernate.type.EnumType">
+                    <param name="enumClass">com.tfk.access.domain.model.wechat.audit.AuditRole</param>
+                    <param name="useNamed">true</param>
+                </type>
+            </property>
+            <property name="name" column="defendantName" type="java.lang.String"/>
+        </component>
+
+        <property name="ok" column="ok" type="java.lang.Boolean"/>
+        <property name="auditDate" column="auditDate" type="java.util.Date"/>
+        <property name="description" column="description" type="java.lang.String"/>
+    </class>
+
+</hibernate-mapping>
+
