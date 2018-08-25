@@ -12,6 +12,8 @@ import org.apache.commons.configuration.PropertiesConfiguration;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
+
 /**
  * @author Liguiqing
  * @since V3.0
@@ -27,6 +29,12 @@ public class FreemarkerStaticModels extends HashMap<Object, Object> {
         while (it.hasNext()) {
             Object key = it.next();
             put(key, getModel(propertiesConfig.getString(key + "")));
+        }
+    }
+
+    public FreemarkerStaticModels(Map<String, String> classMap) {
+        for (String key : classMap.keySet()) {
+            put(key, getModel(classMap.get(key)));
         }
     }
 

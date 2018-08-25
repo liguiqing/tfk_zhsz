@@ -17,7 +17,7 @@ import java.util.List;
 @Component
 public class OutMessageHandler implements MessageHandler {
 
-    @Value("${wechat.message.welcome}")
+    @Value("${wechat.message.welcome:Welcome}")
     private String defaultMessage = "";
 
     private List<XmlOutMessage> outMessages;

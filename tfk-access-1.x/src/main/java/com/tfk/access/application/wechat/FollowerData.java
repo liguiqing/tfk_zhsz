@@ -20,5 +20,9 @@ public class FollowerData {
 
     private String clazzId;
 
+    private String personId;
+
     private String gender;
+
+    private String cause;
 }

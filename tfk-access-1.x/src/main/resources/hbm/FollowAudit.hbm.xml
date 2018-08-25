@@ -10,8 +10,8 @@
         <component name="auditId" class="com.tfk.share.domain.id.wechat.FollowAuditId">
             <property name="id" column="auditId" type="java.lang.String"/>
         </component>
-        <component name="followerId" class="com.tfk.share.domain.id.wechat.WeChatFollowerId">
-            <property name="id" column="followerId" type="java.lang.String"/>
+        <component name="applyId" class="com.tfk.share.domain.id.wechat.FollowApplyId">
+            <property name="id" column="applyId" type="java.lang.String"/>
         </component>
         <component name="auditor" class="com.tfk.access.domain.model.wechat.audit.Auditor">
             <component name="auditorId" class="com.tfk.share.domain.id.PersonId">
@@ -32,12 +32,12 @@
             <property name="name" column="auditorName" type="java.lang.String"/>
         </component>
 
-        <component name="proposer" class="com.tfk.access.domain.model.wechat.audit.Proposer">
+        <component name="applier" class="com.tfk.access.domain.model.wechat.audit.Applier">
             <component name="weChatId" class="com.tfk.share.domain.id.wechat.WeChatId">
-                <property name="id" column="proposerWeChatId" type="java.lang.String"/>
+                <property name="id" column="applierWeChatId" type="java.lang.String"/>
             </component>
-            <property name="weChatOpenId" column="proposerWeChatOpenId" type="java.lang.String"/>
-            <property name="name" column="proposerName" type="java.lang.String"/>
+            <property name="weChatOpenId" column="applierWeChatOpenId" type="java.lang.String"/>
+            <property name="name" column="applierName" type="java.lang.String"/>
         </component>
 
         <component name="defendant" class="com.tfk.access.domain.model.wechat.audit.Defendant">

@@ -46,65 +46,6 @@ VALUES  ('SUBe563abfe42c545dbb3d600f6d512c707','语文','语文',NULL,1,12), ('S
         ('SUB7919e3fb543e4566bedb801187362c59','备用课程7','备用7',NULL,1,12), ('SUBac4aed22199f410abb4d6bfe83888bc2','备用课程8','备用8',NULL,1,12),
         ('SUBd1803b6f25a64d4d953e716b56bc5d9b','备用课程9','备用9',NULL,1,12), ('SUBb363304861234307968306cf11e84f29','备用课程10','备用10',NULL,1,12);
 
-DROP TABLE IF EXISTS `ac_WeChat`;
-CREATE TABLE `ac_WeChat` (
-  `id` BIGINT(20)  NOT NULL AUTO_INCREMENT ,
-  `weChatId` varchar(36) NOT NULL COMMENT '绑定唯一标识',
-  `personId` varchar(36) NOT NULL COMMENT '绑定者人员唯一标识',
-  `wechatOpenId` varchar(36) NOT NULL  COMMENT '微信唯一标识',
-  `category` varchar(16)  COMMENT '绑定者类型:Teacher;Student;Parent',
-  `name` varchar(16) NOT NULL COMMENT '绑定者姓名',
-  `phone` varchar(16)  COMMENT '绑定者联系电话',
-  `bindDate` TIMESTAMP DEFAULT now() COMMENT '绑定时间',
-  `removed` TINYINT(1) DEFAULT 0 COMMENT '删除标记',
-  PRIMARY KEY (`id`),
-  KEY `x_ac_WeChat_weChatId` (`weChatId`),
-  INDEX `x_ac_WeChat_personId` (`personId`),
-  INDEX `x_ac_WeChat_wechatOpenId` (`wechatOpenId`)
-)ENGINE=INNODB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='微信绑定信息';
-
-DROP TABLE IF EXISTS `ac_WeChatFollower`;
-CREATE TABLE `ac_WeChatFollower` (
-  `id` BIGINT(20)  NOT NULL AUTO_INCREMENT ,
-  `followerId` varchar(36) NOT NULL COMMENT '被关注者唯一标识',
-  `weChatId` varchar(36) NOT NULL COMMENT '绑定唯一标识',
-  `personId` varchar(36) NOT NULL COMMENT '绑定者人员唯一标识',
-  `followDate` TIMESTAMP DEFAULT now() COMMENT '关注时间',
-  `auditorId` varchar(36)  COMMENT '审核人员唯一标识,PersonId',
-  `auditorName` varchar(16)  COMMENT '审核人员姓名',
-  `auditDate` TIMESTAMP DEFAULT now() COMMENT '审核时间',
-  `auditResult` varchar(16) DEFAULT 'Undo' COMMENT '审核结果:Undo;Yes,No',
-  PRIMARY KEY (`id`),
-  KEY `x_ac_WeChatFollower_weChatId` (`weChatId`),
-  INDEX `x_ac_WeChatFollower_followerId` (`followerId`),
-  INDEX `x_ac_WeChatFollower_personId` (`personId`)
-)ENGINE=INNODB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='被关注者信息';
-
-DROP TABLE IF EXISTS `ac_FollowAudit`;
-CREATE TABLE `ac_FollowAudit` (
-  `id` BIGINT(20)  NOT NULL AUTO_INCREMENT ,
-  `auditId` varchar(36) NOT NULL COMMENT '审核唯一标识',
-  `followerId` varchar(36) NOT NULL COMMENT '被关注者唯一标识',
-  `auditorId` varchar(36) NOT NULL COMMENT '审核人员唯一标识,PersonId',
-  `auditorSchoolId` varchar(36) NOT NULL COMMENT '审核人员所在学校唯一标识',
-  `auditorClazzId` varchar(36) NOT NULL COMMENT '审核人员所在班级唯一标识',
-  `auditorRole` varchar(36) NOT NULL COMMENT '审核人员角色:Teacher;Student;Parent',
-  `auditorName` varchar(16)  COMMENT '审核人员姓名',
-  `proposerWeChatId` varchar(36) NOT NULL COMMENT '审核申请人员唯一标识,WeChatId',
-  `proposerWeChatOpenId` varchar(36) NOT NULL COMMENT '审核申请人员微信号',
-  `proposerName` varchar(16)  COMMENT '审核申请人员姓名',
-  `defendantId` varchar(36) NOT NULL COMMENT '被核人员唯一标识,PersonId',
-  `defendantSchoolId` varchar(36) NOT NULL COMMENT '被核人员所在学校唯一标识',
-  `defendantClazzId` varchar(36) NOT NULL COMMENT '被核人员所在班级唯一标识',
-  `defendantRole` varchar(36) NOT NULL COMMENT '被核人员角色:Teacher;Student;Parent',
-  `defendantName` varchar(16)  COMMENT '被核人员唯一标识',
-  `auditDate` TIMESTAMP DEFAULT now() COMMENT '审核时间',
-  `ok`TINYINT(1)  COMMENT '审核结果',
-  `description` varchar(128)  COMMENT '审核说明',
-  PRIMARY KEY (`id`),
-  KEY `x_ac_FollowAudit_auditId` (`auditId`)
-)ENGINE=INNODB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='被关注者审核';
-
 DROP TABLE IF EXISTS `sm_school`;
 CREATE TABLE `sm_school` (
   `id` BIGINT(20)  NOT NULL AUTO_INCREMENT ,

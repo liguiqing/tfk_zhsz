@@ -43,8 +43,17 @@ public class PersonServiceImpl implements PersonService {
             return this.remoteProxy.getPersonId(schoolId, clazzId, name, gender, target);
 
         log.debug("Find PersonId with:{} {} {} {} ",schoolId,clazzId,name,gender);
-        String sql = getSql(target);
+        String sql = getPersonIdSql(target);
         return findPersonId(sql,new Object[]{schoolId,clazzId,name,gender.name()});
+    }
+
+    @Override
+    public String getName(String personId, QueryTarget target) {
+        if(hasProxy())
+            return this.remoteProxy.getName(personId, target);
+        String sql = getNameSql(target);
+        String name = jdbc.queryForObject(sql,(rs,r) -> rs.getString("name"),personId);;
+        return name;
     }
 
     private PersonId findPersonId(String sql,Object[] args){
@@ -54,7 +63,18 @@ public class PersonServiceImpl implements PersonService {
         return new PersonId();
     }
 
-    private String getSql(QueryTarget target){
+    private String getNameSql(QueryTarget target){
+        switch (target){
+            case Teacher:
+                return "select a.name from sm_teacher a  where a.personId=?";//TODO
+            case Parent:
+                return "";//TODO
+            default:
+                return "select a.name from sm_student a where a.personId=?;";
+        }
+    }
+
+    private String getPersonIdSql(QueryTarget target){
         switch (target){
             case Teacher:
                 return "";//TODO

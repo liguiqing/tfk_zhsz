@@ -18,6 +18,8 @@ public interface PersonService {
         return new PersonId();
     }
 
+    String getName(String personId,QueryTarget target);
+
     enum QueryTarget{
         Teacher,Student,Parent
     }

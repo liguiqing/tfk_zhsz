@@ -42,40 +42,40 @@
     </bean>
 
     <!--- freemarker -->
-    <bean id="freemarkerConfiguration"   class="org.springframework.beans.factory.config.PropertiesFactoryBean">
-        <property name="location" value="classpath:freemarker.properties" />
-    </bean>
-    <bean id="fmXmlEscape" class="freemarker.template.utility.XmlEscape" />
-    <bean id="freemarkerConfig"
-          class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
-        <property name="templateLoaderPath" value="classpath:META-INF/ftl" />
-        <property name="freemarkerSettings" ref="freemarkerConfiguration" />
-        <property name="freemarkerVariables">
-            <map>
-                <entry key="xml_escape" value-ref="fmXmlEscape" />
-            </map>
-        </property>
-    </bean>
-    <bean id="staticsConfiguration" class="org.apache.commons.configuration.PropertiesConfiguration">
-        <constructor-arg value="freemarkerStatics.properties"></constructor-arg>
-    </bean>
-    <bean id="freemarkerStaticModels" class="com.tfk.boot.config.FreemarkerStaticModels">
-        <constructor-arg index="0" ref="staticsConfiguration"></constructor-arg>
-    </bean>
-    <bean id="freeMarkerViewResolver"
-          class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
-        <property name="cache" value="true" />
-        <property name="prefix" value="" />
-        <property name="suffix" value=".ftl" />
-        <property name="exposeSpringMacroHelpers" value="true" />
-        <property name="exposeRequestAttributes" value="true" />
-        <property name="exposeSessionAttributes" value="true" />
-        <property name="contentType" value="text/html;charset=UTF-8" />
-        <property name="allowRequestOverride" value="true" />
-        <property name="allowSessionOverride" value="true" />
-        <property name="requestContextAttribute" value="request" />
-        <property name="attributesMap" ref="freemarkerStaticModels"></property>
-    </bean>
+    <!--<bean id="freemarkerConfiguration"   class="org.springframework.beans.factory.config.PropertiesFactoryBean">-->
+        <!--<property name="location" value="classpath:freemarker.properties" />-->
+    <!--</bean>-->
+    <!--<bean id="fmXmlEscape" class="freemarker.template.utility.XmlEscape" />-->
+    <!--<bean id="freemarkerConfig"-->
+          <!--class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">-->
+        <!--<property name="templateLoaderPath" value="classpath:META-INF/ftl" />-->
+        <!--<property name="freemarkerSettings" ref="freemarkerConfiguration" />-->
+        <!--<property name="freemarkerVariables">-->
+            <!--<map>-->
+                <!--<entry key="xml_escape" value-ref="fmXmlEscape" />-->
+            <!--</map>-->
+        <!--</property>-->
+    <!--</bean>-->
+    <!--<bean id="staticsConfiguration" class="org.apache.commons.configuration.PropertiesConfiguration">-->
+        <!--<constructor-arg value="freemarkerStatics.properties"></constructor-arg>-->
+    <!--</bean>-->
+    <!--<bean id="freemarkerStaticModels" class="com.tfk.boot.config.FreemarkerStaticModels">-->
+        <!--<constructor-arg index="0" ref="staticsConfiguration"></constructor-arg>-->
+    <!--</bean>-->
+    <!--<bean id="freeMarkerViewResolver"-->
+          <!--class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">-->
+        <!--<property name="cache" value="true" />-->
+        <!--<property name="prefix" value="" />-->
+        <!--<property name="suffix" value=".ftl" />-->
+        <!--<property name="exposeSpringMacroHelpers" value="true" />-->
+        <!--<property name="exposeRequestAttributes" value="true" />-->
+        <!--<property name="exposeSessionAttributes" value="true" />-->
+        <!--<property name="contentType" value="text/html;charset=UTF-8" />-->
+        <!--<property name="allowRequestOverride" value="true" />-->
+        <!--<property name="allowSessionOverride" value="true" />-->
+        <!--<property name="requestContextAttribute" value="request" />-->
+        <!--<property name="attributesMap" ref="freemarkerStaticModels"></property>-->
+    <!--</bean>-->
     <!-- freemarker -->
     <!--- Spring MCV Configurations-->
 
@@ -111,16 +111,19 @@
         </property>
         <property name="mappingResources" >
             <list>
-                <value>hbm/School.hbm.xml</value>
-                <value>hbm/Clazz.hbm.xml</value>
-                <value>hbm/Teacher.hbm.xml</value>
-                <value>hbm/Student.hbm.xml</value>
-                <value>hbm/Assess.hbm.xml</value>
-                <value>hbm/Assessee.hbm.xml</value>
-                <value>hbm/Assessor.hbm.xml</value>
-                <value>hbm/Index.hbm.xml</value>
-                <value>hbm/Award.hbm.xml</value>
-                <value>hbm/Medal.hbm.xml</value>
+                <value>/hbm/School.hbm.xml</value>
+                <value>/hbm/Clazz.hbm.xml</value>
+                <value>/hbm/Teacher.hbm.xml</value>
+                <value>/hbm/Student.hbm.xml</value>
+                <value>/hbm/Assess.hbm.xml</value>
+                <value>/hbm/Assessee.hbm.xml</value>
+                <value>/hbm/Assessor.hbm.xml</value>
+                <value>/hbm/Index.hbm.xml</value>
+                <value>/hbm/Award.hbm.xml</value>
+                <value>/hbm/Medal.hbm.xml</value>
+                <value>/hbm/WeChat.hbm.xml</value>
+                <value>/hbm/FollowApply.hbm.xml</value>
+                <value>/hbm/FollowAudit.hbm.xml</value>
             </list>
         </property>
         <property name="jpaProperties">
@@ -139,4 +142,6 @@
     </bean>
     <tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true"/>
     <!-- Spring jpa configurations -->
+
+    <import resource="classpath*:META-INF/spring/*.xml"/>
 </beans>

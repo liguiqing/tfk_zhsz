@@ -1,13 +1,18 @@
 package com.tfk.access.application.wechat;
 
 import com.tfk.access.domain.model.wechat.*;
+import com.tfk.access.domain.model.wechat.audit.*;
 import com.tfk.access.domain.model.wechat.config.WeChatConfig;
 import com.tfk.access.domain.model.wechat.message.MessageHandler;
 import com.tfk.access.domain.model.wechat.message.XmlMessage;
 import com.tfk.access.domain.model.wechat.message.XmlOutMessage;
 import com.tfk.access.infrastructure.PersonService;
+import com.tfk.access.infrastructure.WeChatMessageService;
 import com.tfk.commons.util.DateUtilWrapper;
 import com.tfk.share.domain.id.PersonId;
+import com.tfk.share.domain.id.school.ClazzId;
+import com.tfk.share.domain.id.school.SchoolId;
+import com.tfk.share.domain.id.wechat.FollowApplyId;
 import com.tfk.share.domain.id.wechat.WeChatId;
 import com.tfk.share.domain.person.Gender;
 import lombok.extern.slf4j.Slf4j;
@@ -37,6 +42,18 @@ public class WechatApplicationService {
 
     @Autowired
     private PersonService personService;
+
+    @Autowired
+    private FollowApplyRepository applyRepository;
+
+    @Autowired
+    private FollowAuditRepository auditRepository;
+
+    @Autowired
+    private ApplyAuditService applyAuditService;
+
+    @Autowired
+    private WeChatMessageService messageService;
 
     public String follow(Map<String,String> params){
         log.debug("WeChat Follow Success!");
@@ -71,13 +88,50 @@ public class WechatApplicationService {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public void addFollows(BindCommand command){
-        log.debug("Add follows from {} ",command.getWechatOpenId());
+    public void applyFollowers(BindCommand command){
+        log.debug("Apply followers from {} ",command.getWechatOpenId());
 
         WeChat weChat = weChatRepository.findByWeChatOpenId(command.getWechatOpenId());
         List<FollowerData> followers = command.getFollowers();
-        addFollowers(followers,weChat);
-        weChatRepository.save(weChat);
+        if(followers == null)
+            return ;
+
+        for(FollowerData data:followers){
+            FollowApplyId applyId = applyRepository.nextIdentity();
+            FollowApply apply = FollowApply.builder()
+                    .applyId(applyId)
+                    .applierName(weChat.getName())
+                    .applierWeChatId(weChat.getWeChatId())
+                    .applierWeChatOpenId(weChat.getWeChatOpenId())
+                    .applyDate(DateUtilWrapper.now())
+                    .cause(data.getCause())
+                    .followerSchoolId(new SchoolId(data.getSchoolId()))
+                    .followerClazzId(new ClazzId(data.getClazzId()))
+                    .followerId(new PersonId(data.getPersonId()))
+                    .build();
+            applyRepository.save(apply);
+
+            messageService.notifyNewFollowerApply(apply.getFollowerSchoolId(),
+                    apply.getFollowerClazzId(),apply.getFollowerId(),apply.getCause());
+        }
+
+        //addFollowers(followers,weChat);
+        //weChatRepository.save(weChat);
+    }
+
+    public void applyAudit(ApplyAuditCommand command){
+        log.debug("Apply Audit from {} ",command);
+
+        FollowApply apply = applyRepository.loadOf(new FollowApplyId(command.getApplyId()));
+        if(apply == null || apply.isAudited())
+            return;
+
+        FollowAudit audit = applyAuditService.auditFollowStudent(new PersonId(command.getAuditorId()),
+                apply, command.isOk(), command.getDescription());
+        apply.audite(audit);
+        auditRepository.save(audit);
+        applyRepository.save(apply);
+
     }
 
     private void addFollowers(List<FollowerData> followers,WeChat weChat){

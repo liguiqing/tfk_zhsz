@@ -10,6 +10,8 @@
     </parent>
     <artifactId>tfk-boot</artifactId>
 
+    <packaging>war</packaging>
+
     <name>TFK Boot</name>
     <url>http://maven.apache.org</url>
 
@@ -40,6 +42,7 @@
         <dependency>
             <groupId>tfk</groupId>
             <artifactId>tfk-test</artifactId>
+            <scope>test</scope>
             <version>${tfk.version}</version>
         </dependency>
         <dependency>
@@ -57,13 +60,16 @@
             <artifactId>tfk-sm</artifactId>
             <version>${tfk.version}</version>
         </dependency>
-
         <dependency>
             <groupId>tfk</groupId>
             <artifactId>tfk-assessment</artifactId>
             <version>${tfk.version}</version>
         </dependency>
-
+        <dependency>
+            <groupId>tfk</groupId>
+            <artifactId>tfk-access</artifactId>
+            <version>${tfk.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>org.springframework</groupId>
@@ -132,7 +138,7 @@
     </dependencyManagement>
 
     <build>
-        <finalName>tfk-boot</finalName>
+        <finalName>ysyp</finalName>
         <filters>
             <filter>src/filters/${env}.properties</filter>
         </filters>
@@ -171,11 +177,14 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <goals><goal>repackage</goal></goals>
-                    </execution>
-                </executions>
+                <!--打包jar需要-->
+                <!--<executions>-->
+                <!--<execution>-->
+                <!--<goals>-->
+                <!--<goal>repackage</goal>-->
+                <!--</goals>-->
+                <!--</execution>-->
+                <!--</executions>-->
             </plugin>
         </plugins>
     </build>
@@ -227,6 +236,19 @@
             <properties>
                 <env>test</env>
             </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-web</artifactId>
+                    <!--用来打包成war文件-->
+                    <exclusions>
+                        <exclusion>
+                            <groupId>org.springframework.boot</groupId>
+                            <artifactId>spring-boot-starter-tomcat</artifactId>
+                        </exclusion>
+                    </exclusions>
+                </dependency>
+            </dependencies>
         </profile>
     </profiles>
 

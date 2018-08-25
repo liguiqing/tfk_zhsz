@@ -130,6 +130,12 @@
                 <version>2.2.0</version>
             </dependency>
 
+            <dependency>
+                <groupId>net.sf.ehcache</groupId>
+                <artifactId>ehcache</artifactId>
+                <version>2.10.5</version>
+            </dependency>
+
             <!-- set spring -->
             <dependency>
                 <groupId>org.springframework</groupId>
@@ -518,6 +524,13 @@
                     <source>${project.build.sourceVersion}</source>
                     <target>${project.build.targetVersion}</target>
                     <encoding>UTF-8</encoding>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <configuration>
+                    <failOnMissingWebXml>false</failOnMissingWebXml>
                 </configuration>
             </plugin>
         </plugins>

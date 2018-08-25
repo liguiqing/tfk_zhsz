@@ -7,6 +7,7 @@ import com.alibaba.fastjson.support.spring.FastJsonJsonView;
 import com.tfk.commons.spring.SpringMvcExceptionResolver;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.PropertiesFactoryBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -34,11 +35,11 @@ import java.util.List;
 @ComponentScan(basePackages = {"com.tfk.**.controller"})
 public class SpringMvcConfiguration extends WebMvcConfigurationSupport {
 
-    @Autowired
-    public FreeMarkerViewResolver freeMarkerViewResolver;
+    //@Autowired
+    //public FreeMarkerViewResolver freeMarkerViewResolver;
 
-    @Autowired
-    private SpringMvcExceptionResolver exceptionResolver;
+    //@Autowired
+    //private SpringMvcExceptionResolver exceptionResolver;
 
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
@@ -99,11 +100,11 @@ public class SpringMvcConfiguration extends WebMvcConfigurationSupport {
         List<View> views = new ArrayList<View>();
         views.add(fastJsonJsonView());
 
-        ArrayList<ViewResolver> viewResolvers = new ArrayList<>();
-        viewResolvers.add(freeMarkerViewResolver);
+        //ArrayList<ViewResolver> viewResolvers = new ArrayList<>();
+        //viewResolvers.add(freeMarkerViewResolver);
 
         ContentNegotiatingViewResolver viewResolver = new ContentNegotiatingViewResolver();
-        viewResolver.setViewResolvers(viewResolvers);
+        //viewResolver.setViewResolvers(viewResolvers);
         viewResolver.setDefaultViews(views);
 
         return viewResolver;
@@ -124,5 +125,4 @@ public class SpringMvcConfiguration extends WebMvcConfigurationSupport {
         view.setFastJsonConfig(fastJsonConfig);
         return view;
     }
-
 }

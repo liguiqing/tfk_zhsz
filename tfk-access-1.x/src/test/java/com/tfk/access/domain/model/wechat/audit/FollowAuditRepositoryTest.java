@@ -39,16 +39,15 @@ public class FollowAuditRepositoryTest extends AbstractTransactionalJUnit4Spring
     public void test(){
         SchoolId schoolId = new SchoolId();
         ClazzId clazzId = new ClazzId();
-        WeChatFollowerId followerId = new WeChatFollowerId();
+
         FollowAuditId auditId = followAuditRepository.nextIdentity();
         FollowAudit audit = FollowAudit.builder()
                 .auditId(auditId)
-                .followerId(followerId)
                 .auditDate(DateUtilWrapper.now())
                 .ok(true)
                 .description("Desc")
                 .auditor(Auditor.builder().schoolId(schoolId).clazzId(clazzId).name("Auditor").auditorId(new PersonId()).role(AuditRole.Teacher).build())
-                .proposer(Proposer.builder().name("Proposer").weChatId(new WeChatId()).weChatOpenId("Weixin").build())
+                .applier(Applier.builder().name("Applier").weChatId(new WeChatId()).weChatOpenId("Weixin").build())
                 .defendant(Defendant.builder().defendantId(new PersonId()).name("Name").schoolId(schoolId).role(AuditRole.Student).clazzId(clazzId).build())
                 .build();
 

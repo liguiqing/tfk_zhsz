@@ -17,8 +17,8 @@ import org.springframework.context.annotation.ImportResource;
  */
 @Slf4j
 @SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
+@ImportResource({"classpath:META-INF/spring/applicationContext-boot-app.xml"})
 @ComponentScan(basePackages = {"com.tfk.boot.config"})
-@ImportResource({"classpath*:META-INF/spring/*.xml"})
 public class TFKAppliction extends SpringBootServletInitializer {
 
     public static void main(String[] args) throws Exception{

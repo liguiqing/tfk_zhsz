@@ -1,9 +1,7 @@
 package com.tfk.access.domain.model.wechat.config;
 
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 /**
  * ClassName: WXConfig <br/>
@@ -17,9 +15,12 @@ import lombok.Setter;
  */
 
 @NoArgsConstructor
+@AllArgsConstructor
 @Setter
 @Getter
+@Builder
 public class WeChatConfig {
+
 
     private String appId;
 

@@ -37,6 +37,7 @@
         <property name="mappingResources" >
             <list>
                 <value>/hbm/WeChat.hbm.xml</value>
+                <value>/hbm/FollowApply.hbm.xml</value>
                 <value>/hbm/FollowAudit.hbm.xml</value>
             </list>
         </property>

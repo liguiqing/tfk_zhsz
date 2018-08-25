@@ -24,6 +24,9 @@ public class IdPrefixes {
     //微信用户关关注审核唯一标识
     public static final String FollowAuditIdPrefix = "FAu";
 
+    //微信用户关关注申请唯一标识
+    public static final String  FollowApplyIdPrefix = "FAP";
+
     //个人唯一标识
     public static final String PersonIdPrefix = "PER";
 

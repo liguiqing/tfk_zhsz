@@ -16,7 +16,7 @@ import lombok.*;
 @Builder
 @EqualsAndHashCode(exclude = {"name"})
 @ToString
-public class Proposer extends ValueObject {
+public class Applier extends ValueObject {
 
     private WeChatId weChatId;
 
