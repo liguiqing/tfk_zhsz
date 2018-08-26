@@ -7,6 +7,7 @@ import org.springframework.cache.ehcache.EhCacheManagerFactoryBean;
 import org.springframework.cache.support.CompositeCacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.core.io.ClassPathResource;
 
 import java.util.Arrays;
@@ -20,7 +21,8 @@ import java.util.Arrays;
 @EnableCaching
 public class TestConfigurations {
 
-    @Bean("cacheManager")
+    @Bean(name = "cacheManager")
+    @Primary
     public CacheManager cacheManager() {
         CompositeCacheManager cacheManager = new CompositeCacheManager();
         EhCacheManagerFactoryBean bean = new EhCacheManagerFactoryBean();

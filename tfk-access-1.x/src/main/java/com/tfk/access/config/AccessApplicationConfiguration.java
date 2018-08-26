@@ -24,7 +24,7 @@ import org.springframework.stereotype.Service;
                 @ComponentScan.Filter(type=FilterType.ANNOTATION,value=Service.class),
                 @ComponentScan.Filter(type=FilterType.ANNOTATION,value=Component.class)},
         useDefaultFilters = false)
-@PropertySource("META-INF/spring/accessConfig.properties")
+@PropertySource("classpath:/META-INF/spring/accessConfig.properties")
 public class AccessApplicationConfiguration {
 
     @Bean

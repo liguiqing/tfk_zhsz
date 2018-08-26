@@ -9,6 +9,8 @@ import com.tfk.sm.domain.model.clazz.Clazz;
 import com.tfk.sm.domain.model.clazz.LearningClazzRepository;
 import com.tfk.sm.domain.model.school.School;
 import com.tfk.sm.domain.model.school.SchoolRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
@@ -19,13 +21,19 @@ import java.util.List;
  * @since V3.0
  */
 
+@Component
 public class StudentService {
 
+    @Autowired
     private LearningClazzRepository learningClazzRepository;
 
+    @Autowired
     private StudentRepository studentRepository;
 
+    @Autowired
     private SchoolRepository schoolRepository;
+
+    public StudentService(){}
 
     public StudentService(LearningClazzRepository learningClazzRepository, StudentRepository studentRepository, SchoolRepository schoolRepository) {
         this.learningClazzRepository = learningClazzRepository;

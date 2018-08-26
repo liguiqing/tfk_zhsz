@@ -19,11 +19,12 @@ import static org.junit.Assert.*;
  * Copyright (c) 2016,$today.year, 深圳市易考试乐学测评有限公司
  **/
 @ContextHierarchy({
-    @ContextConfiguration(locations = {
-        "classpath:META-INF/spring/applicationContext-assessment-app.xml",
-        "classpath:applicationContext-test-cache.xml",
-        "classpath:applicationContext-test-jndi.xml",
-        "classpath:applicationContext-assessment-test-data.xml"}
+        @ContextConfiguration(name="parent",locations = {
+                "classpath:applicationContext-test-jndi.xml",
+                "classpath:applicationContext-assessment-test-data.xml"}),
+        @ContextConfiguration(locations = {
+                "classpath:applicationContext-test-cache.xml",
+                "classpath:META-INF/spring/applicationContext-assessment-app.xml"}
 )})
 @Transactional
 @Rollback

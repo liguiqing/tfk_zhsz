@@ -1,5 +1,7 @@
 package com.tfk;
 
+import com.tfk.boot.config.CorsConfiguation;
+import com.tfk.boot.config.FreemarkerConfig;
 import com.tfk.boot.config.SpringMvcConfiguration;
 import com.tfk.boot.config.TfkBootConfiguration;
 import lombok.extern.slf4j.Slf4j;
@@ -9,7 +11,8 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.ImportResource;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 
 /**
  * @author Liguiqing
@@ -17,8 +20,9 @@ import org.springframework.context.annotation.ImportResource;
  */
 @Slf4j
 @SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
-@ImportResource({"classpath:META-INF/spring/applicationContext-boot-app.xml"})
+//@Configuration
 @ComponentScan(basePackages = {"com.tfk.boot.config"})
+//@PropertySource("classpath:/META-INF/spring/bootConfig.properties")
 public class TFKAppliction extends SpringBootServletInitializer {
 
     public static void main(String[] args) throws Exception{
@@ -31,8 +35,10 @@ public class TFKAppliction extends SpringBootServletInitializer {
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
         log.debug("Add Configurations ");
-        application.sources(SpringMvcConfiguration.class);
-        application.sources(TfkBootConfiguration.class);
+        application.sources(TFKAppliction.class);
+        //application.sources(FreemarkerConfig.class);
+        ///application.sources(SpringMvcConfiguration.class);
+        //application.sources(TfkBootConfiguration.class);
         return super.configure(application);
     }
 

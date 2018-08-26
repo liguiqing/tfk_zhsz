@@ -28,10 +28,11 @@ import static org.junit.Assert.*;
 
 @ContextHierarchy({
 
-        @ContextConfiguration(locations = {
+        @ContextConfiguration(name="parent",locations = {
                 "classpath:applicationContext-test-cache.xml",
                 "classpath:applicationContext-test-jndi.xml",
                 "classpath:applicationContext-access-test-data.xml"}
+
         ),
         @ContextConfiguration(classes= {AccessApplicationConfiguration.class})})
 @Transactional
