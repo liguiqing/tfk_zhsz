@@ -3,7 +3,6 @@ package com.tfk.assessment.domain.model.index;
 import com.tfk.commons.domain.EntityRepository;
 import com.tfk.share.domain.id.identityaccess.TenantId;
 import com.tfk.share.domain.id.index.IndexId;
-import com.tfk.share.domain.school.Teadent;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.repository.Modifying;

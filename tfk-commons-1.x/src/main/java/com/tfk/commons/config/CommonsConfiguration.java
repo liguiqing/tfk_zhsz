@@ -14,11 +14,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.lookup.JndiDataSourceLookup;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.orm.jpa.persistenceunit.DefaultPersistenceUnitManager;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 
@@ -43,19 +45,6 @@ public class CommonsConfiguration {
         springContextUtil.setApplicationContext(applicationContext);
         return springContextUtil;
     }
-
-//    @Bean(name = "cacheManager")
-//    public CacheManager cacheManager(@Value("${cache.location:ehcache.xml}") String location) {
-//        log.debug("Create Cache {}",location);
-//        CompositeCacheManager cacheManager = new CompositeCacheManager();
-//        EhCacheManagerFactoryBean bean = new EhCacheManagerFactoryBean();
-//        bean.setConfigLocation(new ClassPathResource("classpath:"+location));
-//        bean.setShared(true);
-//        EhCacheCacheManager ehCacheCacheManager = new EhCacheCacheManager(bean.getObject());
-//        cacheManager.setCacheManagers(Arrays.asList(ehCacheCacheManager));
-//        cacheManager.setFallbackToNoOpCache(true);
-//        return cacheManager;
-//    }
 
     @Bean(name = "cacheManager")
     public CacheManager cacheManager() {
@@ -84,10 +73,9 @@ public class CommonsConfiguration {
 
         final JndiDataSourceLookup dsLookup = new JndiDataSourceLookup();
         dsLookup.setResourceRef(true);
-        DataSource dataSource = null;
         try{
             log.debug("Get DataSource from jndi {}",jdbcJndiName);
-            dataSource = dsLookup.getDataSource("java:comp/env/jdbc/"+jdbcJndiName);
+            DataSource dataSource = dsLookup.getDataSource("java:comp/env/jdbc/"+jdbcJndiName);
             return dataSource;
         }catch (Exception e){
             log.debug("DataSource not found with jndi {}",jdbcJndiName);
@@ -137,10 +125,17 @@ public class CommonsConfiguration {
         if(mappingResources != null) {
             List<String> mappings = Lists.newArrayList();
             mappingResources.forEach(mappingResource -> mappings.addAll(Arrays.asList(mappingResource.getMappingResource())));
-            entityManagerFactoryBean.setMappingResources(mappings.toArray(new String[]{}));
+            String[] mr = new String[mappings.size()];
+            mr = mappings.toArray(mr);
+            log.debug("EntityManagerFactoryBean mapping resource {}",Arrays.toString(mr));
+            entityManagerFactoryBean.setMappingResources(mr);
+
         }
         entityManagerFactoryBean.setJpaProperties(jpaProperties);
-
+//
+//        DefaultPersistenceUnitManager unitManager = new DefaultPersistenceUnitManager();
+//        unitManager.setPersistenceXmlLocations();
+//        entityManagerFactoryBean.setPersistenceUnitManager(unitManager);
         return entityManagerFactoryBean;
     }
 

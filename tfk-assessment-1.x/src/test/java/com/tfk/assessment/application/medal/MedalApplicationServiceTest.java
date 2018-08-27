@@ -1,6 +1,5 @@
 package com.tfk.assessment.application.medal;
 
-import com.tfk.assessment.domain.model.index.Index;
 import com.tfk.assessment.domain.model.index.IndexRepository;
 import com.tfk.assessment.domain.model.medal.Medal;
 import com.tfk.assessment.domain.model.medal.MedalRepository;

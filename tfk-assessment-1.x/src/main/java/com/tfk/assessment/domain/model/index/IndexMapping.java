@@ -1,7 +1,6 @@
 package com.tfk.assessment.domain.model.index;
 
 import com.tfk.commons.domain.IdentifiedValueObject;
-import com.tfk.share.domain.id.index.IndexId;
 import lombok.*;
 
 /**

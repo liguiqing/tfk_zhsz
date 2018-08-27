@@ -2,7 +2,6 @@ package com.tfk.assessment.port.adapter.http.controller;
 
 import com.tfk.assessment.application.assess.AssessApplicationService;
 import com.tfk.assessment.application.assess.NewAssessCommand;
-import com.tfk.assessment.application.index.NewIndexCommand;
 import com.tfk.commons.port.adaptor.http.controller.AbstractHttpController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

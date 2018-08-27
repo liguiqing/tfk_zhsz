@@ -2,7 +2,7 @@ package com.tfk.commons.util;
 
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Copyright (c) 2016,$today.year, 深圳市天定康科技有限公司

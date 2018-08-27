@@ -1,6 +1,7 @@
 package com.tfk.commons.util;
 
-import lombok.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * @author Liguiqing

@@ -28,7 +28,7 @@ import org.springframework.stereotype.Service;
 @PropertySource("classpath:/META-INF/spring/smConfig.properties")
 public class SmApplicationConfiguration {
 
-    @Bean
+    @Bean("SMMapping")
     MappingResource mappingResource(){
         return ()->new String[]{
                 "/hbm/Clazz.hbm.xml",

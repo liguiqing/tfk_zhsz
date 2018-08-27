@@ -3,12 +3,9 @@ package com.tfk.assessment.domain.model.medal;
 import com.tfk.assessment.domain.model.index.Index;
 import com.tfk.commons.AssertionConcerns;
 import com.tfk.commons.domain.IdentifiedValueObject;
-import com.tfk.share.domain.id.index.IndexId;
 import com.tfk.share.domain.id.medal.MedalId;
 import com.tfk.share.domain.id.school.SchoolId;
 import lombok.*;
-
-import java.util.Set;
 
 /**
  * 勋章

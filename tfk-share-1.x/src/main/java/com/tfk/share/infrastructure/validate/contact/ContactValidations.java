@@ -2,7 +2,6 @@ package com.tfk.share.infrastructure.validate.contact;
 
 import com.google.common.collect.Lists;
 import com.tfk.share.domain.person.Contact;
-import com.tfk.share.domain.person.Person;
 
 import java.util.List;
 

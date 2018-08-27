@@ -2,8 +2,6 @@ package com.tfk.access.port.adapter.http.controller;
 
 import com.tfk.access.application.wechat.BindCommand;
 import com.tfk.access.application.wechat.WechatApplicationService;
-import com.tfk.access.domain.model.wechat.WeChatAccessToken;
-import com.tfk.access.domain.model.wechat.WeChatAccount;
 import com.tfk.access.domain.model.wechat.WebAccessToken;
 import com.tfk.access.domain.model.wechat.message.XmlMessage;
 import com.tfk.access.domain.model.wechat.xml.XStreamTransformer;

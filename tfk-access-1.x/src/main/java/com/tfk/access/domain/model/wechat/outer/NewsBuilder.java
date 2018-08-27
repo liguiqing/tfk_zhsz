@@ -1,9 +1,9 @@
 package com.tfk.access.domain.model.wechat.outer;
 
 
-
 import com.tfk.access.domain.model.wechat.message.XmlOutNewsMessage;
 import com.tfk.access.domain.model.wechat.message.XmlOutNewsMessage.Item;
+
 import java.util.ArrayList;
 import java.util.List;
 

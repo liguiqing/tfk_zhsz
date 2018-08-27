@@ -5,13 +5,11 @@ import com.tfk.assessment.config.AssessmentApplicationConfiguration;
 import com.tfk.commons.config.CommonsConfiguration;
 import com.tfk.share.domain.id.PersonId;
 import com.tfk.share.domain.id.assessment.AssesseeId;
-import com.tfk.share.domain.id.assessment.AssessorId;
 import com.tfk.share.domain.id.school.SchoolId;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.ContextHierarchy;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 import org.springframework.transaction.annotation.Transactional;
 

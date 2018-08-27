@@ -4,10 +4,9 @@
 
 package com.tfk.share.domain.common;
 
+import com.google.common.base.Objects;
 import com.tfk.commons.AssertionConcerns;
 import com.tfk.commons.util.DateUtilWrapper;
-import com.google.common.base.MoreObjects;
-import com.google.common.base.Objects;
 
 import java.util.Date;
 

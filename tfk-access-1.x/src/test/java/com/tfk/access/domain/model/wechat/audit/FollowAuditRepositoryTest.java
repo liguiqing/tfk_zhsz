@@ -8,7 +8,6 @@ import com.tfk.share.domain.id.PersonId;
 import com.tfk.share.domain.id.school.ClazzId;
 import com.tfk.share.domain.id.school.SchoolId;
 import com.tfk.share.domain.id.wechat.FollowAuditId;
-import com.tfk.share.domain.id.wechat.WeChatFollowerId;
 import com.tfk.share.domain.id.wechat.WeChatId;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +17,7 @@ import org.springframework.test.context.ContextHierarchy;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Copyright (c) 2016,$today.year, 深圳市易考试乐学测评有限公司

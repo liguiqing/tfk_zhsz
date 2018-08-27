@@ -7,7 +7,6 @@ import com.tfk.assessment.domain.model.medal.MedalLevel;
 import com.tfk.assessment.domain.model.medal.MedalRepository;
 import com.tfk.assessment.infrastructure.school.SchoolService;
 import com.tfk.commons.domain.Identities;
-import com.tfk.share.domain.id.identityaccess.TenantId;
 import com.tfk.share.domain.id.index.IndexId;
 import com.tfk.share.domain.id.medal.MedalId;
 import com.tfk.share.domain.id.school.SchoolId;

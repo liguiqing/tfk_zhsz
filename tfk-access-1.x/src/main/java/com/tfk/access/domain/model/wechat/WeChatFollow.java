@@ -1,13 +1,12 @@
 package com.tfk.access.domain.model.wechat;
 
-import com.tfk.access.domain.model.wechat.config.WeChatHelper;
 import com.tfk.access.domain.model.wechat.config.WeChatConfig;
+import com.tfk.access.domain.model.wechat.config.WeChatHelper;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 import org.springframework.util.StringUtils;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 /**

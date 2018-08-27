@@ -27,7 +27,7 @@ import org.springframework.stereotype.Service;
 @PropertySource("classpath:/META-INF/spring/asConfig.properties")
 public class AssessmentApplicationConfiguration {
 
-    @Bean
+    @Bean("AssessmentMapping")
     MappingResource mappingResource(){
         return ()->new String[]{
                 "/hbm/Assess.hbm.xml",

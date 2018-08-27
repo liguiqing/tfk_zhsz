@@ -3,7 +3,10 @@ package com.tfk.assessment.domain.model.medal;
 import com.tfk.commons.domain.IdentifiedValueObject;
 import com.tfk.share.domain.id.medal.AwardId;
 import com.tfk.share.domain.id.medal.EvidenceId;
-import lombok.*;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.util.Date;
 

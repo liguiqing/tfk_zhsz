@@ -3,14 +3,12 @@ package com.tfk.assessment.domain.model.index;
 import com.tfk.assessment.AssessmentTestConfiguration;
 import com.tfk.assessment.config.AssessmentApplicationConfiguration;
 import com.tfk.commons.config.CommonsConfiguration;
-import com.tfk.share.domain.id.PersonId;
 import com.tfk.share.domain.id.identityaccess.TenantId;
 import com.tfk.share.domain.id.index.IndexId;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.ContextHierarchy;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 import org.springframework.transaction.annotation.Transactional;
 

@@ -2,7 +2,9 @@ package com.tfk.assessment.domain.model.medal;
 
 import com.tfk.commons.AssertionConcerns;
 import com.tfk.commons.domain.ValueObject;
-import lombok.*;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.ToString;
 
 /**
  * 勋章等级

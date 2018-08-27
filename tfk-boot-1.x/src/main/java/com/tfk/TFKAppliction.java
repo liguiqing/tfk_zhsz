@@ -11,8 +11,6 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
 
 /**
  * @author Liguiqing
@@ -21,7 +19,7 @@ import org.springframework.context.annotation.PropertySource;
 @Slf4j
 @SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
 //@Configuration
-@ComponentScan(basePackages = {"com.tfk.boot.config"})
+//@ComponentScan(basePackages = {"com.tfk.boot.config"})
 //@PropertySource("classpath:/META-INF/spring/bootConfig.properties")
 public class TFKAppliction extends SpringBootServletInitializer {
 
@@ -37,7 +35,7 @@ public class TFKAppliction extends SpringBootServletInitializer {
         log.debug("Add Configurations ");
         application.sources(TFKAppliction.class);
         //application.sources(FreemarkerConfig.class);
-        ///application.sources(SpringMvcConfiguration.class);
+        //application.sources(SpringMvcConfiguration.class);
         //application.sources(TfkBootConfiguration.class);
         return super.configure(application);
     }

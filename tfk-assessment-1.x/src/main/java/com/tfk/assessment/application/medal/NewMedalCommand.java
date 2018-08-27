@@ -1,7 +1,5 @@
 package com.tfk.assessment.application.medal;
 
-import com.tfk.assessment.domain.model.medal.Medal;
-import com.tfk.share.domain.id.school.SchoolId;
 import lombok.*;
 
 /**

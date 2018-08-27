@@ -5,7 +5,6 @@
 package com.tfk.commons.domain;
 
 
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.repository.NoRepositoryBean;
 import org.springframework.data.repository.Repository;
 

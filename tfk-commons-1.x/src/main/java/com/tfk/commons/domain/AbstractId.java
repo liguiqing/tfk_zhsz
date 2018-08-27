@@ -4,8 +4,8 @@
 
 package com.tfk.commons.domain;
 
-import com.tfk.commons.AssertionConcerns;
 import com.google.common.base.Objects;
+import com.tfk.commons.AssertionConcerns;
 
 import java.io.Serializable;
 
