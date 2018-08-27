@@ -55,16 +55,16 @@
             <artifactId>tfk-share</artifactId>
             <version>${tfk.version}</version>
         </dependency>
-        <dependency>
-            <groupId>tfk</groupId>
-            <artifactId>tfk-sm</artifactId>
-            <version>${tfk.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>tfk</groupId>
-            <artifactId>tfk-assessment</artifactId>
-            <version>${tfk.version}</version>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>tfk</groupId>-->
+            <!--<artifactId>tfk-sm</artifactId>-->
+            <!--<version>${tfk.version}</version>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>tfk</groupId>-->
+            <!--<artifactId>tfk-assessment</artifactId>-->
+            <!--<version>${tfk.version}</version>-->
+        <!--</dependency>-->
         <dependency>
             <groupId>tfk</groupId>
             <artifactId>tfk-access</artifactId>

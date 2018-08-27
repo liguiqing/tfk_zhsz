@@ -1,7 +1,9 @@
 package com.tfk.sm.config;
 
+import com.tfk.commons.config.MappingResource;
 import com.tfk.share.infrastructure.validate.contact.*;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.*;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.stereotype.Component;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 @Slf4j
 @Configuration
+@EnableCaching
 @EnableJpaRepositories(value = "com.tfk.sm.domain.model.**.*",
         includeFilters = {@ComponentScan.Filter(type=FilterType.ANNOTATION,value=Repository.class)})
 @ComponentScan(value = "com.tfk.sm.**",
@@ -24,6 +27,16 @@ import org.springframework.stereotype.Service;
         useDefaultFilters = false)
 @PropertySource("classpath:/META-INF/spring/smConfig.properties")
 public class SmApplicationConfiguration {
+
+    @Bean
+    MappingResource mappingResource(){
+        return ()->new String[]{
+                "/hbm/Clazz.hbm.xml",
+                "/hbm/School.hbm.xml",
+                "/hbm/Student.hbm.xml",
+                "/hbm/Teacher.hbm.xml"
+        };
+    }
 
     @Bean("SMContactValidations")
     public ContactValidations contactValidations(){

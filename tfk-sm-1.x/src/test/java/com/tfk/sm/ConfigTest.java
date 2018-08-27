@@ -1,5 +1,6 @@
 package com.tfk.sm;
 
+import com.tfk.commons.config.CommonsConfiguration;
 import com.tfk.commons.util.DateUtilWrapper;
 import com.tfk.share.domain.id.school.ClazzId;
 import com.tfk.share.domain.id.school.SchoolId;
@@ -8,6 +9,7 @@ import com.tfk.sm.application.clazz.ClazzApplicationService;
 import com.tfk.sm.application.school.SchoolApplicationService;
 import com.tfk.sm.application.student.StudentApplicationService;
 import com.tfk.sm.application.teacher.TeacherApplicationService;
+import com.tfk.sm.config.SmApplicationConfiguration;
 import com.tfk.sm.domain.model.clazz.*;
 import com.tfk.sm.domain.model.school.School;
 import com.tfk.sm.domain.model.school.SchoolRepository;
@@ -29,14 +31,12 @@ import static org.junit.Assert.assertTrue;
  * @author Liguiqing
  * @since V3.0
  */
-
-
-@ContextConfiguration(locations = {
-        "classpath:META-INF/spring/applicationContext-sm-app.xml",
-        "classpath:applicationContext-sm-test-ds.xml",
-        "classpath:applicationContext-sm-test-app.xml",
-        "classpath:applicationContext-test-jndi.xml",
-        "classpath:applicationContext-sm-test-data.xml"}
+@ContextConfiguration(
+        classes = {
+                SmTestConfiguration.class,
+                CommonsConfiguration.class,
+                SmApplicationConfiguration.class
+        }
 )
 @Transactional
 @Rollback

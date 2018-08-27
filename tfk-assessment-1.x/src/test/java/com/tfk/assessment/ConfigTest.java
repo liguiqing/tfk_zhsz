@@ -1,5 +1,7 @@
 package com.tfk.assessment;
 
+import com.tfk.assessment.config.AssessmentApplicationConfiguration;
+import com.tfk.commons.config.CommonsConfiguration;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -17,11 +19,12 @@ import static junit.framework.TestCase.assertNotNull;
  */
 
 
-@ContextConfiguration(locations = {
-        "classpath:META-INF/spring/applicationContext-assessment-app.xml",
-        "classpath:applicationContext-assessment-test-app.xml",
-        "classpath:applicationContext-test-jndi.xml",
-        "classpath:applicationContext-assessment-test-data.xml"}
+@ContextConfiguration(
+    classes = {
+            AssessmentTestConfiguration.class,
+            CommonsConfiguration.class,
+            AssessmentApplicationConfiguration.class
+    }
 )
 @Transactional
 @Rollback

@@ -1,10 +1,13 @@
 package com.tfk.sm.domain.model.clazz;
 
+import com.tfk.commons.config.CommonsConfiguration;
 import com.tfk.commons.util.DateUtilWrapper;
 import com.tfk.share.domain.id.school.ClazzId;
 import com.tfk.share.domain.id.school.SchoolId;
 import com.tfk.share.domain.school.Grade;
 import com.tfk.share.domain.school.StudyYear;
+import com.tfk.sm.SmTestConfiguration;
+import com.tfk.sm.config.SmApplicationConfiguration;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -21,14 +24,13 @@ import static org.junit.Assert.assertNull;
  * @author Liguiqing
  * @since V3.0
  */
-@ContextHierarchy({
-        @ContextConfiguration(locations = {
-                "classpath:META-INF/spring/applicationContext-sm-app.xml",
-                "classpath:applicationContext-test-cache.xml",
-                "classpath:applicationContext-sm-test-ds.xml",
-                "classpath:applicationContext-test-jndi.xml",
-                "classpath:applicationContext-sm-test-data.xml"}
-        )})
+@ContextConfiguration(
+        classes = {
+                SmTestConfiguration.class,
+                CommonsConfiguration.class,
+                SmApplicationConfiguration.class
+        }
+)
 @Transactional
 @Rollback
 public class ClazzRepositoryTest extends AbstractTransactionalJUnit4SpringContextTests {

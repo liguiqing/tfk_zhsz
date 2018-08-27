@@ -6,8 +6,6 @@ import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
 import com.alibaba.fastjson.support.spring.FastJsonJsonView;
 import com.tfk.commons.spring.SpringMvcExceptionResolver;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.config.PropertiesFactoryBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -15,13 +13,11 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.servlet.View;
-import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 import org.springframework.web.servlet.view.ContentNegotiatingViewResolver;
-import org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,11 +32,6 @@ import java.util.Properties;
 @ComponentScan(basePackages = {"com.tfk.**.controller"})
 public class SpringMvcConfiguration extends WebMvcConfigurationSupport {
 
-    //@Autowired
-    //public FreeMarkerViewResolver freeMarkerViewResolver;
-
-    //@Autowired
-    //private SpringMvcExceptionResolver exceptionResolver;
 
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {

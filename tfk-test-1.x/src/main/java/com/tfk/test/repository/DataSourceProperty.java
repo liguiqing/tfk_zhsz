@@ -23,8 +23,24 @@ public class DataSourceProperty {
 
     private int maxActive = 20;
 
+    public DataSourceProperty(){}
 
-    protected DataSource getDataSource() throws SQLException {
+    public DataSourceProperty(String url, String username, String password) {
+        this.url = url;
+        this.username = username;
+        this.password = password;
+    }
+
+    public DataSourceProperty(String url, String username, String password, int initialSize, int minIdle, int maxActive) {
+        this.url = url;
+        this.username = username;
+        this.password = password;
+        this.initialSize = initialSize;
+        this.minIdle = minIdle;
+        this.maxActive = maxActive;
+    }
+
+    public DataSource getDataSource() throws SQLException {
         DruidDataSource dataSource = new DruidDataSource();
         dataSource.setUrl(this.url);
         dataSource.setUsername(this.username);

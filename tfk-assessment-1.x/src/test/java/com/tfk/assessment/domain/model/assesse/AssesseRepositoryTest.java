@@ -1,5 +1,8 @@
 package com.tfk.assessment.domain.model.assesse;
 
+import com.tfk.assessment.AssessmentTestConfiguration;
+import com.tfk.assessment.config.AssessmentApplicationConfiguration;
+import com.tfk.commons.config.CommonsConfiguration;
 import com.tfk.commons.util.DateUtilWrapper;
 import com.tfk.share.domain.id.assessment.AssessId;
 import com.tfk.share.domain.id.assessment.AssesseeId;
@@ -18,13 +21,13 @@ import static org.junit.Assert.*;
 /**
  * Copyright (c) 2016,2018, 深圳市易考试乐学测评有限公司
  **/
-@ContextHierarchy({
-    @ContextConfiguration(locations = {
-        "classpath:META-INF/spring/applicationContext-assessment-app.xml",
-        "classpath:applicationContext-test-cache.xml",
-        "classpath:applicationContext-test-jndi.xml",
-        "classpath:applicationContext-assessment-test-data.xml"}
-)})
+@ContextConfiguration(
+        classes = {
+                AssessmentTestConfiguration.class,
+                CommonsConfiguration.class,
+                AssessmentApplicationConfiguration.class
+        }
+)
 @Transactional
 @Rollback
 public class AssesseRepositoryTest extends AbstractTransactionalJUnit4SpringContextTests {

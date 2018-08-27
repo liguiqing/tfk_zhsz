@@ -1,5 +1,8 @@
 package com.tfk.access.domain.model.wechat.audit;
 
+import com.tfk.access.AccessTestConfiguration;
+import com.tfk.access.config.AccessApplicationConfiguration;
+import com.tfk.commons.config.CommonsConfiguration;
 import com.tfk.commons.util.DateUtilWrapper;
 import com.tfk.share.domain.id.PersonId;
 import com.tfk.share.domain.id.school.ClazzId;
@@ -21,13 +24,13 @@ import static org.junit.Assert.*;
  * Copyright (c) 2016,$today.year, 深圳市易考试乐学测评有限公司
  **/
 
+
 @ContextHierarchy({
-        @ContextConfiguration(locations = {
-                "classpath:META-INF/spring/applicationContext-access-app.xml",
-                "classpath:applicationContext-test-cache.xml",
-                "classpath:applicationContext-test-jndi.xml",
-                "classpath:applicationContext-access-test-data.xml"}
-        )})
+    @ContextConfiguration(classes = {
+            AccessApplicationConfiguration.class,
+            AccessTestConfiguration.class,
+            CommonsConfiguration.class})
+})
 @Transactional
 @Rollback
 public class FollowAuditRepositoryTest extends AbstractTransactionalJUnit4SpringContextTests {

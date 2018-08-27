@@ -1,6 +1,7 @@
 package com.tfk.access.config;
 
 import com.tfk.access.domain.model.wechat.config.WeChatConfig;
+import com.tfk.commons.config.MappingResource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.EnableCaching;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 @Slf4j
 @Configuration
+@EnableCaching
 @EnableJpaRepositories(value = "com.tfk.access.domain.model.**.*",
         includeFilters = {@ComponentScan.Filter(type=FilterType.ANNOTATION,value=Repository.class)})
 @ComponentScan(value = "com.tfk.access.**",
@@ -43,5 +45,10 @@ public class AccessApplicationConfiguration {
                 .mchId(mchId)
                 .apiKey(apiKey)
                 .build();
+    }
+
+    @Bean
+    MappingResource mappingResource(){
+        return ()->new String[]{"/hbm/WeChat.hbm.xml","/hbm/FollowApply.hbm.xml","/hbm/FollowAudit.hbm.xml"};
     }
 }

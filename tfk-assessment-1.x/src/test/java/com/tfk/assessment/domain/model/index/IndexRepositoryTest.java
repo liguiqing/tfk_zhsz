@@ -1,5 +1,8 @@
 package com.tfk.assessment.domain.model.index;
 
+import com.tfk.assessment.AssessmentTestConfiguration;
+import com.tfk.assessment.config.AssessmentApplicationConfiguration;
+import com.tfk.commons.config.CommonsConfiguration;
 import com.tfk.share.domain.id.PersonId;
 import com.tfk.share.domain.id.identityaccess.TenantId;
 import com.tfk.share.domain.id.index.IndexId;
@@ -18,14 +21,13 @@ import static org.junit.Assert.*;
 /**
  * Copyright (c) 2016,$today.year, 深圳市易考试乐学测评有限公司
  **/
-@ContextHierarchy({
-        @ContextConfiguration(name="parent",locations = {
-                "classpath:applicationContext-test-jndi.xml",
-                "classpath:applicationContext-assessment-test-data.xml"}),
-        @ContextConfiguration(locations = {
-                "classpath:applicationContext-test-cache.xml",
-                "classpath:META-INF/spring/applicationContext-assessment-app.xml"}
-)})
+@ContextConfiguration(
+        classes = {
+                AssessmentTestConfiguration.class,
+                CommonsConfiguration.class,
+                AssessmentApplicationConfiguration.class
+        }
+)
 @Transactional
 @Rollback
 

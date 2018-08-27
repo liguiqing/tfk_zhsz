@@ -1,6 +1,8 @@
 package com.tfk.access.domain.model.wechat.audit;
 
+import com.tfk.access.AccessTestConfiguration;
 import com.tfk.access.config.AccessApplicationConfiguration;
+import com.tfk.commons.config.CommonsConfiguration;
 import com.tfk.commons.util.DateUtilWrapper;
 import com.tfk.share.domain.id.PersonId;
 import com.tfk.share.domain.id.school.ClazzId;
@@ -8,33 +10,25 @@ import com.tfk.share.domain.id.school.SchoolId;
 import com.tfk.share.domain.id.wechat.FollowApplyId;
 import com.tfk.share.domain.id.wechat.FollowAuditId;
 import com.tfk.share.domain.id.wechat.WeChatId;
-import com.tfk.test.config.TestConfigurations;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.ContextHierarchy;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Copyright (c) 2016,$today.year, 深圳市易考试乐学测评有限公司
  **/
 
-@ContextHierarchy({
-
-        @ContextConfiguration(name="parent",locations = {
-                "classpath:applicationContext-test-cache.xml",
-                "classpath:applicationContext-test-jndi.xml",
-                "classpath:applicationContext-access-test-data.xml"}
-
-        ),
-        @ContextConfiguration(classes= {AccessApplicationConfiguration.class})})
+@ContextConfiguration(classes = {
+        AccessApplicationConfiguration.class,
+        AccessTestConfiguration.class,
+        CommonsConfiguration.class})
 @Transactional
 @Rollback
 public class FollowApplyRepositoryTest extends AbstractTransactionalJUnit4SpringContextTests {

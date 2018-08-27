@@ -1,6 +1,9 @@
 package com.tfk.access.domain.model.wechat;
 
+import com.tfk.access.AccessTestConfiguration;
+import com.tfk.access.config.AccessApplicationConfiguration;
 import com.tfk.access.domain.model.wechat.audit.*;
+import com.tfk.commons.config.CommonsConfiguration;
 import com.tfk.commons.util.DateUtilWrapper;
 import com.tfk.share.domain.id.PersonId;
 import com.tfk.share.domain.id.school.ClazzId;
@@ -12,7 +15,6 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.ContextHierarchy;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,19 +23,17 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 /**
  * Copyright (c) 2016,$today.year, 深圳市易考试乐学测评有限公司
  **/
 
-@ContextHierarchy({
-        @ContextConfiguration(locations = {
-                "classpath:META-INF/spring/applicationContext-access-app.xml",
-                "classpath:applicationContext-test-cache.xml",
-                "classpath:applicationContext-test-jndi.xml",
-                "classpath:applicationContext-access-test-data.xml"}
-        )})
+@ContextConfiguration(classes = {
+        AccessApplicationConfiguration.class,
+        AccessTestConfiguration.class,
+        CommonsConfiguration.class})
 @Transactional
 @Rollback
 public class WeChatRepositoryTest extends AbstractTransactionalJUnit4SpringContextTests {

@@ -1,10 +1,13 @@
 package com.tfk.access;
 
+import com.tfk.access.config.AccessApplicationConfiguration;
+import com.tfk.commons.config.CommonsConfiguration;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.ContextHierarchy;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,13 +19,12 @@ import static junit.framework.TestCase.assertNotNull;
  * @since V3.0
  */
 
+@ContextHierarchy({
+        @ContextConfiguration(
+                classes = {AccessTestConfiguration.class,CommonsConfiguration.class,AccessApplicationConfiguration.class}
+        )
+})
 
-@ContextConfiguration(locations = {
-        "classpath:META-INF/spring/applicationContext-access-app.xml",
-        "classpath:applicationContext-access-test-app.xml",
-        "classpath:applicationContext-test-jndi.xml",
-        "classpath:applicationContext-access-test-data.xml"}
-)
 @Transactional
 @Rollback
 public class ConfigTest extends AbstractTransactionalJUnit4SpringContextTests{
