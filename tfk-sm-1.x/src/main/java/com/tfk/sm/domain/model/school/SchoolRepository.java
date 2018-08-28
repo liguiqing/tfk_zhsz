@@ -9,6 +9,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 
 /**
  * @author Liguiqing
@@ -22,7 +24,7 @@ public interface SchoolRepository extends EntityRepository<School,SchoolId> {
     }
 
     @Override
-    @CacheEvict(value = "smCache", key="#p0.schoolId().id")
+    @CacheEvict(value = "smCache", key="#p0.schoolId.id")
     void save(School school);
 
     @Cacheable(value = "smCache",key = "#p0.id",unless = "#result == null")
@@ -35,4 +37,7 @@ public interface SchoolRepository extends EntityRepository<School,SchoolId> {
     @Query(value = "update sm_school set removed = 1 where schoolId=:schoolId",nativeQuery = true)
     @CacheEvict(value = "smCache",key="#p0")
     void delete(@Param("schoolId") String schoolId);
+
+    @Query(value = "select * from sm_School where removed=0 LIMIT :page,:size",nativeQuery = true)
+    List<School> findByLimit(@Param("page")int page,@Param("size")int size);
 }

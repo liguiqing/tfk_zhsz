@@ -85,7 +85,7 @@ public class ConfigTest extends AbstractTransactionalJUnit4SpringContextTests{
         assertNotNull(learningClazzRepository);
         Date openTime = DateUtilWrapper.now();
         ClazzId clazzId1 = learningClazzRepository.nextIdentity();
-        LearningClazz clazz1 = new LearningClazz(clazzId1,school.schoolId(),openTime);
+        LearningClazz clazz1 = new LearningClazz(clazzId1,school.getSchoolId(),openTime);
         learningClazzRepository.save(clazz1);
         LearningClazz clazz1_ = learningClazzRepository.loadOf(clazzId1);
         assertNotNull(clazz1_);
@@ -93,7 +93,7 @@ public class ConfigTest extends AbstractTransactionalJUnit4SpringContextTests{
 
         assertNotNull(superviseClazzRepository);
         ClazzId clazzId2 = superviseClazzRepository.nextIdentity();
-        SuperviseClazz clazz2 = new SuperviseClazz(clazzId2,school.schoolId(),openTime);
+        SuperviseClazz clazz2 = new SuperviseClazz(clazzId2,school.getSchoolId(),openTime);
         superviseClazzRepository.save(clazz2);
         SuperviseClazz clazz2_ = superviseClazzRepository.loadOf(clazzId2);
         assertNotNull(clazz2_);
@@ -102,7 +102,7 @@ public class ConfigTest extends AbstractTransactionalJUnit4SpringContextTests{
 
         assertNotNull(unitedClazzRepository);
         ClazzId clazzId3 = unitedClazzRepository.nextIdentity();
-        UnitedClazz clazz3 = new UnitedClazz(clazzId2,school.schoolId(),openTime);
+        UnitedClazz clazz3 = new UnitedClazz(clazzId2,school.getSchoolId(),openTime);
         unitedClazzRepository.save(clazz3);
         UnitedClazz clazz3_ = unitedClazzRepository.loadOf(clazzId2);
         assertNotNull(clazz3_);

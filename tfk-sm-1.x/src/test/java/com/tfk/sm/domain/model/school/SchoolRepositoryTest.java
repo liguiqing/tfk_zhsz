@@ -12,6 +12,9 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
@@ -71,5 +74,10 @@ public class SchoolRepositoryTest extends AbstractTransactionalJUnit4SpringConte
     public void save(){
         School school = new School(new SchoolId("SCH123456781"), "Test School", SchoolScope.Primary);
         schoolRepository.save(school);
+        for(int i=0;i<100;i++)
+            schoolRepository.save(new School(schoolRepository.nextIdentity(), "Test School "+1, SchoolScope.Middle));
+
+        List<School> schools = schoolRepository.findByLimit(1, 100);
+        assertEquals(100, schools.size());
     }
 }

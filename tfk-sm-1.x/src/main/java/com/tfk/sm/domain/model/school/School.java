@@ -7,7 +7,11 @@ import com.tfk.commons.util.DateUtilWrapper;
 import com.tfk.share.domain.common.Period;
 import com.tfk.share.domain.id.identityaccess.TenantId;
 import com.tfk.share.domain.id.school.SchoolId;
+import com.tfk.share.domain.school.Grade;
 import com.tfk.share.domain.school.SchoolScope;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.ToString;
 
 /**
  * 学校
@@ -15,7 +19,9 @@ import com.tfk.share.domain.school.SchoolScope;
  * @author Liguiqing
  * @since V1.0
  */
-
+@Getter
+@EqualsAndHashCode(of={"schoolId"})
+@ToString(of = {"schoolId","name"})
 public class School extends Entity {
     private SchoolId schoolId;
 
@@ -44,34 +50,16 @@ public class School extends Entity {
         return new Period(DateUtilWrapper.now(), DateUtilWrapper.tomorrow());
     }
 
-    public SchoolId schoolId() {
-        return schoolId;
-    }
-
-    public void schoolId(SchoolId schoolId) {
-        this.schoolId = schoolId;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        School school = (School) o;
-        return Objects.equal(schoolId, school.schoolId);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(schoolId);
-    }
-
-    @Override
-    public String toString() {
-        return MoreObjects.toStringHelper(this)
-                .add("schoolId", schoolId)
-                .add("name", name)
-                .add("alias", alias)
-                .toString();
+    public Grade[] grades(){
+        int from = this.scope.gradeFrom();
+        int to = this.scope.gradeTo();
+        Grade[] grades = new Grade[to - from];
+        int i = 0;
+        while(i<(to - from)){
+            grades[i] = Grade.newWithLevel(from+i);
+            i++;
+        }
+        return grades;
     }
 
     protected School(){}
