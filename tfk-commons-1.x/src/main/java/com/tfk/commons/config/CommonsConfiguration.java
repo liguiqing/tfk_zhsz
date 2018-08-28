@@ -11,6 +11,7 @@ import org.springframework.cache.ehcache.EhCacheManagerFactoryBean;
 import org.springframework.cache.support.CompositeCacheManager;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.core.io.ClassPathResource;
@@ -115,13 +116,23 @@ public class CommonsConfiguration {
     }
 
     @Bean("entityManagerFactory")
-    public LocalContainerEntityManagerFactoryBean entityManagerFactory(List<MappingResource> mappingResources,
-                                                                       DataSource dataSource,
-                                                                       JpaVendorAdapter jpaVendorAdapter,
-                                                                       Properties jpaProperties) {
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory(
+            @Value("${jpa.unit.name:null}") String persistenceUnitName,
+            List<MappingResource> mappingResources,
+            DataSource dataSource,
+            JpaVendorAdapter jpaVendorAdapter,
+            Properties jpaProperties) {
         LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
+
+        //配置persistenceUnitName 必须使用JPA标准,在META-INF目录建立配置
+        if(!"null".equalsIgnoreCase(persistenceUnitName) && persistenceUnitName.length() > 0) {
+            entityManagerFactoryBean.setPersistenceUnitName(persistenceUnitName);
+            entityManagerFactoryBean.setPersistenceXmlLocation("classpath:META-INF/persistence.xml");
+        }
+
         entityManagerFactoryBean.setDataSource(dataSource);
         entityManagerFactoryBean.setJpaVendorAdapter(jpaVendorAdapter);
+
         if(mappingResources != null) {
             List<String> mappings = Lists.newArrayList();
             mappingResources.forEach(mappingResource -> mappings.addAll(Arrays.asList(mappingResource.getMappingResource())));
@@ -132,10 +143,7 @@ public class CommonsConfiguration {
 
         }
         entityManagerFactoryBean.setJpaProperties(jpaProperties);
-//
-//        DefaultPersistenceUnitManager unitManager = new DefaultPersistenceUnitManager();
-//        unitManager.setPersistenceXmlLocations();
-//        entityManagerFactoryBean.setPersistenceUnitManager(unitManager);
+
         return entityManagerFactoryBean;
     }
 

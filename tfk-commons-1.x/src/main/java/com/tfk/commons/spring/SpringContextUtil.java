@@ -33,11 +33,11 @@ public class SpringContextUtil implements ApplicationContextAware {
 	}
 
 	public static <T> T getBean(String name) {
-		return (T) applicationContext.getBean(name);
+		return (T) SpringContextUtil.applicationContext.getBean(name);
 	}
 
 	public static <T> T getBean(Class clazz) {
-		return (T) applicationContext.getBean(clazz);
+		return (T) SpringContextUtil.applicationContext.getBean(clazz);
 	}
 
 	public static void registerBean(String beanId,String beanClassName,Map<String,Object> pvs) {

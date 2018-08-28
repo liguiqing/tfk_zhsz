@@ -186,25 +186,25 @@
                 <!--</execution>-->
                 <!--</executions>-->
             </plugin>
-            <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>make-war</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                        <configuration>
-                            <skipAssembly>false</skipAssembly>
-                            <outputDirectory>${project.build.directory}</outputDirectory>
-                            <descriptors>
-                                <descriptor>assembly/release.xml</descriptor>
-                            </descriptors>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
+            <!--<plugin>-->
+                <!--<artifactId>maven-assembly-plugin</artifactId>-->
+                <!--<executions>-->
+                    <!--<execution>-->
+                        <!--<id>make-war</id>-->
+                        <!--<phase>package</phase>-->
+                        <!--<goals>-->
+                            <!--<goal>single</goal>-->
+                        <!--</goals>-->
+                        <!--<configuration>-->
+                            <!--<skipAssembly>false</skipAssembly>-->
+                            <!--<outputDirectory>${project.build.directory}</outputDirectory>-->
+                            <!--<descriptors>-->
+                                <!--<descriptor>assembly/release.xml</descriptor>-->
+                            <!--</descriptors>-->
+                        <!--</configuration>-->
+                    <!--</execution>-->
+                <!--</executions>-->
+            <!--</plugin>-->
         </plugins>
     </build>
     <profiles>

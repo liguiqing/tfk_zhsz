@@ -19,4 +19,5 @@ import org.springframework.context.annotation.PropertySource;
 @PropertySource("classpath:/META-INF/spring/bootConfig.properties")
 public class TfkBootConfiguration {
 
+
 }
