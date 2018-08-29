@@ -11,6 +11,10 @@ import java.util.Collection;
 
 public class CollectionsUtilWrapper {
 
+    public static <E> boolean isNotNullOrNotEmpty(Collection<E> collection){
+        return !isNullOrEmpty(collection);
+    }
+
     public static <E> boolean isNullOrEmpty(Collection<E> collection){
         return (collection == null) || collection.size() == 0;
     }

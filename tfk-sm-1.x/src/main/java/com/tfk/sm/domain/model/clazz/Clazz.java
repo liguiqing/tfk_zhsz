@@ -1,14 +1,18 @@
 package com.tfk.sm.domain.model.clazz;
 
-import com.google.common.base.Objects;
 import com.google.common.collect.Sets;
 import com.tfk.commons.AssertionConcerns;
 import com.tfk.commons.domain.Entity;
+import com.tfk.commons.util.CollectionsUtilWrapper;
 import com.tfk.commons.util.DateUtilWrapper;
 import com.tfk.share.domain.id.school.ClazzId;
 import com.tfk.share.domain.id.school.SchoolId;
 import com.tfk.share.domain.school.Grade;
 import com.tfk.share.domain.school.StudyYear;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.ToString;
 
 import java.util.Date;
 import java.util.Set;
@@ -19,7 +23,9 @@ import java.util.Set;
  * @author Liguiqing
  * @since V1.0
  */
-
+@Getter
+@EqualsAndHashCode(of={"clazzId"},callSuper = false)
+@ToString(exclude = {"histories"})
 public abstract class Clazz extends Entity {
     private ClazzId clazzId;
 
@@ -48,6 +54,18 @@ public abstract class Clazz extends Entity {
         }
         aHistory.toSchool(this.schoolId);
         this.histories.add(aHistory);
+    }
+
+    public String getGradeFullName(Grade grade){
+        if(CollectionsUtilWrapper.isNullOrEmpty(this.getHistories()))
+            return "";
+        for(ClazzHistory history:histories){
+            if(history.sameGadeOf(grade)){
+                return history.fullName();
+            }
+        }
+
+        return "";
     }
 
     public void open(){
@@ -84,39 +102,10 @@ public abstract class Clazz extends Entity {
         StudyYear year = StudyYear.now();
         for(ClazzHistory history:this.histories){
             if(history.sameYearOf(year)){
-                return history.grade();
+                return history.getGrade();
             }
         }
         return null;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Clazz clazz = (Clazz) o;
-        return Objects.equal(clazzId, clazz.clazzId);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(clazzId);
-    }
-
-    public ClazzId clazzId() {
-        return clazzId;
-    }
-
-    public SchoolId schoolId() {
-        return schoolId;
-    }
-
-    public Date openedTime() {
-        return openedTime;
-    }
-
-    public Date closedTime() {
-        return closedTime;
     }
 
     protected Clazz() {

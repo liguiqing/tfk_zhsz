@@ -24,12 +24,12 @@ public class StudyYearTest {
     public ExpectedException thrown = ExpectedException.none();
 
     @Test
-    public void testConstructor()throws Exception{
-        StudyYear sy = new StudyYear(1, 2);
+    public void testConstructor(){
+        new StudyYear(1, 2);
     }
 
     @Test
-    public void testNow()throws Exception{
+    public void testNow(){
         StudyYear years = StudyYear.now();
         Date now = DateUtilWrapper.now();
         int thisYear = DateUtilWrapper.thisYear();
@@ -38,11 +38,11 @@ public class StudyYearTest {
 
         int month = DateUtilWrapper.month(now);
         if(month < 8){
-            assertEquals(years.yearStarts(), prevYear);
-            assertEquals(years.yearEnds(), thisYear);
+            assertEquals(years.getYearStarts(), prevYear);
+            assertEquals(years.getYearEnds(), thisYear);
         }else{
-            assertEquals(years.yearStarts(), thisYear);
-            assertEquals(years.yearEnds(), nextYear);
+            assertEquals(years.getYearStarts(), thisYear);
+            assertEquals(years.getYearEnds(), nextYear);
         }
     }
 

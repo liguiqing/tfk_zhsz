@@ -49,7 +49,7 @@ public class NewClazzCommand {
     private  UnitedClazz toUnitedClazz(){
         ClazzId clazzId = new ClazzId();
         UnitedClazz clazz = new UnitedClazz(clazzId,new SchoolId(this.schoolId),this.openedTime);
-        ClazzHistory history = new ClazzHistory(clazzId,grade(),studyYear(),this.clazzName);
+        ClazzHistory history = new ClazzHistory(clazzId,grade(),this.clazzName);
         clazz.addHistory(history);
         return clazz;
     }
@@ -116,8 +116,8 @@ public class NewClazzCommand {
                 .add("schoolId", schoolId)
                 .add("openedTime", openedTime)
                 .add("clazzName", clazzName)
-                .add("yearStarts", yearStarts)
-                .add("yearEnds", yearEnds)
+                .add("getYearStarts", yearStarts)
+                .add("getYearEnds", yearEnds)
                 .add("gradeLevel", gradeLevel)
                 .toString();
     }

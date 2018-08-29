@@ -20,7 +20,7 @@ import lombok.ToString;
  * @since V1.0
  */
 @Getter
-@EqualsAndHashCode(of={"schoolId"})
+@EqualsAndHashCode(of={"schoolId"},callSuper = false)
 @ToString(of = {"schoolId","name"})
 public class School extends Entity {
     private SchoolId schoolId;
@@ -60,6 +60,16 @@ public class School extends Entity {
             i++;
         }
         return grades;
+    }
+
+    public boolean hasGrade(Grade grade){
+        Grade[] grades = grades();
+        for(Grade g:grades){
+            if(g.equals(grade)){
+                return true;
+            }
+        }
+        return false;
     }
 
     protected School(){}

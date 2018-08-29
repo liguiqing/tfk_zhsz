@@ -4,6 +4,8 @@ import com.google.common.base.Objects;
 import com.tfk.share.domain.common.Period;
 import com.tfk.share.domain.id.school.ClazzId;
 import com.tfk.share.domain.id.school.SchoolId;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 /**
  * 教学班级
@@ -11,7 +13,8 @@ import com.tfk.share.domain.id.school.SchoolId;
  * @author Liguiqing
  * @since V3.0
  */
-
+@EqualsAndHashCode(of={"course","period"},callSuper = false)
+@ToString(of={"course","period"})
 public class TeachAndStudyClazz extends GradClazz {
 
     private Course course;
@@ -25,16 +28,6 @@ public class TeachAndStudyClazz extends GradClazz {
         this.period = period;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
-        TeachAndStudyClazz that = (TeachAndStudyClazz) o;
-        return Objects.equal(course, that.course) &&
-                Objects.equal(period, that.period);
-    }
-
     public Course course() {
         return course;
     }
@@ -43,10 +36,6 @@ public class TeachAndStudyClazz extends GradClazz {
         return period;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(super.hashCode(), course, period);
-    }
 
     TeachAndStudyClazz(){}
 }

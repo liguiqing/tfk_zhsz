@@ -49,7 +49,7 @@ public class StudentService {
         boolean canStudyHere = studiedCourses.contains(course);
         AssertionConcerns.assertArgumentFalse(canStudyHere,"班级目前未开能此课程:"+course.name());
 
-        School school = schoolRepository.loadOf(clazz.schoolId());
+        School school = schoolRepository.loadOf(clazz.getSchoolId());
 
         Period period = school.getThisTermStartsAndEnds();
         Grade grade = clazz.currentGrade();
@@ -65,7 +65,7 @@ public class StudentService {
     public ClazzManaged managedAt(Clazz clazz, Student student){
         AssertionConcerns.assertArgumentFalse(clazz.canBeManagedAt(),"教学班不能管理学生");
 
-        School school = schoolRepository.loadOf(clazz.schoolId());
+        School school = schoolRepository.loadOf(clazz.getSchoolId());
 
         Period period = school.getThisTermStartsAndEnds();
         Grade grade = clazz.currentGrade();

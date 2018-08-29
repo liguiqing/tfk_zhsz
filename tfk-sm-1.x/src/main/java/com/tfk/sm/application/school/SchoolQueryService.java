@@ -24,7 +24,7 @@ public class SchoolQueryService {
     @Autowired
     private SchoolRepository schoolRepository;
 
-    List<SchoolData> findAllSchool(int page,int size){
+    public List<SchoolData> findAllSchool(int page, int size){
         log.debug("Query school page{} size{}",page,size);
         List<School> schools = schoolRepository.findByLimit(page, size);
         return schools.stream().map(school ->{

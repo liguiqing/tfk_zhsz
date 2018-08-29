@@ -45,7 +45,7 @@ public class Student extends Teadent {
             return;
 
 
-        Study study = new Study(this,clazz.clazzId(), period, course,grade);
+        Study study = new Study(this,clazz.getClazzId(), period, course,grade);
         if(this.studies == null)
             this.studies = Sets.newHashSet();
         this.studies.add(study);
@@ -55,7 +55,7 @@ public class Student extends Teadent {
         if(!clazz.canBeManagedAt())
             return;
 
-        ClazzManaged cm = new ClazzManaged(this, clazz.clazzId(),period,grade);
+        ClazzManaged cm = new ClazzManaged(this, clazz.getClazzId(),period,grade);
         if(this.manageds == null)
             this.manageds = Sets.newHashSet();
         this.manageds.add(cm);

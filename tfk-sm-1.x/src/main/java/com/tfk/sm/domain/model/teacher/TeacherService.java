@@ -31,11 +31,11 @@ public class TeacherService {
     public ClazzTeaching teachingAt(Teacher teacher,Clazz clazz, Course course){
         AssertionConcerns.assertArgumentFalse(clazz.canBeStudyAt(),"行政班不能教授课程");
 
-        School school = schoolRepository.loadOf(clazz.schoolId());
+        School school = schoolRepository.loadOf(clazz.getSchoolId());
         Period period = school.getThisTermStartsAndEnds();
         Grade grade = clazz.currentGrade();
 
-        ClazzTeaching teaching = new ClazzTeaching(teacher,period,grade,clazz.clazzId(), course);
+        ClazzTeaching teaching = new ClazzTeaching(teacher,period,grade,clazz.getClazzId(), course);
 
         //List<ClazzTeaching> hasTeaching = teacherRepository.findTeaching(teacher.personId());
         //boolean canBeTeached = hasTeaching.size()>0?hasTeaching.contains(teachingAt):true;
@@ -46,7 +46,7 @@ public class TeacherService {
 
     public ClazzManagement managementAt(Teacher teacher, Clazz clazz){
 
-        School school = schoolRepository.loadOf(clazz.schoolId());
+        School school = schoolRepository.loadOf(clazz.getSchoolId());
         Period period = school.getThisTermStartsAndEnds();
         Grade grade = clazz.currentGrade();
 

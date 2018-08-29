@@ -21,7 +21,6 @@ import java.util.Set;
  * @author Liguiqing
  * @since V3.0
  */
-
 public class Teacher extends Teadent {
     private TeacherId teacherId;
 
@@ -43,7 +42,7 @@ public class Teacher extends Teadent {
         if(!this.canTeach(grade,course))
             return;
 
-        ClazzTeaching ct = new ClazzTeaching(this, period,grade,clazz.clazzId(), course);
+        ClazzTeaching ct = new ClazzTeaching(this, period,grade,clazz.getClazzId(), course);
         if(this.teachings == null)
             this.teachings = Sets.newHashSet();
         this.teachings.add(ct);
@@ -53,7 +52,7 @@ public class Teacher extends Teadent {
         if(!clazz.canBeManagedAt())
             return;
 
-        ClazzManagement cm = new ClazzManagement(this, period,clazz.clazzId(),grade);
+        ClazzManagement cm = new ClazzManagement(this, period,clazz.getClazzId(),grade);
         if(this.manages == null)
             this.manages = Sets.newHashSet();
         this.manages.add(cm);
@@ -85,6 +84,10 @@ public class Teacher extends Teadent {
 
     public Set<ClazzTeaching> teachings() {
         return ImmutableSet.copyOf(this.teachings);
+    }
+
+    public Set<ClazzManagement> manages() {
+        return ImmutableSet.copyOf(this.manages);
     }
 
     @Override

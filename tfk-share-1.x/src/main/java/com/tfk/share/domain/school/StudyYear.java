@@ -4,11 +4,12 @@
 
 package com.tfk.share.domain.school;
 
-import com.google.common.base.MoreObjects;
-import com.google.common.base.Objects;
 import com.tfk.commons.AssertionConcerns;
 import com.tfk.commons.domain.ValueObject;
 import com.tfk.commons.util.DateUtilWrapper;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.ToString;
 
 import java.util.Date;
 
@@ -18,7 +19,9 @@ import java.util.Date;
  * @author Liguiqing
  * @since V3.0
  */
-
+@Getter
+@EqualsAndHashCode
+@ToString
 public class StudyYear extends ValueObject {
 
     private int yearStarts;
@@ -52,36 +55,6 @@ public class StudyYear extends ValueObject {
 
     public String stringOf(){
         return this.yearStarts + "-" + this.yearEnds;
-    }
-
-    public int yearStarts() {
-        return yearStarts;
-    }
-
-    public int yearEnds() {
-        return yearEnds;
-    }
-
-    @Override
-    public String toString() {
-        return MoreObjects.toStringHelper(this)
-                .add("yearStarts", yearStarts)
-                .add("yearEnds", yearEnds)
-                .toString();
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        StudyYear studyYear = (StudyYear) o;
-        return yearStarts == studyYear.yearStarts &&
-                yearEnds == studyYear.yearEnds;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(yearStarts, yearEnds);
     }
 
     //Only 4 persistence

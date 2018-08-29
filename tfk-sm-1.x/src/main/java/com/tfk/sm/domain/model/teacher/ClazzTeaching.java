@@ -8,12 +8,16 @@ import com.tfk.share.domain.school.Course;
 import com.tfk.share.domain.school.Grade;
 import com.tfk.share.domain.school.StudyYear;
 import com.tfk.share.domain.school.TeachAndStudyClazz;
+import lombok.*;
+
 
 /**
  * @author Liguiqing
  * @since V3.0
  */
-
+@Getter
+@EqualsAndHashCode
+@ToString
 public class ClazzTeaching extends IdentifiedValueObject {
 
     private TeacherId teacherId;

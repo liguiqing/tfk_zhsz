@@ -26,6 +26,7 @@ import org.springframework.test.context.junit4.AbstractTransactionalJUnit4Spring
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 import static org.junit.Assert.*;
@@ -52,7 +53,7 @@ public class TeacherRepositoryTest extends AbstractTransactionalJUnit4SpringCont
     private TeacherRepository teacherRepository;
 
     @Test
-    public void save(){
+    public void test(){
         assertNotNull(teacherRepository);
         SchoolId schoolId = new SchoolId("SCH12345678");
         PersonId personId = new PersonId("PER12345678");
@@ -97,5 +98,7 @@ public class TeacherRepositoryTest extends AbstractTransactionalJUnit4SpringCont
         teacherRepository.delete(teacherId.id());
         teacher1 =  teacherRepository.loadOf(teacherId);
         assertNull(teacher1);
+
+        List<Teacher> teachers = teacherRepository.findAll();
     }
 }

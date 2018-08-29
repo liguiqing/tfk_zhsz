@@ -1,4 +1,4 @@
-package com.tfk.sm.application.clazz;
+package com.tfk.sm.application.data;
 
 import lombok.*;
 

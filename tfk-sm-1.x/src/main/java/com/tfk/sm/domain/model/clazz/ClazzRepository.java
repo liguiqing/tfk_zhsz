@@ -2,12 +2,16 @@ package com.tfk.sm.domain.model.clazz;
 
 import com.tfk.commons.domain.EntityRepository;
 import com.tfk.share.domain.id.school.ClazzId;
+import com.tfk.share.domain.id.school.SchoolId;
+import com.tfk.share.domain.school.Grade;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.NoRepositoryBean;
 import org.springframework.data.repository.query.Param;
+
+import java.util.List;
 
 /**
  * @author Liguiqing
@@ -25,7 +29,7 @@ public interface ClazzRepository<T extends Clazz> extends EntityRepository<T,Cla
     boolean supports(Class<? extends T> clazz);
 
     @Override
-    @CacheEvict(value = "smCache", key="#p0.clazzId().id")
+    @CacheEvict(value = "smCache", key="#p0.clazzId.id")
     void save(T clazz);
 
     @Cacheable(value = "smCache", key="#p0.id",unless = "#result == null")
@@ -37,4 +41,12 @@ public interface ClazzRepository<T extends Clazz> extends EntityRepository<T,Cla
     @CacheEvict(value = "smCache",key="#p0")
     void delete(@Param("clazzId") String clazzId);
 
+
+    //Attention:No used removed
+    @Query(value = "from Clazz c JOIN ClazzHistory b on b.clazzId=c.clazzId " +
+            "where c.schoolId=?1  and b.grade=?2 ")
+    List<Clazz> findClazzCanBeManagedOf(SchoolId SchoolId,Grade grade);
+
+    @Query(value = "From Clazz where schoolId=?1")
+    List<Clazz> findAllBySchoolId(SchoolId schoolId);
 }

@@ -16,6 +16,9 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 /**
@@ -38,31 +41,40 @@ public class ClazzRepositoryTest extends AbstractTransactionalJUnit4SpringContex
     private ClazzRepository clazzRepository1;
 
     @Test
-    public void save(){
+    public void test(){
         assertNotNull(clazzRepository1);
 
-        SchoolId schoolId = new SchoolId("12345678");
+        SchoolId schoolId = new SchoolId();
         ClazzId clazzId = clazzRepository1.nextIdentity();
         UnitedClazz clazz = new UnitedClazz(clazzId,schoolId,DateUtilWrapper.now());
         clazzRepository1.save(clazz);
         Grade grade = Grade.G1();
         StudyYear studyYear = StudyYear.now();
-        ClazzHistory history = new ClazzHistory(clazzId,grade,studyYear,"一班");
+        ClazzHistory history = new ClazzHistory(clazzId,grade,"一班");
         clazz.addHistory(history);
         clazzRepository1.save(clazz);
 
         Clazz clazz1 = clazzRepository1.loadOf(clazzId);
-        clazz1 = clazzRepository1.loadOf(clazzId);
-        clazz1 = clazzRepository1.loadOf(clazzId);
-        clazz1 = clazzRepository1.loadOf(clazzId);
-        clazz1 = clazzRepository1.loadOf(clazzId);
+
+        int i=0;
+        while (i++<100000){
+            clazzRepository1.loadOf(clazzId);
+        }
 
         assertNotNull(clazz1);
+
+        i=1;
+        while (i++<=10){
+            ClazzId clazzId_ = clazzRepository1.nextIdentity();
+            UnitedClazz clazz_ = new UnitedClazz(clazzId_,schoolId,DateUtilWrapper.now());
+            clazz_.addHistory(new ClazzHistory(clazzId_,grade,i+"班"));
+            clazzRepository1.save(clazz_);
+        }
+
+        List<Clazz> clazzes =  clazzRepository1.findClazzCanBeManagedOf(schoolId,grade);
+        assertEquals(12, clazzes.size());
+
+        clazzes = clazzRepository1.findAllBySchoolId(schoolId);
     }
 
-    @Test
-    public void loadOf(){
-        assertNotNull(clazzRepository1);
-
-    }
 }

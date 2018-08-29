@@ -9,6 +9,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * @author Liguiqing
  * @since V3.0
@@ -33,4 +35,7 @@ public interface TeacherRepository extends EntityRepository<Teacher,TeacherId> {
     @Modifying
     @Query(value = "update sm_teacher set removed = 1 where teacherId=:teacherId",nativeQuery = true)
     void delete(@Param("teacherId") String teacherId);
+
+    @Query(value = "select a.* from sm_teacher a",nativeQuery = true)
+    List<Teacher> findAll();
 }

@@ -36,6 +36,20 @@ public class ClazzApplicationService {
         clazzRepository.save(clazz);
     }
 
+    @Transactional(readOnly = true)
+    public Clazz getClazz(String clazzId){
+        logger.debug("New Clazz {}",clazzId);
+
+        ClazzId clazzId1 = new ClazzId(clazzId);
+        Clazz clazz = null;
+        for(ClazzRepository clazzRepository:this.clazzRepositories){
+            clazz = clazzRepository.loadOf(clazzId1);
+            if(clazz != null)
+                break;;
+        }
+        return clazz;
+    }
+
     @Transactional(rollbackFor = Exception.class)
     public void updateOpenedTime(ClazzId clazzId,Date openedTime){
         //TODO
@@ -49,11 +63,4 @@ public class ClazzApplicationService {
         return null;
     }
 
-    private ClazzRepository getClazzRepositoryOf(Class clazz){
-        for(ClazzRepository clazzRepository:this.clazzRepositories){
-            if(clazzRepository.supports(clazz))
-                return clazzRepository;
-        }
-        return null;
-    }
 }
