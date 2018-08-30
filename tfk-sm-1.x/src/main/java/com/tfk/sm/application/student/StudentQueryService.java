@@ -14,8 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.text.Collator;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -54,7 +54,11 @@ public class StudentQueryService {
             return new ArrayList<>();
         }
 
-        return students.stream().map(student -> toStudentData(student,clazz)).collect(Collectors.toList());
+        List<StudentData> studentData =  students.stream().map(student -> toStudentData(student,clazz))
+                .collect(Collectors.toList());
+        //按中文字姓氏排序
+        studentData.sort((s1,s2)->(Collator.getInstance(java.util.Locale.CHINA).compare(s1.getName(),s2.getName())));
+        return studentData;
     }
 
     private StudentData toStudentData(Student student,Clazz clazz){
