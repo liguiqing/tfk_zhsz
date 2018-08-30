@@ -51,6 +51,11 @@ public class AccessApplicationConfiguration {
 
     @Bean("AccessMapping")
     MappingResource mappingResource(){
-        return ()->new String[]{"/hbm/WeChat.hbm.xml","/hbm/FollowApply.hbm.xml","/hbm/FollowAudit.hbm.xml"};
+        return ()->new String[]{
+                "/hbm/WeChat.hbm.xml",
+                "/hbm/FollowApply.hbm.xml",
+                "/hbm/FollowAudit.hbm.xml",
+                "/hbm/ClazzFollowApply.hbm.xml",
+                "/hbm/ClazzFollowAudit.hbm.xml"};
     }
 }

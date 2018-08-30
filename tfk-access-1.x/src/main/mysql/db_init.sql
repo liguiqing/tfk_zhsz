@@ -82,3 +82,39 @@ CREATE TABLE `ac_FollowAudit` (
   INDEX `x_ac_FollowAudit_applyId` (`applyId`)
 )ENGINE=INNODB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='关注申请审核';
 
+DROP TABLE IF EXISTS `ac_ClazzFollowApply`;
+CREATE TABLE `ac_ClazzFollowApply` (
+  `id` BIGINT(20)  NOT NULL AUTO_INCREMENT ,
+  `applyId` varchar(36) NOT NULL COMMENT '关注申请唯一标识',
+  `auditId` varchar(36)  COMMENT '审核唯一标识',
+  `applyingSchoolId` varchar(36) NOT NULL COMMENT '关注者所在学校唯一标识',
+  `applyingClazzId` varchar(36) NOT NULL COMMENT '关注者所在班级唯一标识',
+  `applierId` varchar(36)  COMMENT '关注者唯一标识,PersonId',
+  `applierName` varchar(16)  COMMENT '申请人员姓名',
+  `applierPhone` varchar(16)  COMMENT '申请人员电话',
+  `applyDate` TIMESTAMP DEFAULT now() COMMENT '申请时间',
+  `cause` varchar(128)  COMMENT '申请原因',
+  PRIMARY KEY (`id`),
+  KEY `x_ac_ClazzFollowApply_applyId` (`applyId`),
+  KEY `x_ac_ClazzFollowApply_auditId` (`auditId`),
+  INDEX `x_ac_ClazzFollowApply_applyingSchoolId` (`applyingSchoolId`),
+  INDEX `x_ac_ClazzFollowApply_applyingClazzId` (`applyingClazzId`),
+  INDEX `x_ac_ClazzFollowApply_applierId` (`applierId`)
+)ENGINE=INNODB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='班级关注申请';
+
+DROP TABLE IF EXISTS `ac_ClazzFollowAudit`;
+CREATE TABLE `ac_ClazzFollowAudit` (
+  `id` BIGINT(20)  NOT NULL AUTO_INCREMENT ,
+  `auditId` varchar(36)  COMMENT '审核唯一标识',
+  `applyId` varchar(36) NOT NULL COMMENT '关注申请唯一标识',
+  `auditorId` varchar(36) NOT NULL COMMENT '审核者唯一标识,PersonId',
+  `auditDate` TIMESTAMP DEFAULT now() COMMENT '审核时间',
+  `ok`TINYINT(1)  COMMENT '审核结果',
+  `description` varchar(128)  COMMENT '审核说明',
+  PRIMARY KEY (`id`),
+  KEY `x_ac_ClazzFollowAudit_auditId` (`auditId`),
+  KEY `x_ac_ClazzFollowAudit_applyId` (`applyId`),
+  INDEX `x_ac_ClazzFollowAudit_auditorId` (`auditorId`)
+)ENGINE=INNODB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='班级关注审核';
+
+
