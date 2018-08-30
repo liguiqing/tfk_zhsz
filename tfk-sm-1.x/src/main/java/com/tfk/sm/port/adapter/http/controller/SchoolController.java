@@ -1,6 +1,8 @@
 package com.tfk.sm.port.adapter.http.controller;
 
 import com.tfk.commons.port.adaptor.http.controller.AbstractHttpController;
+import com.tfk.sm.application.clazz.ClazzQueryService;
+import com.tfk.sm.application.data.ClazzData;
 import com.tfk.sm.application.school.NewSchoolCommand;
 import com.tfk.sm.application.school.SchoolApplicationService;
 import com.tfk.sm.application.school.SchoolData;
@@ -29,6 +31,9 @@ public class SchoolController extends AbstractHttpController {
     @Autowired(required = false)
     private SchoolQueryService schoolQueryService;
 
+    @Autowired(required = false)
+    private ClazzQueryService clazzQueryService;
+
     @RequestMapping(method = RequestMethod.POST)
     public ModelAndView onNewSchool(@RequestBody NewSchoolCommand command){
         logger.debug("New School with name {}",command.getName());
@@ -41,5 +46,12 @@ public class SchoolController extends AbstractHttpController {
         logger.debug("onGetAllSchool ");
         List<SchoolData> datas =  schoolQueryService.findAllSchool(page,size);
         return newModelAndViewBuilder("/school/allSchoolList").withData("schools",datas).creat();
+    }
+
+    @RequestMapping(value = "/grade/clazz/{schoolId}/{gradeLevel}",method = RequestMethod.GET)
+    public ModelAndView onGetSchoolClazz(@PathVariable String schoolId, @PathVariable int gradeLevel){
+        logger.debug("Get Clazz of School {} in Grade {} ",gradeLevel,schoolId);
+        List<ClazzData> datas = clazzQueryService.findSchoolGradeClazzesCanBeManagedOfNow(schoolId,gradeLevel);
+        return newModelAndViewBuilder("/school/gradeClazzList").withData("clazzes",datas).creat();
     }
 }

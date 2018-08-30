@@ -71,23 +71,23 @@ public class ClazzQueryServiceTest {
         when(clazzRepository.loadOf(any(ClazzId.class))).thenReturn(c1).thenReturn(c2).thenReturn(null).thenReturn(c3).thenReturn(c4).thenReturn(c5);
 
 
-        when(c1.getGradeFullName(any(Grade.class))).thenReturn(grade.name()+"1班");
-        when(c2.getGradeFullName(any(Grade.class))).thenReturn(grade.name()+"2班");
-        when(c3.getGradeFullName(any(Grade.class))).thenReturn(grade.name()+"3班");
-        when(c4.getGradeFullName(any(Grade.class))).thenReturn(grade.name()+"4班");
-        when(c5.getGradeFullName(any(Grade.class))).thenReturn(grade.name()+"5班");
+        when(c1.getGradeFullName(any(Grade.class))).thenReturn(grade.getName()+"1班");
+        when(c2.getGradeFullName(any(Grade.class))).thenReturn(grade.getName()+"2班");
+        when(c3.getGradeFullName(any(Grade.class))).thenReturn(grade.getName()+"3班");
+        when(c4.getGradeFullName(any(Grade.class))).thenReturn(grade.getName()+"4班");
+        when(c5.getGradeFullName(any(Grade.class))).thenReturn(grade.getName()+"5班");
 
 
-        List<ClazzData> datas = service.findSchoolGradeClazzesCanBeManagedOfNow(schoolId.id(),grade.level());
+        List<ClazzData> datas = service.findSchoolGradeClazzesCanBeManagedOfNow(schoolId.id(),grade.getLevel());
         assertEquals(0,datas.size());
-        datas = service.findSchoolGradeClazzesCanBeManagedOfNow(schoolId.id(),grade.level());
+        datas = service.findSchoolGradeClazzesCanBeManagedOfNow(schoolId.id(),grade.getLevel());
         assertEquals(0,datas.size());
-        datas = service.findSchoolGradeClazzesCanBeManagedOfNow(schoolId.id(),grade.level());
+        datas = service.findSchoolGradeClazzesCanBeManagedOfNow(schoolId.id(),grade.getLevel());
         assertEquals(0,datas.size());
-        datas = service.findSchoolGradeClazzesCanBeManagedOfNow(schoolId.id(),grade.level());
+        datas = service.findSchoolGradeClazzesCanBeManagedOfNow(schoolId.id(),grade.getLevel());
         assertEquals(5,datas.size());
-        assertEquals(grade.name()+"1班",datas.get(0).getName());
-        assertEquals(grade.name()+"5班",datas.get(4).getName());
+        assertEquals(grade.getName()+"1班",datas.get(0).getName());
+        assertEquals(grade.getName()+"5班",datas.get(4).getName());
 
         verify(schoolRepository,times(4)).loadOf(any(SchoolId.class));
         verify(clazzRepository,times(6)).loadOf(any(ClazzId.class));

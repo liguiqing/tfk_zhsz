@@ -26,9 +26,11 @@ import org.springframework.test.context.junit4.AbstractTransactionalJUnit4Spring
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
 /**
@@ -50,7 +52,7 @@ public class StudentRepositoryTest extends AbstractTransactionalJUnit4SpringCont
     private StudentRepository studentRepository;
 
     @Test
-    public void save(){
+    public void test(){
         SchoolId schoolId = new SchoolId("SCH12345678");
         PersonId personId = new PersonId("PER12345678");
         ClazzId clazzId = new ClazzId("CLA12345678");
@@ -83,9 +85,25 @@ public class StudentRepositoryTest extends AbstractTransactionalJUnit4SpringCont
 
         assertEquals(student,student1);
 
-        Set<Contact> contacts = student1.contacts();
+        Set<Contact> contacts = student1.getContacts();
         assertTrue(contacts.contains(new QQ(123564+"")));
 
+        int i = 1;
+        while(i<=10){
+            Student student_= new Student(new StudentId(),schoolId,personId,"Test");
+            student_.studyAt(p1,Grade.G1(),c1,yw);
+            student_.managedAt(p1,Grade.G1(),c1);
+            studentRepository.save(student_);
+            i++;
+        }
+
+        List<Student> studentList = studentRepository.findByManageds(schoolId,clazzId1,Grade.G1());
+        assertNotNull(studentList);
+        assertEquals(11,studentList.size());
+
+        List<Student> studentList2 = studentRepository.findByStudies(schoolId, clazzId1, Grade.G1());
+        assertNotNull(studentList2);
+        assertEquals(11,studentList2.size());
 
     }
 

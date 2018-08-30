@@ -11,7 +11,7 @@ import java.util.Collection;
 
 public class CollectionsUtilWrapper {
 
-    public static <E> boolean isNotNullOrNotEmpty(Collection<E> collection){
+    public static <E> boolean isNotNullAndNotEmpty(Collection<E> collection){
         return !isNullOrEmpty(collection);
     }
 

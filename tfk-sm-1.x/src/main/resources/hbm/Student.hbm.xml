@@ -62,7 +62,7 @@
         <subclass name="com.tfk.share.domain.person.contact.Phone" entity-name="StudentContactsPhone"  discriminator-value="Phone" />
     </class>
 
-    <class name="com.tfk.sm.domain.model.student.Study" dynamic-update="false"
+    <class name="com.tfk.sm.domain.model.student.Study"
            entity-name="Study" table="sm_student_study" lazy="true">
         <id name="id" type="long" column="id" unsaved-value="-1">
             <generator class="native" />
@@ -84,11 +84,12 @@
             <component name="grade" class="com.tfk.share.domain.school.Grade">
                 <property name="name" column="gradeName" type="java.lang.String"/>
                 <property name="level" column="gradeLevel" type="java.lang.Integer" />
+                <component name="studyYear" class="com.tfk.share.domain.school.StudyYear">
+                    <property name="yearStarts" column="yearStarts" type="java.lang.Integer"/>
+                    <property name="yearEnds" column="yearEnds" type="java.lang.Integer"/>
+                </component>
             </component>
-            <component name="year" class="com.tfk.share.domain.school.StudyYear">
-                <property name="yearStarts" column="yearStarts" type="java.lang.Integer"/>
-                <property name="yearEnds" column="yearEnds" type="java.lang.Integer"/>
-            </component>
+
             <component name="course" class="com.tfk.share.domain.school.Course">
                 <property name="name" column="courseName"/>
                 <component name="subjectId" class="com.tfk.share.domain.id.SubjectId">
@@ -99,7 +100,7 @@
     </class>
 
 
-    <class name="com.tfk.sm.domain.model.student.ClazzManaged" dynamic-update="false"
+    <class name="com.tfk.sm.domain.model.student.ClazzManaged"
            entity-name="StudentManaged" table="sm_student_managed" lazy="true">
         <id name="id" type="long" column="id" unsaved-value="-1">
             <generator class="native" />
@@ -121,10 +122,10 @@
             <component name="grade" class="com.tfk.share.domain.school.Grade">
                 <property name="name" column="gradeName" type="java.lang.String"/>
                 <property name="level" column="gradeLevel" type="java.lang.Integer" />
-            </component>
-            <component name="year" class="com.tfk.share.domain.school.StudyYear">
-                <property name="yearStarts" column="yearStarts" type="java.lang.Integer"/>
-                <property name="yearEnds" column="yearEnds" type="java.lang.Integer"/>
+                <component name="studyYear" class="com.tfk.share.domain.school.StudyYear">
+                    <property name="yearStarts" column="yearStarts" type="java.lang.Integer"/>
+                    <property name="yearEnds" column="yearEnds" type="java.lang.Integer"/>
+                </component>
             </component>
         </component>
     </class>

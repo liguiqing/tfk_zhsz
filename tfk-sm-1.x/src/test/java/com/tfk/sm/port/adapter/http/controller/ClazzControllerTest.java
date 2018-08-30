@@ -55,7 +55,7 @@ public class ClazzControllerTest extends AbstractControllerTest {
         Date openedTime = DateUtilWrapper.now();
         int yearStarts = DateUtilWrapper.thisYear();
         int yearEnds = DateUtilWrapper.nextYear(openedTime);
-        int gradeLevel = Grade.G1().level();
+        int gradeLevel = Grade.G1().getLevel();
         NewClazzCommand command = new NewClazzCommand(new SchoolId().id(), openedTime , "Test Clazz",
                 yearStarts, yearEnds,gradeLevel);
         String content = toJsonString(command);
@@ -74,7 +74,7 @@ public class ClazzControllerTest extends AbstractControllerTest {
 
         when(clazzQueryService.findSchoolGradeClazzesCanBeManagedOfNow(any(String.class),any(Integer.class))).thenReturn(datas);
 
-        this.mvc.perform(get("/clazz/school/"+schoolId.id()+"/"+grade.level()).contentType(MediaType.APPLICATION_JSON)
+        this.mvc.perform(get("/clazz/school/"+schoolId.id()+"/"+grade.getLevel()).contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.status.success", is(Boolean.TRUE)))
                 .andExpect(jsonPath("$.clazzes.[0].name", equalTo("c1")))

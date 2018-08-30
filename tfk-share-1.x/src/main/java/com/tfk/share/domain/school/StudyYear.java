@@ -20,7 +20,7 @@ import java.util.Date;
  * @since V3.0
  */
 @Getter
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = false)
 @ToString
 public class StudyYear extends ValueObject {
 

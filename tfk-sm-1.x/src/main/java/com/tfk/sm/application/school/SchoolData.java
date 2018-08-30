@@ -37,7 +37,7 @@ public class SchoolData {
     }
 
     public void addGradeDatas(Grade[] grades){
-        grads = Arrays.stream(grades).map(g->new GradeData(g.name(),g.level())).collect(Collectors.toList());
+        grads = Arrays.stream(grades).map(g->new GradeData(g.getName(),g.getLevel())).collect(Collectors.toList());
     }
 
 }

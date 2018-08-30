@@ -22,20 +22,11 @@ public class TeachAndStudyClazz extends GradClazz {
     private Period period;
 
     public TeachAndStudyClazz(SchoolId schoolId, ClazzId clazzId,
-                              Grade grade, StudyYear year, Course course, Period period) {
-        super(schoolId, clazzId, grade, year);
+                              Grade grade, Course course, Period period) {
+        super(schoolId, clazzId, grade);
         this.course = course;
         this.period = period;
     }
-
-    public Course course() {
-        return course;
-    }
-
-    public Period period() {
-        return period;
-    }
-
 
     TeachAndStudyClazz(){}
 }

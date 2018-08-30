@@ -27,7 +27,7 @@ public class TeachedCourse extends IdentifiedValueObject {
         this.teacherId = teacher.teacherId();
         this.grade = grade;
         this.course = course;
-        this.courseAlias = grade.name() + course.aliais();
+        this.courseAlias = grade.getName() + course.aliais();
     }
 
     public boolean sameOf(Grade grade, Course course) {

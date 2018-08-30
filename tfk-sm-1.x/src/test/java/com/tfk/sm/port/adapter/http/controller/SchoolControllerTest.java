@@ -73,6 +73,6 @@ public class SchoolControllerTest extends AbstractControllerTest {
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.status.success", is(Boolean.TRUE)))
                 .andExpect(jsonPath("$.schools.[0].name", equalTo("name1")))
-                .andExpect(jsonPath("$.schools.[2].grads[2].name", equalTo(Grade.G3().name())));
+                .andExpect(jsonPath("$.schools.[2].grads[2].name", equalTo(Grade.G3().getName())));
     }
 }

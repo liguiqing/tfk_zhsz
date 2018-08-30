@@ -27,8 +27,7 @@ public class ClazzTeaching extends IdentifiedValueObject {
     protected ClazzTeaching(Teacher teacher, Period period,Grade grade,
                             ClazzId clazzId, Course course) {
         this.teacherId = teacher.teacherId();
-        StudyYear year = StudyYear.newYearsOf(period.starts());
-        this.clazz = new TeachAndStudyClazz(teacher.schoolId(),clazzId,grade,year,course,period);
+        this.clazz = new TeachAndStudyClazz(teacher.schoolId(),clazzId,grade,course,period);
     }
 
     protected ClazzTeaching(){}

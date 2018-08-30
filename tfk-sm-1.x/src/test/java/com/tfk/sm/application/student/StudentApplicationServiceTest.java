@@ -121,7 +121,7 @@ public class StudentApplicationServiceTest {
         when(command.getDateEnds()).thenReturn(dateEnds);
         when(command.getManagedClazzId()).thenReturn(clazzId.id());
         when(command.getCourses()).thenReturn(studyDatas);
-        when(student.studentId()).thenReturn(studentId);
+        when(student.getStudentId()).thenReturn(studentId);
         when(studentRepository.loadOf(any(StudentId.class))).thenReturn(student);
         when(superviseClazzRepository.loadOf(any(ClazzId.class))).thenReturn(null);
         when(unitedClazzRepository.loadOf(any(ClazzId.class))).thenReturn((UnitedClazz)clazz);

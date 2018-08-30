@@ -111,11 +111,12 @@
             <component name="grade" class="com.tfk.share.domain.school.Grade">
                 <property name="name" column="gradeName" type="java.lang.String"/>
                 <property name="level" column="gradeLevel" type="java.lang.Integer" />
+                <component name="studyYear" class="com.tfk.share.domain.school.StudyYear">
+                    <property name="yearStarts" column="yearStarts" type="java.lang.Integer"/>
+                    <property name="yearEnds" column="yearEnds" type="java.lang.Integer"/>
+                </component>
             </component>
-            <component name="year" class="com.tfk.share.domain.school.StudyYear">
-                <property name="yearStarts" column="yearStarts" type="java.lang.Integer"/>
-                <property name="yearEnds" column="yearEnds" type="java.lang.Integer"/>
-            </component>
+
             <component name="course" class="com.tfk.share.domain.school.Course">
                 <property name="name" column="courseName"/>
                 <component name="subjectId" class="com.tfk.share.domain.id.SubjectId">
@@ -148,10 +149,10 @@
             <component name="grade" class="com.tfk.share.domain.school.Grade">
                 <property name="name" column="gradeName" type="java.lang.String"/>
                 <property name="level" column="gradeLevel" type="java.lang.Integer" />
-            </component>
-            <component name="year" class="com.tfk.share.domain.school.StudyYear">
-                <property name="yearStarts" column="yearStarts" type="java.lang.Integer"/>
-                <property name="yearEnds" column="yearEnds" type="java.lang.Integer"/>
+                <component name="studyYear" class="com.tfk.share.domain.school.StudyYear">
+                    <property name="yearStarts" column="yearStarts" type="java.lang.Integer"/>
+                    <property name="yearEnds" column="yearEnds" type="java.lang.Integer"/>
+                </component>
             </component>
         </component>
     </class>

@@ -1,10 +1,9 @@
 package com.tfk.share.domain.school;
 
-import com.google.common.base.MoreObjects;
-import com.google.common.base.Objects;
 import com.tfk.commons.domain.ValueObject;
 import com.tfk.share.domain.id.school.ClazzId;
 import com.tfk.share.domain.id.school.SchoolId;
+import lombok.*;
 
 /**
  * 年级的班级
@@ -12,7 +11,9 @@ import com.tfk.share.domain.id.school.SchoolId;
  * @author Liguiqing
  * @since V3.0
  */
-
+@Getter
+@EqualsAndHashCode(callSuper = false)
+@ToString
 public class GradClazz extends ValueObject {
     private SchoolId schoolId;
 
@@ -20,58 +21,22 @@ public class GradClazz extends ValueObject {
 
     private Grade grade;
 
-    private StudyYear year;
-
-    public GradClazz(SchoolId schoolId, ClazzId clazzId, Grade grade, StudyYear year) {
+    public GradClazz(SchoolId schoolId, ClazzId clazzId, Grade grade) {
         this.schoolId = schoolId;
         this.clazzId = clazzId;
         this.grade = grade;
-        this.year = year;
-
     }
 
-    public SchoolId schoolId() {
-        return schoolId;
+    public boolean isSameGrade(Grade grade){
+        return this.grade.equals(grade);
     }
 
-    public ClazzId clazzId() {
-        return clazzId;
+    public boolean isSameYearOf(StudyYear year){
+        return this.grade.isSameYearOf(year);
     }
 
-    public Grade grade() {
-        return grade;
-    }
-
-    public StudyYear year() {
-        return year;
-    }
-
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        GradClazz termClazz = (GradClazz) o;
-        return Objects.equal(schoolId, termClazz.schoolId) &&
-                Objects.equal(clazzId, termClazz.clazzId) &&
-                Objects.equal(grade, termClazz.grade) &&
-                Objects.equal(year, termClazz.year) ;
-
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(schoolId, clazzId, grade, year);
-    }
-
-    @Override
-    public String toString() {
-        return MoreObjects.toStringHelper(this)
-                .add("schoolId", schoolId)
-                .add("clazzId", clazzId)
-                .add("grade", grade)
-                .add("year", year)
-                .toString();
+    public StudyYear getYear() {
+        return grade.getStudyYear();
     }
 
     protected GradClazz(){}

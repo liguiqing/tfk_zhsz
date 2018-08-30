@@ -8,6 +8,9 @@ import com.tfk.commons.AssertionConcerns;
 import com.tfk.commons.domain.IdentifiedDomainObject;
 import com.tfk.share.domain.id.PersonId;
 import com.tfk.share.infrastructure.validate.contact.ContactValidations;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.ToString;
 
 import java.util.Date;
 import java.util.Set;
@@ -17,6 +20,9 @@ import java.util.Set;
  * @since V3.0
  */
 
+@Getter
+@EqualsAndHashCode(of={"personId"},callSuper = false)
+@ToString(of={"personId","name","gender"})
 public abstract class  Person extends IdentifiedDomainObject {
     private PersonId personId;
 
@@ -52,54 +58,8 @@ public abstract class  Person extends IdentifiedDomainObject {
         this.contacts.add(contact);
     }
 
-    public Set<Contact> contacts(){
+    public Set<Contact> getContacts(){
         return ImmutableSet.copyOf(this.contacts);
-    }
-
-    public String name() {
-        return name;
-    }
-
-    public Date birthday() {
-        return birthday;
-    }
-
-    public Gender gender() {
-        return gender;
-    }
-
-    public void name(String name) {
-        this.name = name;
-    }
-
-    public void birthday(Date birthday) {
-        this.birthday = birthday;
-    }
-
-    public void gender(Gender gender) {
-        this.gender = gender;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Person person = (Person) o;
-        return Objects.equal(personId, person.personId);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(personId);
-    }
-
-    @Override
-    public String toString() {
-        return MoreObjects.toStringHelper(this)
-                .add("personId", personId)
-                .add("name", name)
-                .add("gender", gender)
-                .toString();
     }
 
     protected Person() {

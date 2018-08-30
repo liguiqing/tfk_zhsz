@@ -26,6 +26,7 @@ public class ClazzController extends AbstractHttpController {
     @Autowired(required = false)
     private ClazzApplicationService clazzApplicationService;
 
+    @Autowired(required = false)
     private ClazzQueryService clazzQueryService;
 
     @RequestMapping(method = RequestMethod.POST)
@@ -40,7 +41,7 @@ public class ClazzController extends AbstractHttpController {
     public ModelAndView onGetSchoolClazz(@PathVariable String schoolId, @PathVariable int gradeLevel){
         logger.debug("Get Clazz of School {} in Grade {} ",gradeLevel,schoolId);
         List<ClazzData> datas = clazzQueryService.findSchoolGradeClazzesCanBeManagedOfNow(schoolId,gradeLevel);
-        return newModelAndViewBuilder("/clazz/schoolClazzList").withData("clazzes",datas).creat();
+        return newModelAndViewBuilder("/clazz/gradeClazzList").withData("clazzes",datas).creat();
     }
 
 }

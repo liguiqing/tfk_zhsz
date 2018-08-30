@@ -89,7 +89,7 @@ public class TeacherRepositoryTest extends AbstractTransactionalJUnit4SpringCont
 
         Teacher teacher1 =  teacherRepository.loadOf(teacherId);
         assertEquals(teacher,teacher1);
-        Set<Contact> contacts = teacher1.contacts();
+        Set<Contact> contacts = teacher1.getContacts();
         assertTrue(contacts.contains(new QQ(123564+"")));
         for(int i = 0;i<10000;i++){
             teacher1 =  teacherRepository.loadOf(teacherId);

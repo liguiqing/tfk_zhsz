@@ -1,11 +1,12 @@
 package com.tfk.share.domain.school;
 
-import com.google.common.base.MoreObjects;
-import com.google.common.base.Objects;
 import com.tfk.share.domain.id.PersonId;
 import com.tfk.share.domain.id.school.SchoolId;
 import com.tfk.share.domain.person.Gender;
 import com.tfk.share.domain.person.Person;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.ToString;
 
 import java.util.Date;
 
@@ -14,7 +15,9 @@ import java.util.Date;
  * @author Liguiqing
  * @since V3.0
  */
-
+@Getter
+@ToString
+@EqualsAndHashCode(of = {"schoolId"})
 public abstract class Teadent extends Person {
     private SchoolId schoolId;
 
@@ -50,29 +53,6 @@ public abstract class Teadent extends Person {
 
     public Date offDate() {
         return offDate;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
-        Teadent teadent = (Teadent) o;
-        return Objects.equal(schoolId, teadent.schoolId);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(super.hashCode(), schoolId);
-    }
-
-    @Override
-    public String toString() {
-        return MoreObjects.toStringHelper(this)
-                .add("schoolId", schoolId)
-                .add("joinDate", joinDate)
-                .add("offDate", offDate)
-                .toString();
     }
 
     protected Teadent(){}

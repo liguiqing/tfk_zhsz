@@ -4,10 +4,13 @@
 
 package com.tfk.share.domain.school;
 
-import com.google.common.base.MoreObjects;
-import com.google.common.base.Objects;
 import com.tfk.commons.AssertionConcerns;
 import com.tfk.commons.domain.ValueObject;
+import com.tfk.commons.util.DateUtilWrapper;
+import com.tfk.share.domain.common.Period;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.ToString;
 
 /**
  * 年级
@@ -15,7 +18,9 @@ import com.tfk.commons.domain.ValueObject;
  * @author Liguiqing
  * @since V3.0
  */
-
+@Getter
+@EqualsAndHashCode(of={"level","studyYear"},callSuper = false)
+@ToString
 public class Grade extends ValueObject {
     private String name;
 
@@ -28,6 +33,16 @@ public class Grade extends ValueObject {
         this.name = name;
         this.studyYear = studyYear;
         this.level = level;
+    }
+
+    public boolean isSameYearOf(StudyYear year){
+        return this.studyYear.equals(year);
+    }
+
+    public boolean isBetweenOf(Period period){
+        int yearStarts = DateUtilWrapper.year(period.starts());
+        int yearEnds = DateUtilWrapper.year(period.ends());
+        return this.studyYear.equals(new StudyYear(yearStarts, yearEnds));
     }
 
     public static Grade newWithLevel(int level){
@@ -98,40 +113,6 @@ public class Grade extends ValueObject {
 
     private static Grade G(String name,int level){
         return new Grade(name, StudyYear.now(),level);
-    }
-
-    public String name() {
-        return name;
-    }
-
-    public int level(){
-        return this.level;
-    }
-
-    public StudyYear studyYear() {
-        return studyYear;
-    }
-
-    @Override
-    public String toString() {
-        return MoreObjects.toStringHelper(this)
-                .add("name", name)
-                .add("studyYear", studyYear)
-                .toString();
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Grade grade = (Grade) o;
-        return Objects.equal(name, grade.name) &&
-                Objects.equal(studyYear, grade.studyYear);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(name, studyYear);
     }
 
     //Only 4 persistence

@@ -30,7 +30,7 @@ public class StudentApplicationService  extends TeadentApplicationService {
 
         Student student = toStudent(command);
         studentRepository.save(student);
-        return student.studentId().id();
+        return student.getStudentId().id();
     }
 
     @Transactional(rollbackFor = Exception.class)

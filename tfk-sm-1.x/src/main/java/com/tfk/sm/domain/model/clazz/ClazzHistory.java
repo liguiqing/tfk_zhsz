@@ -35,7 +35,7 @@ public class ClazzHistory extends IdentifiedDomainObject {
     public ClazzHistory(ClazzId clazzId, Grade grade,String clazzName) {
         this.clazzId = clazzId;
         this.grade = grade;
-        this.studyYear = grade.studyYear();
+        this.studyYear = grade.getStudyYear();
         this.clazzName = clazzName;
     }
 
@@ -49,7 +49,7 @@ public class ClazzHistory extends IdentifiedDomainObject {
     }
 
     public String fullName(){
-        return this.grade.name()+this.clazzName;
+        return this.grade.getName()+this.clazzName;
     }
 
     protected void toSchool(SchoolId schoolId){

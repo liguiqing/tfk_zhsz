@@ -66,7 +66,8 @@ public class ClazzQueryService {
         }
 
         List<ClazzData> clazzDatas =  existClazzes.stream()
-                .map(clazz -> new ClazzData(clazz.getClazzId().id(), clazz.getGradeFullName(grade),grade.name(),grade.level()))
+                .map(clazz -> new ClazzData(clazz.getClazzId().id(),
+                        clazz.getGradeFullName(grade),grade.getName(),grade.getLevel()))
                 .collect(Collectors.toList());
         return clazzDatas;
     }

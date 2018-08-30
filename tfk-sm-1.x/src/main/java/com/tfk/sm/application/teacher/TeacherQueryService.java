@@ -9,7 +9,6 @@ import com.tfk.sm.application.clazz.ClazzApplicationService;
 import com.tfk.sm.application.data.ClazzData;
 import com.tfk.sm.application.data.TeacherClazzData;
 import com.tfk.sm.domain.model.clazz.Clazz;
-import com.tfk.sm.domain.model.clazz.ClazzService;
 import com.tfk.sm.domain.model.teacher.ClazzManagement;
 import com.tfk.sm.domain.model.teacher.ClazzTeaching;
 import com.tfk.sm.domain.model.teacher.Teacher;
@@ -50,17 +49,17 @@ public class TeacherQueryService {
         List<TeacherClazzData> clazzDatas = Lists.newArrayList();
 
         Set<ClazzTeaching> teachings =  teacher.teachings();
-        if(!CollectionsUtilWrapper.isNotNullOrNotEmpty(teachings)){
+        if(!CollectionsUtilWrapper.isNotNullAndNotEmpty(teachings)){
             List<ClazzData> teachingClazzDatas = teachings.stream()
-                    .map(ct -> toClazzData(ct.getClazz().clazzId()))
+                    .map(ct -> toClazzData(ct.getClazz().getClazzId()))
                     .collect(Collectors.toList());
             clazzDatas.add(new TeacherClazzData("Teaching", teachingClazzDatas));
         }
 
         Set<ClazzManagement> manages =  teacher.manages();
-        if(!CollectionsUtilWrapper.isNotNullOrNotEmpty(manages)){
+        if(!CollectionsUtilWrapper.isNotNullAndNotEmpty(manages)){
             List<ClazzData> managedClazzDatas = manages.stream()
-                    .map(cm -> toClazzData(cm.getClazz().clazzId()))
+                    .map(cm -> toClazzData(cm.getClazz().getClazzId()))
                     .collect(Collectors.toList());
             clazzDatas.add(new TeacherClazzData("Managed", managedClazzDatas));
         }
@@ -70,7 +69,7 @@ public class TeacherQueryService {
     private ClazzData toClazzData(ClazzId clazzId){
         Clazz clazz = clazzApplicationService.getClazz(clazzId.id());
         Grade grade = clazz.currentGrade();
-        return new ClazzData(clazz.getClazzId().id(),clazz.getGradeFullName(grade),grade.name(),grade.level());
+        return new ClazzData(clazz.getClazzId().id(),clazz.getGradeFullName(grade),grade.getName(),grade.getLevel());
     }
 
 }

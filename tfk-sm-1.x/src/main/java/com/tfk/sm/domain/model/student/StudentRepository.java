@@ -1,13 +1,18 @@
 package com.tfk.sm.domain.model.student;
 
 import com.tfk.commons.domain.EntityRepository;
+import com.tfk.share.domain.id.school.ClazzId;
+import com.tfk.share.domain.id.school.SchoolId;
 import com.tfk.share.domain.id.school.StudentId;
+import com.tfk.share.domain.school.Grade;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * @author Liguiqing
@@ -21,7 +26,7 @@ public interface StudentRepository extends EntityRepository<Student,StudentId> {
     }
 
     @Override
-    @CacheEvict(value = "smCache", key="#p0.studentId().id")
+    @CacheEvict(value = "smCache", key="#p0.studentId.id")
     void save(Student student);
 
     @Cacheable(value = "smCache",key = "#p0.id",unless = "#result == null")
@@ -32,4 +37,12 @@ public interface StudentRepository extends EntityRepository<Student,StudentId> {
     @Modifying
     @Query(value = "update sm_student set removed = 1 where studentId=:studentId",nativeQuery = true)
     void delete(@Param("studentId") String studentId);
+
+    @Query(value = "from Student a JOIN StudentManaged b on b.studentId=a.studentId where " +
+            "a.schoolId=?1 and b.clazz.schoolId=?1 and b.clazz.clazzId=?2 and b.clazz.grade=?3")
+    List<Student> findByManageds(SchoolId schoolId, ClazzId clazzId,Grade grade);
+
+    @Query(value = "From Student a join Study b on b.studentId=a.studentId where " +
+            "a.schoolId=?1 and b.clazz.schoolId=?1 and b.clazz.clazzId=?2 and b.clazz.grade=?3")
+    List<Student> findByStudies(SchoolId schoolId, ClazzId clazzId,Grade grade);
 }
