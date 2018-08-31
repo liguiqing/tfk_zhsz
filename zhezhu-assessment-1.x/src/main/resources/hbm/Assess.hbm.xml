@@ -3,20 +3,20 @@
         "http://www.hibernate.org/dtd/hibernate-mapping/hibernate-mapping-3.0.dtd">
 <hibernate-mapping default-access="field" default-cascade="all" >
 
-    <class name="com.tfk.assessment.domain.model.assesse.Assess" table="as_Assess" lazy="true" dynamic-update="false">
+    <class name="com.zhezhu.assessment.domain.model.assesse.Assess" table="as_Assess" lazy="true" dynamic-update="false">
         <id name="id" type="long" column="id" unsaved-value="-1">
             <generator class="native" />
         </id>
-        <component name="assessId" class="com.tfk.share.domain.id.assessment.AssessId">
+        <component name="assessId" class="com.zhezhu.share.domain.id.assessment.AssessId">
             <property name="id" column="assessId" type="java.lang.String"/>
         </component>
-        <component name="assessorId" class="com.tfk.share.domain.id.assessment.AssessorId">
+        <component name="assessorId" class="com.zhezhu.share.domain.id.assessment.AssessorId">
             <property name="id" column="assessorId" type="java.lang.String"/>
         </component>
-        <component name="assesseeId" class="com.tfk.share.domain.id.assessment.AssesseeId">
+        <component name="assesseeId" class="com.zhezhu.share.domain.id.assessment.AssesseeId">
             <property name="id" column="assesseeId" type="java.lang.String"/>
         </component>
-        <component name="indexId" class="com.tfk.share.domain.id.index.IndexId">
+        <component name="indexId" class="com.zhezhu.share.domain.id.index.IndexId">
             <property name="id" column="indexId" type="java.lang.String"/>
         </component>
         <property name="doneDate" column="doneDate" type="java.util.Date"/>

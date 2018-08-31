@@ -2,44 +2,44 @@
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
         "http://www.hibernate.org/dtd/hibernate-mapping/hibernate-mapping-3.0.dtd">
 <hibernate-mapping default-access="field" default-cascade="all" >
-    <class name="com.tfk.sm.domain.model.clazz.Clazz" abstract="true" table="sm_clazz" lazy="true">
+    <class name="com.zhezhu.sm.domain.model.clazz.Clazz" abstract="true" table="sm_clazz" lazy="true">
 
         <id name="id" type="long" column="id" unsaved-value="-1">
             <generator class="native" />
         </id>
         <!-- 设置鉴别器，column：在数据库中的列。根据该列的值判断是什么类型 -->
         <discriminator column="clazzType" type="java.lang.String"></discriminator>
-        <component name="schoolId" class="com.tfk.share.domain.id.school.SchoolId">
+        <component name="schoolId" class="com.zhezhu.share.domain.id.school.SchoolId">
             <property name="id" column="schoolId" type="java.lang.String"/>
         </component>
-        <component name="clazzId" class="com.tfk.share.domain.id.school.ClazzId">
+        <component name="clazzId" class="com.zhezhu.share.domain.id.school.ClazzId">
             <property name="id" column="clazzId" type="java.lang.String"/>
         </component>
         <property name="openedTime" column="openedTime" type="java.util.Date"/>
         <property name="closedTime" column="closedTime" type="java.util.Date"/>
         <set name="histories"  cascade="all" fetch="join" lazy="true" order-by="id" where="removed=0">
             <key column="clazzId" property-ref="clazzId" update="false"/>
-            <one-to-many class="com.tfk.sm.domain.model.clazz.ClazzHistory"/>
+            <one-to-many class="com.zhezhu.sm.domain.model.clazz.ClazzHistory"/>
         </set>
-        <subclass name="com.tfk.sm.domain.model.clazz.SuperviseClazz" discriminator-value="Supervise" />
-        <subclass name="com.tfk.sm.domain.model.clazz.LearningClazz" discriminator-value="Learning"/>
-        <subclass name="com.tfk.sm.domain.model.clazz.UnitedClazz" discriminator-value="United"/>
+        <subclass name="com.zhezhu.sm.domain.model.clazz.SuperviseClazz" discriminator-value="Supervise" />
+        <subclass name="com.zhezhu.sm.domain.model.clazz.LearningClazz" discriminator-value="Learning"/>
+        <subclass name="com.zhezhu.sm.domain.model.clazz.UnitedClazz" discriminator-value="United"/>
     </class>
 
-    <class name="com.tfk.sm.domain.model.clazz.ClazzHistory" table="sm_clazz_history" lazy="true" dynamic-update="false">
+    <class name="com.zhezhu.sm.domain.model.clazz.ClazzHistory" table="sm_clazz_history" lazy="true" dynamic-update="false">
         <id name="id" type="long" column="id" unsaved-value="-1">
             <generator class="identity" />
         </id>
-        <component name="clazzId" class="com.tfk.share.domain.id.school.ClazzId" >
+        <component name="clazzId" class="com.zhezhu.share.domain.id.school.ClazzId" >
             <property name="id" column="clazzId" type="java.lang.String"/>
         </component>
-        <component name="schoolId" class="com.tfk.share.domain.id.school.SchoolId">
+        <component name="schoolId" class="com.zhezhu.share.domain.id.school.SchoolId">
             <property name="id" column="schoolId" type="java.lang.String"/>
         </component>
-        <component name="grade" class="com.tfk.share.domain.school.Grade">
+        <component name="grade" class="com.zhezhu.share.domain.school.Grade">
             <property name="name" column="gradeName" type="java.lang.String"/>
             <property name="level" column="gradeLevel" type="java.lang.Integer" />
-            <component name="studyYear" class="com.tfk.share.domain.school.StudyYear">
+            <component name="studyYear" class="com.zhezhu.share.domain.school.StudyYear">
                 <property name="yearStarts" column="yearStarts" type="java.lang.Integer"/>
                 <property name="yearEnds" column="yearEnds" type="java.lang.Integer"/>
             </component>

@@ -3,24 +3,24 @@
         "http://www.hibernate.org/dtd/hibernate-mapping/hibernate-mapping-3.0.dtd">
 <hibernate-mapping default-access="field" default-cascade="all" >
 
-    <class name="com.tfk.sm.domain.model.teacher.Teacher" table="sm_teacher" lazy="true" dynamic-update="false">
+    <class name="com.zhezhu.sm.domain.model.teacher.Teacher" table="sm_teacher" lazy="true" dynamic-update="false">
         <id name="id" type="long" column="id" unsaved-value="-1">
             <generator class="native" />
         </id>
-        <component name="teacherId" class="com.tfk.share.domain.id.school.TeacherId">
+        <component name="teacherId" class="com.zhezhu.share.domain.id.school.TeacherId">
             <property name="id" column="teacherId" type="java.lang.String"/>
         </component>
-        <component name="personId" class="com.tfk.share.domain.id.PersonId">
+        <component name="personId" class="com.zhezhu.share.domain.id.PersonId">
             <property name="id" column="personId" type="java.lang.String"/>
         </component>
-        <component name="schoolId" class="com.tfk.share.domain.id.school.SchoolId">
+        <component name="schoolId" class="com.zhezhu.share.domain.id.school.SchoolId">
             <property name="id" column="schoolId" type="java.lang.String"/>
         </component>
 
         <property name="name" column="name" type="java.lang.String"/>
         <property name="gender" column="gender" >
             <type name="org.hibernate.type.EnumType">
-                <param name="enumClass">com.tfk.share.domain.person.Gender</param>
+                <param name="enumClass">com.zhezhu.share.domain.person.Gender</param>
                 <param name="useNamed">true</param>
             </type>
         </property>
@@ -46,42 +46,42 @@
         </set>
     </class>
 
-    <class name="com.tfk.share.domain.person.Contact" table="sm_teacher_contact" abstract="true"
+    <class name="com.zhezhu.share.domain.person.Contact" table="sm_teacher_contact" abstract="true"
            entity-name="TeacherContacts"  >
         <id name="id" type="long" column="id" unsaved-value="-1">
             <generator class="identity" />
         </id>
         <!-- 设置鉴别器，column：在数据库中的列。根据该列的值判断是什么类型 -->
         <discriminator column="category" type="java.lang.String"></discriminator>
-        <component name="personId" class="com.tfk.share.domain.id.PersonId">
+        <component name="personId" class="com.zhezhu.share.domain.id.PersonId">
             <property name="id" column="personId" type="java.lang.String"/>
         </component>
 
         <property name="name" column="name" type="java.lang.String"/>
         <property name="info" column="info" type="java.lang.String"/>
-        <subclass name="com.tfk.share.domain.person.contact.Email" entity-name="TeacherContactsEmail" discriminator-value="Email" />
-        <subclass name="com.tfk.share.domain.person.contact.QQ" entity-name="TeacherContactsQQ" discriminator-value="QQ" />
-        <subclass name="com.tfk.share.domain.person.contact.Weixin" entity-name="TeacherContactsWeixin"  discriminator-value="Weixin" />
-        <subclass name="com.tfk.share.domain.person.contact.Mobile" entity-name="TeacherContactsMobile"  discriminator-value="Mobile" />
-        <subclass name="com.tfk.share.domain.person.contact.Phone" entity-name="TeacherContactsPhone"  discriminator-value="Phone" />
+        <subclass name="com.zhezhu.share.domain.person.contact.Email" entity-name="TeacherContactsEmail" discriminator-value="Email" />
+        <subclass name="com.zhezhu.share.domain.person.contact.QQ" entity-name="TeacherContactsQQ" discriminator-value="QQ" />
+        <subclass name="com.zhezhu.share.domain.person.contact.Weixin" entity-name="TeacherContactsWeixin" discriminator-value="Weixin" />
+        <subclass name="com.zhezhu.share.domain.person.contact.Mobile" entity-name="TeacherContactsMobile" discriminator-value="Mobile" />
+        <subclass name="com.zhezhu.share.domain.person.contact.Phone" entity-name="TeacherContactsPhone" discriminator-value="Phone" />
     </class>
 
-    <class name="com.tfk.sm.domain.model.teacher.TeachedCourse" entity-name="TeacherCourse" table="sm_teacher_course"
-        dynamic-update="false">
+    <class name="com.zhezhu.sm.domain.model.teacher.TeachedCourse" entity-name="TeacherCourse" table="sm_teacher_course"
+           dynamic-update="false">
         <id name="id" type="long" column="id" unsaved-value="-1">
             <generator class="native" />
         </id>
-        <component name="teacherId" class="com.tfk.share.domain.id.school.TeacherId">
+        <component name="teacherId" class="com.zhezhu.share.domain.id.school.TeacherId">
             <property name="id" column="teacherId" type="java.lang.String"/>
         </component>
 
-        <component name="grade" class="com.tfk.share.domain.school.Grade">
+        <component name="grade" class="com.zhezhu.share.domain.school.Grade">
             <property name="name" column="gradeName" type="java.lang.String"/>
             <property name="level" column="gradeLevel" type="java.lang.Integer" />
         </component>
-        <component name="course" class="com.tfk.share.domain.school.Course">
+        <component name="course" class="com.zhezhu.share.domain.school.Course">
             <property name="name" column="courseName"/>
-            <component name="subjectId" class="com.tfk.share.domain.id.SubjectId">
+            <component name="subjectId" class="com.zhezhu.share.domain.id.SubjectId">
                 <property name="id" column="subjectId" type="java.lang.String"/>
             </component>
         </component>
@@ -89,37 +89,37 @@
         <property name="courseAlias" column="courseAlias" type="java.lang.String"/>
     </class>
 
-    <class name="com.tfk.sm.domain.model.teacher.ClazzTeaching" dynamic-update="false"
-        entity-name="TeacherTeachings" table="sm_teacher_teaching" lazy="true">
+    <class name="com.zhezhu.sm.domain.model.teacher.ClazzTeaching" dynamic-update="false"
+           entity-name="TeacherTeachings" table="sm_teacher_teaching" lazy="true">
         <id name="id" type="long" column="id" unsaved-value="-1">
             <generator class="native" />
         </id>
-        <component name="teacherId" class="com.tfk.share.domain.id.school.TeacherId">
+        <component name="teacherId" class="com.zhezhu.share.domain.id.school.TeacherId">
             <property name="id" column="teacherId" type="java.lang.String"/>
         </component>
-        <component name="clazz" class="com.tfk.share.domain.school.TeachAndStudyClazz">
-            <component name="schoolId" class="com.tfk.share.domain.id.school.SchoolId">
+        <component name="clazz" class="com.zhezhu.share.domain.school.TeachAndStudyClazz">
+            <component name="schoolId" class="com.zhezhu.share.domain.id.school.SchoolId">
                 <property name="id" column="schoolId" type="java.lang.String"/>
             </component>
-            <component name="clazzId" class="com.tfk.share.domain.id.school.ClazzId">
+            <component name="clazzId" class="com.zhezhu.share.domain.id.school.ClazzId">
                 <property name="id" column="clazzId" type="java.lang.String"/>
             </component>
-            <component name="period" class="com.tfk.share.domain.common.Period">
+            <component name="period" class="com.zhezhu.share.domain.common.Period">
                 <property name="starts" column="dateStarts" type="java.util.Date"/>
                 <property name="ends" column="dateEnds" type="java.util.Date"/>
             </component>
-            <component name="grade" class="com.tfk.share.domain.school.Grade">
+            <component name="grade" class="com.zhezhu.share.domain.school.Grade">
                 <property name="name" column="gradeName" type="java.lang.String"/>
                 <property name="level" column="gradeLevel" type="java.lang.Integer" />
-                <component name="studyYear" class="com.tfk.share.domain.school.StudyYear">
+                <component name="studyYear" class="com.zhezhu.share.domain.school.StudyYear">
                     <property name="yearStarts" column="yearStarts" type="java.lang.Integer"/>
                     <property name="yearEnds" column="yearEnds" type="java.lang.Integer"/>
                 </component>
             </component>
 
-            <component name="course" class="com.tfk.share.domain.school.Course">
+            <component name="course" class="com.zhezhu.share.domain.school.Course">
                 <property name="name" column="courseName"/>
-                <component name="subjectId" class="com.tfk.share.domain.id.SubjectId">
+                <component name="subjectId" class="com.zhezhu.share.domain.id.SubjectId">
                     <property name="id" column="subjectId" type="java.lang.String"/>
                 </component>
             </component>
@@ -127,29 +127,29 @@
     </class>
 
 
-    <class name="com.tfk.sm.domain.model.teacher.ClazzManagement" dynamic-update="false"
+    <class name="com.zhezhu.sm.domain.model.teacher.ClazzManagement" dynamic-update="false"
            entity-name="TeacherManagements" table="sm_teacher_management" lazy="true">
         <id name="id" type="long" column="id" unsaved-value="-1">
             <generator class="native" />
         </id>
-        <component name="teacherId" class="com.tfk.share.domain.id.school.TeacherId">
+        <component name="teacherId" class="com.zhezhu.share.domain.id.school.TeacherId">
             <property name="id" column="teacherId" type="java.lang.String"/>
         </component>
-        <component name="clazz" class="com.tfk.share.domain.school.ManagementClazz">
-            <component name="schoolId" class="com.tfk.share.domain.id.school.SchoolId">
+        <component name="clazz" class="com.zhezhu.share.domain.school.ManagementClazz">
+            <component name="schoolId" class="com.zhezhu.share.domain.id.school.SchoolId">
                 <property name="id" column="schoolId" type="java.lang.String"/>
             </component>
-            <component name="clazzId" class="com.tfk.share.domain.id.school.ClazzId">
+            <component name="clazzId" class="com.zhezhu.share.domain.id.school.ClazzId">
                 <property name="id" column="clazzId" type="java.lang.String"/>
             </component>
-            <component name="period" class="com.tfk.share.domain.common.Period">
+            <component name="period" class="com.zhezhu.share.domain.common.Period">
                 <property name="starts" column="dateStarts" type="java.util.Date"/>
                 <property name="ends" column="dateEnds" type="java.util.Date"/>
             </component>
-            <component name="grade" class="com.tfk.share.domain.school.Grade">
+            <component name="grade" class="com.zhezhu.share.domain.school.Grade">
                 <property name="name" column="gradeName" type="java.lang.String"/>
                 <property name="level" column="gradeLevel" type="java.lang.Integer" />
-                <component name="studyYear" class="com.tfk.share.domain.school.StudyYear">
+                <component name="studyYear" class="com.zhezhu.share.domain.school.StudyYear">
                     <property name="yearStarts" column="yearStarts" type="java.lang.Integer"/>
                     <property name="yearEnds" column="yearEnds" type="java.lang.Integer"/>
                 </component>

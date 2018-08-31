@@ -3,23 +3,23 @@
         "http://www.hibernate.org/dtd/hibernate-mapping/hibernate-mapping-3.0.dtd">
 <hibernate-mapping default-access="field" default-cascade="all" >
 
-    <class name="com.tfk.access.domain.model.school.ClazzFollowApply" table="ac_ClazzFollowApply" lazy="true">
+    <class name="com.zhezhu.access.domain.model.school.ClazzFollowApply" table="ac_ClazzFollowApply" lazy="true">
         <id name="id" type="long" column="id" unsaved-value="-1">
             <generator class="native" />
         </id>
-        <component name="applyId" class="com.tfk.share.domain.id.access.ClazzFollowApplyId">
+        <component name="applyId" class="com.zhezhu.share.domain.id.access.ClazzFollowApplyId">
             <property name="id" column="applyId" type="java.lang.String"/>
         </component>
-        <component name="auditId" class="com.tfk.share.domain.id.access.ClazzFollowAuditId">
+        <component name="auditId" class="com.zhezhu.share.domain.id.access.ClazzFollowAuditId">
             <property name="id" column="auditId" type="java.lang.String"/>
         </component>
-        <component name="applyingSchoolId" class="com.tfk.share.domain.id.school.SchoolId">
+        <component name="applyingSchoolId" class="com.zhezhu.share.domain.id.school.SchoolId">
             <property name="id" column="applyingSchoolId" type="java.lang.String"/>
         </component>
-        <component name="applyingClazzId" class="com.tfk.share.domain.id.school.ClazzId">
+        <component name="applyingClazzId" class="com.zhezhu.share.domain.id.school.ClazzId">
             <property name="id" column="applyingClazzId" type="java.lang.String"/>
         </component>
-        <component name="applierId" class="com.tfk.share.domain.id.PersonId">
+        <component name="applierId" class="com.zhezhu.share.domain.id.PersonId">
             <property name="id" column="applierId" type="java.lang.String"/>
         </component>
         <property name="applierName" column="applierName" type="java.lang.String"/>

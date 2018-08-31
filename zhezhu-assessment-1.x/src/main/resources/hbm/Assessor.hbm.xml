@@ -3,19 +3,19 @@
         "http://www.hibernate.org/dtd/hibernate-mapping/hibernate-mapping-3.0.dtd">
 <hibernate-mapping default-access="field" default-cascade="all" >
 
-    <class name="com.tfk.assessment.domain.model.collaborator.Assessor" table="as_Assessor"
+    <class name="com.zhezhu.assessment.domain.model.collaborator.Assessor" table="as_Assessor"
            lazy="true" dynamic-update="false">
         <id name="id" type="long" column="id" unsaved-value="-1">
             <generator class="native" />
         </id>
-        <component name="assessorId" class="com.tfk.share.domain.id.assessment.AssessorId">
+        <component name="assessorId" class="com.zhezhu.share.domain.id.assessment.AssessorId">
             <property name="id" column="assessorId" type="java.lang.String"/>
         </component>
-        <component name="collaborator" class="com.tfk.assessment.domain.model.collaborator.Collaborator">
-            <component name="personId" class="com.tfk.share.domain.id.PersonId">
+        <component name="collaborator" class="com.zhezhu.assessment.domain.model.collaborator.Collaborator">
+            <component name="personId" class="com.zhezhu.share.domain.id.PersonId">
                 <property name="id" column="personId" type="java.lang.String"/>
             </component>
-            <component name="schoolId" class="com.tfk.share.domain.id.school.SchoolId">
+            <component name="schoolId" class="com.zhezhu.share.domain.id.school.SchoolId">
                 <property name="id" column="schoolId" type="java.lang.String"/>
             </component>
             <property name="role" column="role" type="java.lang.String"/>

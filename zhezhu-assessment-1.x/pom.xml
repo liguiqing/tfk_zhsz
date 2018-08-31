@@ -4,29 +4,29 @@
         xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>tfk</groupId>
-        <artifactId>tfk</artifactId>
+        <groupId>zhezhu</groupId>
+        <artifactId>zhezhu</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
-    <artifactId>tfk-assessment</artifactId>
+    <artifactId>zhezhu-assessment</artifactId>
 
-    <name>TFK Student Assessment</name>
+    <name>Zhezhu Student Assessment</name>
     <url>http://maven.apache.org</url>
     <dependencies>
         <dependency>
-            <groupId>tfk</groupId>
-            <artifactId>tfk-test</artifactId>
-            <version>${tfk.version}</version>
+            <groupId>zhezhu</groupId>
+            <artifactId>zhezhu-test</artifactId>
+            <version>${zhezhu.version}</version>
         </dependency>
         <dependency>
-            <groupId>tfk</groupId>
-            <artifactId>tfk-commons</artifactId>
-            <version>${tfk.version}</version>
+            <groupId>zhezhu</groupId>
+            <artifactId>zhezhu-commons</artifactId>
+            <version>${zhezhu.version}</version>
         </dependency>
         <dependency>
-            <groupId>tfk</groupId>
-            <artifactId>tfk-share</artifactId>
-            <version>${tfk.version}</version>
+            <groupId>zhezhu</groupId>
+            <artifactId>zhezhu-share</artifactId>
+            <version>${zhezhu.version}</version>
         </dependency>
 
         <dependency>
@@ -95,7 +95,7 @@
     </dependencies>
 
     <build>
-        <finalName>tfk-assessment</finalName>
+        <finalName>zhezhu-assessment</finalName>
         <filters>
             <filter>src/filters/${env}.properties</filter>
         </filters>

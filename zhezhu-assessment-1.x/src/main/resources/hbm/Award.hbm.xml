@@ -3,22 +3,22 @@
         "http://www.hibernate.org/dtd/hibernate-mapping/hibernate-mapping-3.0.dtd">
 <hibernate-mapping default-access="field" default-cascade="all" >
 
-    <class name="com.tfk.assessment.domain.model.medal.Award" table="as_Award" lazy="true">
+    <class name="com.zhezhu.assessment.domain.model.medal.Award" table="as_Award" lazy="true">
         <id name="id" type="long" column="id" unsaved-value="-1">
             <generator class="native" />
         </id>
-        <component name="awardId" class="com.tfk.share.domain.id.medal.AwardId">
+        <component name="awardId" class="com.zhezhu.share.domain.id.medal.AwardId">
             <property name="id" column="awardId" type="java.lang.String"/>
         </component>
-        <component name="medalId" class="com.tfk.share.domain.id.medal.MedalId">
+        <component name="medalId" class="com.zhezhu.share.domain.id.medal.MedalId">
             <property name="id" column="medalId" type="java.lang.String"/>
         </component>
-        <component name="possessorId" class="com.tfk.share.domain.id.PersonId">
+        <component name="possessorId" class="com.zhezhu.share.domain.id.PersonId">
             <property name="id" column="possessorId" type="java.lang.String"/>
         </component>
         <property name="winDate" column="winDate" type="java.util.Date"/>
         <property name="medalName" column="medalName" type="java.lang.String"/>
-        <many-to-one name="riseTo" column="riseTo" class="com.tfk.assessment.domain.model.medal.Award" />
+        <many-to-one name="riseTo" column="riseTo" class="com.zhezhu.assessment.domain.model.medal.Award" />
         <set name="evidences"  cascade="all" fetch="join" lazy="true" order-by="id" where="removed=0">
             <key column="awardId"  update="false"/>
             <one-to-many entity-name="Evidence"/>
@@ -26,23 +26,23 @@
 
     </class>
 
-    <class name="com.tfk.assessment.domain.model.medal.Evidence" table="as_Evidence" lazy="true" entity-name="Evidence">
+    <class name="com.zhezhu.assessment.domain.model.medal.Evidence" table="as_Evidence" lazy="true" entity-name="Evidence">
         <id name="id" type="long" column="id" unsaved-value="-1">
             <generator class="native" />
         </id>
         <discriminator column="evidenceType" type="java.lang.String"></discriminator>
-        <component name="evidenceId" class="com.tfk.share.domain.id.medal.EvidenceId">
+        <component name="evidenceId" class="com.zhezhu.share.domain.id.medal.EvidenceId">
             <property name="id" column="evidenceId" type="java.lang.String"/>
         </component>
-        <component name="awardId" class="com.tfk.share.domain.id.medal.AwardId">
+        <component name="awardId" class="com.zhezhu.share.domain.id.medal.AwardId">
             <property name="id" column="awardId" type="java.lang.String"/>
         </component>
 
         <property name="storage" column="storage" type="java.lang.String"/>
         <property name="uploadDate" column="uploadDate" type="java.util.Date"/>
-        <subclass name="com.tfk.assessment.domain.model.medal.PhotoEvidence" discriminator-value="Photo"/>
-        <subclass name="com.tfk.assessment.domain.model.medal.FileEvidence" discriminator-value="File"/>
-        <subclass name="com.tfk.assessment.domain.model.medal.MaterialEvidence" discriminator-value="Material"/>
+        <subclass name="com.zhezhu.assessment.domain.model.medal.PhotoEvidence" discriminator-value="Photo"/>
+        <subclass name="com.zhezhu.assessment.domain.model.medal.FileEvidence" discriminator-value="File"/>
+        <subclass name="com.zhezhu.assessment.domain.model.medal.MaterialEvidence" discriminator-value="Material"/>
     </class>
 
 

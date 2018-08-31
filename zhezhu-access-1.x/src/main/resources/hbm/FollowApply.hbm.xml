@@ -3,29 +3,29 @@
         "http://www.hibernate.org/dtd/hibernate-mapping/hibernate-mapping-3.0.dtd">
 <hibernate-mapping default-access="field" default-cascade="all" >
 
-    <class name="com.tfk.access.domain.model.wechat.audit.FollowApply" table="ac_FollowApply" lazy="true">
+    <class name="com.zhezhu.access.domain.model.wechat.audit.FollowApply" table="ac_FollowApply" lazy="true">
         <id name="id" type="long" column="id" unsaved-value="-1">
             <generator class="native" />
         </id>
-        <component name="applyId" class="com.tfk.share.domain.id.wechat.FollowApplyId">
+        <component name="applyId" class="com.zhezhu.share.domain.id.wechat.FollowApplyId">
             <property name="id" column="applyId" type="java.lang.String"/>
         </component>
-        <component name="auditId" class="com.tfk.share.domain.id.wechat.FollowAuditId">
+        <component name="auditId" class="com.zhezhu.share.domain.id.wechat.FollowAuditId">
             <property name="id" column="auditId" type="java.lang.String"/>
         </component>
 
-        <component name="applierWeChatId" class="com.tfk.share.domain.id.wechat.WeChatId">
+        <component name="applierWeChatId" class="com.zhezhu.share.domain.id.wechat.WeChatId">
             <property name="id" column="applierWeChatId" type="java.lang.String"/>
         </component>
         <property name="applierWeChatOpenId" column="applierWeChatOpenId" type="java.lang.String"/>
         <property name="applierName" column="applierName" type="java.lang.String"/>
-        <component name="followerSchoolId" class="com.tfk.share.domain.id.school.SchoolId">
+        <component name="followerSchoolId" class="com.zhezhu.share.domain.id.school.SchoolId">
             <property name="id" column="followerSchoolId" type="java.lang.String"/>
         </component>
-        <component name="followerClazzId" class="com.tfk.share.domain.id.school.ClazzId">
+        <component name="followerClazzId" class="com.zhezhu.share.domain.id.school.ClazzId">
             <property name="id" column="followerClazzId" type="java.lang.String"/>
         </component>
-        <component name="followerId" class="com.tfk.share.domain.id.PersonId">
+        <component name="followerId" class="com.zhezhu.share.domain.id.PersonId">
             <property name="id" column="followerId" type="java.lang.String"/>
         </component>
         <property name="applyDate" column="applyDate" type="java.util.Date"/>

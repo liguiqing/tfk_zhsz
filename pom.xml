@@ -3,12 +3,12 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>tfk</groupId>
-    <artifactId>tfk</artifactId>
+    <groupId>zhezhu</groupId>
+    <artifactId>zhezhu</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
-    <name>TFK Root</name>
+    <name>Zhezhu System Root</name>
     <url>http://maven.apache.org</url>
 
 
@@ -16,7 +16,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.build.sourceVersion>1.8</project.build.sourceVersion>
         <project.build.targetVersion>1.8</project.build.targetVersion>
-        <tfk.version>1.0.0-SNAPSHOT</tfk.version>
+        <zhezhu.version>1.0.0-SNAPSHOT</zhezhu.version>
         <spring.version>5.0.8.RELEASE</spring.version>
         <spring.data-jpa.version>2.0.9.RELEASE</spring.data-jpa.version>
         <hibernate.version>5.1.0.Final</hibernate.version>
@@ -550,12 +550,12 @@
     </distributionManagement>
 
     <modules>
-        <module>tfk-test-1.x</module>
-        <module>tfk-commons-1.x</module>
-        <module>tfk-share-1.x</module>
-        <module>tfk-sm-1.x</module>
-        <module>tfk-assessment-1.x</module>
-        <module>tfk-access-1.x</module>
-        <module>tfk-boot-1.x</module>
+        <module>zhezhu-test-1.x</module>
+        <module>zhezhu-commons-1.x</module>
+        <module>zhezhu-share-1.x</module>
+        <module>zhezhu-sm-1.x</module>
+        <module>zhezhu-assessment-1.x</module>
+        <module>zhezhu-access-1.x</module>
+        <module>zhezhu-boot-1.x</module>
     </modules>
 </project>

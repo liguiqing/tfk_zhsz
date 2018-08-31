@@ -3,19 +3,19 @@
         "http://www.hibernate.org/dtd/hibernate-mapping/hibernate-mapping-3.0.dtd">
 <hibernate-mapping default-access="field" default-cascade="all" >
 
-    <class name="com.tfk.access.domain.model.wechat.WeChat" table="ac_WeChat" lazy="true">
+    <class name="com.zhezhu.access.domain.model.wechat.WeChat" table="ac_WeChat" lazy="true">
         <id name="id" type="long" column="id" unsaved-value="-1">
             <generator class="native" />
         </id>
-        <component name="weChatId" class="com.tfk.share.domain.id.wechat.WeChatId">
+        <component name="weChatId" class="com.zhezhu.share.domain.id.wechat.WeChatId">
             <property name="id" column="weChatId" type="java.lang.String"/>
         </component>
-        <component name="personId" class="com.tfk.share.domain.id.PersonId">
+        <component name="personId" class="com.zhezhu.share.domain.id.PersonId">
             <property name="id" column="personId" type="java.lang.String"/>
         </component>
         <property name="category" column="category" >
             <type name="org.hibernate.type.EnumType">
-                <param name="enumClass">com.tfk.access.domain.model.wechat.WeChatCategory</param>
+                <param name="enumClass">com.zhezhu.access.domain.model.wechat.WeChatCategory</param>
                 <param name="useNamed">true</param>
             </type>
         </property>
@@ -30,28 +30,28 @@
 
     </class>
 
-    <class name="com.tfk.access.domain.model.wechat.Follower"  table="ac_WeChatFollower" lazy="true" entity-name="Follower">
+    <class name="com.zhezhu.access.domain.model.wechat.Follower" table="ac_WeChatFollower" lazy="true" entity-name="Follower">
         <id name="id" type="long" column="id" unsaved-value="-1">
             <generator class="native" />
         </id>
-        <component name="followerId" class="com.tfk.share.domain.id.wechat.WeChatFollowerId">
+        <component name="followerId" class="com.zhezhu.share.domain.id.wechat.WeChatFollowerId">
             <property name="id" column="followerId" type="java.lang.String"/>
         </component>
-        <component name="weChatId" class="com.tfk.share.domain.id.wechat.WeChatId">
+        <component name="weChatId" class="com.zhezhu.share.domain.id.wechat.WeChatId">
             <property name="id" column="weChatId" type="java.lang.String"/>
         </component>
-        <component name="personId" class="com.tfk.share.domain.id.PersonId">
+        <component name="personId" class="com.zhezhu.share.domain.id.PersonId">
             <property name="id" column="personId" type="java.lang.String"/>
         </component>
-        <component name="audited" class="com.tfk.access.domain.model.wechat.FollowerAudit">
-            <component name="auditorId" class="com.tfk.share.domain.id.PersonId">
+        <component name="audited" class="com.zhezhu.access.domain.model.wechat.FollowerAudit">
+            <component name="auditorId" class="com.zhezhu.share.domain.id.PersonId">
                 <property name="id" column="auditorId" type="java.lang.String"/>
             </component>
             <property name="auditorName" column="auditorName" type="java.lang.String"/>
             <property name="auditDate" column="auditDate" type="java.util.Date"/>
             <property name="auditResult" column="auditResult" >
                 <type name="org.hibernate.type.EnumType">
-                    <param name="enumClass">com.tfk.access.domain.model.wechat.AuditResult</param>
+                    <param name="enumClass">com.zhezhu.access.domain.model.wechat.AuditResult</param>
                     <param name="useNamed">true</param>
                 </type>
             </property>

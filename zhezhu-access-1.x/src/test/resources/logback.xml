@@ -4,7 +4,7 @@
 		<resetJUL>true</resetJUL>
 	</contextListener>
 	<jmxConfigurator/>
-	<contextName>tfk</contextName>
+	<contextName>zhezhu</contextName>
 	<appender name='CONSOLE' class='ch.qos.logback.core.ConsoleAppender'>
 		<encoder>
 			<pattern>%date %-5level %logger{80} - %msg%n </pattern>
@@ -78,12 +78,12 @@
 		<appender-ref ref='ASYNC' />
 	</logger>
 
-	<logger name="com.tfk" additivity="false">
-		<level value="${logger.com.tfk}" />
+	<logger name="com.zhezhu" additivity="false">
+		<level value="${logger.com.zhezhu}" />
 		<appender-ref ref="ASYNC" />
 	</logger>
-	<logger name="com.tfk.exception" additivity="false">
-		<level value="${logger.com.tfk.exception}" />
+	<logger name="com.zhezhu.exception" additivity="false">
+		<level value="${logger.com.zhezhu.exception}" />
 		<appender-ref ref="ASYNC" />
 	</logger>
 

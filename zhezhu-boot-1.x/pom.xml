@@ -4,15 +4,15 @@
         xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>tfk</groupId>
-        <artifactId>tfk</artifactId>
+        <groupId>zhezhu</groupId>
+        <artifactId>zhezhu</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
-    <artifactId>tfk-boot</artifactId>
+    <artifactId>zhezhu-boot</artifactId>
 
     <packaging>war</packaging>
 
-    <name>TFK Boot</name>
+    <name>Zhezhu Boot</name>
     <url>http://maven.apache.org</url>
 
     <properties>
@@ -40,35 +40,35 @@
         </dependency>
 
         <dependency>
-            <groupId>tfk</groupId>
-            <artifactId>tfk-test</artifactId>
+            <groupId>zhezhu</groupId>
+            <artifactId>zhezhu-test</artifactId>
             <scope>test</scope>
-            <version>${tfk.version}</version>
+            <version>${zhezhu.version}</version>
         </dependency>
         <dependency>
-            <groupId>tfk</groupId>
-            <artifactId>tfk-commons</artifactId>
-            <version>${tfk.version}</version>
+            <groupId>zhezhu</groupId>
+            <artifactId>zhezhu-commons</artifactId>
+            <version>${zhezhu.version}</version>
         </dependency>
         <dependency>
-            <groupId>tfk</groupId>
-            <artifactId>tfk-share</artifactId>
-            <version>${tfk.version}</version>
+            <groupId>zhezhu</groupId>
+            <artifactId>zhezhu-share</artifactId>
+            <version>${zhezhu.version}</version>
         </dependency>
         <dependency>
-            <groupId>tfk</groupId>
-            <artifactId>tfk-sm</artifactId>
-            <version>${tfk.version}</version>
+            <groupId>zhezhu</groupId>
+            <artifactId>zhezhu-sm</artifactId>
+            <version>${zhezhu.version}</version>
         </dependency>
         <dependency>
-            <groupId>tfk</groupId>
-            <artifactId>tfk-assessment</artifactId>
-            <version>${tfk.version}</version>
+            <groupId>zhezhu</groupId>
+            <artifactId>zhezhu-assessment</artifactId>
+            <version>${zhezhu.version}</version>
         </dependency>
         <dependency>
-            <groupId>tfk</groupId>
-            <artifactId>tfk-access</artifactId>
-            <version>${tfk.version}</version>
+            <groupId>zhezhu</groupId>
+            <artifactId>zhezhu-access</artifactId>
+            <version>${zhezhu.version}</version>
         </dependency>
 
         <dependency>
