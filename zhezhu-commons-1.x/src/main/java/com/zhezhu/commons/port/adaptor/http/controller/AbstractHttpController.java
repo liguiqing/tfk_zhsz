@@ -1,6 +1,8 @@
 package com.zhezhu.commons.port.adaptor.http.controller;
 
 import com.zhezhu.commons.lang.Throwables;
+import com.zhezhu.commons.security.UserFace;
+import com.zhezhu.commons.security.UserFaceService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +30,9 @@ public abstract class AbstractHttpController {
 
     @Autowired(required=false)
     private MessageSourceFactory messageSourceFactory;
+
+    @Autowired(required=false)
+    private UserFaceService userFaceService;
 
     protected void output(String content,HttpServletResponse response){
         if(response == null)
@@ -71,4 +76,9 @@ public abstract class AbstractHttpController {
         MessageSource messageSource = getMessageSourceFactory().lookup(request.getParameter("local"));
         return new ModelAndViewBuilder(view,messageSource);
     }
+
+    protected UserFace getUser(){
+        return userFaceService.getUser();
+    }
+
 }

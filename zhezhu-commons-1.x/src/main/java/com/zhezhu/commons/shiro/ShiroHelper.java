@@ -4,6 +4,7 @@
 
 package com.zhezhu.commons.shiro;
 
+import com.zhezhu.commons.security.UserFace;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
@@ -27,6 +28,11 @@ public  class ShiroHelper {
     public static boolean isAuthenticated(){
         Subject subject = getSubject();
         return subject.isAuthenticated();
+    }
+
+    public static UserFace getUser(){
+        Subject subject = getSubject();
+        return (UserFace) subject.getPrincipal();
     }
 
 }
