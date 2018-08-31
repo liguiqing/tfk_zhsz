@@ -53,4 +53,9 @@ public class ClazzFollowApply extends Entity {
         this.auditId = audit.getAuditId();
     }
 
+    public void cancelAudit(ClazzFollowAudit audit){
+        if(this.isAudited() && audit.sameOf(this.auditId))
+            this.auditId = null;
+    }
+
 }

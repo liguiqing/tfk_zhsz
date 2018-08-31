@@ -33,4 +33,8 @@ public class ClazzFollowAudit extends Entity {
     private boolean ok;
 
     private String description;
+
+    public boolean sameOf(ClazzFollowAuditId auditId){
+        return this.auditId.equals(auditId);
+    }
 }
