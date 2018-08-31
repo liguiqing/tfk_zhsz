@@ -26,7 +26,7 @@ import java.util.Set;
  * @author Liguiqing
  * @since V3.0
  */
-@EqualsAndHashCode(of={"studentId"})
+@EqualsAndHashCode(of={"studentId"},callSuper = false)
 @ToString(of={"studentId"})
 public class Student extends Teadent {
     private StudentId studentId;

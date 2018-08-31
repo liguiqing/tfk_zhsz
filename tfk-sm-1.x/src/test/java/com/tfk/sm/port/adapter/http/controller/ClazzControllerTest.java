@@ -4,9 +4,9 @@ import com.tfk.commons.util.DateUtilWrapper;
 import com.tfk.share.domain.id.school.SchoolId;
 import com.tfk.share.domain.school.Grade;
 import com.tfk.sm.application.clazz.ClazzApplicationService;
-import com.tfk.sm.application.data.ClazzData;
 import com.tfk.sm.application.clazz.ClazzQueryService;
 import com.tfk.sm.application.clazz.NewClazzCommand;
+import com.tfk.sm.application.data.ClazzData;
 import com.tfk.test.controller.AbstractControllerTest;
 import org.hamcrest.CoreMatchers;
 import org.junit.Test;
@@ -25,7 +25,8 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 /**

@@ -1,7 +1,5 @@
 package com.tfk.sm.domain.model.school;
 
-import com.google.common.base.MoreObjects;
-import com.google.common.base.Objects;
 import com.tfk.commons.domain.Entity;
 import com.tfk.commons.util.DateUtilWrapper;
 import com.tfk.share.domain.common.Period;

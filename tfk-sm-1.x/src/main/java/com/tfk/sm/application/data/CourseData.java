@@ -1,10 +1,16 @@
 package com.tfk.sm.application.data;
 
+import lombok.*;
+
 /**
  * @author Liguiqing
  * @since V3.0
  */
-
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+@ToString
 public class CourseData {
 
     private String name;
@@ -13,34 +19,8 @@ public class CourseData {
 
     private int gradeLevel;
 
-    public CourseData(){}
-
     public CourseData(String name, String subjectId) {
         this.name = name;
         this.subjectId = subjectId;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getSubjectId() {
-        return subjectId;
-    }
-
-    public void setSubjectId(String subjectId) {
-        this.subjectId = subjectId;
-    }
-
-    public int getGradeLevel() {
-        return gradeLevel;
-    }
-
-    public void setGradeLevel(int gradeLevel) {
-        this.gradeLevel = gradeLevel;
     }
 }

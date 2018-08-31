@@ -83,9 +83,9 @@ public class TeacherControllerTest extends AbstractControllerTest {
         SubjectId subjectId3 = new SubjectId();
 
         CourseData[] courses = new CourseData[3];
-        courses[0] = new CourseData("语文",subjectId1.id());
-        courses[1] = new CourseData("数学",subjectId2.id());
-        courses[2] = new CourseData("英语",subjectId3.id());
+        courses[0] = new CourseData("语文",subjectId1.getId());
+        courses[1] = new CourseData("数学",subjectId2.getId());
+        courses[2] = new CourseData("英语",subjectId3.getId());
 
         String clazzId1 = Identities.genIdNone(IdPrefixes.ClazzIdPrefix);
         String clazzId2 = Identities.genIdNone(IdPrefixes.ClazzIdPrefix);

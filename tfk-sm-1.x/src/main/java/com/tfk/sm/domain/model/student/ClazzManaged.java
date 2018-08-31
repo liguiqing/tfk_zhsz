@@ -7,7 +7,9 @@ import com.tfk.share.domain.id.school.StudentId;
 import com.tfk.share.domain.school.Grade;
 import com.tfk.share.domain.school.ManagementClazz;
 import com.tfk.share.domain.school.StudyYear;
-import lombok.*;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.ToString;
 
 /**
  * 学生受管班级

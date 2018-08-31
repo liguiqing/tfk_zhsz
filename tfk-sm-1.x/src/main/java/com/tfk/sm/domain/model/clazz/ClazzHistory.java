@@ -1,7 +1,5 @@
 package com.tfk.sm.domain.model.clazz;
 
-import com.google.common.base.MoreObjects;
-import com.google.common.base.Objects;
 import com.tfk.commons.domain.IdentifiedDomainObject;
 import com.tfk.share.domain.id.school.ClazzId;
 import com.tfk.share.domain.id.school.SchoolId;
@@ -9,7 +7,6 @@ import com.tfk.share.domain.school.Grade;
 import com.tfk.share.domain.school.StudyYear;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 /**

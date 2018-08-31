@@ -2,9 +2,9 @@ package com.tfk.sm.port.adapter.http.controller;
 
 import com.tfk.commons.port.adaptor.http.controller.AbstractHttpController;
 import com.tfk.sm.application.clazz.ClazzApplicationService;
-import com.tfk.sm.application.data.ClazzData;
 import com.tfk.sm.application.clazz.ClazzQueryService;
 import com.tfk.sm.application.clazz.NewClazzCommand;
+import com.tfk.sm.application.data.ClazzData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,7 +31,7 @@ public class ClazzController extends AbstractHttpController {
 
     @RequestMapping(method = RequestMethod.POST)
     public ModelAndView onNewClazz(@RequestBody NewClazzCommand command){
-        logger.debug("New Clazz with name {} of school {}",command.getClazzName(),command.getSchoolId());
+        logger.debug("URL /clazz Method=POST  {}",command.getClazzName(),command.getSchoolId());
         clazzApplicationService.newClazz(command);
         return newModelAndViewBuilder("/clazz/newClazzSuccess").creat();
     }

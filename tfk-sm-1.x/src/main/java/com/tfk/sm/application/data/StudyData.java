@@ -1,10 +1,16 @@
 package com.tfk.sm.application.data;
 
+import lombok.*;
+
 /**
  * @author Liguiqing
  * @since V3.0
  */
-
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@Getter
+@Setter
 public class StudyData {
 
     private String clazzId;
@@ -14,45 +20,4 @@ public class StudyData {
     private String subjectId;
 
     private int gradeLevel;
-
-    public StudyData(){}
-
-    public StudyData(String clazzId, String courseName, String subjectId, int gradeLevel) {
-        this.clazzId = clazzId;
-        this.courseName = courseName;
-        this.subjectId = subjectId;
-        this.gradeLevel = gradeLevel;
-    }
-
-    public String getClazzId() {
-        return clazzId;
-    }
-
-    public void setClazzId(String clazzId) {
-        this.clazzId = clazzId;
-    }
-
-    public String getCourseName() {
-        return courseName;
-    }
-
-    public void setCourseName(String courseName) {
-        this.courseName = courseName;
-    }
-
-    public String getSubjectId() {
-        return subjectId;
-    }
-
-    public void setSubjectId(String subjectId) {
-        this.subjectId = subjectId;
-    }
-
-    public int getGradeLevel() {
-        return gradeLevel;
-    }
-
-    public void setGradeLevel(int gradeLevel) {
-        this.gradeLevel = gradeLevel;
-    }
 }

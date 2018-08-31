@@ -3,7 +3,9 @@ package com.tfk.share.domain.school;
 import com.tfk.commons.domain.ValueObject;
 import com.tfk.share.domain.id.school.ClazzId;
 import com.tfk.share.domain.id.school.SchoolId;
-import lombok.*;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.ToString;
 
 /**
  * 年级的班级

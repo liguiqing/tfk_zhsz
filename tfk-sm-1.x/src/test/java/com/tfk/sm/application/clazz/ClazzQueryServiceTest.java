@@ -4,7 +4,8 @@ import com.tfk.share.domain.id.school.ClazzId;
 import com.tfk.share.domain.id.school.SchoolId;
 import com.tfk.share.domain.school.Grade;
 import com.tfk.sm.application.data.ClazzData;
-import com.tfk.sm.domain.model.clazz.*;
+import com.tfk.sm.domain.model.clazz.Clazz;
+import com.tfk.sm.domain.model.clazz.ClazzRepository;
 import com.tfk.sm.domain.model.school.School;
 import com.tfk.sm.domain.model.school.SchoolRepository;
 import org.apache.commons.lang3.reflect.FieldUtils;
@@ -16,7 +17,7 @@ import org.mockito.MockitoAnnotations;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
 /**

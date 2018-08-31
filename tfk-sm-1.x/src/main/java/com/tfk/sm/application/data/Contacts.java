@@ -2,24 +2,22 @@ package com.tfk.sm.application.data;
 
 import com.tfk.share.domain.person.Contact;
 import com.tfk.share.domain.person.contact.*;
+import lombok.*;
 
 /**
  * @author Liguiqing
  * @since V3.0
  */
-
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+@ToString
 public class Contacts {
 
     private String category ;
 
     private String value;
-
-    public Contacts(String category, String value) {
-        this.category = category;
-        this.value = value;
-    }
-
-    public Contacts( ) {}
 
     public Contact toContact(){
         switch (this.category){
@@ -30,21 +28,5 @@ public class Contacts {
             case "Phone":return new Phone(this.value);
             default:return null;
         }
-    }
-
-    public String getCategory() {
-        return category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
-    }
-
-    public String getValue() {
-        return value;
-    }
-
-    public void setValue(String value) {
-        this.value = value;
     }
 }

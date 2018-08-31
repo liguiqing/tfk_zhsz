@@ -1,6 +1,5 @@
 package com.tfk.share.domain.school;
 
-import com.google.common.base.Objects;
 import com.tfk.share.domain.common.Period;
 import com.tfk.share.domain.id.school.ClazzId;
 import com.tfk.share.domain.id.school.SchoolId;

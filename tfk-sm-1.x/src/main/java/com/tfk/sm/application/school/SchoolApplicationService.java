@@ -33,7 +33,7 @@ public class SchoolApplicationService {
             return;
 
         SchoolId schoolId = schoolRepository.nextIdentity();
-        SchoolScope scope = SchoolScope.get(command.getScop());
+        SchoolScope scope = SchoolScope.get(command.getScope());
         School school = new School(schoolId,command.getName(),command.getAlias(),scope);
         this.schoolRepository.save(school);
     }

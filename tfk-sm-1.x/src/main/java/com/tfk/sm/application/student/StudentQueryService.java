@@ -6,6 +6,7 @@ import com.tfk.share.domain.id.school.SchoolId;
 import com.tfk.share.domain.school.Grade;
 import com.tfk.sm.application.clazz.ClazzApplicationService;
 import com.tfk.sm.application.data.StudentData;
+import com.tfk.sm.application.data.StudentNameSortedData;
 import com.tfk.sm.domain.model.clazz.Clazz;
 import com.tfk.sm.domain.model.student.Student;
 import com.tfk.sm.domain.model.student.StudentRepository;
@@ -15,7 +16,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.text.Collator;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -33,6 +35,17 @@ public class StudentQueryService {
     @Autowired
     private ClazzApplicationService clazzApplicationService;
 
+
+    public StudentNameSortedData findStudentInOfNowAndSortByName(String schoolId, String clazzId){
+        log.debug("Find student of school {} in clazz {} and sorted ",schoolId,clazzId);
+        List<StudentData> studentData = findStudentInOfNow(schoolId, clazzId);
+        //按中文字姓氏排序
+        studentData.sort((s1,s2)->(Collator.getInstance(java.util.Locale.CHINA).compare(s1.getName(),s2.getName())));
+        StudentNameSortedData sortedData = new StudentNameSortedData();
+        studentData.forEach(data-> sortedData.add(data));
+        return sortedData;
+    }
+
     public List<StudentData> findStudentInOfNow(String schoolId, String clazzId){
         log.debug("Find student of school {} in {}",schoolId,clazzId);
 
@@ -42,23 +55,19 @@ public class StudentQueryService {
         ClazzId clazzId1 = new ClazzId(clazzId);
         if(clazz.canBeManagedAt()){
             List<Student> students = studentRepository.findByManageds(schoolId1,clazzId1,grade);
-            return toStudentDatas(students,clazz);
+            return toStudentData(students,clazz);
         }else{
             List<Student> students = studentRepository.findByStudies(schoolId1,clazzId1,grade);
-            return toStudentDatas(students,clazz);
+            return toStudentData(students,clazz);
         }
     }
 
-    private List<StudentData> toStudentDatas(List<Student> students,Clazz clazz){
+    private List<StudentData> toStudentData(List<Student> students, Clazz clazz){
         if(CollectionsUtilWrapper.isNullOrEmpty(students)){
             return new ArrayList<>();
         }
 
-        List<StudentData> studentData =  students.stream().map(student -> toStudentData(student,clazz))
-                .collect(Collectors.toList());
-        //按中文字姓氏排序
-        studentData.sort((s1,s2)->(Collator.getInstance(java.util.Locale.CHINA).compare(s1.getName(),s2.getName())));
-        return studentData;
+        return students.stream().map(student -> toStudentData(student,clazz)).collect(Collectors.toList());
     }
 
     private StudentData toStudentData(Student student,Clazz clazz){

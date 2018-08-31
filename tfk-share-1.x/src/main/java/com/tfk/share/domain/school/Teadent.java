@@ -17,7 +17,7 @@ import java.util.Date;
  */
 @Getter
 @ToString
-@EqualsAndHashCode(of = {"schoolId"})
+@EqualsAndHashCode(of = {"schoolId"},callSuper = false)
 public abstract class Teadent extends Person {
     private SchoolId schoolId;
 

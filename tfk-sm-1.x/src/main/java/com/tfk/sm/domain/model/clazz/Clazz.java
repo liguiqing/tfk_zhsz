@@ -9,7 +9,6 @@ import com.tfk.share.domain.id.school.ClazzId;
 import com.tfk.share.domain.id.school.SchoolId;
 import com.tfk.share.domain.school.Grade;
 import com.tfk.share.domain.school.StudyYear;
-import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;

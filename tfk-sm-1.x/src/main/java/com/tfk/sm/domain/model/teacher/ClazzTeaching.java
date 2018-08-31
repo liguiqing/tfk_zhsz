@@ -6,9 +6,10 @@ import com.tfk.share.domain.id.school.ClazzId;
 import com.tfk.share.domain.id.school.TeacherId;
 import com.tfk.share.domain.school.Course;
 import com.tfk.share.domain.school.Grade;
-import com.tfk.share.domain.school.StudyYear;
 import com.tfk.share.domain.school.TeachAndStudyClazz;
-import lombok.*;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.ToString;
 
 
 /**
@@ -16,7 +17,7 @@ import lombok.*;
  * @since V3.0
  */
 @Getter
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = false)
 @ToString
 public class ClazzTeaching extends IdentifiedValueObject {
 
