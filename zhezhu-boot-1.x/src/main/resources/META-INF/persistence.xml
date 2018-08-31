@@ -3,8 +3,8 @@
 
     <persistence-unit name="ysplPersistenceUnit">
         <!--<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>-->
-        <jar-file>WEB-INF/lib/tfk-access-1.0.0-SNAPSHOT.jar</jar-file>
-        <jar-file>WEB-INF/lib/tfk-sm-1.0.0-SNAPSHOT.jar</jar-file>
-        <jar-file>WEB-INF/lib/tfk-assessment-1.0.0-SNAPSHOT.jar</jar-file>
+        <jar-file>WEB-INF/lib/zhezhu-access-1.0.0-SNAPSHOT.jar</jar-file>
+        <jar-file>WEB-INF/lib/zhezhu-sm-1.0.0-SNAPSHOT.jar</jar-file>
+        <jar-file>WEB-INF/lib/zhezhu-assessment-1.0.0-SNAPSHOT.jar</jar-file>
     </persistence-unit>
 </persistence>
