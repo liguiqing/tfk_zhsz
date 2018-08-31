@@ -19,17 +19,16 @@ public interface ClazzFollowApplyRepository extends EntityRepository<ClazzFollow
         return new ClazzFollowApplyId();
     }
 
-
     @Cacheable(value = "accessCache",key = "#p0.id",unless = "#result == null")
     @Query("From ClazzFollowApply where applyId=?1")
-    public abstract ClazzFollowApply loadOf(ClazzFollowApplyId applyId);
+    ClazzFollowApply loadOf(ClazzFollowApplyId applyId);
 
     @Override
     @CacheEvict(value = "accessCache", key="#p0.applyId.id")
-    public abstract void save(ClazzFollowApply apply);
+    void save(ClazzFollowApply apply);
 
     @CacheEvict(value = "accessCache",key="#p0.id")
     @Modifying
     @Query(value = "DELETE from ClazzFollowApply where applyId=?1")
-    public abstract void delete(ClazzFollowApplyId applyId);
+    void delete(ClazzFollowApplyId applyId);
 }

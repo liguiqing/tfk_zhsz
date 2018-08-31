@@ -36,21 +36,24 @@ public class SchoolController extends AbstractHttpController {
 
     @RequestMapping(method = RequestMethod.POST)
     public ModelAndView onNewSchool(@RequestBody NewSchoolCommand command){
-        logger.debug("New School with name {}",command.getName());
+        logger.debug("URL /school Method=POST  {}",command);
+
         schoolApplicationService.newSchool(command);
         return newModelAndViewBuilder("/school/newSchoolSuccess").creat();
     }
 
     @RequestMapping(value = "/{page}/{size}",method = RequestMethod.GET)
     public ModelAndView onGetAllSchool(@PathVariable int page,@PathVariable int size){
-        logger.debug("onGetAllSchool ");
-        List<SchoolData> datas =  schoolQueryService.findAllSchool(page,size);
-        return newModelAndViewBuilder("/school/allSchoolList").withData("schools",datas).creat();
+        logger.debug("URL /school/{}/{} Method=GET",page,size);
+
+        List<SchoolData> data =  schoolQueryService.findAllSchool(page,size);
+        return newModelAndViewBuilder("/school/allSchoolList").withData("schools",data).creat();
     }
 
     @RequestMapping(value = "/grade/clazz/{schoolId}/{gradeLevel}",method = RequestMethod.GET)
     public ModelAndView onGetSchoolClazz(@PathVariable String schoolId, @PathVariable int gradeLevel){
-        logger.debug("Get Clazz of School {} in Grade {} ",gradeLevel,schoolId);
+        logger.debug("URL /school/{}/{} Method=GET",schoolId,gradeLevel);
+
         List<ClazzData> datas = clazzQueryService.findSchoolGradeClazzesCanBeManagedOfNow(schoolId,gradeLevel);
         return newModelAndViewBuilder("/school/gradeClazzList").withData("clazzes",datas).creat();
     }

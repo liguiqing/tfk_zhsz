@@ -28,7 +28,7 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
 
 /**
- * Copyright (c) 2016,$today.year, 深圳市易考试乐学测评有限公司
+ * Copyright (c) 2016,$today.year, Liguiqing
  **/
 public class StudentApplicationServiceTest {
 

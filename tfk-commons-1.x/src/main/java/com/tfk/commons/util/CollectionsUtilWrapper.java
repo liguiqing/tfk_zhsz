@@ -1,7 +1,6 @@
 package com.tfk.commons.util;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Collection;
 
 /**
  * 集合处理包装器

@@ -19,7 +19,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 /**
- * Copyright (c) 2016,$today.year, 深圳市易考试乐学测评有限公司
+ * Copyright (c) 2016,$today.year, Liguiqing
  **/
 
 @ContextHierarchy({

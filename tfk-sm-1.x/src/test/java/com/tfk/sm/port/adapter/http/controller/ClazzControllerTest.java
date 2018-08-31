@@ -30,7 +30,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 /**
- * Copyright (c) 2016,$today.year, 深圳市易考试乐学测评有限公司
+ * Copyright (c) 2016,2018, Liguiqing
  **/
 
 @ContextHierarchy({
@@ -75,7 +75,7 @@ public class ClazzControllerTest extends AbstractControllerTest {
 
         when(clazzQueryService.findSchoolGradeClazzesCanBeManagedOfNow(any(String.class),any(Integer.class))).thenReturn(datas);
 
-        this.mvc.perform(get("/clazz/school/"+schoolId.id()+"/"+grade.getLevel()).contentType(MediaType.APPLICATION_JSON)
+        this.mvc.perform(get("/clazz/grade/"+schoolId.id()+"/"+grade.getLevel()).contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.status.success", is(Boolean.TRUE)))
                 .andExpect(jsonPath("$.clazzes.[0].name", equalTo("c1")))

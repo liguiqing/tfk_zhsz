@@ -37,9 +37,9 @@ public class ClazzController extends AbstractHttpController {
     }
 
 
-    @RequestMapping(value = "/school/{schoolId}/{gradeLevel}",method = RequestMethod.GET)
+    @RequestMapping(value = "/grade/{schoolId}/{gradeLevel}",method = RequestMethod.GET)
     public ModelAndView onGetSchoolClazz(@PathVariable String schoolId, @PathVariable int gradeLevel){
-        logger.debug("Get Clazz of School {} in Grade {} ",gradeLevel,schoolId);
+        logger.debug("URL /clazz/grade/{}/{} Method=GET",schoolId,gradeLevel);
         List<ClazzData> datas = clazzQueryService.findSchoolGradeClazzesCanBeManagedOfNow(schoolId,gradeLevel);
         return newModelAndViewBuilder("/clazz/gradeClazzList").withData("clazzes",datas).creat();
     }

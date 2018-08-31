@@ -24,14 +24,16 @@ public class TeacherController extends AbstractHttpController {
 
     @RequestMapping(method = RequestMethod.POST)
     public ModelAndView onNewTeacher(@RequestBody NewTeacherCommand command){
-        logger.debug("New Teacher with name {} to school {}",command.getName(),command.getSchoolId());
+        logger.debug("URL /teacher Method=POST  {}",command);
+
         String teacherId = this.teacherApplicationService.newTeacher(command);
         return newModelAndViewBuilder("/teacher/newTeacherSuccess").withData("teacherId",teacherId).creat();
     }
 
     @RequestMapping(value = "/arrange",method = RequestMethod.POST)
     public ModelAndView onArrangeTeacher(@RequestBody ArrangeTeacherCommand command){
-        logger.debug("Arrange Teacher  {} ",command.getTeacherId());
+        logger.debug("URL /teacher/arrange Method=POST  {}",command);
+
         this.teacherApplicationService.arranging(command);
         return newModelAndViewBuilder("/teacher/arrangeTeacherSuccess").withData("teacherId",command.getTeacherId()).creat();
     }

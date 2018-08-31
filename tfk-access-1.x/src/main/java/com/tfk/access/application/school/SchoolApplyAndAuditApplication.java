@@ -1,6 +1,9 @@
 package com.tfk.access.application.school;
 
+import com.tfk.access.domain.model.school.ClazzFollowApplyRepository;
+import com.tfk.access.domain.model.school.ClazzFollowAuditRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,6 +15,12 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 @Service
 public class SchoolApplyAndAuditApplication {
+
+    @Autowired
+    private ClazzFollowApplyRepository clazzFollowApplyRepository;
+
+    @Autowired
+    private ClazzFollowAuditRepository clazzFollowAuditRepository;
 
     @Transactional(rollbackFor = Exception.class)
     public void applyFollowClazz(ClazzFollowApplyCommand command ){

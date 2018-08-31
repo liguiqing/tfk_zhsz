@@ -3,10 +3,10 @@ package com.tfk.commons.util;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
- * Copyright (c) 2016,$today.year, 深圳市易考试乐学测评有限公司
+ * Copyright (c) 2016,$today.year, Liguiqing
  **/
 public class StringUtilWrapperTest {
 

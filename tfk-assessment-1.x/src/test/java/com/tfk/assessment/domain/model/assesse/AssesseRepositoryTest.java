@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import static org.junit.Assert.*;
 
 /**
- * Copyright (c) 2016,2018, 深圳市易考试乐学测评有限公司
+ * Copyright (c) 2016,2018, Liguiqing
  **/
 @ContextConfiguration(
         classes = {
