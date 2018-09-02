@@ -69,9 +69,20 @@ public class WeChatController extends AbstractHttpController {
 
         String code = request.getParameter("code");
         String state = request.getParameter("state");
-        logger.debug("code:{},state:{}", code, state);
+        logger.debug(" URL /wechat/oauth2/{} Method=GET  code:{},state:{}",model, code, state);
         WebAccessToken accessToken = wechatApplicationService.getWeChatAccessToken(code);
-        return newModelAndViewBuilder("/menu/model/" + model).withData("openid", accessToken.getOpenId()).creat();
+        return newModelAndViewBuilder("/menu/model/" + model)
+                .withData("openid", accessToken.getOpenId())
+                .withData("token",accessToken.getAccessToken())
+                .creat();
+    }
+
+    @RequestMapping(value = "/join/{openId}")
+    public ModelAndView onGetJoined(@PathVariable String openId, HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+        logger.debug("URL /wechat/join/{}", openId);
+
+        return newModelAndViewBuilder("/menu/model/").creat();
     }
 
     /**

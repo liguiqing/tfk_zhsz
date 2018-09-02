@@ -16,6 +16,6 @@ import lombok.Setter;
 public class GradeData {
     private String name;
 
-    private int leve;
+    private int level;
 
 }
