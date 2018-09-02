@@ -13,15 +13,11 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
  */
 @Slf4j
 @SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
-//@Configuration
-//@ComponentScan(basePackages = {"com.zhezhu.boot.config"})
-//@PropertySource("classpath:/META-INF/spring/bootConfig.properties")
 public class TFKAppliction extends SpringBootServletInitializer {
 
     public static void main(String[] args) throws Exception{
         log.debug("TFK Boot Starting ...");
         SpringApplication app = new SpringApplication(TFKAppliction.class);
-        //app.setBannerMode(Banner.Mode.OFF);
         app.run(args);
     }
 
@@ -29,9 +25,6 @@ public class TFKAppliction extends SpringBootServletInitializer {
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
         log.debug("Add Configurations ");
         application.sources(TFKAppliction.class);
-        //application.sources(FreemarkerConfig.class);
-        //application.sources(SpringMvcConfiguration.class);
-        //application.sources(TfkBootConfiguration.class);
         return super.configure(application);
     }
 

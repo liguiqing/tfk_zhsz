@@ -16,6 +16,7 @@ import org.springframework.context.annotation.PropertySource;
 @EnableAspectJAutoProxy
 @EnableCaching
 @ComponentScan(basePackages = {"com.zhezhu.**.config"})
+@ComponentScan(basePackages = {"com.zhezhu.**.controller"})
 @PropertySource("classpath:/META-INF/spring/bootConfig.properties")
 public class TfkBootConfiguration {
 

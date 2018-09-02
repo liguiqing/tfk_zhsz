@@ -44,7 +44,7 @@
 
 	<bean id="freemarkerConfig"
 		class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
-		<property name="templateLoaderPath" value="classpath:ftl/" />
+		<property name="templateLoaderPath" value="classpath:META-INF/ftl" />
 		<property name="freemarkerSettings" ref="freemarkerConfiguration" />
 		<property name="freemarkerVariables">
 			<map>
@@ -74,7 +74,7 @@
 			<list>
 				<bean
 					class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
-					<property name="cache" value="true" />
+					<property name="cache" value="false" />
 					<property name="prefix" value="" />
 					<property name="suffix" value=".ftl" />
 					<property name="exposeSpringMacroHelpers" value="true" />

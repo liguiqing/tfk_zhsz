@@ -29,7 +29,6 @@ import java.util.Properties;
  */
 @Slf4j
 @Configuration
-@ComponentScan(basePackages = {"com.zhezhu.**.controller"})
 public class SpringMvcConfiguration extends WebMvcConfigurationSupport {
 
 
