@@ -14,11 +14,11 @@ import org.springframework.stereotype.Component;
  * @since V3.0
  */
 @Slf4j
-@Component
+@Component("localPersonService")
 public class PersonServiceImpl implements PersonService {
 
     @Autowired(required = false)
-    @Qualifier("remote")
+    @Qualifier("remotePersonService")
     @Setter
     private PersonService remoteProxy; //远程服务代理
 

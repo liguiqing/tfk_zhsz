@@ -16,6 +16,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 import static org.junit.Assert.*;
 
 /**
@@ -55,18 +57,22 @@ public class ClazzFollowApplyRepositoryTest extends AbstractTransactionalJUnit4S
         assertEquals(apply,apply);
 
         ClazzFollowAuditId auditId = new ClazzFollowAuditId();
-        ClazzFollowAudit audit = ClazzFollowAudit.builder().auditId(auditId).applyId(applyId).build();
+        ClazzFollowAudit audit = ClazzFollowAudit.builder().auditId(auditId).ok(true).applyId(applyId).build();
         apply_.audit(audit);
         applyRepository.save(apply_);
 
         apply = applyRepository.loadOf(applyId);
         assertTrue(apply.isAudited());
-
+        assertTrue(apply.isPassed());
         int i = 0;
         while (i<100000){
             applyRepository.loadOf(applyId);
             i++;
         }
+
+        List<ClazzFollowApply> applies = applyRepository.findAllByApplierIdAndAuditIdIsNotNull(applierId);
+        assertEquals(1,applies.size());
+        assertTrue(applies.get(0).isPassed());
 
         applyRepository.delete(applyId);
         apply = applyRepository.loadOf(applyId);

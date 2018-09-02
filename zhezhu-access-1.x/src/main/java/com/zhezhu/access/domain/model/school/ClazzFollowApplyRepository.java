@@ -1,12 +1,15 @@
 package com.zhezhu.access.domain.model.school;
 
 import com.zhezhu.commons.domain.EntityRepository;
+import com.zhezhu.share.domain.id.PersonId;
 import com.zhezhu.share.domain.id.access.ClazzFollowApplyId;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * @author Liguiqing
@@ -31,4 +34,6 @@ public interface ClazzFollowApplyRepository extends EntityRepository<ClazzFollow
     @Modifying
     @Query(value = "DELETE from ClazzFollowApply where applyId=?1")
     void delete(ClazzFollowApplyId applyId);
+
+    List<ClazzFollowApply> findAllByApplierIdAndAuditIdIsNotNull(PersonId applierId);
 }

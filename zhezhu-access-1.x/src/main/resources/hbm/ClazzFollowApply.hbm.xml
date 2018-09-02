@@ -26,6 +26,7 @@
         <property name="applierPhone" column="applierPhone" type="java.lang.String"/>
         <property name="applyDate" column="applyDate" type="java.util.Date"/>
         <property name="cause" column="cause" type="java.lang.String"/>
+        <property name="passed" column="passed" type="java.lang.Boolean"/>
     </class>
 
 </hibernate-mapping>

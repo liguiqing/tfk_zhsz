@@ -44,6 +44,8 @@ public class ClazzFollowApply extends Entity {
 
     private String cause;
 
+    private boolean passed;
+
     public boolean isAudited(){
         return this.auditId != null;
     }
@@ -51,6 +53,7 @@ public class ClazzFollowApply extends Entity {
     public void audit(ClazzFollowAudit audit){
         AssertionConcerns.assertArgumentTrue(audit.getApplyId().equals(this.applyId),"无效的审核");
         this.auditId = audit.getAuditId();
+        this.passed = audit.isOk();
     }
 
     public void cancelAudit(ClazzFollowAudit audit){

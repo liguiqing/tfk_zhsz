@@ -1,8 +1,6 @@
 package com.zhezhu.access.port.adapter.http.controller;
 
-import com.zhezhu.access.application.school.ClazzFollowApplyCommand;
-import com.zhezhu.access.application.school.ClazzFollowAuditCommand;
-import com.zhezhu.access.application.school.SchoolApplyAndAuditApplicationService;
+import com.zhezhu.access.application.school.*;
 import com.zhezhu.commons.port.adaptor.http.controller.AbstractHttpController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.util.List;
 
 /**
  * @author Liguiqing
@@ -22,6 +22,9 @@ public class SchoolApplyAndAuditController extends AbstractHttpController {
 
     @Autowired(required = false)
     private SchoolApplyAndAuditApplicationService applyAndAuditApplicationService;
+
+    @Autowired(required = false)
+    private SchoolApplyAndAuditQueryService applyAndAuditQueryService;
 
     /**
      * 班级关注申请
@@ -52,6 +55,20 @@ public class SchoolApplyAndAuditController extends AbstractHttpController {
     }
 
     /**
+     * 查询申请人已经通过审核的班级关注申请
+     *
+     * @param applierId
+     * @return
+     */
+    @RequestMapping(value = "/apply/audited/{applierId}",method = RequestMethod.GET)
+    public ModelAndView onGetClazzFollowApplyAudited(@PathVariable String applierId){
+        logger.debug("URL /apply/audited/{} Method=GET ",applierId);
+
+        List<ClazzFollowApplyAndAuditData> auditedClazzs = applyAndAuditQueryService.getAuditedClazzs(applierId);
+        return newModelAndViewBuilder("/apply/clazzFollowApplyAuditedList").withData("clazzs",auditedClazzs).creat();
+    }
+
+    /**
      * 班级关注申请审核
      *
      * @param command
@@ -79,4 +96,6 @@ public class SchoolApplyAndAuditController extends AbstractHttpController {
         applyAndAuditApplicationService.followClazzAuditCancel(auditId);
         return newModelAndViewBuilder("/audit/clazzFollowAuditCancel").creat();
     }
+
+
 }

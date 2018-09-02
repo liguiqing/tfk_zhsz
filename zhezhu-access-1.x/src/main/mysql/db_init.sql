@@ -94,6 +94,7 @@ CREATE TABLE `ac_ClazzFollowApply` (
   `applierPhone` varchar(16)  COMMENT '申请人员电话',
   `applyDate` TIMESTAMP DEFAULT now() COMMENT '申请时间',
   `cause` varchar(128)  COMMENT '申请原因',
+  `passed`TINYINT(1)  COMMENT '审核结果',
   PRIMARY KEY (`id`),
   KEY `x_ac_ClazzFollowApply_applyId` (`applyId`),
   KEY `x_ac_ClazzFollowApply_auditId` (`auditId`),

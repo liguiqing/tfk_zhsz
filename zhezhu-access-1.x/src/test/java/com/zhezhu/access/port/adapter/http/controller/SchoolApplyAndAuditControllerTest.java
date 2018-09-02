@@ -1,8 +1,6 @@
 package com.zhezhu.access.port.adapter.http.controller;
 
-import com.zhezhu.access.application.school.ClazzFollowApplyCommand;
-import com.zhezhu.access.application.school.ClazzFollowAuditCommand;
-import com.zhezhu.access.application.school.SchoolApplyAndAuditApplicationService;
+import com.zhezhu.access.application.school.*;
 import com.zhezhu.commons.security.UserFace;
 import com.zhezhu.commons.security.UserFaceService;
 import com.zhezhu.commons.util.DateUtilWrapper;
@@ -19,6 +17,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.ContextHierarchy;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
@@ -41,6 +42,9 @@ public class SchoolApplyAndAuditControllerTest extends AbstractControllerTest {
     @Autowired
     @InjectMocks
     private SchoolApplyAndAuditController controller;
+
+    @Mock
+    private SchoolApplyAndAuditQueryService applyAndAuditQueryService;;
 
     @Mock
     private SchoolApplyAndAuditApplicationService applyAndAuditApplicationService;
@@ -75,6 +79,23 @@ public class SchoolApplyAndAuditControllerTest extends AbstractControllerTest {
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.status.success", is(Boolean.TRUE)))
                 .andExpect(view().name("/apply/clazzFollowApplyCancel"));
+    }
+
+    @Test
+    public void onGetClazzFollowApplyAudited()throws Exception{
+        List<ClazzFollowApplyAndAuditData> data = new ArrayList<>();
+        for(int i=0;i<5;i++){
+            data.add(ClazzFollowApplyAndAuditData.builder().clazzId(new ClazzId().id()).clazzName("className"+i).build());
+        }
+
+        when(applyAndAuditQueryService.getAuditedClazzs(any(String.class))).thenReturn(data);
+
+        this.mvc.perform(get("/apply/audited/"+new  PersonId().id()).contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.status.success", is(Boolean.TRUE)))
+                .andExpect(jsonPath("$.clazzs[0].clazzName", equalTo("className0")))
+                .andExpect(jsonPath("$.clazzs[4].clazzName", equalTo("className4")))
+                .andExpect(view().name("/apply/clazzFollowApplyAuditedList"));
     }
 
     @Test
