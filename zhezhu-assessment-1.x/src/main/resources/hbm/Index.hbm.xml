@@ -28,6 +28,7 @@
             </type>
         </property>
         <property name="name" column="name" type="java.lang.String"/>
+        <property name="group" column="groups" type="java.lang.String"/>
         <property name="description" column=" description" type="java.lang.String"/>
 
         <set name="children"  cascade="all" fetch="join" lazy="true" order-by="id" where="removed=0">

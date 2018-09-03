@@ -26,12 +26,12 @@ public class SchoolService {
     private SchoolInfoApi schoolInfoApi;
 
     @Autowired
-    @Qualifier("defaulTchoolInfoApi")
-    private SchoolInfoApi defaulTchoolInfoApi;
+    @Qualifier("defaultSchoolInfoApi")
+    private SchoolInfoApi defaultSchoolInfoApi;
 
     private SchoolInfoApi api(){
         if(this.schoolInfoApi == null)
-            return defaulTchoolInfoApi;
+            return defaultSchoolInfoApi;
         return this.schoolInfoApi;
     }
 
@@ -54,5 +54,9 @@ public class SchoolService {
     public List<PersonId> getTeacherPersonIds(SchoolId schoolId) {
         //TODO
         return null;
+    }
+
+    public String getStudentNameBy(PersonId personId){
+        return api().getStudentNameBy(personId);
     }
 }

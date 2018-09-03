@@ -1,4 +1,4 @@
-package com.zhezhu.sm.application.data;
+package com.zhezhu.assessment.infrastructure.school;
 
 import lombok.*;
 
@@ -6,30 +6,21 @@ import lombok.*;
  * @author Liguiqing
  * @since V3.0
  */
-
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Getter
 @Setter
-public class StudentData {
-
+@ToString
+public class ClazzData {
     private String schoolId;
 
     private String clazzId;
 
-    private String studentId;
-
-    private String personId;
-
-    private String name;
-
-    private String gender;
+    private String clazzName;
 
     private String gradeName;
 
     private int gradeLevel;
-
-    private String clazzName;
 
 }

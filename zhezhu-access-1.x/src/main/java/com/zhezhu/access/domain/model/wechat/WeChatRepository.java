@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * @author Liguiqing
  * @since V3.0
@@ -34,7 +36,10 @@ public interface WeChatRepository extends EntityRepository<WeChat,WeChatId> {
     @Query(value = "update WeChat set removed = 1 where weChatId=?1")
     void delete(WeChatId weChatId);
 
-    @Query("From WeChat where weChatOpenId=?1 and removed=0")
-    WeChat findByWeChatOpenId(String weChatOpenId);
+    @Query("From WeChat where weChatOpenId=?1 and category=?2 and removed=0")
+    WeChat findByWeChatOpenIdAndCategoryEquals(String weChatOpenId,WeChatCategory category);
 
+
+    @Query("From WeChat where weChatOpenId=?1 and removed=0")
+    List<WeChat> findAllByWeChatOpenId(String weChatOpenId);
 }

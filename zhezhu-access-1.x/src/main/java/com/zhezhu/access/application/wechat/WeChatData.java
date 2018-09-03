@@ -12,15 +12,15 @@ import lombok.*;
 @Getter
 @Setter
 @ToString
-public class WechatData {
+public class WeChatData {
     private String openId;
 
-    private String roles;
+    private String role;
 
     private String personId;
 
     private String name;
 
-    private String phones;
+    private String phone;
 
 }

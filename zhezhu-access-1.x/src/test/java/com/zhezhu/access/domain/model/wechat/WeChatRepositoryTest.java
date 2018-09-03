@@ -48,7 +48,7 @@ public class WeChatRepositoryTest extends AbstractTransactionalJUnit4SpringConte
         String weChatOpenId = UUID.randomUUID().toString();
         WeChat weChat = WeChat.builder()
                 .personId(personId)
-                .category(WeChatCategory.Student)
+                .category(WeChatCategory.Teacher)
                 .name("name")
                 .phone("12345689788")
                 .weChatId(weChatId)
@@ -103,8 +103,8 @@ public class WeChatRepositoryTest extends AbstractTransactionalJUnit4SpringConte
         for(int i = 0;i<100000;i++){
             weChat_ = weChatRepository.loadOf(weChatId);
         }
-
-        weChat_ = weChatRepository.findByWeChatOpenId(weChatOpenId);
+        WeChatCategory chatCategory = WeChatCategory.valueOf("Teacher");
+        weChat_ = weChatRepository.findByWeChatOpenIdAndCategoryEquals(weChatOpenId,chatCategory);
         assertEquals(weChat,weChat_);
 
         weChatRepository.delete(weChatId);

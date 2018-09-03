@@ -20,6 +20,13 @@ public class CollaboratorController extends AbstractHttpController {
     @Autowired(required = false)
     private CollaboratorService collaboratorService;
 
+    /**
+     * 将所有学校老师转换为评价者
+     *
+     * @param schoolId
+     * @return
+     * @throws Exception
+     */
     @RequestMapping(value = "/all/{schoolId}",method = RequestMethod.POST)
     public ModelAndView onToCollaborator(@PathVariable String schoolId)throws Exception{
         logger.debug("URL /collaborator/all/{} method=POST {}",schoolId);
@@ -28,6 +35,13 @@ public class CollaboratorController extends AbstractHttpController {
         return newModelAndViewBuilder("/collaborator/newCollaboratorSuccess").creat();
     }
 
+    /**
+     * 将学生转换为被评价者
+     *
+     * @param schoolId
+     * @return
+     * @throws Exception
+     */
     @RequestMapping(value = "/assessee/from/student/{schoolId}",method = RequestMethod.POST)
     public ModelAndView onStudentToAssessee(@PathVariable String schoolId)throws Exception{
         logger.debug("URL /collaborator/assessee/from/student/{} method=POST {}",schoolId);
@@ -36,6 +50,13 @@ public class CollaboratorController extends AbstractHttpController {
         return newModelAndViewBuilder("/collaborator/newStudentToAssesseeSuccess").creat();
     }
 
+    /**
+     * 将某个学校的老师转换为评价者
+     *
+     * @param schoolId
+     * @return
+     * @throws Exception
+     */
     @RequestMapping(value = "/assessor/from/teacher/{schoolId}",method = RequestMethod.POST)
     public ModelAndView onTeacherToAssessor(@PathVariable String schoolId)throws Exception{
         logger.debug("URL /collaborator/assessor/from/teacher/{} method=POST ",schoolId);

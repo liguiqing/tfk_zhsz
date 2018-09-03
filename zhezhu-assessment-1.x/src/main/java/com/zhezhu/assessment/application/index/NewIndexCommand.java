@@ -32,6 +32,8 @@ public class NewIndexCommand {
 
     private String description;
 
+    private String group;
+
     public Index toStIndex(IndexId indexId){
         return Index.builder()
                 .indexId(indexId)
@@ -40,6 +42,7 @@ public class NewIndexCommand {
                 .score(score)
                 .weight(weight)
                 .description(description)
+                .group(this.group)
                 .build();
     }
 
@@ -52,6 +55,7 @@ public class NewIndexCommand {
                 .score(score)
                 .weight(weight)
                 .description(description)
+                .group(this.group)
                 .build();
     }
 

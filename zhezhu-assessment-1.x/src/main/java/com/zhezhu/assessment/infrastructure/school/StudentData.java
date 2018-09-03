@@ -1,22 +1,23 @@
-package com.zhezhu.sm.application.data;
+package com.zhezhu.assessment.infrastructure.school;
 
 import lombok.*;
+
+import java.util.List;
 
 /**
  * @author Liguiqing
  * @since V3.0
  */
-
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Getter
 @Setter
+@ToString(exclude = {"clazzes"})
 public class StudentData {
-
     private String schoolId;
 
-    private String clazzId;
+    private List<ClazzData> clazzes;
 
     private String studentId;
 
@@ -25,11 +26,5 @@ public class StudentData {
     private String name;
 
     private String gender;
-
-    private String gradeName;
-
-    private int gradeLevel;
-
-    private String clazzName;
 
 }

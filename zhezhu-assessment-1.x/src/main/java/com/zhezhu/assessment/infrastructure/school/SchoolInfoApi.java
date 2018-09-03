@@ -23,4 +23,8 @@ public interface SchoolInfoApi {
     TenantId getSchoolTenantId(SchoolId schoolId);
 
     List<PersonId> getAllStudentPersonIds(SchoolId schoolId);
+
+    String getStudentNameBy(PersonId personId);
+
+    List<StudentData> getStduent(PersonId personId);
 }

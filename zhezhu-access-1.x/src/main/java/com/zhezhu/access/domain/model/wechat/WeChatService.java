@@ -44,22 +44,22 @@ public class WeChatService {
         return webAccessToken;
     }
 
-    public WeChatAccount getWeixinAccount(WeChatConfig config) {
+    public WeChatAccount getWeChatAccount(WeChatConfig config) {
         if (account == null) {
-            account = parseWeixinAccount(config);
+            account = parseWeChatAccount(config);
         }
         return account;
     }
 
-    public WeChatAccount parseWeixinAccount(WeChatConfig config) {
+    public WeChatAccount parseWeChatAccount(WeChatConfig config) {
         WebAccessToken webAccessToken = getWebAccessToken(config);
         String url = WeChatContant.URL_OAUTH2_GET_USER_INFO.replace("ACCESS_TOKEN", webAccessToken.getAccessToken())
                 .replace("OPENID", webAccessToken.getOpenId());
         HttpGet get = new HttpGet(url);
         get.addHeader("Content-type", "application/json; charset=utf-8");
         String content = getRequestContent(get);
-        WeChatAccount webUserInfo = JsonUtillWrapper.from(content, WeChatAccount.class);
-        return webUserInfo;
+        WeChatAccount weChatAccount = JsonUtillWrapper.from(content, WeChatAccount.class);
+        return weChatAccount;
     }
 
     private String getRequestContent(HttpUriRequest httpUriRequest){

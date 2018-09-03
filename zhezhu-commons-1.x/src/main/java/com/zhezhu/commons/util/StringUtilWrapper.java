@@ -1,5 +1,7 @@
 package com.zhezhu.commons.util;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zhezhu.commons.lang.Throwables;
 import lombok.extern.slf4j.Slf4j;
 import net.sourceforge.pinyin4j.PinyinHelper;
@@ -47,5 +49,15 @@ public class StringUtilWrapper {
             }
         }
         return s;
+    }
+
+    public static String toJson(Object o){
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            return mapper.writeValueAsString(o);
+        } catch (JsonProcessingException e) {
+            log.error(Throwables.toString(e));
+        }
+        return "";
     }
 }

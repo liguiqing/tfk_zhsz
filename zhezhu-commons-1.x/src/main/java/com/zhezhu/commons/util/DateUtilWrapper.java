@@ -9,8 +9,12 @@ import org.apache.commons.lang3.time.DateUtils;
 
 import java.time.*;
 import java.time.temporal.ChronoField;
+import java.time.temporal.TemporalAccessor;
+import java.time.temporal.TemporalField;
+import java.time.temporal.WeekFields;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * 时间工具类包装器，使用到不同组件的时间日期处理部件
@@ -352,6 +356,33 @@ public class DateUtilWrapper {
         LocalDate today = LocalDate.now();
         return today.get(ChronoField.DAY_OF_WEEK);
     }
+
+    /**
+     *  取时间所在周第一天
+     * @param date
+     * @return
+     */
+    public static Date getStartDayOfWeek(Date date) {
+        TemporalField fieldISO = WeekFields.of(Locale.CHINA).dayOfWeek();
+        LocalDate localDate = LocalDate.from(toLocalDate(date));
+        localDate.with(fieldISO, 1);
+        return Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+    }
+
+    /**
+     * 取时间所在周最后一天
+     *
+     * @param date
+     * @return
+     */
+    public static Date getEndDayOfWeek(Date date) {
+        TemporalField fieldISO = WeekFields.of(Locale.CHINA).dayOfWeek();
+        LocalDate localDate = LocalDate.from(toLocalDate(date));
+        localDate.with(fieldISO, 7);
+        return Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).plusDays(1L).minusNanos(1L).toInstant());
+    }
+
+
 
     /**
      * 将日期转换到 LocalDate

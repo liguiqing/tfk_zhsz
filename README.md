@@ -1,48 +1,48 @@
-折竹 之 友师优评 V1.0x
+# 折竹 
 
-# 友师优评 流程
+## http 接口返回数据结构:        
+        {
+            "status":{
+                "success": true,   //响应状态,只有值为true时才有 ooo/xxx数据
+                "code": "",        //响应代码,
+                "msg": "",         //响应消息,
+            },
+            "ooo":{}    //if Object
+            "xxx":[]    //if Array
+        }
 
-## 所有http 接口 返回的的数据结构:
-{
-    "status": {
-        "success": true, 
-        "code": "", 
-        "msg": ""
-    }, 
-    "xxx": { }, //if object
-    "xxx": []   //if array
-}
-
+## 友师优评  流程
+>rootpath /ysyp
 ##  1.教师用户访问
 ### 1.1 微信小程序登录微信成功
-        调用接口 /ysyp/wechat/oauth2/{model}
+        调用接口 /wechat/oauth2/{model}
         http  method  GET
              path params:
-               model  默认值m1
+                 model  string 默认值m1
                        
              request  params:
-                code          required
-                status  
+                 code    string required
+                 status  string
         return 
             {
-                "accessToken": null, //微信授权令
-                "openId": null,//微信openId
+                "accessToken": "", //微信授权令
+                "openId": ""       //微信openId
             }
      
 ### 1.2 微信查询用户注册信息
-        调用接口 /ysyp/wechat/join/{openId}
+        调用接口 /wechat/join/{openId}
         http  method  GET  
-             path params:
-               openId  微信openId
+              path params:
+                  openId  微信openId
         return 
-             {"wechat":
-                {
-                    "openId": null,   //微信openId
-                    "roles": null,     //用户角色[Teacher,Student,Parent],多值以,分隔
-                    "personId": null, //用户唯一标识
-                    "name": null, 
-                    "phones": null
-                }
+             {"wechats":
+                [{
+                    "openId": "",    //微信openId
+                    "role": "",      //用户角色[Teacher,Student,Parent],多值以,分隔
+                    "personId": "",  //用户唯一标识
+                    "name": "", 
+                    "phone": ""
+                }]
             }
         如果返回为空,表示没有注册,调用1.3接口
         如果role含teacher进入教师流程,调用
@@ -51,28 +51,28 @@
         调用接口 /apply/audited/{applierId}
         http  method  GET  
              path params:
-               applierId  接口 *1.2* 返回的personId
+               applierId  string 接口 *1.2* 返回的personId
                        
              request  params:
-               openId required 微信openId
+               openId string required 微信openId
         return 
             {"clazzs":
                 {
-                    "schoolId": null, 
-                    "schoolName": null, 
-                    "clazzId": null, 
-                    "clazzName": null, 
-                    "applyId": null, 
-                    "auditId": null, 
-                    "applyDate": null, 
-                    "auditDate": null, 
-                    "auditCause": null, 
-                    "applyDesc": null, 
-                    "applierId": null, 
-                    "applierName": null, 
-                    "auditorId": null, 
-                    "auditorName": null, 
-                    "ok": false
+                    "schoolId": "", 
+                    "schoolName": "", 
+                    "clazzId": "", 
+                    "clazzName": "", 
+                    "applyId": "", 
+                    "auditId": "", 
+                    "applyDate": date, 
+                    "auditDate": "", 
+                    "auditCause": "", 
+                    "applyDesc": "", 
+                    "applierId": "", 
+                    "applierName": "", 
+                    "auditorId": "", 
+                    "auditorName": "", 
+                    "ok": true
                 }
             }
         如果返回为空,表示没有关注班级,界面进入班级关注流程
@@ -81,8 +81,8 @@
         调用接口 /school/{page}/{size}
         http  method  GET  
              path params:
-               page  页码
-               size  页容
+               page  number 页码
+               size  number 页容
         return 
             {
                 "schools": [
@@ -93,12 +93,7 @@
                     }, 
                     {
                         "schoolId": "", 
-                        "name": "name2", 
-                        "grads": null
-                    }, 
-                    {
-                        "schoolId": "", 
-                        "name": "name2", 
+                        "name": "", 
                         "grads": [
                             {
                                 "name": "一年级", 
@@ -121,20 +116,20 @@
         调用接口 /clazz/grade/{schoolId}/{gradeLevel}
         http  method  GET  
              path params:
-               schoolId    学校唯一标识,1.5返回值的schools[n].schoolId
-               gradeLevel  年级序列,1.4返回值的schools[n].grads[m].level
+               schoolId    string 学校唯一标识,1.4返回值的schools[n].schoolId
+               gradeLevel  string 年级序列,1.4返回值的schools[n].grads[m].level
         return   
             {"clazzs": [
                 {
-                    "clazzId": null, 
-                    "name": "c1", 
-                    "gradeName": null, 
+                    "clazzId": "", 
+                    "name": "", 
+                    "gradeName": "", 
                     "gradeLevel": 0
                 }, 
                 {
-                    "clazzId": null, 
-                    "name": "c2", 
-                    "gradeName": null, 
+                    "clazzId": "", 
+                    "name": "", 
+                    "gradeName": "", 
                     "gradeLevel": 0
                 }
             ]}     
@@ -144,44 +139,115 @@
         http  method  POST  
              request body:
                 {
-                    "applyingSchoolId": null, 
-                    "applyingClazzId": null, 
-                    "applierId": null, //1.2返回值的personId
-                    "applierName": null, 
-                    "applierPhone": null, 
-                    "applyDate": null, 
-                    "cause": null
+                    "applyingSchoolId": "", 
+                    "applyingClazzId": "", 
+                    "applierId": "", 
+                    "applierName": "", 
+                    "applierPhone": "", 
+                    "applyDate": date, 
+                    "cause": ""
                 }
         return   
             {
-                "applyId": ""//关注唯一标识
+                "applyId": ""
             }
             
 ### 1.7 查询已经通过审核班级关注申请
         调用接口 /apply/audited/{applierId}
         http  method  GET  
               path params:
-                 applierId    //1.2返回值的personId
+                 applierId    string
         return   
             {
                 "clazzs": [
                     {
-                        "schoolId": null, 
-                        "schoolName": null, 
+                        "schoolId": "", 
+                        "schoolName": "", 
                         "clazzId": "", 
                         "clazzName": "", 
-                        "applyId": null, 
-                        "auditId": null, 
-                        "applyDate": null, 
+                        "applyId": "", 
+                        "auditId": "", 
+                        "applyDate": date, 
                         "auditDate": null, 
-                        "auditCause": null, 
-                        "applyDesc": null, 
-                        "applierId": null, 
-                        "applierName": null, 
-                        "auditorId": null, 
-                        "auditorName": null, 
+                        "auditCause": "", 
+                        "applyDesc": "", 
+                        "applierId": "", 
+                        "applierName": "", 
+                        "auditorId": "", 
+                        "auditorName": "", 
                         "ok": true
                     }
                 ]
             }
-                                      
+### 1.8 查询班级学生信息
+        调用接口 /student/list/clazz/{schoolId}/{clazzId}
+        http  method  GET  
+              path params:
+                 schoolId    string
+                 clazzId     string
+        return   
+            {
+                "students": [
+                    {
+                     "schoolId":"",
+                     "clazzId":"",
+                     "studentId":"",
+                     "personId":"",
+                     "name":"",
+                     "gender":"Male/Female",
+                     "gradeName":"",
+                     "gradeLevel":1,
+                     "clazzName":""
+                    }
+                ]
+            }
+ 
+### 1.9 查询班级学生信息,按姓分组排序
+        调用接口 /student/list/clazz/nameSorted/{schoolId}/{clazzId}
+        http  method  GET  
+              path params:
+                 schoolId    string
+                 clazzId     string
+        return   
+            {
+                 "students":["letter":"C",
+                     "students": [
+                        {
+                         "schoolId":"",
+                         "clazzId":"",
+                         "studentId":"",
+                         "personId":"",
+                         "name":"",
+                         "gender":"Male",
+                         "gradeName":"",
+                         "gradeLevel":1,
+                         "clazzName":""
+                        }]
+                ]
+            }
+ 
+ ### 1.10 查询学校年级评价指标
+         调用接口 /index/owner/{ownerId}/{group}
+         http  method  GET  
+               path params:
+                  ownerId     string schoolId
+                    group     string 级别,grade.level
+               request params:
+             withChildren     boolean
+             
+         return   
+             {
+                  "indexes":[
+                      {
+                          "indexId":"",
+                          "categoryName":"",
+                          "name":"Name",
+                          "score":0.00,
+                          "weight":0.00,
+                          "description":"",
+                          "group":"",
+                          "children":[] // same as this
+                      }
+                  ]
+             }
+                                                                                           

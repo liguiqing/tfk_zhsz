@@ -31,10 +31,15 @@ public class Index extends Entity {
 
     @Setter
     private String name;
+
     @Setter
     private IndexScore score;
+
     @Setter
     private String description;
+
+    @Setter
+    private String group;
 
     private Set<Index> children;
 
@@ -42,13 +47,14 @@ public class Index extends Entity {
 
     @Builder
     private Index(IndexId indexId, Index parent, IndexCategory category,
-                 TenantId owner, String name, double score, double weight, String description) {
+                 TenantId owner, String name, double score, double weight, String description,String group) {
         this.indexId = indexId;
         this.category = category;
         this.owner = owner;
         this.name = name;
         this.score = new IndexScore(score,weight);
         this.description = description;
+        this.group = group;
         if(parent != null){
             parent.addChild(this);
         }

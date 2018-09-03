@@ -15,6 +15,9 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
+import java.util.List;
+
 import static org.junit.Assert.*;
 
 /**
@@ -55,7 +58,7 @@ public class AssesseRepositoryTest extends AbstractTransactionalJUnit4SpringCont
 
         Assess assess_ = assessRepository.loadOf(assessId);
         assertEquals(assess,assess_);
-
+        Date now = DateUtilWrapper.now();
         Assess assess2 = Assess.builder()
                 .indexId(indexId)
                 .assessId(assessId)
@@ -64,10 +67,15 @@ public class AssesseRepositoryTest extends AbstractTransactionalJUnit4SpringCont
                 .category("D")
                 .score(10d)
                 .word("YAMADIE")
-                .doneDate(DateUtilWrapper.now())
+                .doneDate(now)
                 .build();
         assertNotEquals(assess2,assess);
         assertNotEquals(assess2,assess_);
+
+        Date from = DateUtilWrapper.getStartDayOfWeek(now);
+        Date to = DateUtilWrapper.getEndDayOfWeek(now);
+        List<Assess> assessList = assessRepository.findByAssesseeIdAndDoneDateBetween(assesseeId, from, to);
+        assertEquals(1,assessList.size());
 
         assessRepository.delete(assessId);
         assess_ = assessRepository.loadOf(assessId);

@@ -29,7 +29,7 @@ import java.util.Map;
  */
 @Slf4j
 @Service
-public class WechatApplicationService {
+public class WeChatApplicationService {
 
     @Autowired
     private MessageHandler messageHandler;
@@ -55,6 +55,12 @@ public class WechatApplicationService {
     @Autowired
     private WeChatMessageService messageService;
 
+    /**
+     * 公众号关注
+     *
+     * @param params
+     * @return
+     */
     public String follow(Map<String,String> params){
         log.debug("WeChat Follow Success!");
 
@@ -70,32 +76,39 @@ public class WechatApplicationService {
         return outMessage.toXml();
     }
 
+    /**
+     * 公众号/小程序信息绑定
+     *
+     * @param command
+     * @return
+     */
     @Transactional(rollbackFor = Exception.class)
-    public void bind(BindCommand command) {
+    public String bind(BindCommand command) {
         log.debug("WeChat Bind {} ",command);
 
         WeChatId weChatId = weChatRepository.nextIdentity();
         WeChat weChat = WeChat.builder()
                 .weChatId(weChatId)
+                .category(WeChatCategory.valueOf(command.getCategory()))
                 .weChatOpenId(command.getWechatOpenId())
                 .phone(command.getPhone())
                 .name(command.getName())
                 .personId(personService.getPersonId(command.getWechatOpenId()))
                 .build();
-        List<FollowerData> followers = command.getFollowers();
-        addFollowers(followers,weChat);
         weChatRepository.save(weChat);
+        return weChatId.id();
     }
 
     @Transactional(rollbackFor = Exception.class)
     public void applyFollowers(BindCommand command){
         log.debug("Apply followers from {} ",command.getWechatOpenId());
 
-        WeChat weChat = weChatRepository.findByWeChatOpenId(command.getWechatOpenId());
-        List<FollowerData> followers = command.getFollowers();
-        if(followers == null)
+        if(!command.hasFollowers())
             return ;
 
+        WeChatCategory chatCategory = WeChatCategory.valueOf(command.getCategory());
+        WeChat weChat = weChatRepository.findByWeChatOpenIdAndCategoryEquals(command.getWechatOpenId(),chatCategory);
+        List<FollowerData> followers = command.getFollowers();
         for(FollowerData data:followers){
             FollowApplyId applyId = applyRepository.nextIdentity();
             FollowApply apply = FollowApply.builder()
@@ -114,17 +127,14 @@ public class WechatApplicationService {
             messageService.notifyNewFollowerApply(apply.getFollowerSchoolId(),
                     apply.getFollowerClazzId(),apply.getFollowerId(),apply.getCause());
         }
-
-        //addFollowers(followers,weChat);
-        //weChatRepository.save(weChat);
     }
 
-    public void applyAudit(ApplyAuditCommand command){
+    public String applyAudit(ApplyAuditCommand command){
         log.debug("Apply Audit from {} ",command);
 
         FollowApply apply = applyRepository.loadOf(new FollowApplyId(command.getApplyId()));
         if(apply == null || apply.isAudited())
-            return;
+            return "";
 
         FollowAudit audit = applyAuditService.auditFollowStudent(new PersonId(command.getAuditorId()),
                 apply, command.isOk(), command.getDescription());
@@ -132,26 +142,27 @@ public class WechatApplicationService {
         auditRepository.save(audit);
         applyRepository.save(apply);
 
+        addFollower(apply);
+        return audit.getAuditId().id();
     }
 
-    private void addFollowers(List<FollowerData> followers,WeChat weChat){
-        if(followers != null){
-            followers.forEach(data->{
-                PersonId personId = personService.getPersonId(data.getSchoolId(),data.getClazzId(),data.getName(),
-                        Gender.valueOf(data.getGender()),PersonService.QueryTarget.Student);
-                Follower follower = Follower.builder()
-                        .personId(personId)
-                        .followDate(DateUtilWrapper.now())
-                        .build();
-                weChat.addFollower(follower);
-            });
-        }
+    private void addFollower(FollowApply apply){
+        PersonId followerId = apply.getFollowerId();
+        WeChat applyWeChat = weChatRepository.loadOf(apply.getApplierWeChatId());
+
+        Follower follower = Follower.builder()
+                .personId(followerId)
+                .followDate(apply.getApplyDate())
+                .build();
+        applyWeChat.addFollower(follower);
+        weChatRepository.save(applyWeChat);
     }
 
     @Transactional(rollbackFor = Exception.class)
     public void bindCancel(BindCommand command) {
         log.debug("WeChat Bind Canceld {} ",command);
-        WeChat weChat = weChatRepository.findByWeChatOpenId(command.getWechatOpenId());
+        WeChatCategory chatCategory = WeChatCategory.valueOf(command.getName());
+        WeChat weChat = weChatRepository.findByWeChatOpenIdAndCategoryEquals(command.getWechatOpenId(),chatCategory);
         if(weChat != null)
             weChatRepository.delete(weChat.getWeChatId());
     }

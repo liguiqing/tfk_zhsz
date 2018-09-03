@@ -41,6 +41,8 @@ public interface IndexRepository extends EntityRepository<Index,IndexId> {
 
     List<Index> findAllByOwnerAndParentIsNull(TenantId owner);
 
+    List<Index> findAllByOwnerAndParentIsNullAndGroup(TenantId owner,String group);
+
     List<Index> findAllByNameAndCategoryAndOwnerIsNull(String name, IndexCategory category);
 
     List<Index> findAllByNameAndCategoryAndOwnerIsNullAndParentIsNull(String name,IndexCategory category);
