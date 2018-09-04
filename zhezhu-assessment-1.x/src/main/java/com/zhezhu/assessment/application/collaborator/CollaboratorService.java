@@ -4,7 +4,7 @@ import com.zhezhu.assessment.domain.model.collaborator.Assessee;
 import com.zhezhu.assessment.domain.model.collaborator.AssesseeRepository;
 import com.zhezhu.assessment.domain.model.collaborator.Assessor;
 import com.zhezhu.assessment.domain.model.collaborator.AssessorRepository;
-import com.zhezhu.assessment.infrastructure.school.SchoolService;
+import com.zhezhu.share.infrastructure.school.SchoolService;
 import com.zhezhu.share.domain.id.PersonId;
 import com.zhezhu.share.domain.id.assessment.AssesseeId;
 import com.zhezhu.share.domain.id.assessment.AssessorId;
@@ -18,6 +18,8 @@ import java.util.Collection;
 import java.util.List;
 
 /**
+ * 评价协作服务
+ *
  * @author Liguiqing
  * @since V3.0
  */

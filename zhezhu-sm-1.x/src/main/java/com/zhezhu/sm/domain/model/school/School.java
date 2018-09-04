@@ -51,9 +51,10 @@ public class School extends Entity {
     public Grade[] grades(){
         int from = this.scope.gradeFrom();
         int to = this.scope.gradeTo();
-        Grade[] grades = new Grade[to - from];
+        int size = to - from + 1;
+        Grade[] grades = new Grade[size];
         int i = 0;
-        while(i<(to - from)){
+        while(i<size){
             grades[i] = Grade.newWithLevel(from+i);
             i++;
         }

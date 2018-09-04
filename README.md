@@ -89,7 +89,7 @@
                     {
                         "schoolId": "", 
                         "name": "name1", 
-                        "grads": null
+                        "grades": null
                     }, 
                     {
                         "schoolId": "", 
@@ -242,7 +242,7 @@
                           "indexId":"",
                           "categoryName":"",
                           "name":"Name",
-                          "score":0.00,
+                          "score":0.00, //最大分值,每评价得分范围[score*-1 -- score]
                           "weight":0.00,
                           "description":"",
                           "group":"",
@@ -250,4 +250,19 @@
                       }
                   ]
              }
-                                                                                           
+
+### 1.11 提交评价
+        调用接口 /assess
+        http  method  POST  
+             request body:
+                {
+                    "assesseeId":"", //被评者personId
+                    "assessorId":"", //主评者personId
+                    "indexId":"INX7fc279c880fa453ebbd046ab50acfbcb",
+                    "score":10,
+                    "word":"亚马爹"
+                }
+        return   
+            {
+                "applyId": ""
+            }                                                                                           

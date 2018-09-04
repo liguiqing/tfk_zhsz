@@ -1,4 +1,4 @@
-package com.zhezhu.assessment.infrastructure.school;
+package com.zhezhu.share.infrastructure.school;
 
 import lombok.*;
 

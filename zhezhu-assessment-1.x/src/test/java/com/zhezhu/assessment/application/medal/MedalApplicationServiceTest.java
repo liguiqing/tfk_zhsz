@@ -3,7 +3,7 @@ package com.zhezhu.assessment.application.medal;
 import com.zhezhu.assessment.domain.model.index.IndexRepository;
 import com.zhezhu.assessment.domain.model.medal.Medal;
 import com.zhezhu.assessment.domain.model.medal.MedalRepository;
-import com.zhezhu.assessment.infrastructure.school.SchoolService;
+import com.zhezhu.share.infrastructure.school.SchoolService;
 import com.zhezhu.share.domain.id.index.IndexId;
 import com.zhezhu.share.domain.id.medal.MedalId;
 import com.zhezhu.share.domain.id.school.SchoolId;

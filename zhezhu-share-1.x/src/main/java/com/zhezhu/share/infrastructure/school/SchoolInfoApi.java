@@ -1,4 +1,4 @@
-package com.zhezhu.assessment.infrastructure.school;
+package com.zhezhu.share.infrastructure.school;
 
 import com.zhezhu.share.domain.common.Period;
 import com.zhezhu.share.domain.id.PersonId;
@@ -24,7 +24,7 @@ public interface SchoolInfoApi {
 
     List<PersonId> getAllStudentPersonIds(SchoolId schoolId);
 
-    String getStudentNameBy(PersonId personId);
+    StudentData getStduent(PersonId personId);
 
-    List<StudentData> getStduent(PersonId personId);
+    TeacherData getTeacher(PersonId personId,SchoolId schoolId);
 }

@@ -5,7 +5,7 @@ import com.zhezhu.assessment.domain.model.index.IndexRepository;
 import com.zhezhu.assessment.domain.model.medal.Medal;
 import com.zhezhu.assessment.domain.model.medal.MedalLevel;
 import com.zhezhu.assessment.domain.model.medal.MedalRepository;
-import com.zhezhu.assessment.infrastructure.school.SchoolService;
+import com.zhezhu.share.infrastructure.school.SchoolService;
 import com.zhezhu.commons.domain.Identities;
 import com.zhezhu.share.domain.id.index.IndexId;
 import com.zhezhu.share.domain.id.medal.MedalId;

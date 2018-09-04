@@ -1,4 +1,4 @@
-package com.zhezhu.assessment.infrastructure.school;
+package com.zhezhu.share.infrastructure.school;
 
 import com.zhezhu.share.domain.common.Period;
 import com.zhezhu.share.domain.id.PersonId;
@@ -56,7 +56,11 @@ public class SchoolService {
         return null;
     }
 
-    public String getStudentNameBy(PersonId personId){
-        return api().getStudentNameBy(personId);
+    public StudentData getStudenBy(PersonId personId){
+        return api().getStduent(personId);
+    }
+
+    public TeacherData getTeacherBy(PersonId personId,SchoolId schoolId){
+        return api().getTeacher(personId,schoolId);
     }
 }

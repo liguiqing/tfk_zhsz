@@ -4,7 +4,7 @@ import com.zhezhu.assessment.domain.model.medal.Award;
 import com.zhezhu.assessment.domain.model.medal.AwardRepository;
 import com.zhezhu.assessment.domain.model.medal.Medal;
 import com.zhezhu.assessment.domain.model.medal.MedalRepository;
-import com.zhezhu.assessment.infrastructure.school.SchoolService;
+import com.zhezhu.share.infrastructure.school.SchoolService;
 import com.zhezhu.commons.util.DateUtilWrapper;
 import com.zhezhu.share.domain.common.Period;
 import com.zhezhu.share.domain.id.PersonId;

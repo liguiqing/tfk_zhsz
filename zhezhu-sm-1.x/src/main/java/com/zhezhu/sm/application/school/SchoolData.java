@@ -23,7 +23,7 @@ public class SchoolData {
 
     private String name;
 
-    private List<GradeData> grads;
+    private List<GradeData> grades;
 
     public SchoolData(String schoolId, String name) {
         this.schoolId = schoolId;
@@ -31,7 +31,7 @@ public class SchoolData {
     }
 
     public void addGradeDatas(Grade[] grades){
-        grads = Arrays.stream(grades).map(g->new GradeData(g.getName(),g.getLevel())).collect(Collectors.toList());
+        this.grades = Arrays.stream(grades).map(g->new GradeData(g.getName(),g.getLevel())).collect(Collectors.toList());
     }
 
 }

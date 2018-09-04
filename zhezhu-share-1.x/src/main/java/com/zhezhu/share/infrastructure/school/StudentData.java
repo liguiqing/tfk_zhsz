@@ -1,4 +1,4 @@
-package com.zhezhu.assessment.infrastructure.school;
+package com.zhezhu.share.infrastructure.school;
 
 import lombok.*;
 
@@ -13,11 +13,9 @@ import java.util.List;
 @Builder
 @Getter
 @Setter
-@ToString(exclude = {"clazzes"})
+@ToString(exclude = {"clazzes","contacts"})
 public class StudentData {
     private String schoolId;
-
-    private List<ClazzData> clazzes;
 
     private String studentId;
 
@@ -26,5 +24,9 @@ public class StudentData {
     private String name;
 
     private String gender;
+
+    private List<ContactData> contacts;
+
+    private List<ClazzData> clazzes;
 
 }

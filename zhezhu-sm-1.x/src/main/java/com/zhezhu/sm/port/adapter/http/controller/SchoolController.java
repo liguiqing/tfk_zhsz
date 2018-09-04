@@ -46,7 +46,7 @@ public class SchoolController extends AbstractHttpController {
     public ModelAndView onGetAllSchool(@PathVariable int page,@PathVariable int size){
         logger.debug("URL /school/{}/{} Method=GET",page,size);
 
-        List<SchoolData> data =  schoolQueryService.findAllSchool(page,size);
+        List<SchoolData> data =  schoolQueryService.findAllSchool(pageStart(page,size),size);
         return newModelAndViewBuilder("/school/allSchoolList").withData("schools",data).creat();
     }
 

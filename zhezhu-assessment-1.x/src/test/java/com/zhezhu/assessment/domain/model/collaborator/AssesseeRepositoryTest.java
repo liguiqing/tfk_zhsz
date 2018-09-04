@@ -47,17 +47,19 @@ public class AssesseeRepositoryTest extends AbstractTransactionalJUnit4SpringCon
                 .build();
 
         assesseeRepository.save(assessee);
-        Assessee assessor_ = assesseeRepository.loadOf(assesseeId);
-        assertNotNull(assessor_);
-        assertEquals(assessee,assessor_);
+        Assessee assessee_ = assesseeRepository.loadOf(assesseeId);
+        assertNotNull(assessee_);
+        assertEquals(assessee,assessee_);
 
         for(int i=0;i<10000;i++){
             assesseeRepository.loadOf(assesseeId);
         }
 
+        assessee_ = assesseeRepository.findByPersonIdAndSchoolId(personId, schoolId);
+        assertEquals(assessee,assessee_);
         assesseeRepository.delete(assesseeId);
-        assessor_ = assesseeRepository.loadOf(assesseeId);
-        assertNull(assessor_);
+        assessee_ = assesseeRepository.loadOf(assesseeId);
+        assertNull(assessee_);
     }
 
 }

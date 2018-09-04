@@ -81,4 +81,12 @@ public abstract class AbstractHttpController {
         return userFaceService.getUser();
     }
 
+    protected int pageStart(int page,int size){
+        if(page <=0)
+            page = 1;
+        if(size<0)
+            size = 100;
+        return page * size - size;
+    }
+
 }

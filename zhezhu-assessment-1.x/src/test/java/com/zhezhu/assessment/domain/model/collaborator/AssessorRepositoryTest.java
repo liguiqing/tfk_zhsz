@@ -55,6 +55,8 @@ public class AssessorRepositoryTest extends AbstractTransactionalJUnit4SpringCon
             assessorRepository.loadOf(assessorId);
         }
 
+        assessor_ = assessorRepository.findByPersonIdAndSchoolId(personId,schoolId);
+        assertEquals(assessor,assessor_);
         assessorRepository.delete(assessorId);
         assessor_ = assessorRepository.loadOf(assessorId);
         assertNull(assessor_);
