@@ -15,10 +15,13 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.lookup.JndiDataSourceLookup;
+import org.springframework.lang.Nullable;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.orm.jpa.vendor.HibernateJpaDialect;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 
@@ -112,11 +115,17 @@ public class CommonsConfiguration {
         return new HibernateJpaVendorAdapter();
     }
 
+    @Bean("jpaDialect")
+    public HibernateJpaDialect jpaDialect(){
+        return new HibernateJpaDialect();
+    }
+
     @Bean("entityManagerFactory")
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(
             @Value("${jpa.unit.name:null}") String persistenceUnitName,
-            List<MappingResource> mappingResources,
+            @Nullable List<MappingResource> mappingResources,
             DataSource dataSource,
+            HibernateJpaDialect jpaDialect,
             JpaVendorAdapter jpaVendorAdapter,
             Properties jpaProperties) {
         LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
@@ -129,7 +138,7 @@ public class CommonsConfiguration {
 
         entityManagerFactoryBean.setDataSource(dataSource);
         entityManagerFactoryBean.setJpaVendorAdapter(jpaVendorAdapter);
-
+        entityManagerFactoryBean.setJpaDialect(jpaDialect);
         if(mappingResources != null) {
             List<String> mappings = Lists.newArrayList();
             mappingResources.forEach(mappingResource -> mappings.addAll(Arrays.asList(mappingResource.getMappingResource())));
@@ -143,6 +152,13 @@ public class CommonsConfiguration {
 
         return entityManagerFactoryBean;
     }
+
+//    @Bean("transactionManager")
+//    public PlatformTransactionManager transactionManager(DataSource dataSource){
+//        DataSourceTransactionManager transactionManager = new DataSourceTransactionManager(dataSource);
+//        //JpaTransactionManager transactionManager = new JpaTransactionManager(emf);
+//        return transactionManager;
+//    }
 
     @Bean("transactionManager")
     public PlatformTransactionManager transactionManager(EntityManagerFactory emf){

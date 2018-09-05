@@ -75,7 +75,7 @@ public class SchoolRepositoryTest extends AbstractTransactionalJUnit4SpringConte
         for(int i=0;i<100;i++)
             schoolRepository.save(new School(schoolRepository.nextIdentity(), "Test School "+i, SchoolScope.Middle));
 
-        List<School> schools = schoolRepository.findByLimit(1, 100);
+        List<School> schools = schoolRepository.findByLimit(0, 100);
         assertEquals(100, schools.size());
         assertEquals(school,schools.get(0));
     }

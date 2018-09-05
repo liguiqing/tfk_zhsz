@@ -2,7 +2,7 @@ package com.zhezhu.assessment.port.adapter.http.controller;
 
 import com.zhezhu.assessment.application.collaborator.CollaboratorData;
 import com.zhezhu.assessment.application.collaborator.CollaboratorQueryService;
-import com.zhezhu.assessment.application.collaborator.CollaboratorService;
+import com.zhezhu.assessment.application.collaborator.CollaboratorApplicationService;
 import com.zhezhu.assessment.domain.model.collaborator.CollaboratorRole;
 import com.zhezhu.commons.port.adaptor.http.controller.AbstractHttpController;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +21,9 @@ import org.springframework.web.servlet.ModelAndView;
 public class CollaboratorController extends AbstractHttpController {
 
     @Autowired(required = false)
-    private CollaboratorService collaboratorService;
+    private CollaboratorApplicationService collaboratorService;
 
-    @Autowired
+    @Autowired(required = false)
     private CollaboratorQueryService collaboratorQueryService;
 
     /**
@@ -88,7 +88,7 @@ public class CollaboratorController extends AbstractHttpController {
     }
 
     /**
-     * 取老师的评价者身份
+     * 取学生的被评价者身份
      *
      * @param personId
      * @return

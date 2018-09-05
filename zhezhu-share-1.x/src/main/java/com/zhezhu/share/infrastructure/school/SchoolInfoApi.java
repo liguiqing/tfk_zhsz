@@ -16,15 +16,13 @@ import java.util.List;
  */
 
 public interface SchoolInfoApi {
-    default Period getSchoolTermPeriod(SchoolId schoolId){
-        return Term.defaultPeriodOfThisTerm();
-    }
+    Period getSchoolTermPeriod(SchoolId schoolId);
 
     TenantId getSchoolTenantId(SchoolId schoolId);
 
     List<PersonId> getAllStudentPersonIds(SchoolId schoolId);
 
-    StudentData getStduent(PersonId personId);
+    StudentData getStudent(PersonId personId);
 
     TeacherData getTeacher(PersonId personId,SchoolId schoolId);
 }

@@ -1,6 +1,6 @@
 package com.zhezhu.assessment.port.adapter.http.controller;
 
-import com.zhezhu.assessment.application.collaborator.CollaboratorService;
+import com.zhezhu.assessment.application.collaborator.CollaboratorApplicationService;
 import com.zhezhu.share.domain.id.school.SchoolId;
 import com.zhezhu.zhezhu.controller.AbstractControllerTest;
 import org.junit.Test;
@@ -33,7 +33,7 @@ public class CollaboratorControllerTest extends AbstractControllerTest {
     private CollaboratorController controller;
 
     @Mock
-    private CollaboratorService collaboratorService;
+    private CollaboratorApplicationService collaboratorService;
 
     @Test
     public void onToCollaborator() throws Exception{

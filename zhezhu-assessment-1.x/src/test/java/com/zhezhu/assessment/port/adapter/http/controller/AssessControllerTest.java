@@ -1,10 +1,12 @@
 package com.zhezhu.assessment.port.adapter.http.controller;
 
+import com.zhezhu.assessment.AssessmentTestConfiguration;
 import com.zhezhu.assessment.application.assess.AssessApplicationService;
 import com.zhezhu.assessment.application.assess.NewAssessCommand;
 import com.zhezhu.share.domain.id.assessment.AssesseeId;
 import com.zhezhu.share.domain.id.assessment.AssessorId;
 import com.zhezhu.share.domain.id.index.IndexId;
+import com.zhezhu.share.infrastructure.school.SchoolService;
 import com.zhezhu.zhezhu.controller.AbstractControllerTest;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -37,6 +39,9 @@ public class AssessControllerTest extends AbstractControllerTest {
 
     @Mock
     private AssessApplicationService assessApplicationService;
+
+    @Mock
+    private SchoolService schoolService;
 
     @Test
     public void onAssess() throws Exception{

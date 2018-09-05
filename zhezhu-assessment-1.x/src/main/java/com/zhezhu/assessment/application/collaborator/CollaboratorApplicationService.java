@@ -25,7 +25,7 @@ import java.util.List;
  */
 @Slf4j
 @Service
-public class CollaboratorService {
+public class CollaboratorApplicationService {
 
     @Autowired
     private SchoolService schoolService;

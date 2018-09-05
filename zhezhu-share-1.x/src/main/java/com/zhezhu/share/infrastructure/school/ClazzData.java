@@ -23,4 +23,6 @@ public class ClazzData {
 
     private int gradeLevel;
 
+    private String type;
+
 }

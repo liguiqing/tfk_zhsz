@@ -39,6 +39,32 @@ public class AssessService {
                 .build();
     }
 
+    public Assess newAssess(Index index, Assessor assessor, Assessee assessee, double score,String word){
+        if(index == null)
+            return newAssess(assessor, assessee, word);
+        if(word == null)
+            return newAssess(index,assessor,assessee,score);
+
+        return Assess.builder().assessId(repository.nextIdentity())
+                .indexId(index.getIndexId())
+                .assessorId(assessor.getAssessorId())
+                .assesseeId(assessee.getAssesseeId())
+                .category(index.getCategory())
+                .doneDate(DateUtilWrapper.now())
+                .score(score)
+                .word(word)
+                .build();
+    }
+
+    public Assess newAssess(Assessor assessor, Assessee assessee, String word){
+        return Assess.builder().assessId(repository.nextIdentity())
+                .assessorId(assessor.getAssessorId())
+                .assesseeId(assessee.getAssesseeId())
+                .doneDate(DateUtilWrapper.now())
+                .word(word)
+                .build();
+    }
+
     public List<Assess> newAssesses(Index index, Assessor assessor, Assessee assessee, double score){
         if(!index.isTop()) {
             Assess assess = newAssess(index, assessor, assessee,score);

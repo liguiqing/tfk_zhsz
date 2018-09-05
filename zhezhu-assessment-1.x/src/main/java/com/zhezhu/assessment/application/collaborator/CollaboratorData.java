@@ -30,17 +30,23 @@ public class CollaboratorData {
     private TeacherData teacher;
 
     public CollaboratorData setAssessorDetail(CollaboratorRole role, Assessor assessor, SchoolService schoolService){
+        this.assessorId = assessor.getAssessorId().id();
         if(role.equals(CollaboratorRole.Teacher)){
             this.teacher = schoolService.getTeacherBy(assessor.getCollaborator().getPersonId(),
                     assessor.getCollaborator().getSchoolId());
-
+        }else if(role.equals(CollaboratorRole.Student)){
+            this.student = schoolService.getStudenBy(assessor.getCollaborator().getPersonId());
         }
         return this;
     }
 
     public CollaboratorData setAssesseeDetail(CollaboratorRole role, Assessee assessee, SchoolService schoolService){
+        this.assesseeId = assessee.getAssesseeId().id();
         if(role.equals(CollaboratorRole.Student)){
             this.student = schoolService.getStudenBy(assessee.getCollaborator().getPersonId());
+        }else if(role.equals(CollaboratorRole.Teacher)){
+            this.teacher = schoolService.getTeacherBy(assessee.getCollaborator().getPersonId(),
+                    assessee.getCollaborator().getSchoolId());
         }
         return this;
     }

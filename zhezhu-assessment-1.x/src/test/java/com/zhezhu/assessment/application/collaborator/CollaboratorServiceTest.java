@@ -42,7 +42,7 @@ public class CollaboratorServiceTest {
 
     @Test
     public void toCollaborator() throws Exception{
-        CollaboratorService service = getService();
+        CollaboratorApplicationService service = getService();
         doNothing().when(service).studentToAssessee(anyString());
         doNothing().when(service).teacherToAssessor(anyString());
         service.toCollaborator(new SchoolId().id());
@@ -51,7 +51,7 @@ public class CollaboratorServiceTest {
 
     @Test
     public void studentToAssessee() throws Exception{
-        CollaboratorService service = getService();
+        CollaboratorApplicationService service = getService();
         List<PersonId> studentPersonIds = new ArrayList<PersonId>();
         studentPersonIds.add(new PersonId());
         studentPersonIds.add(new PersonId());
@@ -69,7 +69,7 @@ public class CollaboratorServiceTest {
 
     @Test
     public void teacherToAssessor() throws Exception{
-        CollaboratorService service = getService();
+        CollaboratorApplicationService service = getService();
         List<PersonId> teacherPersonIds = new ArrayList<PersonId>();
         teacherPersonIds.add(new PersonId());
         teacherPersonIds.add(new PersonId());
@@ -85,8 +85,8 @@ public class CollaboratorServiceTest {
         verify(assessorRepository,times(3)).save(any(Assessor.class));
     }
 
-    private CollaboratorService getService() throws IllegalAccessException {
-        CollaboratorService service = new CollaboratorService();
+    private CollaboratorApplicationService getService() throws IllegalAccessException {
+        CollaboratorApplicationService service = new CollaboratorApplicationService();
         FieldUtils.writeField(service,"schoolService",schoolService,true);
         FieldUtils.writeField(service,"assesseeRepository",assesseeRepository,true);
         FieldUtils.writeField(service,"assessorRepository",assessorRepository,true);

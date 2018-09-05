@@ -1,10 +1,12 @@
 package com.zhezhu.share.infrastructure.school;
 
+import com.zhezhu.commons.lang.Throwables;
 import com.zhezhu.share.domain.common.Period;
 import com.zhezhu.share.domain.id.PersonId;
 import com.zhezhu.share.domain.id.identityaccess.TenantId;
 import com.zhezhu.share.domain.id.school.SchoolId;
 import com.zhezhu.share.domain.school.Term;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
@@ -17,6 +19,7 @@ import java.util.List;
  * @author Liguiqing
  * @since V3.0
  */
+@Slf4j
 @Component("defaultSchoolInfoApi")
 public class JdbcSchoolInfoApi implements SchoolInfoApi {
 
@@ -25,8 +28,13 @@ public class JdbcSchoolInfoApi implements SchoolInfoApi {
 
     @Override
     public TenantId getSchoolTenantId(SchoolId schoolId) {
-        String sql  = "select tenantId from sm_school where schoolId=?";
-        return jdbc.queryForObject(sql,(rs,rn)->new TenantId(rs.getString("tenantId")),schoolId.id());
+        String sql = "select tenantId from sm_school where schoolId=?";
+        try {
+            return jdbc.queryForObject(sql, (rs, rn) -> new TenantId(rs.getString("tenantId")), schoolId.id());
+        }catch (Exception e){
+            log.debug(Throwables.toString(e));
+        }
+        return null;
     }
 
     @Override
@@ -37,19 +45,24 @@ public class JdbcSchoolInfoApi implements SchoolInfoApi {
 
 
     @Override
-    public StudentData getStduent(PersonId personId) {
+    public StudentData getStudent(PersonId personId) {
         String sql = "select studentId,schoolId,`name`,gender from sm_student where personId=? and removed=0 and offDate is null";
-        return jdbc.queryForObject(sql,(rs,rn) ->
-             StudentData.builder()
-                     .name(rs.getString("name"))
-                     .schoolId(rs.getString("schoolId"))
-                     .studentId(rs.getString("studentId"))
-                     .personId(personId.id())
-                     .gender(rs.getString("gender"))
-                     .clazzes(getStudentClazzes(rs.getString("studentId")))
-                     .contacts(getStudentContacts(personId.id()))
-                     .build()
-        ,personId.id());
+        try{
+            return jdbc.queryForObject(sql,(rs,rn) ->
+                 StudentData.builder()
+                         .name(rs.getString("name"))
+                         .schoolId(rs.getString("schoolId"))
+                         .studentId(rs.getString("studentId"))
+                         .personId(personId.id())
+                         .gender(rs.getString("gender"))
+                         .clazzes(getStudentClazzes(rs.getString("studentId")))
+                         .contacts(getStudentContacts(personId.id()))
+                         .build()
+            ,personId.id());
+        }catch (Exception e){
+            log.debug(Throwables.toString(e));
+        }
+        return null;
     }
 
     @Override
@@ -59,10 +72,12 @@ public class JdbcSchoolInfoApi implements SchoolInfoApi {
 
     @Override
     public TeacherData getTeacher(PersonId personId, SchoolId schoolId) {
-        String sql = "select teacherId,name,gender from sm_teacher where personId =? and schoolId=? ";
+        String sql = "select teacherId,name,gender from sm_teacher where personId =? and schoolId=? and removed=0 ";
 
-        return jdbc.queryForObject(sql, (rs, rn) ->
+        try{
+            return jdbc.queryForObject(sql, (rs, rn) ->
                     TeacherData.builder()
+                            .schoolId(schoolId.id())
                             .teacherId(rs.getString("teacherId"))
                             .name(rs.getString("name"))
                             .personId(personId.id())
@@ -70,18 +85,24 @@ public class JdbcSchoolInfoApi implements SchoolInfoApi {
                             .contacts(getTeacherContacts(personId.id()))
                             .build()
                 , personId.id(), schoolId.id());
+        }catch (Exception e){
+            log.debug(Throwables.toString(e));
+        }
+        return null;
     }
 
     private List<ClazzData> getStudentClazzes(String studentId){
-        String sql = "select a.clazzId,a.gradeName,a.gradeLevel,b.clazzName from sm_student_managed a " +
-                "inner join sm_clazz_history b on b.clazzId = a.clazzId " +
-                "where a.studentId=? and a.dateEnds is null and a.yearEnds is null and b.removed=0";
+        String sql = "select a.clazzId,a.gradeName,a.gradeLevel,b.clazzName " +
+                "from sm_student_managed a " +
+                "inner join sm_clazz_history b on b.clazzId = a.clazzId and a.yearEnds=b.yearEnds " +
+                "where a.studentId=? and a.dateEnds is null and b.removed=0";
         return jdbc.query(sql,(rs,rowNum) ->
                         ClazzData.builder()
                                 .clazzName(rs.getString("clazzName"))
                                 .clazzId(rs.getString("clazzId"))
                                 .gradeName(rs.getString("gradeName"))
                                 .gradeLevel(rs.getInt("gradeLevel"))
+                                .type("United")
                                 .build()
                 ,studentId);
     }
@@ -96,19 +117,20 @@ public class JdbcSchoolInfoApi implements SchoolInfoApi {
     private List<ClazzData> getTeacherClazzes(String teacherId){
         String sql = "select a.clazzId,b.clazzName,a.gradeName,a.gradeLevel,a.job " +
                 "from sm_teacher_management a " +
-                "inner join sm_clazz_history b on b.clazzId = a.clazzId " +
-                "where  a.dateEnds is null and a.yearEnds is null and b.removed=0 and a.teacherId=?";
+                "inner join sm_clazz_history b on b.clazzId = a.clazzId and a.yearEnds=b.yearEnds " +
+                "where  a.dateEnds is null and b.removed=0 and a.teacherId=?";
         return jdbc.query(sql,(rs,rowNum) ->
                         ClazzData.builder()
                                 .clazzName(rs.getString("clazzName"))
                                 .clazzId(rs.getString("clazzId"))
                                 .gradeName(rs.getString("gradeName"))
                                 .gradeLevel(rs.getInt("gradeLevel"))
+                                .type("United")
                                 .build()
                 ,teacherId);
     }
     private List<ContactData> getTeacherContacts(String personId){
-        String sql = "select `name`,info from select `name`,info from sm_teacher_contact where personId=? ";
+        String sql = "select `name`,info from sm_teacher_contact where personId=? ";
         return jdbc.query(sql,(rs,rowNum) ->
                         new ContactData(rs.getString("name"),rs.getString("info"))
                 ,personId);

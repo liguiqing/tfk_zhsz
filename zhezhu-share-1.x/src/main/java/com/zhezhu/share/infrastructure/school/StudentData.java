@@ -29,4 +29,18 @@ public class StudentData {
 
     private List<ClazzData> clazzes;
 
+    public int getGradeLevel(){
+        if(clazzes != null){
+            return clazzes.get(0).getGradeLevel();
+        }
+        return 0;
+    }
+
+    public String getGradeName(){
+        if(clazzes != null){
+            return clazzes.get(0).getGradeName();
+        }
+        return "";
+    }
+
 }

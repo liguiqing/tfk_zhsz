@@ -11,6 +11,7 @@ import com.zhezhu.share.domain.id.school.ClazzId;
 import com.zhezhu.share.domain.id.school.SchoolId;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
@@ -37,6 +38,7 @@ public class ClazzFollowApplyRepositoryTest extends AbstractTransactionalJUnit4S
 
     @Test
     public void test(){
+
         ClazzFollowApplyId applyId = applyRepository.nextIdentity();
         PersonId applierId = new PersonId();
         SchoolId schoolId = new SchoolId();
@@ -54,7 +56,7 @@ public class ClazzFollowApplyRepositoryTest extends AbstractTransactionalJUnit4S
         applyRepository.save(apply);
 
         ClazzFollowApply apply_ = applyRepository.loadOf(applyId);
-        assertEquals(apply,apply);
+        assertEquals(apply,apply_);
 
         ClazzFollowAuditId auditId = new ClazzFollowAuditId();
         ClazzFollowAudit audit = ClazzFollowAudit.builder().auditId(auditId).ok(true).applyId(applyId).build();

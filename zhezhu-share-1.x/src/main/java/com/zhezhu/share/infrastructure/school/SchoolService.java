@@ -57,7 +57,7 @@ public class SchoolService {
     }
 
     public StudentData getStudenBy(PersonId personId){
-        return api().getStduent(personId);
+        return api().getStudent(personId);
     }
 
     public TeacherData getTeacherBy(PersonId personId,SchoolId schoolId){
