@@ -36,6 +36,6 @@ public interface TeacherRepository extends EntityRepository<Teacher,TeacherId> {
     @Query(value = "update sm_teacher set removed = 1 where teacherId=:teacherId",nativeQuery = true)
     void delete(@Param("teacherId") String teacherId);
 
-    @Query(value = "select a.* from sm_teacher a",nativeQuery = true)
+    @Query(value = "select a.* from sm_teacher a where removed=0",nativeQuery = true)
     List<Teacher> findAll();
 }

@@ -9,6 +9,7 @@ import com.zhezhu.share.domain.id.school.ClazzId;
 import com.zhezhu.share.domain.id.school.SchoolId;
 import com.zhezhu.share.domain.id.school.StudentId;
 import com.zhezhu.share.domain.person.Contact;
+import com.zhezhu.share.domain.person.Credentials;
 import com.zhezhu.share.domain.person.contact.QQ;
 import com.zhezhu.share.domain.person.contact.Weixin;
 import com.zhezhu.share.domain.school.Course;
@@ -62,6 +63,8 @@ public class StudentRepositoryTest extends AbstractTransactionalJUnit4SpringCont
         student.addContact(contactValidations,new QQ(123564+""));
         student.addContact(contactValidations,new QQ(123567+""));
         student.addContact(contactValidations,new Weixin("123456@123.com"));
+        student.addCredentials("学籍号","13156464654654");
+        student.addCredentials("身份证","452312654789522254");
 
         Course yw = new Course("语文",new SubjectId("SUB123456781"));
         ClazzId clazzId1 = new ClazzId("CLA123456781");
@@ -85,6 +88,8 @@ public class StudentRepositoryTest extends AbstractTransactionalJUnit4SpringCont
 
         Set<Contact> contacts = student1.getContacts();
         assertTrue(contacts.contains(new QQ(123564+"")));
+        Set<Credentials> credentials = student1.getCredentials();
+        assertTrue(credentials.contains(Credentials.builder().personId(personId).name("身份证").value("452312654789522254").build()));
 
         int i = 1;
         while(i<=10){

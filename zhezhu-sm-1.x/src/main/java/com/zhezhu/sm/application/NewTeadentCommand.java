@@ -2,6 +2,7 @@ package com.zhezhu.sm.application;
 
 import com.zhezhu.share.domain.person.Gender;
 import com.zhezhu.sm.application.data.Contacts;
+import com.zhezhu.sm.application.data.CredentialsData;
 import lombok.*;
 
 import java.util.Date;
@@ -31,4 +32,6 @@ public abstract class NewTeadentCommand {
     private Gender gender;
 
     private Contacts[] contacts;
+
+    private CredentialsData[] credentials;
 }

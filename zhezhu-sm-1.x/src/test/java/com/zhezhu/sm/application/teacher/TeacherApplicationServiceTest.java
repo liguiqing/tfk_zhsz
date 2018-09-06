@@ -72,7 +72,7 @@ public class TeacherApplicationServiceTest {
         contacts[1] = new Contacts("Weixin", "123456@aa.com");
 
         NewTeacherCommand command = new NewTeacherCommand("zhezhu school",joinDate,null,
-                "Test Teacher",null,Gender.Male,contacts);
+                "Test Teacher",null,Gender.Male,contacts,null);
 
         when(contactValidations.validate(any(Contact.class))).thenReturn(true).thenReturn(true)
                 .thenReturn(true).thenReturn(true).thenReturn(true);

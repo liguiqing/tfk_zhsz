@@ -11,6 +11,7 @@ import com.zhezhu.share.domain.person.Person;
 import com.zhezhu.share.domain.school.Teadent;
 import com.zhezhu.share.infrastructure.validate.contact.ContactValidations;
 import com.zhezhu.sm.application.data.Contacts;
+import com.zhezhu.sm.application.data.CredentialsData;
 import com.zhezhu.sm.domain.model.clazz.Clazz;
 import com.zhezhu.sm.domain.model.clazz.LearningClazzRepository;
 import com.zhezhu.sm.domain.model.clazz.SuperviseClazzRepository;
@@ -73,7 +74,6 @@ public abstract class TeadentApplicationService {
         PersonId personId = new PersonId();
         Student student = new Student(studentId,schoolId,personId,command.getName(),command.getBirthday(),command.getGender());
         setOtherFieldsValue(command,student);
-
         return student;
     }
 
@@ -81,6 +81,15 @@ public abstract class TeadentApplicationService {
         teadent.join(command.getJoinDate());
         teadent.off(command.getOffDate());
         addContacts(command.getContacts(),teadent);
+        addCredentials(command.getCredentials(),teadent);
+    }
+
+    private void addCredentials(CredentialsData[] credentials, Teadent teadent) {
+        if(credentials != null){
+            for(CredentialsData data:credentials){
+                teadent.addCredentials(data.getName(),data.getValue());
+            }
+        }
     }
 
     protected Clazz getStudyClazz(ClazzId clazzId){

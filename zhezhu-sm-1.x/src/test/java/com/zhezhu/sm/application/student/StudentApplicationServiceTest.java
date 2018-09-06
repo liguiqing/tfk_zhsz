@@ -79,7 +79,7 @@ public class StudentApplicationServiceTest {
         String schoolId = Identities.genIdNone(IdPrefixes.SchoolIdPrefix);
 
         NewStudentCommand command = new NewStudentCommand(schoolId,joinDate,null,
-                "Test Student",null,Gender.Male,contacts);
+                "Test Student",null,Gender.Male,contacts,null);
 
         when(contactValidations.validate(any(Contact.class))).thenReturn(true).thenReturn(true)
                 .thenReturn(true).thenReturn(true).thenReturn(true);

@@ -29,11 +29,12 @@ public class ClazzApplicationService {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public void newClazz(NewClazzCommand command){
+    public String  newClazz(NewClazzCommand command){
         logger.debug("New Clazz {}",command);
         Clazz clazz = command.toClazz();
         ClazzRepository clazzRepository = getClazzRepositoryOf(clazz);
         clazzRepository.save(clazz);
+        return clazz.getClazzId().id();
     }
 
     @Transactional(readOnly = true)
@@ -57,7 +58,7 @@ public class ClazzApplicationService {
 
     private ClazzRepository getClazzRepositoryOf(Clazz clazz){
         for(ClazzRepository clazzRepository:this.clazzRepositories){
-            if(clazzRepository.supports(clazz))
+            if(clazzRepository.supports(clazz.getClass()))
                 return clazzRepository;
         }
         return null;

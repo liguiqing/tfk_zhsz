@@ -22,10 +22,10 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 /**
  * Copyright (c) 2016,$today.year, 深圳市易考试乐学测评有限公司
@@ -95,12 +95,12 @@ public class JdbcSchoolInfoApiTest extends AbstractTransactionalJUnit4SpringCont
         jdbc.update("INSERT INTO `sm_student_managed`(`studentId`,`schoolId`,`clazzId`,`job`,`gradeName`,`gradeLevel`,`yearStarts`,`yearEnds`,`dateStarts`,`dateEnds`) VALUES (?,?,?,?,?,?,?,?,?,?)",
                 new Object[]{studentId.id(),schoolId.id(),clazzId.id(),"a","六年级",6,2018,2019,"2018-09-01",null});
 
-        jdbc.update("INSERT INTO `sm_clazz_history`(`clazzId`,`schoolId`,`clazzName`,`gradeName`,`gradeLevel`,`yearStarts`,`yearEnds`,`removed`) VALUES (?,?,?,?,?,?,?,?)",
-                new Object[]{clazzId.id(),schoolId.id(),"一班","五年级",5,2017,2018,0});
-        jdbc.update("INSERT INTO `sm_clazz_history`(`clazzId`,`schoolId`,`clazzName`,`gradeName`,`gradeLevel`,`yearStarts`,`yearEnds`,`removed`) VALUES (?,?,?,?,?,?,?,?)",
-                new Object[]{clazzId.id(),schoolId.id(),"一班","六年级",6,2018,2019,0});
+        jdbc.update("INSERT INTO `sm_clazz_history`(`clazzId`,`clazzName`,`gradeName`,`gradeLevel`,`yearStarts`,`yearEnds`) VALUES (?,?,?,?,?,?)",
+                new Object[]{clazzId.id(),"一班","五年级",5,2017,2018});
+        jdbc.update("INSERT INTO `sm_clazz_history`(`clazzId`,`clazzName`,`gradeName`,`gradeLevel`,`yearStarts`,`yearEnds`) VALUES (?,?,?,?,?,?)",
+                new Object[]{clazzId.id(),"一班","六年级",6,2018,2019});
 
-        List l = jdbc.query("select a.clazzId,a.gradeName,a.gradeLevel,b.clazzName,a.dateEnds from sm_student_managed a inner join sm_clazz_history b on b.clazzId = a.clazzId and a.yearEnds=b.yearEnds  where a.studentId=? and a.dateEnds is null and  b.removed=0 ",
+        List l = jdbc.query("select a.clazzId,a.gradeName,a.gradeLevel,b.clazzName,a.dateEnds from sm_student_managed a inner join sm_clazz_history b on b.clazzId = a.clazzId and a.yearEnds=b.yearEnds  where a.studentId=? and a.dateEnds is null ",
                 (rs,rowNum) -> rs.getString("dateEnds"),studentId.id());
 
         StudentData student = api.getStudent(personId);
@@ -136,10 +136,10 @@ public class JdbcSchoolInfoApiTest extends AbstractTransactionalJUnit4SpringCont
         jdbc.batchUpdate(sql, args);
 
         ClazzId clazzId = new ClazzId();
-        jdbc.update("INSERT INTO `sm_clazz_history`(`clazzId`,`schoolId`,`clazzName`,`gradeName`,`gradeLevel`,`yearStarts`,`yearEnds`,`removed`) VALUES (?,?,?,?,?,?,?,?)",
-                new Object[]{clazzId.id(),schoolId.id(),"一班","五年级",5,2017,2018,0});
-        jdbc.update("INSERT INTO `sm_clazz_history`(`clazzId`,`schoolId`,`clazzName`,`gradeName`,`gradeLevel`,`yearStarts`,`yearEnds`,`removed`) VALUES (?,?,?,?,?,?,?,?)",
-                new Object[]{clazzId.id(),schoolId.id(),"一班","六年级",6,2018,2019,0});
+        jdbc.update("INSERT INTO `sm_clazz_history`(`clazzId`,`clazzName`,`gradeName`,`gradeLevel`,`yearStarts`,`yearEnds`) VALUES (?,?,?,?,?,?)",
+                new Object[]{clazzId.id(),"一班","五年级",5,2017,2018});
+        jdbc.update("INSERT INTO `sm_clazz_history`(`clazzId`,`clazzName`,`gradeName`,`gradeLevel`,`yearStarts`,`yearEnds`) VALUES (?,?,?,?,?,?)",
+                new Object[]{clazzId.id(),"一班","六年级",6,2018,2019});
         jdbc.update("INSERT INTO `sm_teacher_contact`(`personId`,`category`,`name`,`info`) VALUES (?,?,?,?)",
                 new Object[]{personId.id(),"Phone","手机","1235689874"});
         jdbc.update("INSERT INTO `sm_teacher_contact`(`personId`,`category`,`name`,`info`) VALUES (?,?,?,?)",

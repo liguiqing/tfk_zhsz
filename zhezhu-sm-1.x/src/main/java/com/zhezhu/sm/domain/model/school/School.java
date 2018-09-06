@@ -7,6 +7,7 @@ import com.zhezhu.share.domain.id.identityaccess.TenantId;
 import com.zhezhu.share.domain.id.school.SchoolId;
 import com.zhezhu.share.domain.school.Grade;
 import com.zhezhu.share.domain.school.SchoolScope;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
@@ -35,6 +36,7 @@ public class School extends Entity {
         this(schoolId, name, name, scope);
     }
 
+    @Builder
     public School(SchoolId schoolId, String name, String alias, SchoolScope scope) {
         this.schoolId = schoolId;
         this.name = name;

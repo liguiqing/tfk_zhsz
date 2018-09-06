@@ -7,7 +7,6 @@ import com.zhezhu.assessment.application.index.IndexData;
 import com.zhezhu.assessment.application.index.IndexQueryService;
 import com.zhezhu.assessment.domain.model.collaborator.CollaboratorRole;
 import com.zhezhu.commons.port.adaptor.http.controller.AbstractHttpController;
-import com.zhezhu.share.infrastructure.school.SchoolService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -35,9 +34,6 @@ public class AssessController extends AbstractHttpController {
 
     @Autowired(required = false)
     private IndexQueryService indexQueryService;
-
-    @Autowired(required = false)
-    private SchoolService schoolService;
 
     /**
      * 进行一次评价

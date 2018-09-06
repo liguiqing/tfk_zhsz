@@ -32,6 +32,8 @@ public abstract class  Person extends IdentifiedDomainObject {
 
     private Set<Contact> contacts;
 
+    private Set<Credentials> credentials;
+
     public Person(PersonId personId, String name) {
         this(personId, name, null, Gender.Unkow);
     }
@@ -56,9 +58,29 @@ public abstract class  Person extends IdentifiedDomainObject {
         this.contacts.add(contact);
     }
 
+    public void addCredentials(String name,String value){
+        this.addCredentials(name,value,null,null);
+    }
+
+    public void addCredentials(String name,String value,
+                               Date releaseDate,Date expireDate){
+        if(this.credentials == null)
+            this.credentials = Sets.newHashSet();
+        Credentials credentials = Credentials.builder()
+                .personId(this.personId)
+                .name(name)
+                .value(value)
+                .releaseDate(releaseDate)
+                .expireDate(expireDate)
+                .build();
+        this.credentials.add(credentials);
+    }
+
     public Set<Contact> getContacts(){
         return ImmutableSet.copyOf(this.contacts);
     }
+
+    public Set<Credentials> getCredentials(){ return ImmutableSet.copyOf(this.credentials);}
 
     protected Person() {
     }

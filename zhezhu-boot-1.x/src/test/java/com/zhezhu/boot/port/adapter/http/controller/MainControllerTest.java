@@ -3,9 +3,11 @@ package com.zhezhu.boot.port.adapter.http.controller;
 import com.zhezhu.boot.config.CorsConfiguation;
 import com.zhezhu.boot.config.FreemarkerConfig;
 import com.zhezhu.boot.config.SpringMvcConfiguration;
+import com.zhezhu.boot.infrastructure.init.DbInitService;
 import com.zhezhu.zhezhu.controller.AbstractControllerTest;
 import org.junit.Test;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
@@ -39,6 +41,9 @@ public class MainControllerTest extends AbstractControllerTest {
     @Autowired
     @InjectMocks
     private MainController controller;
+
+    @Mock
+    private DbInitService dbInitService;
 
     @Test
     public void onIndex() throws Exception{

@@ -20,6 +20,7 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 /**
  * @author Liguiqing
@@ -47,15 +48,15 @@ public class ClazzRepositoryTest extends AbstractTransactionalJUnit4SpringContex
         SchoolId schoolId = new SchoolId();
         ClazzId clazzId = clazzRepository1.nextIdentity();
         UnitedClazz clazz = new UnitedClazz(clazzId,schoolId,DateUtilWrapper.now());
-        clazzRepository1.save(clazz);
         Grade grade = Grade.G1();
-        StudyYear studyYear = StudyYear.now();
-        ClazzHistory history = new ClazzHistory(clazzId,grade,"一班");
-        clazz.addHistory(history);
+        clazz.addHistory(grade,"一班");
         clazzRepository1.save(clazz);
+
+        StudyYear studyYear = StudyYear.now();
 
         Clazz clazz1 = clazzRepository1.loadOf(clazzId);
-
+        clazz1.addHistory(grade,"一班");
+        clazz1.getHistories().forEach(h->assertTrue(h.sameYearOf(studyYear)));
         int i=0;
         while (i++<100000){
             clazzRepository1.loadOf(clazzId);
@@ -67,14 +68,15 @@ public class ClazzRepositoryTest extends AbstractTransactionalJUnit4SpringContex
         while (i++<=10){
             ClazzId clazzId_ = clazzRepository1.nextIdentity();
             UnitedClazz clazz_ = new UnitedClazz(clazzId_,schoolId,DateUtilWrapper.now());
-            clazz_.addHistory(new ClazzHistory(clazzId_,grade,i+"班"));
+            clazz_.addHistory(grade,i+"班");
             clazzRepository1.save(clazz_);
         }
 
         List<Clazz> clazzes =  clazzRepository1.findClazzCanBeManagedOf(schoolId,grade);
-        assertEquals(12, clazzes.size());
+        assertEquals(11, clazzes.size());
 
         clazzes = clazzRepository1.findAllBySchoolId(schoolId);
+        assertEquals(11, clazzes.size());
     }
 
 }

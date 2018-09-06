@@ -16,6 +16,7 @@ import java.util.Date;
  */
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Getter
 @Setter
 @ToString
@@ -41,8 +42,7 @@ public class NewClazzCommand {
     private  UnitedClazz toUnitedClazz(){
         ClazzId clazzId = new ClazzId();
         UnitedClazz clazz = new UnitedClazz(clazzId,new SchoolId(this.schoolId),this.openedTime);
-        ClazzHistory history = new ClazzHistory(clazzId,grade(),this.clazzName);
-        clazz.addHistory(history);
+        clazz.addHistory(grade(),this.clazzName);
         return clazz;
     }
 

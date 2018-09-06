@@ -21,25 +21,19 @@ import lombok.ToString;
 public class ClazzHistory extends IdentifiedDomainObject {
     private ClazzId clazzId;
 
-    private SchoolId schoolId;
-
     private Grade grade;
-
-    private StudyYear studyYear;
 
     private String clazzName;
 
     public ClazzHistory(ClazzId clazzId, Grade grade,String clazzName) {
         this.clazzId = clazzId;
         this.grade = grade;
-        this.studyYear = grade.getStudyYear();
         this.clazzName = clazzName;
     }
 
     public boolean sameYearOf(StudyYear year) {
-        return this.studyYear.equals(year);
+        return this.grade.getStudyYear().equals(year);
     }
-
 
     public boolean sameGadeOf(Grade grade) {
         return this.grade.equals(grade);
@@ -47,10 +41,6 @@ public class ClazzHistory extends IdentifiedDomainObject {
 
     public String fullName(){
         return this.grade.getName()+this.clazzName;
-    }
-
-    protected void toSchool(SchoolId schoolId){
-        this.schoolId = schoolId;
     }
 
     protected ClazzHistory(){

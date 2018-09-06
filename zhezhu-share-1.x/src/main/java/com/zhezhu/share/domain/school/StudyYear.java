@@ -57,6 +57,14 @@ public class StudyYear extends ValueObject {
         return this.yearStarts + "-" + this.yearEnds;
     }
 
+    public Date getDefaultDateStarts(){
+        return DateUtilWrapper.toDate(this.yearStarts+"-09-01","yyyy-MM-dd");
+    }
+
+    public Date getDefaultDateEnds(){
+        return DateUtilWrapper.toDate(this.yearEnds+"-06-30","yyyy-MM-dd");
+    }
+
     //Only 4 persistence
     protected StudyYear(){}
 }

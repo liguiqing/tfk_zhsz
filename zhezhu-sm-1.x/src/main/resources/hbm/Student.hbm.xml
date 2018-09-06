@@ -32,6 +32,10 @@
             <key column="personId"  update="false"/>
             <one-to-many  entity-name="StudentContacts" />
         </set>
+        <set name="credentials"  cascade="all" fetch="join" lazy="true" order-by="id" >
+            <key column="personId"  update="false"/>
+            <one-to-many  entity-name="StudentCredentials" />
+        </set>
         <set name="studies" cascade="all" fetch="join" lazy="true" order-by="dateStarts">
             <key column="studentId" property-ref="studentId" update="false"/>
             <one-to-many entity-name="Study"/>
@@ -40,6 +44,20 @@
             <key column="studentId" property-ref="studentId" update="false"/>
             <one-to-many entity-name="StudentManaged"/>
         </set>
+    </class>
+
+    <class name="com.zhezhu.share.domain.person.Credentials" table="sm_student_credentials" abstract="true"
+           entity-name="StudentCredentials" >
+        <id name="id" type="long" column="id" unsaved-value="-1">
+            <generator class="identity" />
+        </id>
+        <component name="personId" class="com.zhezhu.share.domain.id.PersonId">
+            <property name="id" column="personId" type="java.lang.String"/>
+        </component>
+        <property name="name" column="names" type="java.lang.String"/>
+        <property name="value" column="info" type="java.lang.String"/>
+        <property name="releaseDate" column="releaseDate" type="java.util.Date"/>
+        <property name="expireDate" column="expireDate" type="java.util.Date"/>
     </class>
 
     <class name="com.zhezhu.share.domain.person.Contact" table="sm_student_contact" abstract="true"

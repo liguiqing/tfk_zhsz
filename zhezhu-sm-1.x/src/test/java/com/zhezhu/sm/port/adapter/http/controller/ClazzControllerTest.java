@@ -57,11 +57,12 @@ public class ClazzControllerTest extends AbstractControllerTest {
         int yearStarts = DateUtilWrapper.thisYear();
         int yearEnds = DateUtilWrapper.nextYear(openedTime);
         int gradeLevel = Grade.G1().getLevel();
-        NewClazzCommand command = new NewClazzCommand(new SchoolId().id(), openedTime , "Test Clazz",
+        SchoolId schoolId = new SchoolId();
+        NewClazzCommand command = new NewClazzCommand(schoolId.id(), openedTime , "Test Clazz",
                 yearStarts, yearEnds,gradeLevel);
         String content = toJsonString(command);
 
-        doNothing().when(clazzApplicationService).newClazz(any(NewClazzCommand.class));
+        when(clazzApplicationService.newClazz(any(NewClazzCommand.class))).thenReturn(schoolId.getId());
         this.mvc.perform(post("/clazz").contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON).content(content))
                 .andExpect(jsonPath("$.status.success", CoreMatchers.is(Boolean.TRUE)));

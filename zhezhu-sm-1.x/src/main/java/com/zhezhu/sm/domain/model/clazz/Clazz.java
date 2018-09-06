@@ -47,12 +47,13 @@ public abstract class Clazz extends Entity {
         this.openedTime = openedTime == null?DateUtilWrapper.now():openedTime;
     }
 
-    public void addHistory(ClazzHistory aHistory){
+
+    public void addHistory(Grade grade,String clazzName){
         if(this.histories == null){
             this.histories = Sets.newHashSet();
         }
-        aHistory.toSchool(this.schoolId);
-        this.histories.add(aHistory);
+        ClazzHistory history = new ClazzHistory(this.clazzId, grade, clazzName);
+        this.histories.add(history);
     }
 
     public String getGradeFullName(Grade grade){

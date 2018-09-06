@@ -38,11 +38,11 @@ public interface StudentRepository extends EntityRepository<Student,StudentId> {
     @Query(value = "update sm_student set removed = 1 where studentId=:studentId",nativeQuery = true)
     void delete(@Param("studentId") String studentId);
 
-    @Query(value = "from Student a JOIN StudentManaged b on b.studentId=a.studentId where " +
+    @Query(value = "select a from Student a JOIN StudentManaged b on b.studentId=a.studentId where " +
             "a.schoolId=?1 and b.clazz.schoolId=?1 and b.clazz.clazzId=?2 and b.clazz.grade=?3")
     List<Student> findByManageds(SchoolId schoolId, ClazzId clazzId,Grade grade);
 
-    @Query(value = "From Student a join Study b on b.studentId=a.studentId where " +
+    @Query(value = "select a From Student a join Study b on b.studentId=a.studentId where " +
             "a.schoolId=?1 and b.clazz.schoolId=?1 and b.clazz.clazzId=?2 and b.clazz.grade=?3")
     List<Student> findByStudies(SchoolId schoolId, ClazzId clazzId,Grade grade);
 }

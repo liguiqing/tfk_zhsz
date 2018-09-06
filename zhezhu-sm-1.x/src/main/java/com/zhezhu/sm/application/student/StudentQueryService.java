@@ -78,6 +78,7 @@ public class StudentQueryService {
                 .clazzName(clazz.getGradeFullName(grade))
                 .gradeName(grade.getName())
                 .gradeLevel(grade.getLevel())
+                .name(student.getName())
                 .schoolId(student.getSchoolId().id())
                 .personId(student.getPersonId().id())
                 .studentId(student.getStudentId().id())

@@ -17,25 +17,25 @@
         </component>
         <property name="openedTime" column="openedTime" type="java.util.Date"/>
         <property name="closedTime" column="closedTime" type="java.util.Date"/>
-        <set name="histories"  cascade="all" fetch="join" lazy="true" order-by="id" where="removed=0">
+        <set name="histories"  cascade="all" fetch="join" lazy="false" order-by="id">
             <key column="clazzId" property-ref="clazzId" update="false"/>
-            <one-to-many class="com.zhezhu.sm.domain.model.clazz.ClazzHistory"/>
+            <one-to-many entity-name="ClazzHistory"/>
         </set>
         <subclass name="com.zhezhu.sm.domain.model.clazz.SuperviseClazz" discriminator-value="Supervise" />
         <subclass name="com.zhezhu.sm.domain.model.clazz.LearningClazz" discriminator-value="Learning"/>
         <subclass name="com.zhezhu.sm.domain.model.clazz.UnitedClazz" discriminator-value="United"/>
     </class>
 
-    <class name="com.zhezhu.sm.domain.model.clazz.ClazzHistory" table="sm_clazz_history" lazy="true" dynamic-update="false">
+    <class name="com.zhezhu.sm.domain.model.clazz.ClazzHistory" entity-name="ClazzHistory" table="sm_clazz_history" lazy="true" >
         <id name="id" type="long" column="id" unsaved-value="-1">
             <generator class="identity" />
         </id>
         <component name="clazzId" class="com.zhezhu.share.domain.id.school.ClazzId" >
             <property name="id" column="clazzId" type="java.lang.String"/>
         </component>
-        <component name="schoolId" class="com.zhezhu.share.domain.id.school.SchoolId">
-            <property name="id" column="schoolId" type="java.lang.String"/>
-        </component>
+        <!--<component name="schoolId" class="com.zhezhu.share.domain.id.school.SchoolId">-->
+            <!--<property name="id" column="schoolId" type="java.lang.String"/>-->
+        <!--</component>-->
         <component name="grade" class="com.zhezhu.share.domain.school.Grade">
             <property name="name" column="gradeName" type="java.lang.String"/>
             <property name="level" column="gradeLevel" type="java.lang.Integer" />

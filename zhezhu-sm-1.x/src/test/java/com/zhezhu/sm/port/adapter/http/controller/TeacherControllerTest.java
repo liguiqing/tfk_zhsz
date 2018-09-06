@@ -60,7 +60,7 @@ public class TeacherControllerTest extends AbstractControllerTest {
         contacts[1] = new Contacts("Weixin", "123456@aa.com");
 
         NewTeacherCommand command = new NewTeacherCommand("zhezhu school",joinDate,null,
-                "Test Teacher",null,Gender.Male,contacts);
+                "Test Teacher",null,Gender.Male,contacts,null);
         String content = toJsonString(command);
         String teacherId = new TeacherId().id();
         when(teacherApplicationService.newTeacher(any(NewTeacherCommand.class))).thenReturn(teacherId);

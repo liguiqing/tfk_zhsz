@@ -5,10 +5,9 @@ package com.zhezhu;
  * @since V3.0
  */
 
-import com.zhezhu.commons.spring.SpringContextUtil;
+import com.zhezhu.commons.lang.Throwables;
 import com.zhezhu.zhezhu.repository.DataSourceProperty;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,14 +15,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.jndi.SimpleNamingContextBuilder;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import javax.naming.Context;
-import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 import java.sql.SQLException;
-import java.util.Map;
-
-import static org.junit.Assert.assertNotNull;
 
 @Slf4j
 @RunWith(SpringRunner.class)
@@ -46,19 +40,14 @@ public class TFKApplictionTest {
             builder.bind("java:comp/env/jdbc/testJndiDs", dataSource);
             builder.activate();
         } catch (NamingException ex) {
-            ex.printStackTrace();
+            log.error(Throwables.toString(ex));
         }catch (SQLException ex){
-            ex.printStackTrace();
+            log.error(Throwables.toString(ex));
         }
     }
 
     @Test
     public void contextLoads() throws Exception {
-        assertNotNull(SpringContextUtil.getBean("dataSource"));
-        Context context = new InitialContext();
-        context.list("java:comp/env/jdbc/testJndiDs");
-        Map attr = context.getEnvironment();
-        log.debug("{}",attr);
     }
 
 }

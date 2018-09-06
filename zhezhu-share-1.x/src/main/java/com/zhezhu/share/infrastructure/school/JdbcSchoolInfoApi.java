@@ -95,7 +95,7 @@ public class JdbcSchoolInfoApi implements SchoolInfoApi {
         String sql = "select a.clazzId,a.gradeName,a.gradeLevel,b.clazzName " +
                 "from sm_student_managed a " +
                 "inner join sm_clazz_history b on b.clazzId = a.clazzId and a.yearEnds=b.yearEnds " +
-                "where a.studentId=? and a.dateEnds is null and b.removed=0";
+                "where a.studentId=? and a.dateEnds is null ";
         return jdbc.query(sql,(rs,rowNum) ->
                         ClazzData.builder()
                                 .clazzName(rs.getString("clazzName"))
@@ -118,7 +118,7 @@ public class JdbcSchoolInfoApi implements SchoolInfoApi {
         String sql = "select a.clazzId,b.clazzName,a.gradeName,a.gradeLevel,a.job " +
                 "from sm_teacher_management a " +
                 "inner join sm_clazz_history b on b.clazzId = a.clazzId and a.yearEnds=b.yearEnds " +
-                "where  a.dateEnds is null and b.removed=0 and a.teacherId=?";
+                "where  a.dateEnds is null and a.teacherId=?";
         return jdbc.query(sql,(rs,rowNum) ->
                         ClazzData.builder()
                                 .clazzName(rs.getString("clazzName"))
