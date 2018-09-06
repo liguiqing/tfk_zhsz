@@ -37,7 +37,7 @@ import java.util.stream.Collectors;
 public class SzmsSchool extends AbstractSchoolData{
 
     @Override
-    public void create() {
+    public void doCreate() {
         createSchool();
     }
 

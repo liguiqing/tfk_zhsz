@@ -35,7 +35,7 @@ public class CollaboratorData {
             this.teacher = schoolService.getTeacherBy(assessor.getCollaborator().getPersonId(),
                     assessor.getCollaborator().getSchoolId());
         }else if(role.equals(CollaboratorRole.Student)){
-            this.student = schoolService.getStudenBy(assessor.getCollaborator().getPersonId());
+            this.student = schoolService.getStudentBy(assessor.getCollaborator().getPersonId());
         }
         return this;
     }
@@ -43,7 +43,7 @@ public class CollaboratorData {
     public CollaboratorData setAssesseeDetail(CollaboratorRole role, Assessee assessee, SchoolService schoolService){
         this.assesseeId = assessee.getAssesseeId().id();
         if(role.equals(CollaboratorRole.Student)){
-            this.student = schoolService.getStudenBy(assessee.getCollaborator().getPersonId());
+            this.student = schoolService.getStudentBy(assessee.getCollaborator().getPersonId());
         }else if(role.equals(CollaboratorRole.Teacher)){
             this.teacher = schoolService.getTeacherBy(assessee.getCollaborator().getPersonId(),
                     assessee.getCollaborator().getSchoolId());

@@ -7,6 +7,7 @@ CREATE TABLE `as_Index` (
   `category` VARCHAR(16) NOT NULL  COMMENT '评价指标类别',
   `name` VARCHAR(16) NOT NULL  COMMENT '评价指标名称',
   `alias` VARCHAR(8)  COMMENT '评价指标简称',
+  `plus` TINYINT(1) DEFAULT 1 COMMENT '大于0正面指标,计算时分值相加;等于0负责指标,计算时分值相减',
   `score` DOUBLE(5,2)  COMMENT '评价指标分值',
   `weight` DOUBLE(3,2) COMMENT '评价指标得分计算权重,取值范围0-1',
   `description` VARCHAR(128)   COMMENT '评价指标说明',

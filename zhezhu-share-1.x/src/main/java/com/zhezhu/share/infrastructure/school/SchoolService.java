@@ -52,11 +52,10 @@ public class SchoolService {
     }
 
     public List<PersonId> getTeacherPersonIds(SchoolId schoolId) {
-        //TODO
-        return null;
+        return api().getAllTeacherPersonIds(schoolId);
     }
 
-    public StudentData getStudenBy(PersonId personId){
+    public StudentData getStudentBy(PersonId personId){
         return api().getStudent(personId);
     }
 

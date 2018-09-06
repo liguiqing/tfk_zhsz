@@ -26,6 +26,10 @@ public class NewIndexCommand {
 
     private String name;
 
+    private String alias;
+
+    private boolean plus;
+
     private double score;
 
     private double weight;
@@ -38,7 +42,9 @@ public class NewIndexCommand {
         return Index.builder()
                 .indexId(indexId)
                 .name(name)
-                .category(IndexCategory.getByName(this.categoryName))
+                .plus(plus)
+                .alias(alias)
+                .category(IndexCategory.valueOf(this.categoryName))
                 .score(score)
                 .weight(weight)
                 .description(description)
@@ -51,7 +57,9 @@ public class NewIndexCommand {
                 .indexId(indexId)
                 .owner(new TenantId(ownerId))
                 .name(name)
-                .category(IndexCategory.getByName(this.categoryName))
+                .plus(plus)
+                .alias(alias)
+                .category(IndexCategory.valueOf(this.categoryName))
                 .score(score)
                 .weight(weight)
                 .description(description)

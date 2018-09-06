@@ -7,9 +7,11 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.QueryHints;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.QueryHint;
 import java.util.List;
 
 /**
@@ -39,6 +41,7 @@ public interface IndexRepository extends EntityRepository<Index,IndexId> {
 
     List<Index> findAllByNameAndOwnerAndCategory(String name, TenantId owner, IndexCategory category);
 
+    @QueryHints({ @QueryHint(name = "org.hibernate.cacheable", value ="true") })
     List<Index> findAllByOwnerAndParentIsNull(TenantId owner);
 
     List<Index> findAllByOwnerAndParentIsNullAndGroup(TenantId owner,String group);
@@ -47,5 +50,6 @@ public interface IndexRepository extends EntityRepository<Index,IndexId> {
 
     List<Index> findAllByNameAndCategoryAndOwnerIsNullAndParentIsNull(String name,IndexCategory category);
 
+    @QueryHints({ @QueryHint(name = "org.hibernate.cacheable", value ="true") })
     List<Index> findAllByOwnerIsNullAndParentIsNull();
 }

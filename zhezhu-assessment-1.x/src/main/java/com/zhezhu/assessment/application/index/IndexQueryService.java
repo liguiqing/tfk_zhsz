@@ -2,6 +2,7 @@ package com.zhezhu.assessment.application.index;
 
 import com.zhezhu.assessment.domain.model.index.Index;
 import com.zhezhu.assessment.domain.model.index.IndexRepository;
+import com.zhezhu.commons.util.CollectionsUtilWrapper;
 import com.zhezhu.share.domain.id.identityaccess.TenantId;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,11 @@ public class IndexQueryService {
         log.debug("Get owner indexes {} {} {}",ownerId,group,withChildren);
 
         List<Index> indexes = indexRepository.findAllByOwnerAndParentIsNullAndGroup(new TenantId(ownerId),group);
+        //如果没有自定义指标,取公共指标
+        if(CollectionsUtilWrapper.isNullOrEmpty(indexes)){
+            indexes = indexRepository.findAllByOwnerIsNullAndParentIsNull();
+        }
+
         if(withChildren){
             return getIndexChildren(indexes);
         }
@@ -49,6 +55,8 @@ public class IndexQueryService {
     private IndexData toIndexData(Index index){
         return IndexData.builder()
                 .name(index.getName())
+                .alias(index.getAlias())
+                .plus(index.isPlus())
                 .indexId(index.getIndexId().id())
                 .categoryName(index.getCategory())
                 .score(index.getScore().getScore())

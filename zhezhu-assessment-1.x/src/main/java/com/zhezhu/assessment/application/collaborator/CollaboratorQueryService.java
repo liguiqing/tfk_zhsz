@@ -11,6 +11,7 @@ import com.zhezhu.share.domain.id.school.SchoolId;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 评价查询服务
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Service;
  */
 @Slf4j
 @Service
+@Transactional(readOnly = true)
 public class CollaboratorQueryService {
 
     @Autowired
@@ -32,24 +34,37 @@ public class CollaboratorQueryService {
     private AssessorRepository assessorRepository;
 
     public CollaboratorData getAssessorBy(String schoolId, String personId, CollaboratorRole role){
+        return this.getAssessorBy(schoolId, personId, role, true);
+    }
+
+    public CollaboratorData getAssessorBy(String schoolId, String personId, CollaboratorRole role,boolean withDetail){
         log.debug("Get Assessor by personId {}",personId);
 
         Assessor assessor = assessorRepository.findByPersonIdAndSchoolId(new PersonId(personId), new SchoolId(schoolId));
-        return CollaboratorData.builder()
+        CollaboratorData data =  CollaboratorData.builder()
                 .assessorId(assessor.getAssessorId().id())
                 .schoolId(assessor.getCollaborator().getSchoolId().id())
-                .build()
-                .setAssessorDetail(role,assessor,schoolService);
+                .build();
+        if(withDetail)
+                data.setAssessorDetail(role,assessor,schoolService);
+        return data;
     }
 
     public CollaboratorData getAssesseeBy(String schoolId,String personId, CollaboratorRole role){
+        return getAssessorBy(schoolId, personId, role, true);
+    }
+
+    public CollaboratorData getAssesseeBy(String schoolId,String personId, CollaboratorRole role,boolean withDetail){
         log.debug("Get Assessor by personId {}",personId);
 
         Assessee assessee = assesseeRepository.findByPersonIdAndSchoolId(new PersonId(personId), new SchoolId(schoolId));
-        return CollaboratorData.builder()
-                .assessorId(assessee.getAssesseeId().id())
+        CollaboratorData data =  CollaboratorData.builder()
+                .assesseeId(assessee.getAssesseeId().id())
                 .schoolId(assessee.getCollaborator().getSchoolId().id())
-                .build()
-                .setAssesseeDetail(role,assessee,schoolService);
+                .build();
+
+        if(withDetail)
+            data.setAssesseeDetail(role,assessee,schoolService);
+        return data;
     }
 }

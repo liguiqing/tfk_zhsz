@@ -29,8 +29,13 @@ public class Index extends Entity {
 
     private TenantId owner;
 
+    private boolean plus = Boolean.TRUE; //正面还是负面
+
     @Setter
     private String name;
+
+    @Setter
+    private String alias;
 
     @Setter
     private IndexScore score;
@@ -47,11 +52,14 @@ public class Index extends Entity {
 
     @Builder
     private Index(IndexId indexId, Index parent, IndexCategory category,
-                 TenantId owner, String name, double score, double weight, String description,String group) {
+                 TenantId owner, String name,String alias, double score,
+                  double weight, String description,String group,boolean plus) {
         this.indexId = indexId;
         this.category = category;
         this.owner = owner;
+        this.plus = plus;
         this.name = name;
+        this.alias = alias;
         this.score = new IndexScore(score,weight);
         this.description = description;
         this.group = group;

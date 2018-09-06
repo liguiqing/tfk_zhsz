@@ -39,7 +39,7 @@ public class SzewSchool extends AbstractSchoolData {
 
 
     @Override
-    public void create() {
+    public void doCreate() {
         createSchool();
     }
 

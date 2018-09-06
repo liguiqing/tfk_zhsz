@@ -53,13 +53,16 @@ public class AssessQueryService {
         if(CollectionsUtilWrapper.isNullOrEmpty(assesses))
             return new ArrayList<>();
 
-        return assesses.stream().map(assess ->toData(assesseeId,assess)).collect(Collectors.toList());
+        return assesses.stream().map(assess ->toData(assesseeId,assess))
+                .sorted((a,b)->DateUtilWrapper.lessThan(a.getDoneDate(),b.getDoneDate())?-1:1)
+                .collect(Collectors.toList());
     }
 
     private AssessData toData(String assesseeId, Assess assess){
         Index index =  indexRepository.loadOf(assess.getIndexId());
 
         return AssessData.builder()
+                .doneDate(assess.getDoneDate())
                 .indexName(index.getName())
                 .indexScore(index.getMaxScore())
                 .assesseeId(assesseeId)

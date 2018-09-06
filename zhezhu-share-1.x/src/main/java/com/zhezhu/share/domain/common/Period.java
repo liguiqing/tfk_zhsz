@@ -24,10 +24,10 @@ public class Period {
     private Date ends;
 
     public Period(Date starts, Date ends) {
-        AssertionConcerns.assertArgumentNotNull(starts,"无效的起始时间");
-        AssertionConcerns.assertArgumentNotNull(ends,"无效的终止时间");
-        boolean b = DateUtilWrapper.lessThan(ends, starts);
-        AssertionConcerns.assertArgumentTrue(!b,"起始时间不能大于终止时间");
+        if(starts != null && ends != null){
+            boolean b = DateUtilWrapper.lessThan(ends, starts);
+            AssertionConcerns.assertArgumentTrue(!b,"起始时间不能大于终止时间");
+        }
         this.starts = starts;
         this.ends = ends;
     }

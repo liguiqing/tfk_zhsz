@@ -77,7 +77,7 @@ public class IndexApplicationServiceTest {
     public void updateIndex()throws Exception {
         IndexApplicationService indexApplicationService = getIndexApplicationService();
         NewIndexCommand command = NewIndexCommand.builder()
-                .categoryName("Morals1")
+                .categoryName("Morals")
                 .description("Desc1")
                 .name("name1")
                 .score(11.0d)

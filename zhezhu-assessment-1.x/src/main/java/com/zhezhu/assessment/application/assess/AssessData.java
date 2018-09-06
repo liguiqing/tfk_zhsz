@@ -2,6 +2,8 @@ package com.zhezhu.assessment.application.assess;
 
 import lombok.*;
 
+import java.util.Date;
+
 /**
  * @author Liguiqing
  * @since V3.0
@@ -15,6 +17,8 @@ import lombok.*;
 @ToString
 public class AssessData {
     private String indexName;
+
+    private Date doneDate;
 
     private double indexScore;
 

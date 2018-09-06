@@ -227,29 +227,91 @@
             }
  
  ### 1.10 查询学校年级评价指标
-         调用接口 /index/owner/{ownerId}/{group}
+         调用接口 /assess/teacher/to/student
          http  method  GET  
-               path params:
-                  ownerId     string schoolId
-                    group     string 级别,grade.level
                request params:
-             withChildren     boolean
-             
+                  schoolId    string required
+                 teacherId    string required
+                 studentId    string required            
          return   
-             {
-                  "indexes":[
-                      {
-                          "indexId":"",
-                          "categoryName":"",
-                          "name":"Name",
-                          "score":0.00, //最大分值,每评价得分范围[score*-1 -- score]
-                          "weight":0.00,
-                          "description":"",
-                          "group":"",
-                          "children":[] // same as this
-                      }
-                  ]
-             }
+            {
+                "indexes": [
+                    {
+                        "alias": "积极举手发言", 
+                        "categoryName": "Intelligence", 
+                        "children": null, 
+                        "description": "", 
+                        "group": "", 
+                        "indexId": "INXdf18303617d745f7a8faffec293b00d4", 
+                        "name": "积极举手发言", 
+                        "plus": true, 
+                        "score": 10, 
+                        "weight": 0
+                    },
+                    {
+                        "alias": "未提交作业", 
+                        "categoryName": "Intelligence", 
+                        "children": null, 
+                        "description": "", 
+                        "group": "", 
+                        "indexId": "INXc793be2278c2496eb6fd2df2879e88e7", 
+                        "name": "未提交作业", 
+                        "plus": false, 
+                        "score": 10, 
+                        "weight": 0
+                    }
+                ], 
+                "assessee": { //被评价者,学生
+                    "assesseeId": "ASEb581bb2e92a544fea413fb502fe34c15", 
+                    "assessorId": "", 
+                    "schoolId": "SCH27508814ae724270a63c0ad759baf2ff", 
+                    "student": {
+                        "clazzes": [
+                            {
+                                "clazzId": "CLA87ea796aa34b438aad9fb5a232dd3218", 
+                                "clazzName": "1班", 
+                                "gradeLevel": 1, 
+                                "gradeName": "一年级", 
+                                "schoolId": "", 
+                                "type": "United"
+                            }
+                        ], 
+                        "contacts": [
+                            {
+                                "name": "电话号码", 
+                                "value": "13600001234"
+                            }
+                        ], 
+                        "gender": "", 
+                        "gradeLevel": 1, 
+                        "gradeName": "一年级", 
+                        "name": "赖名建", 
+                        "personId": "PER5c8b0bde05ed4c70b4e0f89128b9ad2d", 
+                        "schoolId": "SCH27508814ae724270a63c0ad759baf2ff", 
+                        "studentId": "STU8810101cc91347aa825d8e57f6a225ed"
+                    }, 
+                    "teacher": null
+                }, 
+                "assessor": { //评价者,老师
+                    "assesseeId": "", 
+                    "assessorId": "ASReb2da8aa398d4c518a3360272e984843", 
+                    "schoolId": "SCH27508814ae724270a63c0ad759baf2ff", 
+                    "student": null, 
+                    "teacher": {
+                        "clazzes": [ ], 
+                        "contacts": [
+                            {
+                                "name": "电话号码", 
+                                "value": "1390001234"
+                            }
+                        ], 
+                        "name": "姜典来", 
+                        "personId": "PER2d71568f7f08455aa1508931019e409d", 
+                        "schoolId": "SCH27508814ae724270a63c0ad759baf2ff", 
+                        "teacherId": "TEAf015b5642368433ba95dbca81b791b2b"
+                    }
+                }
+            }
 
 ### 1.11 提交评价
         调用接口 /assess
@@ -258,8 +320,8 @@
                 {
                     "assesseeId":"", //被评者personId
                     "assessorId":"", //主评者personId
-                    "indexId":"INX7fc279c880fa453ebbd046ab50acfbcb",
-                    "score":10,
+                    "indexId":"", 
+                    "score":10,   //有值indexId不能为空
                     "word":"亚马爹"
                 }
         return   

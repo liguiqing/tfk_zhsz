@@ -22,6 +22,8 @@ public interface SchoolInfoApi {
 
     List<PersonId> getAllStudentPersonIds(SchoolId schoolId);
 
+    List<PersonId> getAllTeacherPersonIds(SchoolId schoolId);
+
     StudentData getStudent(PersonId personId);
 
     TeacherData getTeacher(PersonId personId,SchoolId schoolId);

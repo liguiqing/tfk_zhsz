@@ -43,6 +43,12 @@ public class JdbcSchoolInfoApi implements SchoolInfoApi {
         return jdbc.query(sql,(rs,rowNum) -> new PersonId(rs.getString("personId")),schoolId.id());
     }
 
+    @Override
+    public List<PersonId> getAllTeacherPersonIds(SchoolId schoolId) {
+        String sql = "select personId from sm_teacher where schoolId = ? and removed=0";
+        return jdbc.query(sql,(rs,rowNum) -> new PersonId(rs.getString("personId")),schoolId.id());
+    }
+
 
     @Override
     public StudentData getStudent(PersonId personId) {

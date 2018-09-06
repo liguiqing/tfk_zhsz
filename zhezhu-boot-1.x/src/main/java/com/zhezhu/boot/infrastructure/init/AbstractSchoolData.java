@@ -1,5 +1,6 @@
 package com.zhezhu.boot.infrastructure.init;
 
+import com.zhezhu.assessment.application.collaborator.CollaboratorApplicationService;
 import com.zhezhu.commons.util.DateUtilWrapper;
 import com.zhezhu.share.domain.id.SubjectId;
 import com.zhezhu.share.domain.id.school.ClazzId;
@@ -45,9 +46,21 @@ public abstract class AbstractSchoolData  implements SchoolData{
     protected StudentApplicationService studentApplicationService;
 
     @Autowired
+    protected CollaboratorApplicationService collaboratorService;
+
+    @Autowired
     protected JdbcTemplate jdbc;
 
     protected SchoolId schoolId = new SchoolId();
+
+    @Override
+    public void create() {
+        doCreate();
+        collaboratorService.teacherToAssessor(this.schoolId.id());
+        collaboratorService.studentToAssessee(this.schoolId.id());
+    }
+
+    protected abstract void doCreate();
 
     @PostConstruct
     public void initSubjects(){
@@ -80,7 +93,7 @@ public abstract class AbstractSchoolData  implements SchoolData{
                     .studentId(studentId)
                     .courses(studyData)
                     .dateStarts(year.getDefaultDateStarts())
-                    .dateEnds(year.getDefaultDateEnds())
+                    //.dateEnds(year.getDefaultDateEnds())
                     .managedClazzId(clazzId.id())
                     .build());
         }
@@ -98,7 +111,7 @@ public abstract class AbstractSchoolData  implements SchoolData{
                 .courses(courses)
                 .teacherId(teacherId2)
                 .dateStarts(studyYear.getDefaultDateStarts())
-                .dateEnds(studyYear.getDefaultDateEnds())
+                //.dateEnds(studyYear.getDefaultDateEnds())
                 .teachingClazzIds(Arrays.stream(teachingClazzIds).map(id->id.id()).collect(Collectors.toList()).toArray(new String[]{}))
                 .managementClazzIds(Arrays.stream(managementClazzIds).map(id->id.id()).collect(Collectors.toList()).toArray(new String[]{}))
                 .build());

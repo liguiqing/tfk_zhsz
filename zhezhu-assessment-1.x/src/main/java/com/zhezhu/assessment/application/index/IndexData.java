@@ -22,6 +22,10 @@ public class IndexData {
 
     private String name;
 
+    private String alias;
+
+    private boolean plus;
+
     private double score;
 
     private double weight;
