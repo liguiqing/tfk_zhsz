@@ -28,9 +28,9 @@ public class AssessRank extends IdentifiedValueObject {
 
     private int yearEnds;
 
-    private RankScope rankScope;
+    private RankScope rankScope;  //排名范围
 
-    private RankCategory rankCategory; //排名类型:
+    private RankCategory rankCategory; //排名类型
 
     private Date rankDate;
 
@@ -38,6 +38,6 @@ public class AssessRank extends IdentifiedValueObject {
 
     private int rank;
 
-    private int promote;
+    private int promote;  //进退步
 
 }

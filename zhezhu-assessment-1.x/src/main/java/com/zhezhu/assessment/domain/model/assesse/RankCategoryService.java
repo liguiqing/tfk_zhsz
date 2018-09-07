@@ -1,6 +1,5 @@
-package com.zhezhu.assessment.infrastructure.rank;
+package com.zhezhu.assessment.domain.model.assesse;
 
-import com.zhezhu.assessment.domain.model.assesse.RankCategory;
 import com.zhezhu.commons.util.DateUtilWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -39,6 +38,4 @@ public class RankCategoryService {
         }
         return DateUtilWrapper.now();
     }
-
-
 }

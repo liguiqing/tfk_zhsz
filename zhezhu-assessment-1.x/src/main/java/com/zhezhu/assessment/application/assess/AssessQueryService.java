@@ -1,13 +1,13 @@
 package com.zhezhu.assessment.application.assess;
 
-import com.zhezhu.assessment.domain.model.assesse.Assess;
-import com.zhezhu.assessment.domain.model.assesse.AssessRepository;
-import com.zhezhu.assessment.domain.model.assesse.AssessService;
+import com.zhezhu.assessment.domain.model.assesse.*;
 import com.zhezhu.assessment.domain.model.index.Index;
 import com.zhezhu.assessment.domain.model.index.IndexRepository;
 import com.zhezhu.commons.util.CollectionsUtilWrapper;
 import com.zhezhu.commons.util.DateUtilWrapper;
+import com.zhezhu.share.domain.id.PersonId;
 import com.zhezhu.share.domain.id.assessment.AssesseeId;
+import com.zhezhu.share.domain.id.school.SchoolId;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,6 +35,17 @@ public class AssessQueryService {
 
     @Autowired
     private AssessRepository assessRepository;
+
+    @Autowired
+    private AssessRankRepository rankRepository;
+
+    public List<AssessRank> getRanks(String schoolId, String personId,
+                                     RankCategory category,RankScope scope,Date from,Date to){
+        log.debug("Get Assess ranks of {} in scope of {} category {}",personId,scope,category);
+        return rankRepository.findAllBySchoolIdAndPersonIdAndRankCategoryAndRankScopeAndRankDateBetween(
+                new SchoolId(schoolId), new PersonId(personId),
+                category, scope, from, to);
+    }
 
     public List<AssessData> getAssessOf(String assesseeId, Date from, Date to) {
         Date now = DateUtilWrapper.now();

@@ -1,4 +1,4 @@
-package com.zhezhu.assessment.infrastructure.rank;
+package com.zhezhu.assessment.domain.model.assesse;
 
 import com.zhezhu.assessment.domain.model.assesse.RankCategory;
 

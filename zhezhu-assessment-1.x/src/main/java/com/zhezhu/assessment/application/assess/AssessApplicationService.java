@@ -11,6 +11,8 @@ import com.zhezhu.assessment.infrastructure.message.AssessMessage;
 import com.zhezhu.commons.message.MessageEvent;
 import com.zhezhu.commons.message.MessageListener;
 import com.zhezhu.commons.message.Messagingable;
+import com.zhezhu.commons.util.ArraysUtilWrapper;
+import com.zhezhu.commons.util.CollectionsUtilWrapper;
 import com.zhezhu.share.domain.id.PersonId;
 import com.zhezhu.share.domain.id.assessment.AssessId;
 import com.zhezhu.share.domain.id.assessment.AssesseeId;
@@ -66,6 +68,18 @@ public class AssessApplicationService {
         sendMessage(new AssessMessage(index,assessee,command.getScore()));
     }
 
+    @Transactional(rollbackFor = Exception.class)
+    public void assesses(NewAssessCommand[] commands){
+        if(ArraysUtilWrapper.isNotNullAndNotEmpty(commands)){
+            for(NewAssessCommand command:commands){
+                if(command != null){
+                    this.assess(command);
+                }
+            }
+        }
+    }
+
+
     /**
      * 老师评价学生
      *
@@ -73,26 +87,34 @@ public class AssessApplicationService {
      * @return
      */
     @Transactional(rollbackFor = Exception.class)
-    public String teacherAssessStudent(NewTeacherAssessStudentCommand command){
+    public String[] teacherAssessStudent(NewTeacherAssessStudentCommand command){
         log.debug("Teacher assess Student {}",command);
-        AssessId assessId = assessRepository.nextIdentity();
+        List<IndexAssess> assesses = command.getAssesses();
+        if(CollectionsUtilWrapper.isNullOrEmpty(assesses))
+            return new String[]{};
 
         PersonId teacherPersonId = new PersonId(command.getTeacherPersonId());
         PersonId studentPersonId = new PersonId(command.getStudentPersonId());
         SchoolId schoolId = new SchoolId(command.getSchoolId());
         Assessor assessor = teacherAsAssessor(teacherPersonId, schoolId);
         Assessee assessee = assesseeRepository.findByPersonIdAndSchoolId(studentPersonId, schoolId);
-        Index index = null;
-        if(command.getIndexId() != null){
-            index = indexRepository.loadOf(new IndexId(command.getIndexId()));
-        }
-        Assess assess = assesseService.newAssess(index, assessor, assessee, command.getScore(), command.getWord());
 
-        if(index != null){
-            sendMessage(new AssessMessage(index,assessee,command.getScore()));
+        String[] assessIds = new String[assesses.size()];
+        int i= 0;
+        for(IndexAssess assess:assesses){
+            Index index = null;
+            if(assess.getIndexId() != null){
+                index = indexRepository.loadOf(new IndexId(assess.getIndexId()));
+            }
+            Assess assess_ = assesseService.newAssess(index, assessor, assessee, assess.getScore(), assess.getWord());
+            if(index != null){
+                sendMessage(new AssessMessage(index,assessee,assess.getScore()));
+            }
+            assessRepository.save(assess_);
+            assessIds[i++] = assess_.getAssessId().id();
         }
-        assessRepository.save(assess);
-        return assessId.id();
+        return assessIds;
+
     }
 
     private Assessor teacherAsAssessor(PersonId teacherPersonId,SchoolId schoolId){

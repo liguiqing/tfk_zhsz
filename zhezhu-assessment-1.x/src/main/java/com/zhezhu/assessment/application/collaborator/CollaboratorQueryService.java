@@ -51,7 +51,7 @@ public class CollaboratorQueryService {
     }
 
     public CollaboratorData getAssesseeBy(String schoolId,String personId, CollaboratorRole role){
-        return getAssessorBy(schoolId, personId, role, true);
+        return getAssesseeBy(schoolId, personId, role, true);
     }
 
     public CollaboratorData getAssesseeBy(String schoolId,String personId, CollaboratorRole role,boolean withDetail){

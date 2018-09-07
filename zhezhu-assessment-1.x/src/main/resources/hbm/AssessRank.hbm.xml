@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping/hibernate-mapping-3.0.dtd">
+<hibernate-mapping default-access="field" default-cascade="all" >
+    <class name="com.zhezhu.assessment.domain.model.assesse.AssessRank" table="as_AssessRank" lazy="true">
+
+        <id name="id" type="long" column="id" unsaved-value="-1">
+            <generator class="native" />
+        </id>
+
+        <component name="personId" class="com.zhezhu.share.domain.id.PersonId">
+            <property name="id" column="personId" type="java.lang.String"/>
+        </component>
+
+        <component name="schoolId" class="com.zhezhu.share.domain.id.school.SchoolId">
+            <property name="id" column="schoolId" type="java.lang.String"/>
+        </component>
+
+        <property name="rankScope" column="rankScope" >
+            <type name="org.hibernate.type.EnumType">
+                <param name="enumClass">com.zhezhu.assessment.domain.model.assesse.RankScope</param>
+                <param name="useNamed">true</param>
+            </type>
+        </property>
+        <property name="rankCategory" column="rankCategory" >
+            <type name="org.hibernate.type.EnumType">
+                <param name="enumClass">com.zhezhu.assessment.domain.model.assesse.RankCategory</param>
+                <param name="useNamed">true</param>
+            </type>
+        </property>
+        <property name="yearStarts" column="yearStarts" type="java.lang.Integer"/>
+        <property name="yearEnds" column="yearEnds" type="java.lang.Integer"/>
+        <property name="rankDate" column="rankDate" type="java.util.Date"/>
+        <property name="rankNode" column="rankNode" type="java.lang.String"/>
+        <property name="rank" column="rank" type="java.lang.Integer"/>
+        <property name="promote" column="promote" type="java.lang.Integer"/>
+    </class>
+
+</hibernate-mapping>

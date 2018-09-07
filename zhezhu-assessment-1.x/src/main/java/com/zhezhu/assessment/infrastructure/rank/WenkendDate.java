@@ -1,6 +1,7 @@
 package com.zhezhu.assessment.infrastructure.rank;
 
 import com.zhezhu.assessment.domain.model.assesse.RankCategory;
+import com.zhezhu.assessment.domain.model.assesse.RankCategoryDate;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;

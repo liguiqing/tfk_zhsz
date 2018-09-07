@@ -33,6 +33,7 @@ public class AssessmentApplicationConfiguration {
                 "/hbm/Assess.hbm.xml",
                 "/hbm/Assessee.hbm.xml",
                 "/hbm/Assessor.hbm.xml",
+                "/hbm/AssessRank.hbm.xml",
                 "/hbm/Award.hbm.xml",
                 "/hbm/Index.hbm.xml",
                 "/hbm/Medal.hbm.xml"

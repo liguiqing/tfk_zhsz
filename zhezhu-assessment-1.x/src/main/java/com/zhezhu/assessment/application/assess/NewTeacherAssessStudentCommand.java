@@ -1,6 +1,9 @@
 package com.zhezhu.assessment.application.assess;
 
+import com.google.common.collect.Lists;
 import lombok.*;
+
+import java.util.List;
 
 /**
  * @author Liguiqing
@@ -19,10 +22,16 @@ public class NewTeacherAssessStudentCommand {
 
     private String studentPersonId;
 
-    private String indexId;
+    private List<IndexAssess> assesses;
 
-    private double score;
+    public NewTeacherAssessStudentCommand addAssess(IndexAssess indexAssess){
+        if(this.assesses == null)
+            this.assesses = Lists.newArrayList();
+        this.assesses.add(indexAssess);
+        return this;
+    }
 
-    private String word;
-
+    public NewTeacherAssessStudentCommand addAssess(String indexId,double score,String word){
+        return this.addAssess(new IndexAssess(indexId, score, word));
+    }
 }

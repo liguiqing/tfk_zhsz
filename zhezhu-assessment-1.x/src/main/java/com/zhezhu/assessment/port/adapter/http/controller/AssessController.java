@@ -5,15 +5,19 @@ import com.zhezhu.assessment.application.collaborator.CollaboratorData;
 import com.zhezhu.assessment.application.collaborator.CollaboratorQueryService;
 import com.zhezhu.assessment.application.index.IndexData;
 import com.zhezhu.assessment.application.index.IndexQueryService;
+import com.zhezhu.assessment.domain.model.assesse.AssessRank;
 import com.zhezhu.assessment.domain.model.assesse.RankCategory;
+import com.zhezhu.assessment.domain.model.assesse.RankScope;
 import com.zhezhu.assessment.domain.model.collaborator.CollaboratorRole;
-import com.zhezhu.assessment.infrastructure.rank.RankCategoryService;
+import com.zhezhu.assessment.domain.model.assesse.RankCategoryService;
+import com.zhezhu.commons.AssertionConcerns;
 import com.zhezhu.commons.port.adaptor.http.controller.AbstractHttpController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -45,7 +49,6 @@ public class AssessController extends AbstractHttpController {
      *
      * @param command
      * @return
-     * @throws Exception
      */
     @RequestMapping(method = RequestMethod.POST)
     public ModelAndView onAssess(@RequestBody NewAssessCommand command){
@@ -56,10 +59,26 @@ public class AssessController extends AbstractHttpController {
     }
 
     /**
-     * 老师评价学生
+     * 进行一组评价
      *
+     * @param commands
      * @return
-     * @throws Exception
+     */
+    @RequestMapping(value = "/more",method = RequestMethod.POST)
+    public ModelAndView onAssesses(@RequestBody NewAssessCommand[] commands){
+        logger.debug("URL /assess/more method=POST {}", Arrays.toString(commands));
+
+        assessApplicationService.assesses(commands);
+        return newModelAndViewBuilder("/assess/newAssessSuccess").creat();
+    }
+
+    /**
+     * 获取老师评价学生的指标
+     *
+     * @param teacherId
+     * @param studentId
+     * @param schoolId
+     * @return ModelAndView
      */
     @RequestMapping(value="/teacher/to/student",method = RequestMethod.GET)
     public ModelAndView onTeacherAssessingToStudent(@RequestParam String teacherId,
@@ -87,8 +106,9 @@ public class AssessController extends AbstractHttpController {
     @RequestMapping(value="/teacher/to/student",method = RequestMethod.POST)
     public ModelAndView onTeacherAssessToStudent(@RequestBody NewTeacherAssessStudentCommand command){
         logger.debug("URL /assess/teacher/to/student method=POST {}",command);
-        String assessId = assessApplicationService.teacherAssessStudent(command);
-        return newModelAndViewBuilder("/assess/newAssessSuccess").withData("assessId",assessId).creat();
+
+        String[] assessIds = assessApplicationService.teacherAssessStudent(command);
+        return newModelAndViewBuilder("/assess/newAssessSuccess").withData("assessIds",assessIds).creat();
     }
 
     /**
@@ -99,8 +119,6 @@ public class AssessController extends AbstractHttpController {
      * @param personId
      * @param from 为null时为本周第一天
      * @param to   为null时为本周最后一天
-     * @return
-     * @throws Exception
      */
     @RequestMapping(value="/list/{schoolId}/{role}/{personId}",method = RequestMethod.GET)
     public ModelAndView onGetAssess(@PathVariable String schoolId,
@@ -109,8 +127,9 @@ public class AssessController extends AbstractHttpController {
                                     @RequestParam(required = false) Date from,
                                     @RequestParam(required = false) Date to){
         logger.debug("URL /assess/list/{}/{}/{} method=GET ",schoolId,role,personId);
+        CollaboratorRole role1 = CollaboratorRole.valueOf(role);
+        CollaboratorData assessee = collaboratorQueryService.getAssesseeBy(schoolId,personId,role1,false);
 
-        CollaboratorData assessee = collaboratorQueryService.getAssesseeBy(schoolId,personId,CollaboratorRole.valueOf(role),false);
         List<AssessData> data = assessQueryService.getAssessOf(assessee.getAssesseeId(),from,to);
         return newModelAndViewBuilder("/assess/assessList").withData("assesses",data).creat();
     }
@@ -118,24 +137,51 @@ public class AssessController extends AbstractHttpController {
     /**
      * 查询人员某个时段的全部评价
      *
+     * @param category @link RankCategory
+     * @param role   @link CollaboratorRole
      * @param schoolId
-     * @param schoolId
-     * @param role
      * @param personId
-     * @return
-     * @throws Exception
      */
-    @RequestMapping(value="/list/node/{node}/{schoolId}/{role}/{personId}",method = RequestMethod.GET)
-    public ModelAndView onGetAssessOfNode(@PathVariable String node,
-                                          @PathVariable String schoolId,
-                                    @PathVariable String role,
-                                    @PathVariable String personId){
-        logger.debug("URL /assess/list/{}/{}/{} method=GET ",schoolId,role,personId);
+    @RequestMapping(value="/list/category/{category}/{role}",method = RequestMethod.GET)
+    public ModelAndView onGetAssessOfNode(@PathVariable String category,
+                                          @PathVariable String role,
+                                          @RequestParam String schoolId,
+                                          @RequestParam String personId){
+        logger.debug("URL /assess/list/category/{}/{} method=GET ",category,role);
 
-        Date from = rankCategoryService.from(RankCategory.valueOf(node));
-        Date to = rankCategoryService.to(RankCategory.valueOf(node));
-        CollaboratorData assessee = collaboratorQueryService.getAssesseeBy(schoolId,personId,CollaboratorRole.valueOf(role),false);
+        CollaboratorRole collaboratorRole = CollaboratorRole.valueOf(role);
+        AssertionConcerns.assertArgumentNotNull(collaboratorRole,"as-03-004");
+        RankCategory category1 = RankCategory.valueOf(category);
+        AssertionConcerns.assertArgumentNotNull(collaboratorRole,"as-03-004");
+
+        Date from = rankCategoryService.from(category1);
+        Date to = rankCategoryService.to(category1);
+        CollaboratorData assessee = collaboratorQueryService.getAssesseeBy(schoolId,personId,collaboratorRole,false);
         List<AssessData> data = assessQueryService.getAssessOf(assessee.getAssesseeId(),from,to);
         return newModelAndViewBuilder("/assess/assessList").withData("assesses",data).creat();
     }
+
+    /**
+     * 取评价排名
+     *
+     * @param schoolId
+     * @param personId
+     * @param category @link com.zhezhu.assessment.domain.model.assesse.RankCategory
+     * @return
+     */
+    @RequestMapping(value="/list/rank/{schoolId}/{personId}",method = RequestMethod.GET)
+    public ModelAndView onGetAssessRankOfClazz(@PathVariable String schoolId,
+                                          @PathVariable String personId,
+                                          @RequestParam String category){
+        logger.debug("URL /assess/list/rank/{}/{} method=GET ",schoolId,personId);
+
+        RankCategory category1 = RankCategory.valueOf(category);
+        AssertionConcerns.assertArgumentNotNull(category1,"as-03-004");
+
+        Date from = rankCategoryService.from(category1);
+        Date to = rankCategoryService.to(category1);
+        List<AssessRank> data = assessQueryService.getRanks(schoolId,personId,category1, RankScope.Clazz,from,to);
+        return newModelAndViewBuilder("/assess/assessRankList").withData("ranks",data).creat();
+    }
+
 }
