@@ -7,7 +7,6 @@ import lombok.*;
  * @since V3.0
  */
 @NoArgsConstructor
-@AllArgsConstructor
 @Getter
 @Setter
 @ToString
@@ -15,7 +14,16 @@ public class IndexAssess {
 
     private String indexId;
 
-    private double score;
+    private double score = -1d;
 
     private String word;
+
+    public IndexAssess(String word){
+        this.word =  word;
+    }
+
+    public IndexAssess(String indexId,double score){
+        this.indexId = indexId;
+        this.score = score;
+    }
 }

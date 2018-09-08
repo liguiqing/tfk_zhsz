@@ -97,7 +97,7 @@ public class AssessApplicationService {
         PersonId studentPersonId = new PersonId(command.getStudentPersonId());
         SchoolId schoolId = new SchoolId(command.getSchoolId());
         Assessor assessor = teacherAsAssessor(teacherPersonId, schoolId);
-        Assessee assessee = assesseeRepository.findByPersonIdAndSchoolId(studentPersonId, schoolId);
+        Assessee assessee = studentAsAssessee(studentPersonId, schoolId);
 
         String[] assessIds = new String[assesses.size()];
         int i= 0;
@@ -109,6 +109,8 @@ public class AssessApplicationService {
             Assess assess_ = assesseService.newAssess(index, assessor, assessee, assess.getScore(), assess.getWord());
             if(index != null){
                 sendMessage(new AssessMessage(index,assessee,assess.getScore()));
+            }else{
+                sendMessage(new AssessMessage(assessee,assess.getWord()));
             }
             assessRepository.save(assess_);
             assessIds[i++] = assess_.getAssessId().id();

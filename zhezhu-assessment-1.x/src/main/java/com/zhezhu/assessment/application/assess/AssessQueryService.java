@@ -28,9 +28,6 @@ import java.util.stream.Collectors;
 public class AssessQueryService {
 
     @Autowired
-    private AssessService assesseService;
-
-    @Autowired
     private IndexRepository indexRepository;
 
     @Autowired

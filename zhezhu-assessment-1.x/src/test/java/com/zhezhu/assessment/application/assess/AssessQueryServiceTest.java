@@ -1,9 +1,14 @@
 package com.zhezhu.assessment.application.assess;
 
+import com.google.common.collect.Lists;
 import com.zhezhu.assessment.domain.model.assesse.*;
+import com.zhezhu.assessment.domain.model.index.Index;
 import com.zhezhu.assessment.domain.model.index.IndexRepository;
+import com.zhezhu.assessment.domain.model.index.IndexScore;
 import com.zhezhu.commons.util.DateUtilWrapper;
 import com.zhezhu.share.domain.id.PersonId;
+import com.zhezhu.share.domain.id.assessment.AssesseeId;
+import com.zhezhu.share.domain.id.index.IndexId;
 import com.zhezhu.share.domain.id.school.SchoolId;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.Before;
@@ -14,15 +19,16 @@ import org.mockito.MockitoAnnotations;
 import java.util.Date;
 import java.util.List;
 
+import static org.junit.Assert.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.when;
 
 /**
  * Copyright (c) 2016,$today.year, 深圳市易考试乐学测评有限公司
  **/
 public class AssessQueryServiceTest {
-
-    @Mock
-    private AssessService assesseService;
 
     @Mock
     private IndexRepository indexRepository;
@@ -41,7 +47,6 @@ public class AssessQueryServiceTest {
 
     private AssessQueryService getService()throws Exception{
         AssessQueryService service = new AssessQueryService();
-        FieldUtils.writeField(service,"assesseService",assesseService,true);
         FieldUtils.writeField(service,"indexRepository",indexRepository,true);
         FieldUtils.writeField(service,"assessRepository",assessRepository,true);
         FieldUtils.writeField(service,"rankRepository",rankRepository,true);
@@ -60,9 +65,34 @@ public class AssessQueryServiceTest {
     }
 
     @Test
-    public void getAssessOf() {
+    public void getAssessOf() throws Exception{
+        AssessQueryService service = getService();
 
+        List<Assess> assesses = Lists.newArrayList();
+        IndexId indexId = new IndexId();
+        assesses.add(Assess.builder().indexId(indexId).score(1).doneDate(DateUtilWrapper.toDate("2018-09-01","yyyy-MM-dd")).build());
+        assesses.add(Assess.builder().indexId(indexId).score(2).doneDate(DateUtilWrapper.toDate("2018-09-07","yyyy-MM-dd")).build());
+        assesses.add(Assess.builder().indexId(indexId).score(3).doneDate(DateUtilWrapper.toDate("2018-09-03","yyyy-MM-dd")).build());
+        assesses.add(Assess.builder().indexId(indexId).score(4).doneDate(DateUtilWrapper.toDate("2018-09-05","yyyy-MM-dd")).build());
+        assesses.add(Assess.builder().indexId(indexId).score(5).doneDate(DateUtilWrapper.toDate("2018-09-02","yyyy-MM-dd")).build());
+        assesses.add(Assess.builder().indexId(indexId).score(6).doneDate(DateUtilWrapper.toDate("2018-09-04","yyyy-MM-dd")).build());
+
+        Index index = mock(Index.class);
+        when(index.getName()).thenReturn("I1");
+        when(index.getScore()).thenReturn(new IndexScore(10,0));
+        when(indexRepository.loadOf(any(IndexId.class))).thenReturn(index);
+        when(assessRepository.findByAssesseeIdAndDoneDateBetween(any(AssesseeId.class), any(Date.class), any(Date.class))).thenReturn(null).thenReturn(assesses);
+
+        List<AssessData> data = service.getAssessOf(new AssesseeId().id(),null,null);
+        assertEquals(0,data.size());
+        data = service.getAssessOf(new AssesseeId().id(),null,null);
+        assertEquals(6,data.size());
+        assertEquals(data.get(0).getDoneDate(),assesses.get(0).getDoneDate());
+        assertEquals(data.get(3).getDoneDate(),assesses.get(5).getDoneDate());
+        assertEquals(data.get(5).getDoneDate(),assesses.get(1).getDoneDate());
+        data = service.getAssessOf(new AssesseeId().id(),DateUtilWrapper.toDate("2018-09-01","yyyy-MM-dd"),DateUtilWrapper.toDate("2018-09-10","yyyy-MM-dd"));
+        assertEquals(data.get(0).getDoneDate(),assesses.get(0).getDoneDate());
+        assertEquals(data.get(3).getDoneDate(),assesses.get(5).getDoneDate());
+        assertEquals(data.get(5).getDoneDate(),assesses.get(1).getDoneDate());
     }
-
-
 }

@@ -23,6 +23,12 @@ public class AssessMessage implements Messagingable {
         this.target = assessee.getCollaborator().getPersonId().id();
     }
 
+    public AssessMessage(Assessee assessee,String word) {
+        LocalDate date = LocalDate.now();
+        this.message = date + " 评语:"+word;
+        this.target = assessee.getCollaborator().getPersonId().id();
+    }
+
     @Override
     public String toMessge() {
         return this.message;

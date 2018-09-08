@@ -28,6 +28,14 @@ public class AssessService {
     @Autowired
     private IndexRepository indexRepository;
 
+
+    public Assess newAssess(Index index, Assessor assessor, Assessee assessee, double score,String word){
+        if(index == null)
+            return newAssess(assessor, assessee, word);
+        return newAssess(index,assessor,assessee,score);
+    }
+
+
     public Assess newAssess(Index index, Assessor assessor, Assessee assessee, double score){
         return Assess.builder().assessId(repository.nextIdentity())
                 .indexId(index.getIndexId())
@@ -36,23 +44,6 @@ public class AssessService {
                 .category(index.getCategory())
                 .doneDate(DateUtilWrapper.now())
                 .score(score)
-                .build();
-    }
-
-    public Assess newAssess(Index index, Assessor assessor, Assessee assessee, double score,String word){
-        if(index == null)
-            return newAssess(assessor, assessee, word);
-        if(word == null)
-            return newAssess(index,assessor,assessee,score);
-
-        return Assess.builder().assessId(repository.nextIdentity())
-                .indexId(index.getIndexId())
-                .assessorId(assessor.getAssessorId())
-                .assesseeId(assessee.getAssesseeId())
-                .category(index.getCategory())
-                .doneDate(DateUtilWrapper.now())
-                .score(score)
-                .word(word)
                 .build();
     }
 

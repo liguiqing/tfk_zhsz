@@ -30,8 +30,4 @@ public class NewTeacherAssessStudentCommand {
         this.assesses.add(indexAssess);
         return this;
     }
-
-    public NewTeacherAssessStudentCommand addAssess(String indexId,double score,String word){
-        return this.addAssess(new IndexAssess(indexId, score, word));
-    }
 }

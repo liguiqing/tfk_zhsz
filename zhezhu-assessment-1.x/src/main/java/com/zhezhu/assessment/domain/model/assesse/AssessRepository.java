@@ -16,7 +16,7 @@ import java.util.List;
  * @author Liguiqing
  * @since V3.0
  */
-@Repository("AssesseRepository")
+@Repository
 public interface AssessRepository extends EntityRepository<Assess,AssessId> {
 
     @Override

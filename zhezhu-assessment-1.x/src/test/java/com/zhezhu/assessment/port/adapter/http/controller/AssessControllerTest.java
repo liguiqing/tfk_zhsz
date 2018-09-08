@@ -1,12 +1,29 @@
 package com.zhezhu.assessment.port.adapter.http.controller;
 
-import com.zhezhu.assessment.AssessmentTestConfiguration;
-import com.zhezhu.assessment.application.assess.AssessApplicationService;
-import com.zhezhu.assessment.application.assess.NewAssessCommand;
+import com.google.common.collect.Lists;
+import com.zhezhu.assessment.application.assess.*;
+import com.zhezhu.assessment.application.collaborator.CollaboratorData;
+import com.zhezhu.assessment.application.collaborator.CollaboratorQueryService;
+import com.zhezhu.assessment.application.index.IndexData;
+import com.zhezhu.assessment.application.index.IndexQueryService;
+import com.zhezhu.assessment.domain.model.assesse.AssessRank;
+import com.zhezhu.assessment.domain.model.assesse.RankCategory;
+import com.zhezhu.assessment.domain.model.assesse.RankCategoryService;
+import com.zhezhu.assessment.domain.model.assesse.RankScope;
+import com.zhezhu.assessment.domain.model.collaborator.CollaboratorRole;
+import com.zhezhu.assessment.domain.model.index.IndexCategory;
+import com.zhezhu.commons.util.DateUtilWrapper;
+import com.zhezhu.share.domain.id.PersonId;
+import com.zhezhu.share.domain.id.assessment.AssessId;
 import com.zhezhu.share.domain.id.assessment.AssesseeId;
 import com.zhezhu.share.domain.id.assessment.AssessorId;
 import com.zhezhu.share.domain.id.index.IndexId;
-import com.zhezhu.share.infrastructure.school.SchoolService;
+import com.zhezhu.share.domain.id.school.ClazzId;
+import com.zhezhu.share.domain.id.school.SchoolId;
+import com.zhezhu.share.domain.id.school.StudentId;
+import com.zhezhu.share.domain.id.school.TeacherId;
+import com.zhezhu.share.infrastructure.school.StudentData;
+import com.zhezhu.share.infrastructure.school.TeacherData;
 import com.zhezhu.zhezhu.controller.AbstractControllerTest;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -16,12 +33,18 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.ContextHierarchy;
 
+import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertNotNull;
-import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 /**
  * Copyright (c) 2016,$today.year, Liguiqing
@@ -41,7 +64,16 @@ public class AssessControllerTest extends AbstractControllerTest {
     private AssessApplicationService assessApplicationService;
 
     @Mock
-    private SchoolService schoolService;
+    private AssessQueryService assessQueryService;
+
+    @Mock
+    private CollaboratorQueryService collaboratorQueryService;
+
+    @Mock
+    private IndexQueryService indexQueryService;
+
+    @Mock
+    private RankCategoryService rankCategoryService;
 
     @Test
     public void onAssess() throws Exception{
@@ -64,5 +96,222 @@ public class AssessControllerTest extends AbstractControllerTest {
         this.mvc.perform(post("/assess").contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON).content(content))
                 .andExpect(jsonPath("$.status.success", is(Boolean.TRUE)));
+
+
+        content = toJsonString(new NewAssessCommand[]{command});
+        this.mvc.perform(post("/assess/more").contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON).content(content))
+                .andExpect(jsonPath("$.status.success", is(Boolean.TRUE)))
+                .andExpect(view().name("/assess/newAssessSuccess"));
     }
+
+    @Test
+    public void onTeacherAssessingToStudentGet()throws Exception{
+        PersonId teacherId = new PersonId();
+        PersonId studentId = new PersonId();
+        SchoolId schoolId = new SchoolId();
+        AssessorId assessorId = new AssessorId();
+        AssesseeId assesseeId = new AssesseeId();
+
+        CollaboratorData teacher = CollaboratorData.builder()
+                .schoolId(schoolId.id())
+                .assessorId(assessorId.id())
+                .teacher(TeacherData.builder().schoolId(schoolId.id()).name("T1").build())
+                .build();
+        CollaboratorData student = CollaboratorData.builder()
+                .schoolId(schoolId.id())
+                .assesseeId(assesseeId.id())
+                .student(StudentData.builder().schoolId(schoolId.id()).name("S1").build())
+                .build();
+
+        when(collaboratorQueryService.getAssessorBy(any(String.class), any(String.class), any(CollaboratorRole.class))).thenReturn(teacher);
+        when(collaboratorQueryService.getAssesseeBy(any(String.class), any(String.class), eq(CollaboratorRole.Student))).thenReturn(student);
+        ArrayList<IndexData> indexData = new ArrayList<>();
+        indexData.add(IndexData.builder()
+                .plus(true)
+                .alias("Index")
+                .score(7)
+                .name("Index")
+                .group("1")
+                .description("desc1")
+                .categoryName(IndexCategory.Intelligence.name())
+                .build());
+        indexData.add(IndexData.builder()
+                .plus(false)
+                .alias("Index2")
+                .score(6)
+                .name("Index2")
+                .group("1")
+                .description("desc2")
+                .categoryName(IndexCategory.Morals.name())
+                .build());
+
+        when(indexQueryService.getOwnerIndexes(any(String.class),any(String.class),any(Boolean.class))).thenReturn(indexData);
+
+
+        this.mvc.perform(get("/assess/teacher/to/student")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .param("teacherPersonId",teacherId.getId())
+                .param("studentPersonId",studentId.getId())
+                .param("schoolId",schoolId.getId()))
+                .andExpect(jsonPath("$.status.success", is(Boolean.TRUE)))
+                .andExpect(jsonPath("$.assessor.schoolId", equalTo(schoolId.id())))
+                .andExpect(jsonPath("$.assessee.schoolId", equalTo(schoolId.id())))
+                .andExpect(jsonPath("$.assessor.assessorId", equalTo(assessorId.id())))
+                .andExpect(jsonPath("$.assessor.teacher.name", equalTo("T1")))
+                .andExpect(jsonPath("$.assessee.student.name", equalTo("S1")))
+                .andExpect(jsonPath("$.assessee.student.schoolId", equalTo(schoolId.id())))
+                .andExpect(jsonPath("$.indexes[0].alias", equalTo("Index")))
+                .andExpect(jsonPath("$.indexes[0].plus", is(Boolean.TRUE)))
+                .andExpect(jsonPath("$.indexes[0].categoryName", equalTo(IndexCategory.Intelligence.name())))
+                .andExpect(jsonPath("$.indexes[1].alias", equalTo("Index2")))
+                .andExpect(jsonPath("$.indexes[1].plus", is(Boolean.FALSE)))
+                .andExpect(jsonPath("$.indexes[1].categoryName", equalTo(IndexCategory.Morals.name())))
+                .andExpect(view().name("/assess/newAssessList"));
+        verify(indexQueryService,times(1)).getOwnerIndexes(any(String.class),any(String.class),any(Boolean.class));
+    }
+
+    @Test
+    public void onTeacherAssessingToStudentPost()throws Exception{
+        PersonId teacherId = new PersonId();
+        PersonId studentId = new PersonId();
+        SchoolId schoolId = new SchoolId();
+        String[] assessIds = {new AssessId().id(),new AssessId().id(),new AssessId().id(),new AssessId().id(),new AssessId().id()};
+        ArrayList<IndexAssess> indexAssesses = Lists.newArrayList();
+        indexAssesses.add(new IndexAssess(new IndexId().id(),4));
+        indexAssesses.add(new IndexAssess(new IndexId().id(),5));
+        indexAssesses.add(new IndexAssess(new IndexId().id(),7));
+        indexAssesses.add(new IndexAssess(new IndexId().id(),9));
+        indexAssesses.add(new IndexAssess("word"));
+        NewTeacherAssessStudentCommand command = NewTeacherAssessStudentCommand.builder()
+                .studentPersonId(studentId.id())
+                .teacherPersonId(teacherId.id())
+                .schoolId(schoolId.id())
+                .assesses(indexAssesses)
+                .build();
+
+        String content = toJsonString(command);
+
+        when(assessApplicationService.teacherAssessStudent(any(NewTeacherAssessStudentCommand.class))).thenReturn(assessIds);
+
+        this.mvc.perform(post("/assess/teacher/to/student")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON).content(content))
+                .andExpect(jsonPath("$.status.success", is(Boolean.TRUE)))
+                .andExpect(jsonPath("$.assessIds[0]", equalTo(assessIds[0])))
+                .andExpect(view().name("/assess/newAssessSuccess"));
+        verify(assessApplicationService,times(1)).teacherAssessStudent(any(NewTeacherAssessStudentCommand.class));
+    }
+
+    @Test
+    public void onGetAssess()throws Exception{
+        CollaboratorRole role = CollaboratorRole.Student;
+        PersonId studentId = new PersonId();
+        ClazzId clazzId = new ClazzId();
+        SchoolId schoolId = new SchoolId();
+        AssesseeId assesseeId = new AssesseeId();
+        CollaboratorData student = CollaboratorData.builder()
+                .schoolId(schoolId.id())
+                .assesseeId(assesseeId.id())
+                .student(StudentData.builder().schoolId(schoolId.id()).name("S1").build())
+                .build();
+        List<AssessData> data = Lists.newArrayList();
+        data.add(AssessData.builder().indexScore(2).clazzId(clazzId.id()).indexName("I1").assesseeId(new AssesseeId().id()).doneDate(new Date()).assesseeName("S1").build());
+        data.add(AssessData.builder().indexScore(5).clazzId(clazzId.id()).indexName("I2").assesseeId(new AssesseeId().id()).doneDate(new Date()).assesseeName("S1").build());
+        data.add(AssessData.builder().indexScore(6).clazzId(clazzId.id()).indexName("I3").assesseeId(new AssesseeId().id()).doneDate(new Date()).assesseeName("S1").build());
+        data.add(AssessData.builder().indexScore(-6).clazzId(clazzId.id()).indexName("I4").assesseeId(new AssesseeId().id()).doneDate(new Date()).assesseeName("S1").build());
+
+        when(collaboratorQueryService.getAssesseeBy(eq(schoolId.id()),eq(studentId.id()),eq(role),eq(Boolean.FALSE))).thenReturn(student);
+        when(assessQueryService.getAssessOf(any(String.class),any(Date.class),any(Date.class))).thenReturn(data);
+
+        this.mvc.perform(get("/assess/list/all/"+schoolId.id()+"/"+role.name()+"/"+studentId.id())
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .param("from","2018-08-01")
+                .param("to","2018-10-01"))
+                .andExpect(jsonPath("$.status.success", is(Boolean.TRUE)))
+                .andExpect(jsonPath("$.assesses[0].indexName", equalTo(data.get(0).getIndexName())))
+                .andExpect(jsonPath("$.assesses[1].indexName", equalTo(data.get(1).getIndexName())))
+                .andExpect(view().name("/assess/assessList"));
+        when(assessQueryService.getAssessOf(any(String.class),any(),any())).thenReturn(data);
+        this.mvc.perform(get("/assess/list/all/"+schoolId.id()+"/"+role.name()+"/"+studentId.id())
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.status.success", is(Boolean.TRUE)))
+                .andExpect(jsonPath("$.assesses[0].indexName", equalTo(data.get(0).getIndexName())))
+                .andExpect(jsonPath("$.assesses[1].indexName", equalTo(data.get(1).getIndexName())))
+                .andExpect(view().name("/assess/assessList"));
+        verify(collaboratorQueryService,times(2)).getAssesseeBy(eq(schoolId.id()),eq(studentId.id()),eq(role),eq(Boolean.FALSE));
+    }
+
+    @Test
+    public void onGetAssessOfNode()throws Exception{
+        CollaboratorRole role = CollaboratorRole.Student;
+        PersonId studentId = new PersonId();
+        ClazzId clazzId = new ClazzId();
+        SchoolId schoolId = new SchoolId();
+        AssesseeId assesseeId = new AssesseeId();
+        CollaboratorData student = CollaboratorData.builder()
+                .schoolId(schoolId.id())
+                .assesseeId(assesseeId.id())
+                .student(StudentData.builder().schoolId(schoolId.id()).name("S1").build())
+                .build();
+        List<AssessData> data = Lists.newArrayList();
+        data.add(AssessData.builder().indexScore(2).clazzId(clazzId.id()).indexName("I1").assesseeId(new AssesseeId().id()).doneDate(new Date()).assesseeName("S1").build());
+        data.add(AssessData.builder().indexScore(5).clazzId(clazzId.id()).indexName("I2").assesseeId(new AssesseeId().id()).doneDate(new Date()).assesseeName("S1").build());
+        data.add(AssessData.builder().indexScore(6).clazzId(clazzId.id()).indexName("I3").assesseeId(new AssesseeId().id()).doneDate(new Date()).assesseeName("S1").build());
+        data.add(AssessData.builder().indexScore(-6).clazzId(clazzId.id()).indexName("I4").assesseeId(new AssesseeId().id()).doneDate(new Date()).assesseeName("S1").build());
+
+        when(collaboratorQueryService.getAssesseeBy(eq(schoolId.id()),eq(studentId.id()),eq(role),eq(Boolean.FALSE))).thenReturn(student);
+        when(assessQueryService.getAssessOf(any(String.class),any(Date.class),any(Date.class))).thenReturn(data);
+
+        RankCategory dayCategory = RankCategory.Day;
+        Date from = DateUtilWrapper.toDate("2018-09-01","yyyy-MM-dd");
+        Date to = DateUtilWrapper.toDate("2018-09-01","yyyy-MM-dd");
+        when(rankCategoryService.from(eq(dayCategory))).thenReturn(from);
+        when(rankCategoryService.to(eq(dayCategory))).thenReturn(to);
+
+        this.mvc.perform(get("/assess/list/category/"+dayCategory.name()+"/"+role.name())
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .param("schoolId",schoolId.getId())
+                .param("personId",studentId.getId()))
+                .andExpect(jsonPath("$.status.success", is(Boolean.TRUE)))
+                .andExpect(jsonPath("$.assesses[0].indexName", equalTo(data.get(0).getIndexName())))
+                .andExpect(jsonPath("$.assesses[1].indexName", equalTo(data.get(1).getIndexName())))
+                .andExpect(view().name("/assess/assessList"));
+        verify(collaboratorQueryService,times(1)).getAssesseeBy(eq(schoolId.id()),eq(studentId.id()),eq(role),eq(Boolean.FALSE));
+    }
+
+    @Test
+    public void onGetAssessRankOfClazz()throws Exception{
+        PersonId studentId = new PersonId();
+        SchoolId schoolId = new SchoolId();
+        RankCategory dayCategory = RankCategory.Day;
+        Date from = DateUtilWrapper.toDate("2018-09-01","yyyy-MM-dd");
+        Date to = DateUtilWrapper.toDate("2018-09-01","yyyy-MM-dd");
+        when(rankCategoryService.from(eq(dayCategory))).thenReturn(from);
+        when(rankCategoryService.to(eq(dayCategory))).thenReturn(to);
+
+        List<AssessRank> data = Lists.newArrayList();
+        data.add(AssessRank.builder().promote(1).rank(10).rankNode("2018-09-01").rankDate(from).yearEnds(2018).yearStarts(2019).rankCategory(dayCategory).rankScope(RankScope.Clazz).personId(studentId).schoolId(schoolId).build());
+        data.add(AssessRank.builder().promote(1).rank(9).rankNode("2018-09-02").rankDate(from).yearEnds(2018).yearStarts(2019).rankCategory(dayCategory).rankScope(RankScope.Clazz).personId(studentId).schoolId(schoolId).build());
+        data.add(AssessRank.builder().promote(2).rank(7).rankNode("2018-09-03").rankDate(from).yearEnds(2018).yearStarts(2019).rankCategory(dayCategory).rankScope(RankScope.Clazz).personId(studentId).schoolId(schoolId).build());
+        data.add(AssessRank.builder().promote(1).rank(6).rankNode("2018-09-04").rankDate(from).yearEnds(2018).yearStarts(2019).rankCategory(dayCategory).rankScope(RankScope.Clazz).personId(studentId).schoolId(schoolId).build());
+        data.add(AssessRank.builder().promote(3).rank(3).rankNode("2018-09-05").rankDate(from).yearEnds(2018).yearStarts(2019).rankCategory(dayCategory).rankScope(RankScope.Clazz).personId(studentId).schoolId(schoolId).build());
+
+        when(assessQueryService.getRanks(eq(schoolId.id()),eq(studentId.id()),eq(RankCategory.Day), eq(RankScope.Clazz),eq(from),eq(to))).thenReturn(data);
+
+        this.mvc.perform(get("/assess/list/rank/"+schoolId.id()+"/"+studentId.id())
+        .contentType(MediaType.APPLICATION_JSON)
+        .accept(MediaType.APPLICATION_JSON)
+        .param("category",dayCategory.name()))
+        .andExpect(jsonPath("$.status.success", is(Boolean.TRUE)))
+        .andExpect(jsonPath("$.ranks[0].rank", equalTo(data.get(0).getRank())))
+        .andExpect(view().name("/assess/assessRankList"));
+
+        verify(assessQueryService,times(1)).getRanks(eq(schoolId.id()),eq(studentId.id()),eq(RankCategory.Day), eq(RankScope.Clazz),eq(from),eq(to));
+    }
+
 }

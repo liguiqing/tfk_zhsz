@@ -13,6 +13,7 @@ import com.zhezhu.assessment.domain.model.assesse.RankCategoryService;
 import com.zhezhu.commons.AssertionConcerns;
 import com.zhezhu.commons.port.adaptor.http.controller.AbstractHttpController;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -22,6 +23,8 @@ import java.util.Date;
 import java.util.List;
 
 /**
+ * 评价http适配器
+ *
  * @author Liguiqing
  * @since V3.0
  */
@@ -75,21 +78,22 @@ public class AssessController extends AbstractHttpController {
     /**
      * 获取老师评价学生的指标
      *
-     * @param teacherId
-     * @param studentId
+     * @param teacherPersonId
+     * @param studentPersonId
      * @param schoolId
      * @return ModelAndView
      */
     @RequestMapping(value="/teacher/to/student",method = RequestMethod.GET)
-    public ModelAndView onTeacherAssessingToStudent(@RequestParam String teacherId,
-                                                    @RequestParam String studentId,
+    public ModelAndView onTeacherAssessingToStudent(@RequestParam String teacherPersonId,
+                                                    @RequestParam String studentPersonId,
                                                     @RequestParam String schoolId){
-        logger.debug("URL /assess/teacher/to/student?teacherId={}&studentId={} method=POST",teacherId,studentId);
-        CollaboratorData teacher = collaboratorQueryService.getAssessorBy(schoolId, teacherId, CollaboratorRole.Teacher);
-        CollaboratorData student = collaboratorQueryService.getAssesseeBy(schoolId, studentId, CollaboratorRole.Student);
+        logger.debug("URL /assess/teacher/to/student?teacherId={}&studentId={}&schoolId={} method=GET",teacherPersonId,studentPersonId,schoolId);
+
+        CollaboratorData teacher = collaboratorQueryService.getAssessorBy(schoolId, teacherPersonId, CollaboratorRole.Teacher);
+        CollaboratorData student = collaboratorQueryService.getAssesseeBy(schoolId, studentPersonId, CollaboratorRole.Student);
         int grade = student.getStudent().getGradeLevel();
         List<IndexData> indexes = indexQueryService.getOwnerIndexes(schoolId,grade+"",false);
-        return newModelAndViewBuilder("/assess/newAssessSuccess")
+        return newModelAndViewBuilder("/assess/newAssessList")
                 .withData("assessor",teacher)
                 .withData("assessee",student)
                 .withData("indexes",indexes)
@@ -120,13 +124,14 @@ public class AssessController extends AbstractHttpController {
      * @param from 为null时为本周第一天
      * @param to   为null时为本周最后一天
      */
-    @RequestMapping(value="/list/{schoolId}/{role}/{personId}",method = RequestMethod.GET)
+    @RequestMapping(value="/list/all/{schoolId}/{role}/{personId}",method = RequestMethod.GET)
     public ModelAndView onGetAssess(@PathVariable String schoolId,
                                     @PathVariable String role,
                                     @PathVariable String personId,
-                                    @RequestParam(required = false) Date from,
-                                    @RequestParam(required = false) Date to){
-        logger.debug("URL /assess/list/{}/{}/{} method=GET ",schoolId,role,personId);
+                                    @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date from,
+                                    @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd")Date to){
+        logger.debug("URL /assess/list/all/{}/{}/{} method=GET ",schoolId,role,personId);
+
         CollaboratorRole role1 = CollaboratorRole.valueOf(role);
         CollaboratorData assessee = collaboratorQueryService.getAssesseeBy(schoolId,personId,role1,false);
 

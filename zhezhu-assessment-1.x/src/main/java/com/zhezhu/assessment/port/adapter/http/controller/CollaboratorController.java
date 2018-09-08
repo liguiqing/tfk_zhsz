@@ -99,6 +99,6 @@ public class CollaboratorController extends AbstractHttpController {
         logger.debug("URL /collaborator/assessee/student/{}/{} method=GET ",schoolId,personId);
 
         CollaboratorData assessee = collaboratorQueryService.getAssesseeBy(schoolId,personId, CollaboratorRole.Student);
-        return newModelAndViewBuilder("/collaborator/assessorInfo").withData("assessee",assessee).creat();
+        return newModelAndViewBuilder("/collaborator/assesseeInfo").withData("assessee",assessee).creat();
     }
 }
