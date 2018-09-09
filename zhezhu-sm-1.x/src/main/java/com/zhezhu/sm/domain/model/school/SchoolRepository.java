@@ -38,6 +38,6 @@ public interface SchoolRepository extends EntityRepository<School,SchoolId> {
     @CacheEvict(value = "smCache",key="#p0")
     void delete(@Param("schoolId") String schoolId);
 
-    @Query(value = "select * from sm_School where removed=0 LIMIT :page,:size",nativeQuery = true)
+    @Query(value = "select * from sm_school where removed=0 LIMIT :page,:size",nativeQuery = true)
     List<School> findByLimit(@Param("page")int page,@Param("size")int size);
 }
