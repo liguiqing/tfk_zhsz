@@ -41,6 +41,16 @@ public class Follower extends IdentifiedValueObject {
         return this.personId.equals(personId);
     }
 
+    public Follower copyTo(WeChatId weChatId){
+        Follower follower = new Follower();
+        follower.weChatId = weChatId;
+        follower.followerId = new WeChatFollowerId();
+        follower.personId = personId;
+        follower.followDate = followDate;
+        follower.audited = audited;
+        return follower;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

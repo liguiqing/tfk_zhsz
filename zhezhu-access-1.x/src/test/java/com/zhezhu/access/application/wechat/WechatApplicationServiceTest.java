@@ -16,7 +16,9 @@ import com.zhezhu.share.domain.id.wechat.FollowAuditId;
 import com.zhezhu.share.domain.id.wechat.WeChatId;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
@@ -30,6 +32,9 @@ import static org.mockito.Mockito.*;
  * Copyright (c) 2016,$today.year, 深圳市易考试乐学测评有限公司
  **/
 public class WechatApplicationServiceTest {
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
+
     @Mock
     private MessageHandler messageHandler;
 
@@ -180,14 +185,57 @@ public class WechatApplicationServiceTest {
         when(weChatRepository.loadOf(any(WeChatId.class))).thenReturn(weChat);
 
         String auditId = service.applyAudit(command);
-
+        assertNotNull(auditId);
     }
 
     @Test
-    public void bindCancel() {
+    public void cancelApply()throws Exception{
+        WeChatApplicationService service = getService();
+
+        FollowApply apply = FollowApply.builder().applyId(new FollowApplyId()).build();
+        when(applyRepository.loadOf(any(FollowApplyId.class))).thenReturn(apply).thenReturn(null);
+        doNothing().when(applyRepository).delete(any(FollowApplyId.class));
+        service.cancelApply(apply.getApplyId().id());
+
+        thrown.expect(NullPointerException.class);
+        thrown.expectMessage("ac-01-005");
+        service.cancelApply(apply.getApplyId().id());
     }
 
     @Test
-    public void getWeChatAccessToken() {
+    public void cancelApplyAudit()throws Exception{
+        WeChatApplicationService service = getService();
+
+        FollowAudit audit = mock(FollowAudit.class);
+        FollowApply apply = mock(FollowApply.class);
+        when(auditRepository.loadOf(any(FollowAuditId.class))).thenReturn(audit);
+        when(applyRepository.loadOf(any(FollowApplyId.class))).thenReturn(apply);
+        when(apply.cancel(eq(audit))).thenReturn(true).thenReturn(false);
+        doNothing().when(audit).no(any(String.class));
+        doNothing().when(auditRepository).save(any(FollowAudit.class));
+        doNothing().when(applyRepository).save(any(FollowApply.class));
+
+        ApplyAuditCommand command = ApplyAuditCommand.builder().auditId(new FollowAuditId().id()).applyId(new FollowApplyId().id()).ok(false).description("desc").build();
+
+        service.cancelApplyAudit(command);
+        thrown.expect(IllegalArgumentException.class);
+        thrown.expectMessage("ac-01-004");
+        service.cancelApplyAudit(command);
+    }
+
+
+    @Test
+    public void bindCancel() throws Exception{
+        WeChatApplicationService service = getService();
+        BindCommand command = BindCommand.builder().category(WeChatCategory.Teacher.name()).build();
+        WeChat weChat = WeChat.builder().weChatId(new WeChatId()).build();
+        when(weChatRepository.findByWeChatOpenIdAndCategoryEquals(any(String.class), any(WeChatCategory.class))).thenReturn(weChat);
+        doNothing().when( weChatRepository).delete(eq(weChat.getWeChatId()));
+        service.bindCancel(command);
+    }
+
+    @Test
+    public void getWeChatAccessToken()throws Exception{
+        WeChatApplicationService service = getService();
     }
 }

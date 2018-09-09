@@ -1,9 +1,7 @@
 package com.zhezhu.access.port.adapter.http.controller;
 
-import com.zhezhu.access.application.wechat.BindCommand;
-import com.zhezhu.access.application.wechat.WeChatData;
-import com.zhezhu.access.application.wechat.WeChatApplicationService;
-import com.zhezhu.access.application.wechat.WechatQueryService;
+import com.zhezhu.access.application.wechat.*;
+import com.zhezhu.access.domain.model.wechat.WeChatCategory;
 import com.zhezhu.access.domain.model.wechat.WebAccessToken;
 import com.zhezhu.access.domain.model.wechat.message.XmlMessage;
 import com.zhezhu.access.domain.model.wechat.xml.XStreamTransformer;
@@ -36,7 +34,7 @@ public class WeChatController extends AbstractHttpController {
     private WeChatApplicationService wechatApplicationService;
 
     @Autowired(required = false)
-    private WechatQueryService wechatQueryService;
+    private WeChatQueryService weChatQueryService;
 
     /**
      * 微信关注成功后欢迎信息
@@ -49,6 +47,7 @@ public class WeChatController extends AbstractHttpController {
     @RequestMapping(value ="/follow",method = RequestMethod.GET)
     public void onFollow(HttpServletRequest request,HttpServletResponse response){
         logger.debug("URL /wechat Method=GET");
+
         Map<String,String> params = getServletWrapper().getParameterMap(request);
         String content = wechatApplicationService.follow(params);
         output(content,response);
@@ -92,7 +91,7 @@ public class WeChatController extends AbstractHttpController {
     public ModelAndView onGetJoined(@PathVariable String openId){
         logger.debug("URL /wechat/join/{}", openId);
 
-        List<WeChatData> data = wechatQueryService.getWeChats(openId);
+        List<WeChatData> data = weChatQueryService.getWeChats(openId);
         return newModelAndViewBuilder("/wechat/wechatList").withData("weChats",data).creat();
     }
 
@@ -104,34 +103,80 @@ public class WeChatController extends AbstractHttpController {
      */
     @RequestMapping(value ="/bind",method = RequestMethod.POST)
     public ModelAndView onBind(@RequestBody BindCommand command){
-        logger.debug("URL /wechat/bind Method=GET {}",command.getWechatOpenId());
+        logger.debug("URL /wechat/bind Method=POST {}",command.getWechatOpenId());
+
         String weChatId = wechatApplicationService.bind(command);
         return newModelAndViewBuilder("/wechat/bindSuccess").withData("weChatId",weChatId).creat();
     }
 
     /**
-     * 添加微信号的被关注者
+     * 添加微信号的被关注者申请
+     *
      * @param command
      * @return
      */
-    @RequestMapping(value ="/follower",method = RequestMethod.POST)
+    @RequestMapping(value ="/apply/follower",method = RequestMethod.POST)
     public ModelAndView onFollower(@RequestBody BindCommand command){
-        logger.debug("URL /wechat/bind Method=GET {}",command.getWechatOpenId());
-        wechatApplicationService.bind(command);
-        return newModelAndViewBuilder("/wechat/bindSuccess").creat();
+        logger.debug("URL /wechat/apply/follower Method=POST {}",command.getWechatOpenId());
+
+        wechatApplicationService.applyFollowers(command);
+        return newModelAndViewBuilder("/wechat/applyFollowersSuccess").creat();
     }
 
     /**
      * 取消微信号的被关注者
+     *
+     * @param applyId
+     * @return
+     */
+    @RequestMapping(value ="/apply/follower/{applyId}",method = RequestMethod.DELETE)
+    public ModelAndView onCancelFollower(@PathVariable String applyId){
+        logger.debug("URL /wechat/apply/follower/{} Method=DELETE ",applyId);
+
+        wechatApplicationService.cancelApply(applyId);
+        return newModelAndViewBuilder("/wechat/cancelFollowersSuccess").creat();
+    }
+
+    /**
+     * 审核关注申请
+     *
      * @param command
      * @return
      */
-    @RequestMapping(value ="/follower",method = RequestMethod.PUT)
-    public ModelAndView onCancelFollower(@RequestBody BindCommand command){
-        logger.debug("URL /wechat/bind Method=GET {}",command.getWechatOpenId());
-        wechatApplicationService.bindCancel(command);
-        return newModelAndViewBuilder("/wechat/bindSuccess").creat();
+    @RequestMapping(value ="/audit/follower",method = RequestMethod.POST)
+    public ModelAndView onAuditFollower(@RequestBody ApplyAuditCommand command){
+        logger.debug("URL /wechat/audit/follower Method=POST {}",command);
+
+        String auditId = wechatApplicationService.applyAudit(command);
+        return newModelAndViewBuilder("/wechat/auditFollowersSuccess").withData("auditId",auditId).creat();
     }
 
+    /**
+     * 取消关注审核
+     *
+     * @param command
+     * @return
+     */
+    @RequestMapping(value ="/audit/follower",method = RequestMethod.DELETE)
+    public ModelAndView onCancelAuditFollower(@RequestBody ApplyAuditCommand command){
+        logger.debug("URL /wechat/audit/follower Method=DELETE {}",command);
+
+        wechatApplicationService.cancelApplyAudit(command);
+        return newModelAndViewBuilder("/wechat/cancelAuditFollowersSuccess").creat();
+    }
+
+    /**
+     * 查询学生关注者
+     *
+     * @param weChatOpenId
+     * @return
+     */
+    @RequestMapping(value ="/followers/student/{weChatOpenId}",method = RequestMethod.GET)
+    public ModelAndView onGetFollowerOfStudent(@PathVariable String weChatOpenId){
+        logger.debug("URL /wechat/followers/student/{} Method=GET ",weChatOpenId);
+
+        List<FollowerData> followers = weChatQueryService.getFollowers(weChatOpenId, WeChatCategory.Student);
+        return newModelAndViewBuilder("/wechat/followerList").withData("followers",followers).creat();
+    }
 
 }

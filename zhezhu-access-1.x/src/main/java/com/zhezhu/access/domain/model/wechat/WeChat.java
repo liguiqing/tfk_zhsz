@@ -63,4 +63,23 @@ public class WeChat extends Entity {
         });
     }
 
+    public WeChat cloneTo(WeChatCategory other) {
+        return WeChat.builder()
+                .weChatId(new WeChatId())
+                .weChatOpenId(this.weChatOpenId)
+                .personId(this.personId)
+                .category(other)
+                .phone(this.phone)
+                .name(this.name)
+                .bindDate(this.bindDate)
+                .build();
+    }
+
+    public void copyFollowers(WeChat other){
+        if(other.followerSize() > 0){
+            for(Follower follower:other.followers){
+                this.addFollower(follower.copyTo(this.weChatId));
+            }
+        }
+    }
 }

@@ -13,9 +13,11 @@ import lombok.*;
 @Setter
 @ToString
 public class ApplyAuditCommand {
-    private String auditorId;
+    private String auditorId; //审核者的PersonId
 
     private String applyId;
+
+    private String auditId;
 
     private boolean ok;
 

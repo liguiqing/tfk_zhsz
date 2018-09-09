@@ -15,7 +15,8 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-@EqualsAndHashCode
+@Builder
+@EqualsAndHashCode(callSuper = false)
 @ToString
 public class FollowerAudit extends ValueObject {
 

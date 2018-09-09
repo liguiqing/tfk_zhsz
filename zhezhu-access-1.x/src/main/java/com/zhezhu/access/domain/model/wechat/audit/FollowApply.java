@@ -21,7 +21,7 @@ import java.util.Date;
 @AllArgsConstructor
 @Builder
 @Getter
-@EqualsAndHashCode(of={"applyId"})
+@EqualsAndHashCode(of={"applyId"},callSuper = false)
 @ToString
 public class FollowApply extends Entity {
     private FollowApplyId applyId;
@@ -50,6 +50,16 @@ public class FollowApply extends Entity {
 
     public void audite(FollowAudit audit){
         this.auditId = audit.getAuditId();
+    }
+
+    public boolean cancel(FollowAudit audit){
+        if(this.isAudited()){
+            if(this.auditId.equals(audit.getAuditId())){
+                this.auditId = null;
+                return true;
+            }
+        }
+        return false;
     }
 
 }

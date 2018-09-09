@@ -98,6 +98,7 @@ public class JdbcSchoolInfoApi implements SchoolInfoApi {
     }
 
     private List<ClazzData> getStudentClazzes(String studentId){
+        //目前只查询了管理班级
         String sql = "select a.clazzId,a.gradeName,a.gradeLevel,b.clazzName " +
                 "from sm_student_managed a " +
                 "inner join sm_clazz_history b on b.clazzId = a.clazzId and a.yearEnds=b.yearEnds " +

@@ -1,10 +1,15 @@
 package com.zhezhu.access.port.adapter.http.controller;
 
-import com.zhezhu.access.application.wechat.WeChatApplicationService;
-import com.zhezhu.access.application.wechat.WeChatData;
-import com.zhezhu.access.application.wechat.WechatQueryService;
+import com.google.common.collect.Lists;
+import com.zhezhu.access.application.wechat.*;
 import com.zhezhu.access.domain.model.wechat.WeChatCategory;
 import com.zhezhu.share.domain.id.PersonId;
+import com.zhezhu.share.domain.id.school.ClazzId;
+import com.zhezhu.share.domain.id.school.SchoolId;
+import com.zhezhu.share.domain.id.wechat.FollowApplyId;
+import com.zhezhu.share.domain.id.wechat.FollowAuditId;
+import com.zhezhu.share.domain.id.wechat.WeChatId;
+import com.zhezhu.share.domain.person.Gender;
 import com.zhezhu.zhezhu.controller.AbstractControllerTest;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -15,12 +20,14 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.ContextHierarchy;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
@@ -42,7 +49,7 @@ public class WeChatControllerTest extends AbstractControllerTest {
     private WeChatApplicationService wechatApplicationService;
 
     @Mock
-    private WechatQueryService wechatQueryService;
+    private WeChatQueryService weChatQueryService;
 
     @Test
     public void onGetJoined()throws Exception{
@@ -50,7 +57,7 @@ public class WeChatControllerTest extends AbstractControllerTest {
         ArrayList<WeChatData> data = new ArrayList<>();
         data.add(WeChatData.builder().name("Name").build());
         data.add(WeChatData.builder().role(WeChatCategory.Teacher.name()).build());
-        when(wechatQueryService.getWeChats(any(String.class))).thenReturn(data);
+        when(weChatQueryService.getWeChats(any(String.class))).thenReturn(data);
 
 
         this.mvc.perform(get("/wechat/join/"+new PersonId().id()).contentType(MediaType.APPLICATION_JSON)
@@ -63,25 +70,114 @@ public class WeChatControllerTest extends AbstractControllerTest {
 
     @Test
     public void onFollow() {
+
     }
 
     @Test
     public void onDialog() {
+
     }
 
     @Test
     public void onOauth2() {
+
     }
 
     @Test
-    public void onBind() {
+    public void onBind() throws Exception{
+        BindCommand command = BindCommand.builder().category(WeChatCategory.Teacher.name()).build();
+        WeChatId weChatId = new WeChatId();
+        when(wechatApplicationService.bind(any(BindCommand.class))).thenReturn(weChatId.id());
+
+        String content = toJsonString(command);
+        this.mvc.perform(post("/wechat/bind").contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON).content(content))
+                .andExpect(jsonPath("$.status.success", is(Boolean.TRUE)))
+                .andExpect(jsonPath("$.weChatId", equalTo(weChatId.id())))
+                .andExpect(view().name("/wechat/bindSuccess"));
+
     }
 
     @Test
-    public void onFollower() {
+    public void onFollower() throws Exception{
+        List<FollowerData> followerData = Lists.newArrayList();
+        followerData.add(FollowerData.builder().clazzId(new ClazzId().id()).name("T1").schoolId(new SchoolId().id()).gender(Gender.Female.name()).build());
+        followerData.add(FollowerData.builder().clazzId(new ClazzId().id()).name("T2").schoolId(new SchoolId().id()).gender(Gender.Male.name()).build());
+        BindCommand command = BindCommand.builder().wechatOpenId(UUID.randomUUID().toString()).followers(followerData).category(WeChatCategory.Parent.name()).build();
+
+        doNothing().when(wechatApplicationService).applyFollowers(any(BindCommand.class));
+
+        String content = toJsonString(command);
+        this.mvc.perform(post("/wechat/apply/follower").contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON).content(content))
+                .andExpect(jsonPath("$.status.success", is(Boolean.TRUE)))
+                .andExpect(view().name("/wechat/applyFollowersSuccess"));
     }
 
     @Test
-    public void onCancelFollower() {
+    public void onCancelFollower() throws Exception{
+        FollowApplyId applyId = new FollowApplyId();
+        doNothing().when(wechatApplicationService).cancelApply(any(String.class));
+        this.mvc.perform(delete("/wechat/apply/follower/"+applyId.id()).contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.status.success", is(Boolean.TRUE)))
+                .andExpect(view().name("/wechat/cancelFollowersSuccess"));
     }
+
+    @Test
+    public void onAuditFollower()throws Exception{
+        ApplyAuditCommand command = ApplyAuditCommand.builder()
+                .applyId(new FollowApplyId().id())
+                .auditorId(new PersonId().id())
+                .description("DESC")
+                .ok(true)
+                .build();
+        FollowAuditId auditId = new FollowAuditId();
+        when(wechatApplicationService.applyAudit(any(ApplyAuditCommand.class))).thenReturn(auditId.id());
+
+        String content = toJsonString(command);
+        this.mvc.perform(post("/wechat/audit/follower").contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON).content(content))
+                .andExpect(jsonPath("$.status.success", is(Boolean.TRUE)))
+                .andExpect(jsonPath("$.auditId", equalTo(auditId.id())))
+                .andExpect(view().name("/wechat/auditFollowersSuccess"));
+    }
+
+    @Test
+    public void onCancelAuditFollower()throws Exception{
+        FollowAuditId auditId = new FollowAuditId();
+        ApplyAuditCommand command = ApplyAuditCommand.builder()
+                .applyId(new FollowApplyId().id())
+                .auditId(auditId.id())
+                .auditorId(new PersonId().id())
+                .description("DESC")
+                .ok(false)
+                .build();
+
+        doNothing().when(wechatApplicationService).cancelApplyAudit(any(ApplyAuditCommand.class));
+
+        String content = toJsonString(command);
+        this.mvc.perform(delete("/wechat/audit/follower").contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON).content(content))
+                .andExpect(jsonPath("$.status.success", is(Boolean.TRUE)))
+                .andExpect(view().name("/wechat/cancelAuditFollowersSuccess"));
+    }
+
+    @Test
+    public void onGetFollowerOfStudent()throws Exception{
+        String weChatOpenId = UUID.randomUUID().toString();
+        List<FollowerData> followers = Lists.newArrayList();
+        followers.add(FollowerData.builder().personId(new PersonId().id()).schoolId(new SchoolId().id()).clazzId(new ClazzId().id()).name("S1").gender(Gender.Female.name()).build());
+        followers.add(FollowerData.builder().personId(new PersonId().id()).schoolId(new SchoolId().id()).clazzId(new ClazzId().id()).name("S2").gender(Gender.Male.name()).build());
+
+        when(weChatQueryService.getFollowers(eq(weChatOpenId),eq(WeChatCategory.Student))).thenReturn(followers);
+
+        this.mvc.perform(get("/wechat/followers/student/"+weChatOpenId).contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.status.success", is(Boolean.TRUE)))
+                .andExpect(jsonPath("$.followers[0].name", equalTo("S1")))
+                .andExpect(jsonPath("$.followers[1].name", equalTo("S2")))
+                .andExpect(view().name("/wechat/followerList"));
+    }
+
 }
