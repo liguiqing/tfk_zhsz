@@ -1,5 +1,6 @@
 package com.zhezhu.access.config;
 
+import com.zhezhu.access.domain.model.wechat.WebAccessTokenFactory;
 import com.zhezhu.access.domain.model.wechat.config.WeChatConfig;
 import com.zhezhu.commons.config.MappingResource;
 import lombok.extern.slf4j.Slf4j;
@@ -47,6 +48,11 @@ public class AccessApplicationConfiguration {
                 .mchId(mchId)
                 .apiKey(apiKey)
                 .build();
+    }
+
+    @Bean
+    public WebAccessTokenFactory webAccessTokenFactory(WeChatConfig weChatConfig){
+        return new WebAccessTokenFactory(weChatConfig);
     }
 
     @Bean("AccessMapping")

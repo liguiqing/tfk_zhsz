@@ -40,6 +40,9 @@ public class WeChatApplicationService {
     private WeChatConfig weChatConfig;
 
     @Autowired
+    private WebAccessTokenFactory webAccessTokenFactory;
+
+    @Autowired
     private WeChatRepository weChatRepository;
 
     @Autowired
@@ -261,7 +264,7 @@ public class WeChatApplicationService {
 
     @Transactional(readOnly = true)
     public WebAccessToken getWeChatAccessToken(String code){
-        WeChatService weChatService = new WeChatService(code);
-        return weChatService.getWebAccessToken(weChatConfig);
+        return webAccessTokenFactory.newWebAccessToken(code);
     }
+
 }

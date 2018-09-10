@@ -1,8 +1,6 @@
 package com.zhezhu.access.application.wechat;
 
-import com.zhezhu.access.domain.model.wechat.WeChat;
-import com.zhezhu.access.domain.model.wechat.WeChatCategory;
-import com.zhezhu.access.domain.model.wechat.WeChatRepository;
+import com.zhezhu.access.domain.model.wechat.*;
 import com.zhezhu.access.domain.model.wechat.audit.*;
 import com.zhezhu.access.domain.model.wechat.config.WeChatConfig;
 import com.zhezhu.access.domain.model.wechat.message.MessageHandler;
@@ -42,6 +40,9 @@ public class WechatApplicationServiceTest {
     private WeChatConfig weChatConfig;
 
     @Mock
+    private WebAccessTokenFactory webAccessTokenFactory;
+
+    @Mock
     private WeChatRepository weChatRepository;
 
     @Mock
@@ -74,6 +75,7 @@ public class WechatApplicationServiceTest {
         FieldUtils.writeField(service,"weChatRepository",weChatRepository,true);
         FieldUtils.writeField(service,"weChatConfig",weChatConfig,true);
         FieldUtils.writeField(service,"messageHandler",messageHandler,true);
+        FieldUtils.writeField(service,"webAccessTokenFactory",webAccessTokenFactory,true);
         return spy(service);
     }
 
@@ -237,5 +239,9 @@ public class WechatApplicationServiceTest {
     @Test
     public void getWeChatAccessToken()throws Exception{
         WeChatApplicationService service = getService();
+        WebAccessToken token = mock(WebAccessToken.class);
+        when(webAccessTokenFactory.newWebAccessToken(any(String.class))).thenReturn(token);
+        WebAccessToken token_ = service.getWeChatAccessToken("");
+        assertEquals(token,token_);
     }
 }
