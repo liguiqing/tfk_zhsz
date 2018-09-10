@@ -4,8 +4,6 @@ import com.zhezhu.access.domain.model.wechat.WeChat;
 import com.zhezhu.access.domain.model.wechat.WeChatCategory;
 import com.zhezhu.access.domain.model.wechat.WeChatRepository;
 import com.zhezhu.commons.util.CollectionsUtilWrapper;
-import com.zhezhu.share.infrastructure.school.SchoolService;
-import com.zhezhu.share.infrastructure.school.StudentData;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,7 +26,7 @@ public class WeChatQueryService {
     private WeChatRepository weChatRepository;
 
     @Autowired
-    private SchoolService schoolService;
+    private FollowerTransferHelper followerTransferHelper;
 
     public List<WeChatData> getWeChats(String weChatOpenId){
         log.debug("Get Wechats by OpenId {}",weChatOpenId);
@@ -51,17 +49,8 @@ public class WeChatQueryService {
         if(weChat == null || CollectionsUtilWrapper.isNullOrEmpty(weChat.getFollowers()))
             return new ArrayList<>();
 
-        //目前只实现了学生关注者
-        return weChat.getFollowers().stream().filter(follower -> follower.isAudited()).map(follower -> {
-            StudentData student = schoolService.getStudentBy(follower.getPersonId());
-            FollowerData data = FollowerData.builder()
-                    .personId(student.getPersonId())
-                    .schoolId(student.getSchoolId())
-                    .clazzId(student.getManagedClazzId())
-                    .name(student.getName())
-                    .gender(student.getGender())
-                    .build();
-            return data;
-        }).collect(Collectors.toList());
+        return weChat.getFollowers().stream().filter(follower -> follower.isAudited()).map(follower ->
+            followerTransferHelper.transTo(follower,category)
+        ).collect(Collectors.toList());
     }
 }

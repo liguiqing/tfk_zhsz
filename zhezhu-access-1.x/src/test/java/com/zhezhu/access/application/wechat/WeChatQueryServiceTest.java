@@ -40,7 +40,7 @@ public class WeChatQueryServiceTest {
     private WeChatRepository weChatRepository;
 
     @Mock
-    private SchoolService schoolService;
+    private FollowerTransferHelper followerTransferHelper;
 
     @Before
     public void before(){
@@ -50,7 +50,7 @@ public class WeChatQueryServiceTest {
     private WeChatQueryService getService()throws Exception{
         WeChatQueryService service = new WeChatQueryService();
         FieldUtils.writeField(service,"weChatRepository",weChatRepository,true);
-        FieldUtils.writeField(service,"schoolService",schoolService,true);
+        FieldUtils.writeField(service,"followerTransferHelper",followerTransferHelper,true);
         return spy(service);
     }
 
@@ -81,9 +81,9 @@ public class WeChatQueryServiceTest {
         WeChat weChat = mock(WeChat.class);
         when(weChat.getFollowers()).thenReturn(Sets.newHashSet()).thenReturn(followers);
         when(weChatRepository.findByWeChatOpenIdAndCategoryEquals(weChatOpenId, WeChatCategory.Student)).thenReturn(null).thenReturn(weChat);
-        StudentData student1 = StudentData.builder().name("S1").build();
-        StudentData student2 = StudentData.builder().name("S2").build();
-        when(schoolService.getStudentBy(any(PersonId.class))).thenReturn(student1).thenReturn(student2);
+        FollowerData student1 = FollowerData.builder().name("S1").build();
+        FollowerData student2 = FollowerData.builder().name("S2").build();
+        when(followerTransferHelper.transTo(any(Follower.class),any(WeChatCategory.class))).thenReturn(student1).thenReturn(student2);
 
         WeChatQueryService service  = getService();
         List<FollowerData> followerData = service.getFollowers(weChatOpenId, WeChatCategory.Student);
