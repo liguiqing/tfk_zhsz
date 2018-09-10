@@ -6,6 +6,7 @@ import com.zhezhu.access.domain.model.wechat.config.WeChatConfig;
 import com.zhezhu.access.domain.model.wechat.message.MessageHandler;
 import com.zhezhu.access.infrastructure.PersonService;
 import com.zhezhu.access.infrastructure.WeChatMessageService;
+import com.zhezhu.commons.util.DateUtilWrapper;
 import com.zhezhu.share.domain.id.PersonId;
 import com.zhezhu.share.domain.id.school.ClazzId;
 import com.zhezhu.share.domain.id.school.SchoolId;
@@ -122,6 +123,61 @@ public class WechatApplicationServiceTest {
         verify(weChatRepository,times(3)).nextIdentity();
         verify(personService,times(3)).getPersonId(any(String.class));
         verify(weChatRepository,times(3)).save(any(WeChat.class));
+    }
+
+    @Test
+    public void transferTo()throws Exception{
+        WeChatApplicationService service = getService();
+        WeChat weChat = WeChat.builder()
+                .category(WeChatCategory.Teacher)
+                .weChatId(new WeChatId())
+                .name("N1")
+                .weChatOpenId(UUID.randomUUID().toString())
+                .phone("12345678")
+                .bindDate(DateUtilWrapper.now())
+                .build();
+        PersonId personId1 = new PersonId();
+        PersonId personId2 = new PersonId();
+        weChat.addFollower(personId1, DateUtilWrapper.now());
+        weChat.addFollower(personId2, DateUtilWrapper.now());
+
+        when(weChatRepository.loadOf(any(WeChatId.class))).thenReturn(weChat).thenReturn(weChat).thenReturn(null);
+        doNothing().when(weChatRepository).save(any(WeChat.class));
+
+        String weChatId1 = service.transferTo(weChat.getWeChatId().id(), WeChatCategory.Parent, false);
+        assertFalse(weChatId1.equals(weChat.getWeChatId().toString()));
+        String weChatId2 = service.transferTo(weChat.getWeChatId().id(), WeChatCategory.Parent, true);
+        assertFalse(weChatId2.equals(weChat.getWeChatId().toString()));
+        assertFalse(weChatId1.equals(weChatId2));
+
+        thrown.expect(NullPointerException.class);
+        thrown.expectMessage("ac-01-000");
+        service.transferTo(weChat.getWeChatId().id(), WeChatCategory.Parent, true);
+    }
+
+    @Test
+    public void copyFollowers()throws Exception{
+        WeChat weChat = WeChat.builder()
+                .category(WeChatCategory.Teacher)
+                .weChatId(new WeChatId())
+                .name("N1")
+                .weChatOpenId(UUID.randomUUID().toString())
+                .phone("12345678")
+                .bindDate(DateUtilWrapper.now())
+                .build();
+
+        PersonId personId1 = new PersonId();
+        PersonId personId2 = new PersonId();
+        weChat.addFollower(personId1, DateUtilWrapper.now());
+        weChat.addFollower(personId2, DateUtilWrapper.now());
+
+        WeChat weChat1 = weChat.cloneTo(WeChatCategory.Parent);
+        when(weChatRepository.loadOf(any(WeChatId.class))).thenReturn(weChat).thenReturn(weChat1).thenReturn(weChat).thenReturn(null).thenReturn(null);
+        WeChatApplicationService service = getService();
+        service.copyFollowers(weChat.getWeChatId().id(),weChat1.getWeChatId().id());
+        thrown.expect(NullPointerException.class);
+        thrown.expectMessage("ac-01-000");
+        service.copyFollowers(weChat.getWeChatId().id(),weChat1.getWeChatId().id());
     }
 
     @Test

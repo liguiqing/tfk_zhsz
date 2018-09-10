@@ -10,6 +10,7 @@ import org.apache.http.client.methods.HttpUriRequest;
 
 /**
  * 微信接口调用服务
+ *
  * @author Liguiqing
  * @since V3.0
  */

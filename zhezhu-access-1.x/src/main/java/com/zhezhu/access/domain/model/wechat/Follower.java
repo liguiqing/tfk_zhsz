@@ -2,6 +2,7 @@ package com.zhezhu.access.domain.model.wechat;
 
 import com.google.common.base.Objects;
 import com.zhezhu.commons.domain.IdentifiedValueObject;
+import com.zhezhu.commons.util.DateUtilWrapper;
 import com.zhezhu.share.domain.id.PersonId;
 import com.zhezhu.share.domain.id.wechat.WeChatFollowerId;
 import com.zhezhu.share.domain.id.wechat.WeChatId;
@@ -10,6 +11,8 @@ import lombok.*;
 import java.util.Date;
 
 /**
+ * 被关注者
+ *
  * @author Liguiqing
  * @since V3.0
  */
@@ -17,11 +20,11 @@ import java.util.Date;
 @AllArgsConstructor
 @Getter
 @Builder
-@ToString(callSuper = false)
+@ToString
 public class Follower extends IdentifiedValueObject {
     private WeChatFollowerId followerId;
 
-    private WeChatId weChatId;
+    private WeChatId weChatId; //关注者唯一标识
 
     private PersonId personId;
 
@@ -30,6 +33,8 @@ public class Follower extends IdentifiedValueObject {
     private FollowerAudit audited;
 
     public void audited(PersonId auditorId,String auditorName,Date auditDate,AuditResult result){
+        if(auditDate == null)
+            auditDate = DateUtilWrapper.now();
         this.audited = new FollowerAudit(auditorId, auditorName, auditDate, result);
     }
 

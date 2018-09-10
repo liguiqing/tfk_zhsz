@@ -7,6 +7,8 @@ import com.zhezhu.share.domain.id.school.SchoolId;
 import lombok.*;
 
 /**
+ * 关注审核者
+ *
  * @author Liguiqing
  * @since V3.0
  */
@@ -14,7 +16,7 @@ import lombok.*;
 @AllArgsConstructor
 @Getter
 @Builder
-@EqualsAndHashCode(exclude = {"name"})
+@EqualsAndHashCode(exclude = {"name"},callSuper = false)
 @ToString
 public class Auditor extends ValueObject {
 

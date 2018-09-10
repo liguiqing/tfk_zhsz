@@ -23,6 +23,8 @@ public class ApplyAuditService {
     @Autowired
     private PersonService personService;
 
+
+
     public FollowAudit auditFollowStudent(PersonId auditorId,FollowApply apply,boolean ok,String description){
         String auditorName = personService.getName(auditorId.id(),PersonService.QueryTarget.Teacher);
 

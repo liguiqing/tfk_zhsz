@@ -1,6 +1,7 @@
 package com.zhezhu.share.infrastructure.school;
 
 import com.zhezhu.commons.util.CollectionsUtilWrapper;
+import com.zhezhu.share.domain.person.Gender;
 import lombok.*;
 
 import java.util.List;
@@ -14,7 +15,7 @@ import java.util.List;
 @Builder
 @Getter
 @Setter
-@ToString(exclude = {"clazzes","contacts"})
+@ToString(exclude = {"clazzes","contacts","credentials"})
 public class StudentData {
     private String schoolId;
 
@@ -29,6 +30,8 @@ public class StudentData {
     private List<ContactData> contacts;
 
     private List<ClazzData> clazzes;
+
+    private List<CredentialsData> credentials;
 
     public int getGradeLevel(){
         if(CollectionsUtilWrapper.isNotNullAndNotEmpty(this.clazzes)){
@@ -49,6 +52,26 @@ public class StudentData {
             return clazzes.get(0).getClazzId();
         }
         return "";
+    }
+
+    public boolean sameGenderAs(Gender gender){
+        if(this.gender == null || this.gender.length() == 0)
+            return true;
+
+        if(gender == null)
+            return false;
+
+        return this.gender.equals(gender.name());
+    }
+
+    public boolean hasCredentials(String name,String value){
+        if(CollectionsUtilWrapper.isNotNullAndNotEmpty(this.credentials)){
+            for(CredentialsData c:this.credentials){
+                if(c.sameAs(name,value))
+                    return true;
+            }
+        }
+        return false;
     }
 
 }

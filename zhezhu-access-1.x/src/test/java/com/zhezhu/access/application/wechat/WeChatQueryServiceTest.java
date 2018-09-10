@@ -14,6 +14,8 @@ import com.zhezhu.share.domain.id.school.SchoolId;
 import com.zhezhu.share.domain.id.wechat.WeChatId;
 import com.zhezhu.share.domain.person.Gender;
 import com.zhezhu.share.domain.person.Person;
+import com.zhezhu.share.infrastructure.school.ClazzData;
+import com.zhezhu.share.infrastructure.school.CredentialsData;
 import com.zhezhu.share.infrastructure.school.SchoolService;
 import com.zhezhu.share.infrastructure.school.StudentData;
 import org.apache.commons.lang3.reflect.FieldUtils;
@@ -21,6 +23,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +45,9 @@ public class WeChatQueryServiceTest {
     @Mock
     private FollowerTransferHelper followerTransferHelper;
 
+    @Mock
+    private SchoolService schoolService;
+
     @Before
     public void before(){
         MockitoAnnotations.initMocks(this);
@@ -51,6 +57,7 @@ public class WeChatQueryServiceTest {
         WeChatQueryService service = new WeChatQueryService();
         FieldUtils.writeField(service,"weChatRepository",weChatRepository,true);
         FieldUtils.writeField(service,"followerTransferHelper",followerTransferHelper,true);
+        FieldUtils.writeField(service,"schoolService",schoolService,true);
         return spy(service);
     }
 
@@ -71,7 +78,6 @@ public class WeChatQueryServiceTest {
 
     @Test
     public void getFollowers() throws Exception {
-
         String weChatOpenId = UUID.randomUUID().toString();
         Set<Follower> followers = Sets.newHashSet();
         followers.add(Follower.builder().personId(new PersonId()).audited(FollowerAudit.builder().build()).build());
@@ -94,6 +100,64 @@ public class WeChatQueryServiceTest {
         assertEquals(2,followerData.size());
         assertEquals("S1",followerData.get(0).getName());
         assertEquals("S2",followerData.get(1).getName());
+    }
+
+    @Test
+    public void findFollowerBy()throws Exception{
+        WeChatQueryService service  = getService();
+        List<StudentData> studentData = Lists.newArrayList();
+        ClazzId clazzId = new ClazzId();
+        SchoolId schoolId = new SchoolId();
+        List<ClazzData> clazzData = Lists.newArrayList();
+        clazzData.add(ClazzData.builder().clazzId(clazzId.id()).build());
+
+        for(int i=0;i<10;i++){
+            List<CredentialsData> credentialsData = Lists.newArrayList();
+            String gender = Gender.Female.name();
+            String name = "S"+i;
+
+            if(i%2 == 0){
+                credentialsData.add(new CredentialsData("身份证", "12345678" + i));
+                gender = Gender.Male.name();
+            }else{
+                credentialsData.add(new CredentialsData("学号", "987654321" + i));
+            }
+
+            if(i>6)
+                name = "SS";
+
+            StudentData student = StudentData.builder()
+                    .schoolId(schoolId.id())
+                    .clazzes(clazzData)
+                    .name(name)
+                    .gender(gender)
+                    .credentials(credentialsData)
+                    .personId(new PersonId().id())
+                    .build();
+            studentData.add(student);
+        }
+
+        when(schoolService.getClazzStudents(any(ClazzId.class))).thenReturn(null).thenReturn(studentData);
+        long c = service.findFollowerBy("", clazzId.id(), "", "", null);
+        assertEquals(0, c);
+        c = service.findFollowerBy("S0", clazzId.id(), null, null, null);
+        assertEquals(1, c);
+        c = service.findFollowerBy("S5", clazzId.id(), null, null, null);
+        assertEquals(1, c);
+        c = service.findFollowerBy("S6", clazzId.id(), null, null, null);
+        assertEquals(1, c);
+        c = service.findFollowerBy("Sasdf", clazzId.id(), null, null, null);
+        assertEquals(0, c);
+        c = service.findFollowerBy("SS", clazzId.id(), null, null, null);
+        assertEquals(3, c);
+        c = service.findFollowerBy("SS", clazzId.id(), "身份证", "123456788", null);
+        assertEquals(1, c);
+        c = service.findFollowerBy("SS", clazzId.id(), null, null, Gender.Female);
+        assertEquals(2, c);
+        c = service.findFollowerBy("SS", clazzId.id(), "学号", "9876543219", null);
+        assertEquals(1, c);
+        c = service.findFollowerBy("SS", clazzId.id(), "学号", "9876543217", null);
+        assertEquals(1, c);
     }
 
 }

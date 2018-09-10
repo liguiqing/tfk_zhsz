@@ -20,7 +20,7 @@ import java.util.List;
 public class BindCommand {
     private String wechatOpenId;
 
-    private String category;
+    private String category; //WeChatCategory
 
     private String name;
 

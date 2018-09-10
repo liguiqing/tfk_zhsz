@@ -6,12 +6,10 @@ import com.zhezhu.access.domain.model.wechat.WebAccessToken;
 import com.zhezhu.access.domain.model.wechat.message.XmlMessage;
 import com.zhezhu.access.domain.model.wechat.xml.XStreamTransformer;
 import com.zhezhu.commons.port.adaptor.http.controller.AbstractHttpController;
+import com.zhezhu.share.domain.person.Gender;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -177,6 +175,28 @@ public class WeChatController extends AbstractHttpController {
 
         List<FollowerData> followers = weChatQueryService.getFollowers(weChatOpenId, WeChatCategory.Student);
         return newModelAndViewBuilder("/wechat/followerList").withData("followers",followers).creat();
+    }
+
+    /**
+     *
+     * @param name
+     * @param clazzId
+     * @param credentialsName
+     * @param credentialsValue
+     * @param gender
+     * @return
+     */
+    @RequestMapping(value ="/followers/student/query",method = RequestMethod.GET)
+    public ModelAndView onQueryFollowerOfStudent(@RequestParam String name,
+                                                 @RequestParam String clazzId,
+                                                 @RequestParam(required = false) String credentialsName,
+                                                 @RequestParam(required = false) String credentialsValue,
+                                                 @RequestParam(required = false) String gender
+                                                    ){
+        logger.debug("URL /wechat/followers/student/query?name={}&clazzId={} Method=GET ",name,clazzId);
+
+        long c = weChatQueryService.findFollowerBy(name, clazzId, credentialsName, credentialsValue, Gender.valueOf(gender));
+        return newModelAndViewBuilder("/wechat/followerList").withData("c",c).creat();
     }
 
 }

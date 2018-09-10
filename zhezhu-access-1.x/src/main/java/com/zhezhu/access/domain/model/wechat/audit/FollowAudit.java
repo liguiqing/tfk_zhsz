@@ -18,7 +18,7 @@ import java.util.Date;
 @AllArgsConstructor
 @Getter
 @Builder
-@EqualsAndHashCode(of = {"auditId"})
+@EqualsAndHashCode(of = {"auditId"},callSuper = false)
 @ToString
 public class FollowAudit extends Entity {
 

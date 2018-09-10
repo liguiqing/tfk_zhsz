@@ -16,7 +16,7 @@ import lombok.*;
 @AllArgsConstructor
 @Getter
 @Builder
-@EqualsAndHashCode(exclude = {"name","role"})
+@EqualsAndHashCode(exclude = {"name","role"},callSuper = false)
 @ToString
 public class Defendant extends ValueObject {
     private PersonId defendantId;

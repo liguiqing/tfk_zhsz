@@ -2,8 +2,11 @@ package com.zhezhu.access.domain.model.wechat;
 
 import com.google.common.collect.Sets;
 import com.zhezhu.access.domain.model.wechat.audit.FollowAudit;
+import com.zhezhu.commons.AssertionConcerns;
 import com.zhezhu.commons.domain.Entity;
+import com.zhezhu.commons.util.DateUtilWrapper;
 import com.zhezhu.share.domain.id.PersonId;
+import com.zhezhu.share.domain.id.wechat.WeChatFollowerId;
 import com.zhezhu.share.domain.id.wechat.WeChatId;
 import lombok.*;
 
@@ -19,8 +22,8 @@ import java.util.Set;
 @Getter
 @Setter
 @Builder
-@ToString(exclude = {"followers"},callSuper = false)
-@EqualsAndHashCode(of="weChatId")
+@ToString(exclude = {"followers"})
+@EqualsAndHashCode(of="weChatId",callSuper = false)
 public class WeChat extends Entity {
 
     private WeChatId weChatId;
@@ -39,10 +42,26 @@ public class WeChat extends Entity {
 
     private Set<Follower> followers;
 
-    public WeChat addFollower(Follower follower){
+    protected WeChat addFollower(Follower follower){
         if(this.followers == null)
             this.followers = Sets.newHashSet();
+
         this.followers.add(follower);
+        return this;
+
+    }
+
+    public WeChat addFollower(PersonId followerId,Date followDateDate){
+        if(followDateDate == null)
+            followDateDate = DateUtilWrapper.now();
+
+        Follower follower = Follower.builder()
+                .weChatId(this.getWeChatId())
+                .followerId(new WeChatFollowerId())
+                .personId(followerId)
+                .followDate(followDateDate)
+                .build();
+        this.addFollower(follower);
         return this;
     }
 
@@ -64,6 +83,7 @@ public class WeChat extends Entity {
     }
 
     public WeChat cloneTo(WeChatCategory other) {
+        AssertionConcerns.assertArgumentNotEquals(this.category,other,"ac-01-008");
         return WeChat.builder()
                 .weChatId(new WeChatId())
                 .weChatOpenId(this.weChatOpenId)
@@ -76,6 +96,9 @@ public class WeChat extends Entity {
     }
 
     public void copyFollowers(WeChat other){
+        if(this.equals(other))
+            return;
+
         if(other.followerSize() > 0){
             for(Follower follower:other.followers){
                 this.addFollower(follower.copyTo(this.weChatId));

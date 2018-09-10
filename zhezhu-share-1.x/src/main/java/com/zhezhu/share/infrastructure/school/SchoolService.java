@@ -3,6 +3,7 @@ package com.zhezhu.share.infrastructure.school;
 import com.zhezhu.share.domain.common.Period;
 import com.zhezhu.share.domain.id.PersonId;
 import com.zhezhu.share.domain.id.identityaccess.TenantId;
+import com.zhezhu.share.domain.id.school.ClazzId;
 import com.zhezhu.share.domain.id.school.SchoolId;
 import com.zhezhu.share.domain.school.Term;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,5 +62,10 @@ public class SchoolService {
 
     public TeacherData getTeacherBy(PersonId personId,SchoolId schoolId){
         return api().getTeacher(personId,schoolId);
+    }
+
+    public List<StudentData> getClazzStudents(ClazzId clazzId){
+        //TODO
+        return null;
     }
 }

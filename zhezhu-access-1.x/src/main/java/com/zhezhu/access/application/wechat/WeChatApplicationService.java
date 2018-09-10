@@ -126,7 +126,7 @@ public class WeChatApplicationService {
     }
 
     /**
-     * 微信用户自制关注者转换
+     * 微信用户复制关注者转换
      *
      * @param waChatId
      * @param otherId
@@ -243,12 +243,7 @@ public class WeChatApplicationService {
     private void addFollower(FollowApply apply){
         PersonId followerId = apply.getFollowerId();
         WeChat applyWeChat = weChatRepository.loadOf(apply.getApplierWeChatId());
-
-        Follower follower = Follower.builder()
-                .personId(followerId)
-                .followDate(apply.getApplyDate())
-                .build();
-        applyWeChat.addFollower(follower);
+        applyWeChat.addFollower(followerId,apply.getApplyDate());
         weChatRepository.save(applyWeChat);
     }
 

@@ -6,5 +6,5 @@ package com.zhezhu.access.domain.model.wechat.audit;
  */
 
 public enum AuditRole {
-    Teacher,Student,Parent;
+    Teacher,Student,Parent
 }

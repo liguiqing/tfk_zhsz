@@ -5,7 +5,7 @@ import com.zhezhu.share.domain.id.wechat.WeChatId;
 import lombok.*;
 
 /**
- * 注者申请人
+ * 关注者申请人
  *
  * @author Liguiqing
  * @since V3.0
@@ -14,7 +14,7 @@ import lombok.*;
 @AllArgsConstructor
 @Getter
 @Builder
-@EqualsAndHashCode(exclude = {"name"})
+@EqualsAndHashCode(exclude = {"name"},callSuper = false)
 @ToString
 public class Applier extends ValueObject {
 

@@ -10,6 +10,8 @@ import org.springframework.util.StringUtils;
 import java.util.Map;
 
 /**
+ * 微信公众号关注
+ *
  * @author Liguiqing
  * @since V3.0
  */
