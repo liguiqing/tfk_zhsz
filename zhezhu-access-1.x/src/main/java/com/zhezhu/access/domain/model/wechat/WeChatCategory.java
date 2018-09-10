@@ -8,5 +8,5 @@ package com.zhezhu.access.domain.model.wechat;
  */
 
 public enum WeChatCategory {
-    Teacher,Student,Parent;
+    Teacher,Student,Parent
 }

@@ -1,5 +1,6 @@
 package com.zhezhu.share.infrastructure.school;
 
+import com.zhezhu.commons.util.CollectionsUtilWrapper;
 import lombok.*;
 
 import java.util.List;
@@ -30,15 +31,22 @@ public class StudentData {
     private List<ClazzData> clazzes;
 
     public int getGradeLevel(){
-        if(clazzes != null){
+        if(CollectionsUtilWrapper.isNotNullAndNotEmpty(this.clazzes)){
             return clazzes.get(0).getGradeLevel();
         }
         return 0;
     }
 
     public String getGradeName(){
-        if(clazzes != null){
+        if(CollectionsUtilWrapper.isNotNullAndNotEmpty(this.clazzes)){
             return clazzes.get(0).getGradeName();
+        }
+        return "";
+    }
+
+    public String getManagedClazzId(){
+        if(CollectionsUtilWrapper.isNotNullAndNotEmpty(this.clazzes)){
+            return clazzes.get(0).getClazzId();
         }
         return "";
     }

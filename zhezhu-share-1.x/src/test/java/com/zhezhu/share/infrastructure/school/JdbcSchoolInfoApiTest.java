@@ -113,6 +113,7 @@ public class JdbcSchoolInfoApiTest extends AbstractTransactionalJUnit4SpringCont
         assertEquals("QQ",student.getContacts().get(1).getName());
         assertEquals("256320",student.getContacts().get(1).getValue());
         assertEquals(1,student.getClazzes().size());
+        assertEquals("六年级",student.getClazzes().get(0).getGradeName());
     }
 
     @Test
