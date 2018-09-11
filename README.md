@@ -380,7 +380,6 @@
         http  method  POST  
               path params:
                   schoolId    string 
-                      role    string value:Teacher;Student;Parent;
                   personId    string
                   
             request params:
