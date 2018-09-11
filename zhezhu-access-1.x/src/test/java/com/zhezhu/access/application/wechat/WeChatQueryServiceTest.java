@@ -138,26 +138,26 @@ public class WeChatQueryServiceTest {
         }
 
         when(schoolService.getClazzStudents(any(ClazzId.class))).thenReturn(null).thenReturn(studentData);
-        long c = service.findFollowerBy("", clazzId.id(), "", "", null);
-        assertEquals(0, c);
+        String[] c = service.findFollowerBy("", clazzId.id(), "", "", null);
+        assertEquals(0, c.length);
         c = service.findFollowerBy("S0", clazzId.id(), null, null, null);
-        assertEquals(1, c);
+        assertEquals(1, c.length);
         c = service.findFollowerBy("S5", clazzId.id(), null, null, null);
-        assertEquals(1, c);
+        assertEquals(1, c.length);
         c = service.findFollowerBy("S6", clazzId.id(), null, null, null);
-        assertEquals(1, c);
+        assertEquals(1, c.length);
         c = service.findFollowerBy("Sasdf", clazzId.id(), null, null, null);
-        assertEquals(0, c);
+        assertEquals(0, c.length);
         c = service.findFollowerBy("SS", clazzId.id(), null, null, null);
-        assertEquals(3, c);
+        assertEquals(3, c.length);
         c = service.findFollowerBy("SS", clazzId.id(), "身份证", "123456788", null);
-        assertEquals(1, c);
+        assertEquals(1, c.length);
         c = service.findFollowerBy("SS", clazzId.id(), null, null, Gender.Female);
-        assertEquals(2, c);
+        assertEquals(2, c.length);
         c = service.findFollowerBy("SS", clazzId.id(), "学号", "9876543219", null);
-        assertEquals(1, c);
+        assertEquals(1, c.length);
         c = service.findFollowerBy("SS", clazzId.id(), "学号", "9876543217", null);
-        assertEquals(1, c);
+        assertEquals(1, c.length);
     }
 
 }

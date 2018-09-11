@@ -29,16 +29,6 @@ public class WeChatTest {
         weChat.addFollower(personId2, DateUtilWrapper.now());
 
         assertEquals(2, weChat.followerSize());
-        int i=0;
-        for(Follower follower:weChat.getFollowers()){
-            if(i==0){
-                assertEquals(personId1,follower.getPersonId());
-            }else{
-                assertEquals(personId2,follower.getPersonId());
-            }
-            assertEquals(weChat.getWeChatId(),follower.getWeChatId());
-            i++;
-        }
     }
 
     @Test

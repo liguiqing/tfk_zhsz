@@ -25,6 +25,7 @@ import java.util.UUID;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -172,7 +173,7 @@ public class WeChatControllerTest extends AbstractControllerTest {
 
         when(weChatQueryService.getFollowers(eq(weChatOpenId),eq(WeChatCategory.Student))).thenReturn(followers);
 
-        this.mvc.perform(get("/wechat/followers/student/"+weChatOpenId).contentType(MediaType.APPLICATION_JSON)
+        this.mvc.perform(get("/wechat/query/followers/"+weChatOpenId).contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.status.success", is(Boolean.TRUE)))
                 .andExpect(jsonPath("$.followers[0].name", equalTo("S1")))
@@ -180,4 +181,51 @@ public class WeChatControllerTest extends AbstractControllerTest {
                 .andExpect(view().name("/wechat/followerList"));
     }
 
+
+    @Test
+    public void onQueryFollowerCanBeApplied()throws Exception{
+        String[] pids1 = new String[]{new PersonId().id()};
+        String[] pids2 = new String[]{new PersonId().id()};
+        String[] pids3 = new String[]{new PersonId().id(),new PersonId().id()};
+        String clazzId = new ClazzId().id();
+        when(weChatQueryService.findFollowerBy(any(String.class),any(String.class),isNull(),isNull(),isNull()))
+                .thenReturn(new String[]{}).thenReturn(pids1);
+
+        when(weChatQueryService.findFollowerBy(any(String.class),any(String.class),isNull(),isNull(),any(Gender.class)))
+                .thenReturn(pids2).thenReturn(pids3);
+
+        when(weChatQueryService.findFollowerBy(any(String.class),any(String.class),any(String.class),any(String.class),any(Gender.class)))
+                .thenReturn(pids3);
+
+        this.mvc.perform(get("/wechat/apply/query/followers").contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON).param("name","N1").param("clazzId",clazzId))
+                .andExpect(jsonPath("$.status.success", is(Boolean.TRUE)))
+                .andExpect(view().name("/wechat/followerList"));
+
+        this.mvc.perform(get("/wechat/apply/query/followers").contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON).param("name","N1").param("clazzId",clazzId))
+                .andExpect(jsonPath("$.status.success", is(Boolean.TRUE)))
+                .andExpect(jsonPath("$.personIds[0]", equalTo(pids1[0])))
+                .andExpect(view().name("/wechat/followerList"));
+
+        this.mvc.perform(get("/wechat/apply/query/followers").contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .param("name","N1")
+                .param("clazzId",clazzId)
+                .param("gender",Gender.Male.name()))
+                .andExpect(jsonPath("$.status.success", is(Boolean.TRUE)))
+                .andExpect(jsonPath("$.personIds[0]", equalTo(pids2[0])))
+                .andExpect(view().name("/wechat/followerList"));
+
+        this.mvc.perform(get("/wechat/apply/query/followers").contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .param("name","N1")
+                .param("clazzId",clazzId)
+                .param("credentialsName","身份证")
+                .param("credentialsValue","1234567891")
+                .param("gender",Gender.Male.name()))
+                .andExpect(jsonPath("$.status.success", is(Boolean.TRUE)))
+                .andExpect(jsonPath("$.personIds[0]", equalTo(pids3[0])))
+                .andExpect(view().name("/wechat/followerList"));
+    }
 }

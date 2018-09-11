@@ -245,8 +245,8 @@
                         "indexId": "INXdf18303617d745f7a8faffec293b00d4", 
                         "name": "积极举手发言", 
                         "plus": true, 
-                        "score": 10, 
-                        "weight": 0
+                        "score": 10, //最高得分
+                        "weight": 0  //权重
                     },
                     {
                         "alias": "未提交作业", 
@@ -313,10 +313,29 @@
                 }
             }
 
-### 1.11 提交评价
-        调用接口 /assess
+### 1.11 老师评价学生
+        调用接口 /assess/teacher/to/student
         http  method  POST  
              request body:
+                {
+                    "schoolId": "", 
+                    "teacherPersonId": "", 
+                    "studentPersonId": "", 
+                    "assesses": [
+                        {
+                            "indexId": "", 
+                            "score": 5
+                        }, 
+                        {
+                            "indexId": "", 
+                            "score": -5
+                        }, 
+                        {
+                            "word": ""
+                        }
+                    ]
+                }
+             
                 {
                     "assesseeId":"", //被评者personId
                     "assessorId":"", //主评者personId
@@ -326,5 +345,7 @@
                 }
         return   
             {
-                "applyId": ""
-            }                                                                                           
+                "assessIds": []
+            }
+            
+                                                                                           

@@ -164,20 +164,21 @@ public class WeChatController extends AbstractHttpController {
     }
 
     /**
-     * 查询学生关注者
+     * 查询微信号的关注者(学生)
      *
      * @param weChatOpenId
      * @return
      */
-    @RequestMapping(value ="/followers/student/{weChatOpenId}",method = RequestMethod.GET)
+    @RequestMapping(value ="/query/followers/{weChatOpenId}",method = RequestMethod.GET)
     public ModelAndView onGetFollowerOfStudent(@PathVariable String weChatOpenId){
-        logger.debug("URL /wechat/followers/student/{} Method=GET ",weChatOpenId);
+        logger.debug("URL /wechat/query/followers/{} Method=GET ",weChatOpenId);
 
         List<FollowerData> followers = weChatQueryService.getFollowers(weChatOpenId, WeChatCategory.Student);
         return newModelAndViewBuilder("/wechat/followerList").withData("followers",followers).creat();
     }
 
     /**
+     * 查询可申请的关注者
      *
      * @param name
      * @param clazzId
@@ -186,17 +187,17 @@ public class WeChatController extends AbstractHttpController {
      * @param gender
      * @return
      */
-    @RequestMapping(value ="/followers/student/query",method = RequestMethod.GET)
-    public ModelAndView onQueryFollowerOfStudent(@RequestParam String name,
+    @RequestMapping(value ="/apply/query/followers",method = RequestMethod.GET)
+    public ModelAndView onQueryFollowerCanBeApplied(@RequestParam String name,
                                                  @RequestParam String clazzId,
                                                  @RequestParam(required = false) String credentialsName,
                                                  @RequestParam(required = false) String credentialsValue,
                                                  @RequestParam(required = false) String gender
                                                     ){
-        logger.debug("URL /wechat/followers/student/query?name={}&clazzId={} Method=GET ",name,clazzId);
-
-        long c = weChatQueryService.findFollowerBy(name, clazzId, credentialsName, credentialsValue, Gender.valueOf(gender));
-        return newModelAndViewBuilder("/wechat/followerList").withData("c",c).creat();
+        logger.debug("URL /wechat/apply/query/followers?name={}&clazzId={} Method=GET ",name,clazzId);
+        Gender gender1 = gender == null ? null : Gender.valueOf(gender);
+        String[] personIds = weChatQueryService.findFollowerBy(name, clazzId, credentialsName, credentialsValue,gender1);
+        return newModelAndViewBuilder("/wechat/followerList").withData("personIds",personIds).creat();
     }
 
 }
