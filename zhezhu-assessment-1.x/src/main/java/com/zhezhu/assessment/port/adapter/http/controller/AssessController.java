@@ -119,7 +119,7 @@ public class AssessController extends AbstractHttpController {
      * 查询人员某个时段的全部评价
      *
      * @param schoolId
-     * @param role
+     * @param role value is one of Teacher;Student;Parent;
      * @param personId
      * @param from 为null时为本周第一天
      * @param to   为null时为本周最后一天
@@ -129,7 +129,7 @@ public class AssessController extends AbstractHttpController {
                                     @PathVariable String role,
                                     @PathVariable String personId,
                                     @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date from,
-                                    @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd")Date to){
+                                    @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date to){
         logger.debug("URL /assess/list/all/{}/{}/{} method=GET ",schoolId,role,personId);
 
         CollaboratorRole role1 = CollaboratorRole.valueOf(role);
@@ -185,7 +185,7 @@ public class AssessController extends AbstractHttpController {
 
         Date from = rankCategoryService.from(category1);
         Date to = rankCategoryService.to(category1);
-        List<AssessRank> data = assessQueryService.getRanks(schoolId,personId,category1, RankScope.Clazz,from,to);
+        List<AssessRankData> data = assessQueryService.getRanks(schoolId,personId,category1, RankScope.Clazz,from,to);
         return newModelAndViewBuilder("/assess/assessRankList").withData("ranks",data).creat();
     }
 

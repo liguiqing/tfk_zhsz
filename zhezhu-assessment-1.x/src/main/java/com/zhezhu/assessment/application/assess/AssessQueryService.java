@@ -36,12 +36,26 @@ public class AssessQueryService {
     @Autowired
     private AssessRankRepository rankRepository;
 
-    public List<AssessRank> getRanks(String schoolId, String personId,
+    public List<AssessRankData> getRanks(String schoolId, String personId,
                                      RankCategory category,RankScope scope,Date from,Date to){
         log.debug("Get Assess ranks of {} in scope of {} category {}",personId,scope,category);
+
         return rankRepository.findAllBySchoolIdAndPersonIdAndRankCategoryAndRankScopeAndRankDateBetween(
                 new SchoolId(schoolId), new PersonId(personId),
-                category, scope, from, to);
+                category, scope, from, to).stream()
+                .sorted((a,b)->DateUtilWrapper.lessThan(a.getRankDate(),b.getRankDate())?1:-1)
+                .map(rank ->
+                    AssessRankData.builder()
+                            .schoolId(schoolId)
+                            .personId(personId)
+                            .promote(rank.getPromote())
+                            .rank(rank.getRank())
+                            .rankDate(rank.getRankDate())
+                            .rankCategory(rank.getRankCategory().name())
+                            .rankScope(rank.getRankScope().name())
+                            .rankNode(rank.getRankNode())
+                            .build())
+                .collect(Collectors.toList());
     }
 
     public List<AssessData> getAssessOf(String assesseeId, Date from, Date to) {
@@ -62,7 +76,7 @@ public class AssessQueryService {
             return new ArrayList<>();
 
         return assesses.stream().map(assess ->toData(assesseeId,assess))
-                .sorted((a,b)->DateUtilWrapper.lessThan(a.getDoneDate(),b.getDoneDate())?-1:1)
+                .sorted((a,b)->DateUtilWrapper.lessThan(a.getDoneDate(),b.getDoneDate())?1:-1)
                 .collect(Collectors.toList());
     }
 

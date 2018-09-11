@@ -21,9 +21,8 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.*;
 
 /**
  * Copyright (c) 2016,$today.year, 深圳市易考试乐学测评有限公司
@@ -58,10 +57,43 @@ public class AssessQueryServiceTest {
         AssessQueryService service = getService();
         SchoolId schoolId = new SchoolId();
         PersonId personId = new PersonId();
+
+        List<AssessRank> assessRanks = Lists.newArrayList();
+        assessRanks.add(AssessRank.builder()
+                .schoolId(schoolId)
+                .personId(personId)
+                .rankCategory(RankCategory.Weekend)
+                .rankScope(RankScope.Clazz)
+                .rank(10)
+                .yearStarts(2018)
+                .yearEnds(2019)
+                .rankDate(DateUtilWrapper.toDate("2018-09-03","yyyy-MM-dd"))
+                .promote(2)
+                .build());
+        assessRanks.add(AssessRank.builder()
+                .schoolId(schoolId)
+                .personId(personId)
+                .rankCategory(RankCategory.Weekend)
+                .rankScope(RankScope.Clazz)
+                .yearStarts(2018)
+                .yearEnds(2019)
+                .rankDate(DateUtilWrapper.toDate("2018-09-05","yyyy-MM-dd"))
+                .rank(12)
+                .promote(-2)
+                .build());
+
         Date from  = DateUtilWrapper.toDate("2018-09-01","yyyy-MM-dd");
         Date to  = DateUtilWrapper.toDate("2018-09-30","yyyy-MM-dd");
-        List<AssessRank> ranks = service.getRanks(schoolId.id(), personId.id(), RankCategory.Weekend,
+
+        when(rankRepository.findAllBySchoolIdAndPersonIdAndRankCategoryAndRankScopeAndRankDateBetween(any(SchoolId.class)
+                , any(PersonId.class), any(RankCategory.class), any(RankScope.class), eq(from), eq(to))).thenReturn(assessRanks);
+
+        List<AssessRankData> ranks = service.getRanks(schoolId.id(), personId.id(), RankCategory.Weekend,
                 RankScope.Clazz, from, to);
+        assertEquals(assessRanks.size(),ranks.size());
+        assertEquals(assessRanks.get(0).getRankDate(),ranks.get(1).getRankDate());
+        verify(rankRepository,times(1)).findAllBySchoolIdAndPersonIdAndRankCategoryAndRankScopeAndRankDateBetween(any(SchoolId.class)
+                , any(PersonId.class), any(RankCategory.class), any(RankScope.class), eq(from), eq(to));
     }
 
     @Test
@@ -87,12 +119,12 @@ public class AssessQueryServiceTest {
         assertEquals(0,data.size());
         data = service.getAssessOf(new AssesseeId().id(),null,null);
         assertEquals(6,data.size());
-        assertEquals(data.get(0).getDoneDate(),assesses.get(0).getDoneDate());
-        assertEquals(data.get(3).getDoneDate(),assesses.get(5).getDoneDate());
-        assertEquals(data.get(5).getDoneDate(),assesses.get(1).getDoneDate());
+        assertEquals(data.get(0).getDoneDate(),assesses.get(1).getDoneDate());
+        assertEquals(data.get(3).getDoneDate(),assesses.get(2).getDoneDate());
+        assertEquals(data.get(5).getDoneDate(),assesses.get(0).getDoneDate());
         data = service.getAssessOf(new AssesseeId().id(),DateUtilWrapper.toDate("2018-09-01","yyyy-MM-dd"),DateUtilWrapper.toDate("2018-09-10","yyyy-MM-dd"));
-        assertEquals(data.get(0).getDoneDate(),assesses.get(0).getDoneDate());
-        assertEquals(data.get(3).getDoneDate(),assesses.get(5).getDoneDate());
-        assertEquals(data.get(5).getDoneDate(),assesses.get(1).getDoneDate());
+        assertEquals(data.get(0).getDoneDate(),assesses.get(1).getDoneDate());
+        assertEquals(data.get(3).getDoneDate(),assesses.get(2).getDoneDate());
+        assertEquals(data.get(5).getDoneDate(),assesses.get(0).getDoneDate());
     }
 }

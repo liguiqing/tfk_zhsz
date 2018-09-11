@@ -1,10 +1,12 @@
 package com.zhezhu.access.application.school;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.zhezhu.access.domain.model.school.ClazzFollowApply;
 import com.zhezhu.commons.util.DateUtilWrapper;
 import com.zhezhu.share.domain.id.PersonId;
 import com.zhezhu.share.domain.id.access.ClazzFollowApplyId;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
@@ -30,6 +32,8 @@ public class ClazzFollowApplyCommand {
 
     private String applierPhone;
 
+    @DateTimeFormat(pattern="yyyy-MM-dd")
+    @JsonFormat(pattern="yyyy-MM-dd",timezone = "GMT+8")
     private Date applyDate;
 
     private String cause;

@@ -294,12 +294,12 @@ public class AssessControllerTest extends AbstractControllerTest {
         when(rankCategoryService.from(eq(dayCategory))).thenReturn(from);
         when(rankCategoryService.to(eq(dayCategory))).thenReturn(to);
 
-        List<AssessRank> data = Lists.newArrayList();
-        data.add(AssessRank.builder().promote(1).rank(10).rankNode("2018-09-01").rankDate(from).yearEnds(2018).yearStarts(2019).rankCategory(dayCategory).rankScope(RankScope.Clazz).personId(studentId).schoolId(schoolId).build());
-        data.add(AssessRank.builder().promote(1).rank(9).rankNode("2018-09-02").rankDate(from).yearEnds(2018).yearStarts(2019).rankCategory(dayCategory).rankScope(RankScope.Clazz).personId(studentId).schoolId(schoolId).build());
-        data.add(AssessRank.builder().promote(2).rank(7).rankNode("2018-09-03").rankDate(from).yearEnds(2018).yearStarts(2019).rankCategory(dayCategory).rankScope(RankScope.Clazz).personId(studentId).schoolId(schoolId).build());
-        data.add(AssessRank.builder().promote(1).rank(6).rankNode("2018-09-04").rankDate(from).yearEnds(2018).yearStarts(2019).rankCategory(dayCategory).rankScope(RankScope.Clazz).personId(studentId).schoolId(schoolId).build());
-        data.add(AssessRank.builder().promote(3).rank(3).rankNode("2018-09-05").rankDate(from).yearEnds(2018).yearStarts(2019).rankCategory(dayCategory).rankScope(RankScope.Clazz).personId(studentId).schoolId(schoolId).build());
+        List<AssessRankData> data = Lists.newArrayList();
+        data.add(AssessRankData.builder().promote(1).rank(10).rankNode("2018-09-01").rankDate(from).rankCategory(dayCategory.name()).rankScope(RankScope.Clazz.name()).personId(studentId.id()).schoolId(schoolId.id()).build());
+        data.add(AssessRankData.builder().promote(1).rank(9).rankNode("2018-09-02").rankDate(from).rankCategory(dayCategory.name()).rankScope(RankScope.Clazz.name()).personId(studentId.id()).schoolId(schoolId.id()).build());
+        data.add(AssessRankData.builder().promote(2).rank(7).rankNode("2018-09-03").rankDate(from).rankCategory(dayCategory.name()).rankScope(RankScope.Clazz.name()).personId(studentId.id()).schoolId(schoolId.id()).build());
+        data.add(AssessRankData.builder().promote(1).rank(6).rankNode("2018-09-04").rankDate(from).rankCategory(dayCategory.name()).rankScope(RankScope.Clazz.name()).personId(studentId.id()).schoolId(schoolId.id()).build());
+        data.add(AssessRankData.builder().promote(3).rank(3).rankNode("2018-09-05").rankDate(from).rankCategory(dayCategory.name()).rankScope(RankScope.Clazz.name()).personId(studentId.id()).schoolId(schoolId.id()).build());
 
         when(assessQueryService.getRanks(eq(schoolId.id()),eq(studentId.id()),eq(RankCategory.Day), eq(RankScope.Clazz),eq(from),eq(to))).thenReturn(data);
 
@@ -309,6 +309,7 @@ public class AssessControllerTest extends AbstractControllerTest {
         .param("category",dayCategory.name()))
         .andExpect(jsonPath("$.status.success", is(Boolean.TRUE)))
         .andExpect(jsonPath("$.ranks[0].rank", equalTo(data.get(0).getRank())))
+                .andExpect(jsonPath("$.ranks[0].rankDate", equalTo("2018-09-01")))
         .andExpect(view().name("/assess/assessRankList"));
 
         verify(assessQueryService,times(1)).getRanks(eq(schoolId.id()),eq(studentId.id()),eq(RankCategory.Day), eq(RankScope.Clazz),eq(from),eq(to));

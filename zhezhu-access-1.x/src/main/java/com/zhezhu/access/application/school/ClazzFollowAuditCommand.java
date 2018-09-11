@@ -1,11 +1,13 @@
 package com.zhezhu.access.application.school;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.zhezhu.access.domain.model.school.ClazzFollowAudit;
 import com.zhezhu.commons.util.DateUtilWrapper;
 import com.zhezhu.share.domain.id.PersonId;
 import com.zhezhu.share.domain.id.access.ClazzFollowApplyId;
 import com.zhezhu.share.domain.id.access.ClazzFollowAuditId;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
@@ -25,6 +27,8 @@ public class ClazzFollowAuditCommand {
 
     private String auditorId;
 
+    @DateTimeFormat(pattern="yyyy-MM-dd")
+    @JsonFormat(pattern="yyyy-MM-dd",timezone = "GMT+8")
     private Date auditDate;
 
     private boolean ok;

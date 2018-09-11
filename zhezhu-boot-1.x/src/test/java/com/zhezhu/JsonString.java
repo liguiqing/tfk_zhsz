@@ -4,11 +4,16 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
 import com.zhezhu.access.application.wechat.WeChatData;
 import com.zhezhu.access.domain.model.wechat.WeChatCategory;
+import com.zhezhu.assessment.application.assess.AssessData;
+import com.zhezhu.assessment.application.assess.AssessRankData;
 import com.zhezhu.assessment.application.assess.IndexAssess;
 import com.zhezhu.assessment.application.assess.NewTeacherAssessStudentCommand;
 import com.zhezhu.assessment.application.index.IndexData;
+import com.zhezhu.assessment.domain.model.assesse.RankCategory;
+import com.zhezhu.assessment.domain.model.assesse.RankScope;
 import com.zhezhu.commons.domain.Identities;
 import com.zhezhu.commons.port.adaptor.http.controller.HttpAdaptorResponse;
+import com.zhezhu.commons.util.DateUtilWrapper;
 import com.zhezhu.share.domain.id.IdPrefixes;
 import com.zhezhu.share.domain.id.PersonId;
 import com.zhezhu.share.domain.id.index.IndexId;
@@ -19,6 +24,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 
@@ -31,19 +38,19 @@ public class JsonString {
 
     @Test
     public void test()throws Exception{
-        ArrayList<IndexAssess> data = Lists.newArrayList();
-        data.add(new IndexAssess(new IndexId().id(),5));
-        data.add(new IndexAssess(new IndexId().id(),-5));
-        data.add(new IndexAssess(""));
+        PersonId studentId = new PersonId();
+        SchoolId schoolId = new SchoolId();
+        RankCategory dayCategory = RankCategory.Day;
+        Date from = DateUtilWrapper.toDate("2018-09-01","yyyy-MM-dd");
+        Date to = DateUtilWrapper.toDate("2018-09-01","yyyy-MM-dd");
+        List<AssessRankData> data = Lists.newArrayList();
+        data.add(AssessRankData.builder().promote(1).rank(10).rankNode("2018-09-01").rankDate(from).rankCategory(dayCategory.name()).rankScope(RankScope.Clazz.name()).personId(studentId.id()).schoolId(schoolId.id()).build());
+        data.add(AssessRankData.builder().promote(1).rank(9).rankNode("2018-09-02").rankDate(from).rankCategory(dayCategory.name()).rankScope(RankScope.Clazz.name()).personId(studentId.id()).schoolId(schoolId.id()).build());
+        data.add(AssessRankData.builder().promote(2).rank(7).rankNode("2018-09-03").rankDate(from).rankCategory(dayCategory.name()).rankScope(RankScope.Clazz.name()).personId(studentId.id()).schoolId(schoolId.id()).build());
+        data.add(AssessRankData.builder().promote(1).rank(6).rankNode("2018-09-04").rankDate(from).rankCategory(dayCategory.name()).rankScope(RankScope.Clazz.name()).personId(studentId.id()).schoolId(schoolId.id()).build());
+        data.add(AssessRankData.builder().promote(3).rank(3).rankNode("2018-09-05").rankDate(from).rankCategory(dayCategory.name()).rankScope(RankScope.Clazz.name()).personId(studentId.id()).schoolId(schoolId.id()).build());
 
-
-        NewTeacherAssessStudentCommand command = NewTeacherAssessStudentCommand.builder()
-                .schoolId(new SchoolId().id())
-                .teacherPersonId(new PersonId().id())
-                .studentPersonId(new PersonId().id())
-                .assesses(data)
-                .build();
-        log.debug(toJsonString(command));
+        log.debug(toJsonString(data));
 
     }
 

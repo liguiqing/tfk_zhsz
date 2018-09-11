@@ -348,4 +348,56 @@
                 "assessIds": []
             }
             
-                                                                                           
+### 1.12 查询人员某个时段的全部评价
+        调用接口 /assess/list/all/{schoolId}/{role}/{personId}
+        http  method  POST  
+              path params:
+                  schoolId    string 
+                      role    string value:Teacher;Student;Parent;
+                  personId    string
+                  
+            request params:
+                      from    date pattern:yyyy-MM-dd  为null时为本周第一天
+                        to    date pattern:yyyy-MM-dd  为null时为本周最后一天
+        return   //按doneDate倒序排列
+            {
+                "assessIes": [
+                     {
+                         "indexName": "", 
+                         "doneDate": "2019-01-01", 
+                         "indexScore": 10, 
+                         "score": 8, 
+                         "word": "亚马爹", 
+                         "assesseeName": "张三", 
+                         "assesseeId": "", 
+                         "clazzId": ""
+                     }
+                ]
+            }
+            
+### 1.13 查询人员取评价排名
+        调用接口 /assess/list/rank/{schoolId}/{personId}
+        http  method  POST  
+              path params:
+                  schoolId    string 
+                      role    string value:Teacher;Student;Parent;
+                  personId    string
+                  
+            request params:
+                  category    string required  values:Year:学年;Term:学期;Month:月;,Weekend:周;Day:天;
+        return   //按doneDate倒序排列
+            {
+                "ranks": [
+                     {
+                         "schoolId": "", 
+                         "clazzId": "", 
+                         "personId": "", 
+                         "rankScope": "Clazz",// Clazz:班级;Grade:年级;School:学校;
+                         "rankCategory": "Day", //Year:学年;Term:学期;Month:月;Weekend:周;Day:天;
+                         "rankNode": "2018-09-01", 
+                         "rankDate": "2018-09-01", 
+                         "rank": 10, 
+                         "promote": 1, 
+                         "chidren": [] same as this
+                }]
+            }                                                                                                       
