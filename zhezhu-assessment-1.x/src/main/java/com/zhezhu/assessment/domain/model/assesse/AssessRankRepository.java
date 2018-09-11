@@ -20,6 +20,10 @@ public interface AssessRankRepository extends EntityRepository<AssessRank, Perso
 
     void save(AssessRank rank);
 
+    AssessRank findByPersonIdAndRankNodeAndRankCategoryAndRankScopeAndYearStartsAndYearEnds(PersonId personId,String node,
+                                                                                            RankCategory category,RankScope scope,
+                                                                                            int yearStarts,int yearEnds);
+
     List<AssessRank> findAllBySchoolIdAndPersonIdAndRankCategoryAndRankScopeAndRankDateBetween(
             SchoolId schoolId,PersonId personId, RankCategory category,RankScope scope, Date from, Date to);
 }

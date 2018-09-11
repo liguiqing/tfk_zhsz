@@ -53,8 +53,8 @@
              path params:
                applierId  string 接口 *1.2* 返回的personId
                        
-             request  params:
-               openId string required 微信openId
+              request  params:
+                  openId  string required 微信openId
         return 
             {"clazzs":
                 {
@@ -116,8 +116,8 @@
         调用接口 /clazz/grade/{schoolId}/{gradeLevel}
         http  method  GET  
              path params:
-               schoolId    string 学校唯一标识,1.4返回值的schools[n].schoolId
-               gradeLevel  string 年级序列,1.4返回值的schools[n].grads[m].level
+                 schoolId    string 学校唯一标识,1.4返回值的schools[n].schoolId
+               gradeLevel    string 年级序列,1.4返回值的schools[n].grads[m].level
         return   
             {"clazzs": [
                 {
@@ -137,7 +137,7 @@
 ### 1.6 提交班级关注申请
         调用接口 /apply/school
         http  method  POST  
-             request body:
+             request  body:
                 {
                     "applyingSchoolId": "", 
                     "applyingClazzId": "", 
@@ -184,7 +184,7 @@
         http  method  GET  
               path params:
                  schoolId    string
-                 clazzId     string
+                  clazzId    string
         return   
             {
                 "students": [
@@ -231,8 +231,8 @@
          http  method  GET  
                request params:
                   schoolId    string required
-                 teacherId    string required
-                 studentId    string required            
+           teacherPersonId    string required
+           studentPersonId    string required            
          return   
             {
                 "indexes": [

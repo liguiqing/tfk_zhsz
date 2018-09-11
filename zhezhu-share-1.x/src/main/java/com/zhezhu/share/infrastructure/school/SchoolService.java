@@ -68,4 +68,9 @@ public class SchoolService {
         //TODO
         return null;
     }
+
+    public List<ClazzData> getClazzs(SchoolId schoolId){
+        //TODO
+        return null;
+    }
 }

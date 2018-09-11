@@ -7,14 +7,18 @@
         <id name="id" type="long" column="id" unsaved-value="-1">
             <generator class="native" />
         </id>
+        <component name="schoolId" class="com.zhezhu.share.domain.id.school.SchoolId">
+            <property name="id" column="schoolId" type="java.lang.String"/>
+        </component>
+
+        <component name="clazzId" class="com.zhezhu.share.domain.id.school.ClazzId">
+            <property name="id" column="clazzId" type="java.lang.String"/>
+        </component>
 
         <component name="personId" class="com.zhezhu.share.domain.id.PersonId">
             <property name="id" column="personId" type="java.lang.String"/>
         </component>
 
-        <component name="schoolId" class="com.zhezhu.share.domain.id.school.SchoolId">
-            <property name="id" column="schoolId" type="java.lang.String"/>
-        </component>
 
         <property name="rankScope" column="rankScope" >
             <type name="org.hibernate.type.EnumType">
@@ -32,6 +36,8 @@
         <property name="yearEnds" column="yearEnds" type="java.lang.Integer"/>
         <property name="rankDate" column="rankDate" type="java.util.Date"/>
         <property name="rankNode" column="rankNode" type="java.lang.String"/>
+        <property name="score" column="score" type="java.lang.Double"/>
+        <property name="promoteScore" column="promoteScore" type="java.lang.Double"/>
         <property name="rank" column="rank" type="java.lang.Integer"/>
         <property name="promote" column="promote" type="java.lang.Integer"/>
     </class>

@@ -408,4 +408,17 @@ public class DateUtilWrapper {
         LocalDateTime localDateTime = LocalDateTime.ofInstant(instant, zone);
         return localDateTime.toLocalTime();
     }
+
+    /**
+     * 将LocalTime 转换到 Date
+     * @param time
+     * @return
+     */
+    public static Date fromLocalTime(LocalDateTime time){
+        ZoneId zoneId = ZoneId.systemDefault();
+        LocalDateTime localDateTime = LocalDateTime.now();
+        ZonedDateTime zdt = localDateTime.atZone(zoneId);
+        Date date = Date.from(zdt.toInstant());
+        return date;
+    }
 }

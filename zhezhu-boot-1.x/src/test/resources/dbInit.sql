@@ -74,6 +74,27 @@ CREATE TABLE `as_Assess` (
   INDEX `x_as_Assess_indexId` (`indexId`)
 )ENGINE=INNODB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='评价信息表';
 
+DROP TABLE IF EXISTS `as_AssessRank`;
+CREATE TABLE `as_AssessRank` (
+  `id` BIGINT(20)  NOT NULL AUTO_INCREMENT ,
+  `schoolId` varchar(36) NOT NULL COMMENT '学校唯一标识,源于as_Assessee.schoolId',
+  `personId` varchar(36) NOT NULL COMMENT '人员唯一标识,源于as_Assessee.personId',
+  `clazzId` varchar(36)  COMMENT '班级唯一标识',
+  `yearStarts` SMALLINT(4)  COMMENT '学年开始年度',
+  `yearEnds` SMALLINT(4)  COMMENT '学年结束年度',
+  `rankScope` varchar(16)  COMMENT '排名范围:Clazz-班级;Grade-年级;School-学校',
+  `rankCategory` varchar(16) NOT NULL COMMENT '排名类型:Year-学年;Term-学期;Month-月;Weekend-周',
+  `rankDate` DATE COMMENT '排名日期',
+  `rankNode` varchar(16)  COMMENT '排名节点:Year(yearStarts+yearEnds,如2018-2019);Term(1,2);Moth(1-12);Weekend(1-52);',
+  `score` DOUBLE(5,2)  COMMENT '当期得分',
+  `promoteScore` DOUBLE(5,2)  COMMENT '当期得分与前期比',
+  `rank` SMALLINT(4)  COMMENT '当期排名',
+  `promote` SMALLINT(4)  COMMENT '当期与前期排名进退步名次',
+  PRIMARY KEY (`id`),
+  INDEX `x_as_AssessRank_schoolId` (`schoolId`),
+  INDEX `x_as_AssessRank_personId` (`personId`)
+)ENGINE=INNODB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='评价排名';
+
 DROP TABLE IF EXISTS `as_Medal`;
 CREATE TABLE `as_Medal` (
   `id` BIGINT(20)  NOT NULL AUTO_INCREMENT ,

@@ -39,4 +39,5 @@ public interface AssessRepository extends EntityRepository<Assess,AssessId> {
 
     @Query("From Assess where assesseeId=?1 and doneDate between ?2 and ?3 and removed=0")
     List<Assess> findByAssesseeIdAndDoneDateBetween(AssesseeId assesseeId, Date doneDateFrom, Date doneDateTo);
+
 }
