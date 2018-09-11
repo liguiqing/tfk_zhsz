@@ -49,6 +49,14 @@ public class Period {
         return ends;
     }
 
+    public int yearStarts(){
+        return DateUtilWrapper.year(starts);
+    }
+
+    public int yearEnds(){
+        return DateUtilWrapper.year(ends);
+    }
+
     @Override
     public String toString() {
         return this.starts + "-" + this.ends;
