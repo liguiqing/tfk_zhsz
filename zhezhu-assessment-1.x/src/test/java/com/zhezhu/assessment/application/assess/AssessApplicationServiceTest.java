@@ -1,9 +1,7 @@
 package com.zhezhu.assessment.application.assess;
 
 import com.google.common.collect.Lists;
-import com.zhezhu.assessment.domain.model.assesse.Assess;
-import com.zhezhu.assessment.domain.model.assesse.AssessRepository;
-import com.zhezhu.assessment.domain.model.assesse.AssessService;
+import com.zhezhu.assessment.domain.model.assesse.*;
 import com.zhezhu.assessment.domain.model.collaborator.Assessee;
 import com.zhezhu.assessment.domain.model.collaborator.AssesseeRepository;
 import com.zhezhu.assessment.domain.model.collaborator.Assessor;
@@ -13,19 +11,28 @@ import com.zhezhu.assessment.domain.model.index.IndexCategory;
 import com.zhezhu.assessment.domain.model.index.IndexRepository;
 import com.zhezhu.assessment.domain.model.medal.AwardRepository;
 import com.zhezhu.commons.message.MessageListener;
+import com.zhezhu.commons.util.DateUtilWrapper;
 import com.zhezhu.share.domain.id.PersonId;
 import com.zhezhu.share.domain.id.assessment.AssessId;
+import com.zhezhu.share.domain.id.assessment.AssessTeamId;
 import com.zhezhu.share.domain.id.assessment.AssesseeId;
 import com.zhezhu.share.domain.id.assessment.AssessorId;
 import com.zhezhu.share.domain.id.index.IndexId;
+import com.zhezhu.share.domain.id.school.ClazzId;
 import com.zhezhu.share.domain.id.school.SchoolId;
 import com.zhezhu.share.domain.person.Person;
+import com.zhezhu.share.domain.school.SchoolScope;
+import com.zhezhu.share.infrastructure.school.ClazzData;
+import com.zhezhu.share.infrastructure.school.SchoolData;
+import com.zhezhu.share.infrastructure.school.SchoolService;
+import com.zhezhu.share.infrastructure.school.StudentData;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.util.Date;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -37,6 +44,9 @@ import static org.mockito.Mockito.*;
 public class AssessApplicationServiceTest {
     @Mock
     private AssessService assesseService;
+
+    @Mock
+    private AssessTeamRepository assessTeamRepository;
 
     @Mock
     private IndexRepository indexRepository;
@@ -56,6 +66,9 @@ public class AssessApplicationServiceTest {
     @Mock
     private MessageListener messageListener;
 
+    @Mock
+    private SchoolService schoolService;
+
     @Before
     public void before(){
         MockitoAnnotations.initMocks(this);
@@ -71,7 +84,35 @@ public class AssessApplicationServiceTest {
         FieldUtils.writeField(service,"assesseeRepository",assesseeRepository,true);
         FieldUtils.writeField(service,"awardRepository",awardRepository,true);
         FieldUtils.writeField(service,"messageListener",messageListener,true);
+        FieldUtils.writeField(service,"schoolService",schoolService,true);
+        FieldUtils.writeField(service,"assessTeamRepository",assessTeamRepository,true);
         return spy(service);
+    }
+
+    @Test
+    public void genAsseeTeamsOf()throws Exception{
+        SchoolId schoolId = new SchoolId();
+
+        SchoolData school = SchoolData.builder().name("S1").schoolId(schoolId.id()).scope(SchoolScope.Primary.name()).build();
+        List<ClazzData> clazzData = Lists.newArrayList();
+        Date now = DateUtilWrapper.now();
+        int year = DateUtilWrapper.year(now);
+        clazzData.add(ClazzData.builder().clazzId(new ClazzId().id()).schoolId(schoolId.id()).gradeName("G1").clazzName("C1").openedTime(now).build());
+        clazzData.add(ClazzData.builder().clazzId(new ClazzId().id()).schoolId(schoolId.id()).gradeName("G1").clazzName("C2").openedTime(now).build());
+        clazzData.add(ClazzData.builder().clazzId(new ClazzId().id()).schoolId(schoolId.id()).gradeName("G2").clazzName("C3").openedTime(now).build());
+        clazzData.add(ClazzData.builder().clazzId(new ClazzId().id()).schoolId(schoolId.id()).gradeName("G2").clazzName("C4").openedTime(now).build());
+        clazzData.add(ClazzData.builder().clazzId(new ClazzId().id()).schoolId(schoolId.id()).gradeName("G3").clazzName("C5").openedTime(now).build());
+        AssessTeamId teamId = new AssessTeamId();
+        AssessTeam team_  = mock(AssessTeam.class);
+        when(team_.getTeamId()).thenReturn(schoolId.id());
+        when(team_.getAssessTeamId()).thenReturn(teamId);
+        when(schoolService.getClazzs(eq(schoolId))).thenReturn(clazzData);
+        when(schoolService.getSchool(any(SchoolId.class))).thenReturn(school);
+        when(assessTeamRepository.findByTeamId(any(String.class))).thenReturn(team_).thenReturn(null);
+
+        AssessApplicationService service = getService();
+        service.genAsseeTeamsOf(schoolId.id());
+        verify(team_,times(2)).getAssessTeamId();
     }
 
     @Test
@@ -97,9 +138,16 @@ public class AssessApplicationServiceTest {
         when(assesseService.newAssesses(eq(index), eq(assessor), eq(assessee), eq(command1.getScore()))).thenReturn(assesses);
         doNothing().when(messageListener).addEvent(any());
 
+        StudentData student = spy(StudentData.builder().personId(new PersonId().id()).build());
+        when(student.getManagedClazzId()).thenReturn(new ClazzId().id());
+        when(schoolService.getStudentBy(any(PersonId.class))).thenReturn(student);
+        AssessTeam team = AssessTeam.builder().assessTeamId(new AssessTeamId()).build();
+        when(assessTeamRepository.findByTeamId(any(String.class))).thenReturn(team);
+
         service.assess(command1);
         verify(assessRepository,times(1)).save(any(Assess.class));
         verify(messageListener,times(1)).addEvent(any());
+        verify(student,times(1)).getManagedClazzId();
     }
 
     @Test

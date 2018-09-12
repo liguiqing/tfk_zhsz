@@ -7,8 +7,11 @@ package com.zhezhu.commons.util;
 import org.junit.Test;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.temporal.WeekFields;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 import static org.junit.Assert.*;
 
@@ -20,6 +23,16 @@ import static org.junit.Assert.*;
  */
 
 public class DateUtilWrapperTest {
+
+    @Test
+    public void test(){
+
+        String s = LocalDate.now().toString();
+        System.out.println(s);
+        s = LocalDate.now().getMonth().getValue()+"";
+        System.out.println(s);
+
+    }
 
     @Test
     public void testToday()throws  Exception{

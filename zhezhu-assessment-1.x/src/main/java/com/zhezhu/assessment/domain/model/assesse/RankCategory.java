@@ -32,4 +32,14 @@ public enum RankCategory implements LabelEnum {
     public String getValue() {
         return this.name();
     }
+
+    public RankCategory child(){
+        switch (this){
+            case Year:return Term;
+            case Term:return Month;
+            case Month:return Weekend;
+            case Weekend:return Day;
+        }
+        return null;
+    }
 }

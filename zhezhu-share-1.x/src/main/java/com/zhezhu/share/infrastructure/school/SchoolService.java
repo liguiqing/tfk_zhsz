@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -34,6 +35,26 @@ public class SchoolService {
         if(this.schoolInfoApi == null)
             return defaultSchoolInfoApi;
         return this.schoolInfoApi;
+    }
+
+    public SchoolData getSchool(SchoolId schoolId){
+        return api().getSchool(schoolId);
+    }
+
+    public ClazzData getClazz(ClazzId clazzId){
+        //TODO
+        return null;
+    }
+
+    public Term getSchoolTermOfNow(SchoolId schoolId){
+        //TODO schoolId is not null
+
+        LocalDate now = LocalDate.now();
+        int month = now.getMonth().getValue();
+        if(month >= 8 || month < 2) {
+            return Term.First();
+        }
+        return Term.Second();
     }
 
     public Period getSchoolTermPeriod(SchoolId schoolId){

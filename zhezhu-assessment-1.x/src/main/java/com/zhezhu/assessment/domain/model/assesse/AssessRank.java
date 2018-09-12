@@ -2,6 +2,8 @@ package com.zhezhu.assessment.domain.model.assesse;
 
 import com.zhezhu.commons.domain.IdentifiedValueObject;
 import com.zhezhu.share.domain.id.PersonId;
+import com.zhezhu.share.domain.id.assessment.AssessTeamId;
+import com.zhezhu.share.domain.id.assessment.AssesseeId;
 import com.zhezhu.share.domain.id.school.ClazzId;
 import com.zhezhu.share.domain.id.school.SchoolId;
 import lombok.*;
@@ -24,6 +26,10 @@ public class AssessRank extends IdentifiedValueObject {
     private SchoolId schoolId;
 
     private ClazzId clazzId;
+
+    private AssessTeamId assessTeamId;
+
+    private AssesseeId assesseeId;
 
     private PersonId personId;
 

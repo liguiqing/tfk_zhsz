@@ -49,6 +49,24 @@ public class JdbcSchoolInfoApi implements SchoolInfoApi {
         return jdbc.query(sql,(rs,rowNum) -> new PersonId(rs.getString("personId")),schoolId.id());
     }
 
+    @Override
+    public SchoolData getSchool(SchoolId schoolId) {
+        String sql = "select schoolId,name,alias,scope from sm_school where schoolId=? and removed=0 ";
+        try{
+            return jdbc.queryForObject(sql, (rs, rn) ->
+                            SchoolData.builder()
+                                    .schoolId(schoolId.id())
+                                    .name(rs.getString("name"))
+                                    .alias(rs.getString("alias"))
+                                    .scope(rs.getString("scope"))
+                                    .build()
+                    , schoolId.id());
+        }catch (Exception e){
+            log.debug(Throwables.toString(e));
+        }
+        return null;
+    }
+
 
     @Override
     public StudentData getStudent(PersonId personId) {

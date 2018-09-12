@@ -22,8 +22,7 @@ public class RankCategoryService {
     public Date from(RankCategory category ){
         for(RankCategoryDate date:categoryDates){
             if(date.supports(category)){
-                Date now = DateUtilWrapper.now();
-                return DateUtilWrapper.getStartDayOfWeek(now);
+                return date.from();
             }
         }
         return DateUtilWrapper.now();
@@ -32,8 +31,7 @@ public class RankCategoryService {
     public Date to(RankCategory category ){
         for(RankCategoryDate date:categoryDates){
             if(date.supports(category)){
-                Date now = DateUtilWrapper.now();
-                return DateUtilWrapper.getEndDayOfWeek(now);
+               return date.to();
             }
         }
         return DateUtilWrapper.now();

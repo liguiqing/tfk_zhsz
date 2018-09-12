@@ -75,6 +75,9 @@ public class IdPrefixes {
     //评价活动唯一标识
     public static final String AssessIdPrefix = "ASS";
 
+    //评价活动分组唯一标识
+    public static final String AssessTeamIdPrefix = "ATE";
+
     //评价主评者唯一标识
     public static final String AssessorIdPrefix = "ASR";
 

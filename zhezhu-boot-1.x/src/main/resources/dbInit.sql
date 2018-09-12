@@ -445,6 +445,7 @@ CREATE TABLE `as_Assess` (
   `assessId` varchar(36) NOT NULL COMMENT '评价唯一标识',
   `assessorId` varchar(36) NOT NULL COMMENT '主评唯一标识',
   `assesseeId` varchar(36) NOT NULL COMMENT '被评唯一标识',
+  `assessTeamId` varchar(36) COMMENT '评价所属组唯一标识',
   `indexId` varchar(36)  COMMENT '评价指标唯一标识',
   `doneDate` TIMESTAMP DEFAULT NOW() COMMENT '评价时间',
   `category` VARCHAR(16) COMMENT '评价指标类别',
@@ -455,6 +456,7 @@ CREATE TABLE `as_Assess` (
   KEY `x_as_Assess_assessId` (`assessId`),
   INDEX `x_as_Assess_assessorId` (`assessorId`),
   INDEX `x_as_Assess_assesseeId` (`assesseeId`),
+  INDEX `x_as_Assess_assessTeamId` (`assessTeamId`),
   INDEX `x_as_Assess_indexId` (`indexId`)
 )ENGINE=INNODB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='评价信息表';
 

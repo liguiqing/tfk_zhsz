@@ -2,6 +2,7 @@ package com.zhezhu.assessment.domain.model.assesse;
 
 import com.zhezhu.commons.domain.IdentifiedValueObject;
 import com.zhezhu.share.domain.id.assessment.AssessId;
+import com.zhezhu.share.domain.id.assessment.AssessTeamId;
 import com.zhezhu.share.domain.id.assessment.AssesseeId;
 import com.zhezhu.share.domain.id.assessment.AssessorId;
 import com.zhezhu.share.domain.id.index.IndexId;
@@ -29,7 +30,11 @@ public class Assess extends IdentifiedValueObject {
 
     private AssesseeId assesseeId;
 
+    private AssessTeamId assessTeamId;
+
     private IndexId indexId;
+
+    private AssessTeamId teamId;
 
     private Date doneDate;
 
@@ -50,6 +55,10 @@ public class Assess extends IdentifiedValueObject {
         this.category = category;
         this.score = score;
         this.word = word;
+    }
+
+    public void associateTo(AssessTeam team){
+        this.assessTeamId = team.getAssessTeamId();
     }
 
     public Assess(){}

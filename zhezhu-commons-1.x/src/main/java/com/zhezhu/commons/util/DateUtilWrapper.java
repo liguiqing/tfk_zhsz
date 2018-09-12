@@ -421,4 +421,11 @@ public class DateUtilWrapper {
         Date date = Date.from(zdt.toInstant());
         return date;
     }
+
+    public static Date fromLocalDate(LocalDate localDate){
+        ZonedDateTime zonedDateTime = localDate.atStartOfDay(ZoneId.systemDefault());
+        Instant instant1 = zonedDateTime.toInstant();
+        Date from = Date.from(instant1);
+        return  from;
+    }
 }

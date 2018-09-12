@@ -1,8 +1,7 @@
 package com.zhezhu.assessment.application.assess;
 
-import com.zhezhu.assessment.domain.model.assesse.Assess;
-import com.zhezhu.assessment.domain.model.assesse.AssessRepository;
-import com.zhezhu.assessment.domain.model.assesse.AssessService;
+import com.google.common.collect.Lists;
+import com.zhezhu.assessment.domain.model.assesse.*;
 import com.zhezhu.assessment.domain.model.collaborator.*;
 import com.zhezhu.assessment.domain.model.index.Index;
 import com.zhezhu.assessment.domain.model.index.IndexRepository;
@@ -14,16 +13,18 @@ import com.zhezhu.commons.message.Messagingable;
 import com.zhezhu.commons.util.ArraysUtilWrapper;
 import com.zhezhu.commons.util.CollectionsUtilWrapper;
 import com.zhezhu.share.domain.id.PersonId;
-import com.zhezhu.share.domain.id.assessment.AssessId;
 import com.zhezhu.share.domain.id.assessment.AssesseeId;
 import com.zhezhu.share.domain.id.assessment.AssessorId;
 import com.zhezhu.share.domain.id.index.IndexId;
 import com.zhezhu.share.domain.id.school.SchoolId;
+import com.zhezhu.share.infrastructure.school.SchoolService;
+import com.zhezhu.share.infrastructure.school.StudentData;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -45,6 +46,9 @@ public class AssessApplicationService {
     private AssessRepository assessRepository;
 
     @Autowired
+    private AssessTeamRepository assessTeamRepository;
+
+    @Autowired
     private AssessorRepository assessorRepository;
 
     @Autowired
@@ -53,8 +57,48 @@ public class AssessApplicationService {
     @Autowired
     private AwardRepository awardRepository;
 
+    @Autowired
+    private SchoolService schoolService;
+
+    @Autowired
+    private RankService rankService;
+
+    @Autowired
+    private AssessRankRepository rankRepository;
+
     @Autowired(required = false)
     private MessageListener messageListener;
+
+    @Transactional(rollbackFor = Exception.class)
+    public void genAsseeTeamsOf(String schoolId){
+        log.debug("Gen assess teams for {}",schoolId);
+
+        AssessTeamService teamService = new AssessTeamService();
+        List<AssessTeam> schoolTeams = teamService.teamOfSchool(new SchoolId(schoolId), schoolService);
+
+        if(CollectionsUtilWrapper.isNullOrEmpty(schoolTeams))
+            return;
+        ArrayList<AssessTeam> existsTeams = Lists.newArrayList();
+        ArrayList<AssessTeam> existsTeams2 = Lists.newArrayList();
+        for(AssessTeam team:schoolTeams){
+            AssessTeam team_ = assessTeamRepository.findByTeamId(team.getTeamId());
+            if(team_ != null){
+                existsTeams.add(team_);
+                existsTeams2.add(team);
+                continue;
+            }
+            int i = 0;
+            for(AssessTeam pt:existsTeams2){
+                if(pt.getAssessTeamId().equals(team.getParentAssessTeamId())){
+                    AssessTeam pt_ = existsTeams.get(i);
+                    team.updateParent(pt_);
+                    break;
+                }
+                i++;
+            }
+            assessTeamRepository.save(team);
+        }
+    }
 
     @Transactional(rollbackFor = Exception.class)
     public void assess(NewAssessCommand command){
@@ -63,8 +107,18 @@ public class AssessApplicationService {
         Index index = indexRepository.loadOf(new IndexId(command.getIndexId()));
         Assessor assessor = assessorRepository.loadOf(new AssessorId(command.getAssessorId()));
         Assessee assessee = assesseeRepository.loadOf(new AssesseeId(command.getAssesseeId()));
+
+        //以下方法只实现老师评价学生非走班情况,走班还要根据Assessor的教师信息进行判断,最好做成一个接口来处理AssessTeam,才能做到业务抽象,以后要改
+        PersonId assesseePersonId = assessee.getCollaborator().getPersonId();
+        StudentData student = schoolService.getStudentBy(assesseePersonId);
+        String clazzId = student.getManagedClazzId();
+        AssessTeam team = assessTeamRepository.findByTeamId(clazzId);
+
         List<Assess> assesses = assesseService.newAssesses(index, assessor, assessee, command.getScore());
-        assesses.forEach(assess -> assessRepository.save(assess));
+        assesses.forEach(assess -> {
+            assess.associateTo(team);
+            assessRepository.save(assess);
+        });
         sendMessage(new AssessMessage(index,assessee,command.getScore()));
     }
 
@@ -116,7 +170,16 @@ public class AssessApplicationService {
             assessIds[i++] = assess_.getAssessId().id();
         }
         return assessIds;
+    }
 
+    public void rank(String teamId,String category,String scope){
+        log.debug("Rank for {} {} {}",teamId,category,scope);
+        RankCategory category1 = RankCategory.valueOf(category);
+        RankScope scope1 = RankScope.valueOf(scope);
+        List<AssessRank> ranks = rankService.rank(teamId, category1, scope1);
+        for(AssessRank rank:ranks){
+            rankRepository.save(rank);
+        }
     }
 
     private Assessor teacherAsAssessor(PersonId teacherPersonId,SchoolId schoolId){

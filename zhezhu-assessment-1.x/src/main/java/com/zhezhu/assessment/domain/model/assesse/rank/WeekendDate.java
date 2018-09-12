@@ -1,7 +1,8 @@
-package com.zhezhu.assessment.infrastructure.rank;
+package com.zhezhu.assessment.domain.model.assesse.rank;
 
 import com.zhezhu.assessment.domain.model.assesse.RankCategory;
 import com.zhezhu.assessment.domain.model.assesse.RankCategoryDate;
+import com.zhezhu.commons.util.DateUtilWrapper;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -11,7 +12,7 @@ import java.util.Date;
  * @since V3.0
  */
 @Component
-public class WenkendDate implements RankCategoryDate {
+public class WeekendDate implements RankCategoryDate {
 
 
     @Override
@@ -21,11 +22,13 @@ public class WenkendDate implements RankCategoryDate {
 
     @Override
     public Date from() {
-        return null;
+        Date now = DateUtilWrapper.now();
+        return DateUtilWrapper.getStartDayOfWeek(now);
     }
 
     @Override
     public Date to() {
-        return null;
+        Date now = DateUtilWrapper.now();
+        return DateUtilWrapper.getEndDayOfWeek(now);
     }
 }

@@ -47,6 +47,21 @@ public class AssessController extends AbstractHttpController {
     @Autowired(required = false)
     private RankCategoryService rankCategoryService;
 
+
+    /**
+     * 生成学校评价组
+     *
+     * @param schoolId
+     * @return
+     */
+    @RequestMapping(value="/team/gen/{schoolId}",method = RequestMethod.POST)
+    public ModelAndView onGenAssessTeamOf(@PathVariable String schoolId){
+        logger.debug("URL /assess/team/gen/{} method=POST",schoolId);
+
+        assessApplicationService.genAsseeTeamsOf(schoolId);
+        return newModelAndViewBuilder("/assess/newAssessTeamSuccess").creat();
+    }
+
     /**
      * 进行一次评价
      *

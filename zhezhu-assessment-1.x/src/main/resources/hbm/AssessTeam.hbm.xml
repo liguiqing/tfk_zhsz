@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping/hibernate-mapping-3.0.dtd">
+<hibernate-mapping default-access="field" default-cascade="all" >
+
+    <class name="com.zhezhu.assessment.domain.model.assesse.AssessTeam" table="as_AssessTeam" lazy="true">
+        <cache usage="read-write" region="asCache"></cache>
+        <id name="id" type="long" column="id" unsaved-value="-1">
+            <generator class="native" />
+        </id>
+        <component name="assessTeamId" class="com.zhezhu.share.domain.id.assessment.AssessTeamId">
+            <property name="id" column="assessTeamId" type="java.lang.String"/>
+        </component>
+        <component name="parentAssessTeamId" class="com.zhezhu.share.domain.id.assessment.AssessTeamId">
+            <property name="id" column="parentTeamId" type="java.lang.String"/>
+        </component>
+        <property name="teamName" column="teamName" type="java.lang.String"/>
+        <property name="teamId" column="teamId" type="java.lang.String"/>
+    </class>
+
+</hibernate-mapping>

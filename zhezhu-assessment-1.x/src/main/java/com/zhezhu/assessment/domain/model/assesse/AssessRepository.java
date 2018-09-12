@@ -2,6 +2,7 @@ package com.zhezhu.assessment.domain.model.assesse;
 
 import com.zhezhu.commons.domain.EntityRepository;
 import com.zhezhu.share.domain.id.assessment.AssessId;
+import com.zhezhu.share.domain.id.assessment.AssessTeamId;
 import com.zhezhu.share.domain.id.assessment.AssesseeId;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -40,4 +41,6 @@ public interface AssessRepository extends EntityRepository<Assess,AssessId> {
     @Query("From Assess where assesseeId=?1 and doneDate between ?2 and ?3 and removed=0")
     List<Assess> findByAssesseeIdAndDoneDateBetween(AssesseeId assesseeId, Date doneDateFrom, Date doneDateTo);
 
+    @Query("From Assess where assessTeamId=?1 and doneDate between ?2 and ?3 and removed=0")
+    List<Assess> findByAssessTeamIdAndDoneDateBetween(AssessTeamId teamId, Date doneDateFrom, Date doneDateTo);
 }

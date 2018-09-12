@@ -31,6 +31,7 @@ public class AssessmentApplicationConfiguration {
     MappingResource mappingResource(){
         return ()->new String[]{
                 "/hbm/Assess.hbm.xml",
+                "/hbm/AssessTeam.hbm.xml",
                 "/hbm/Assessee.hbm.xml",
                 "/hbm/Assessor.hbm.xml",
                 "/hbm/AssessRank.hbm.xml",

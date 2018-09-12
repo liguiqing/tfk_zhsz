@@ -76,6 +76,14 @@ public class AssessControllerTest extends AbstractControllerTest {
     private RankCategoryService rankCategoryService;
 
     @Test
+    public void onGenAssessTeamOf()throws Exception{
+        this.mvc.perform(post("/assess/team/gen/"+new SchoolId().id()).contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.status.success", is(Boolean.TRUE)))
+                .andExpect(view().name("/assess/newAssessTeamSuccess"));
+    }
+
+    @Test
     public void onAssess() throws Exception{
         assertNotNull(controller);
         AssesseeId assesseeId = new AssesseeId();

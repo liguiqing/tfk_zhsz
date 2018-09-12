@@ -74,6 +74,18 @@ CREATE TABLE `as_Assess` (
   INDEX `x_as_Assess_indexId` (`indexId`)
 )ENGINE=INNODB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='评价信息表';
 
+DROP TABLE IF EXISTS `as_AssessTeam`;
+CREATE TABLE `as_AssessTeam` (
+  `id` BIGINT(20)  NOT NULL AUTO_INCREMENT ,
+  `assessTeamId` varchar(36) NOT NULL COMMENT '评价组唯一标识',
+  `parentTeamId` varchar(36) COMMENT '评价组上级唯一标识',
+  `teamId` varchar(36) NOT NULL COMMENT '评价组外部唯一标识,如schoolId,clazzId',
+  `teamName` varchar(36)  COMMENT '评价组名称',
+  `removed` TINYINT(1) DEFAULT 0 COMMENT '删除标记',
+  PRIMARY KEY (`id`),
+  KEY `x_as_AssessTeam_assessTeamId` (`assessTeamId`)
+)ENGINE=INNODB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='评价组信息表';
+
 DROP TABLE IF EXISTS `as_AssessRank`;
 CREATE TABLE `as_AssessRank` (
   `id` BIGINT(20)  NOT NULL AUTO_INCREMENT ,

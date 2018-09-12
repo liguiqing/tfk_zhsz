@@ -32,4 +32,12 @@ public enum RankScope implements LabelEnum {
     public String toString(){
         return this.label + "【" + this.name() + "】" ;
     }
+
+    public RankScope child(){
+        switch (this){
+            case School:return Grade;
+            case Grade:return Clazz;
+        }
+        return null;
+    }
 }

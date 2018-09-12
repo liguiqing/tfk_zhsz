@@ -5,6 +5,7 @@ import com.zhezhu.assessment.config.AssessmentApplicationConfiguration;
 import com.zhezhu.commons.config.CommonsConfiguration;
 import com.zhezhu.commons.util.DateUtilWrapper;
 import com.zhezhu.share.domain.id.assessment.AssessId;
+import com.zhezhu.share.domain.id.assessment.AssessTeamId;
 import com.zhezhu.share.domain.id.assessment.AssesseeId;
 import com.zhezhu.share.domain.id.assessment.AssessorId;
 import com.zhezhu.share.domain.id.index.IndexId;
@@ -44,6 +45,7 @@ public class AssesseRepositoryTest extends AbstractTransactionalJUnit4SpringCont
         AssessId assessId = new AssessId();
         AssesseeId assesseeId = new AssesseeId();
         AssessorId assessorId = new AssessorId();
+        AssessTeam team = AssessTeam.builder().assessTeamId(new AssessTeamId()).build();
         Assess assess = Assess.builder()
                 .indexId(indexId)
                 .assessId(assessId)
@@ -54,10 +56,12 @@ public class AssesseRepositoryTest extends AbstractTransactionalJUnit4SpringCont
                 .word("YAMADIE")
                 .doneDate(DateUtilWrapper.now())
                 .build();
+        assess.associateTo(team);
         assessRepository.save(assess);
 
         Assess assess_ = assessRepository.loadOf(assessId);
         assertEquals(assess,assess_);
+        assertEquals(assess_.getAssessTeamId(), team.getAssessTeamId());
         Date now = DateUtilWrapper.now();
         Assess assess2 = Assess.builder()
                 .indexId(indexId)
@@ -69,6 +73,7 @@ public class AssesseRepositoryTest extends AbstractTransactionalJUnit4SpringCont
                 .word("YAMADIE")
                 .doneDate(now)
                 .build();
+        assess2.associateTo(team);
         assertNotEquals(assess2,assess);
         assertNotEquals(assess2,assess_);
 
@@ -77,9 +82,14 @@ public class AssesseRepositoryTest extends AbstractTransactionalJUnit4SpringCont
         List<Assess> assessList = assessRepository.findByAssesseeIdAndDoneDateBetween(assesseeId, from, to);
         assertEquals(1,assessList.size());
 
+        assessRepository.save(assess2);
+        assessList = assessRepository.findByAssessTeamIdAndDoneDateBetween(team.getAssessTeamId(), from, to);
+        assertEquals(2,assessList.size());
+
         assessRepository.delete(assessId);
         assess_ = assessRepository.loadOf(assessId);
         assertNull(assess_);
+
 
         testBatch(10,10000);
     }
