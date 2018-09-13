@@ -41,7 +41,6 @@ public interface IndexRepository extends EntityRepository<Index,IndexId> {
 
     List<Index> findAllByNameAndOwnerAndCategory(String name, TenantId owner, IndexCategory category);
 
-    @QueryHints({ @QueryHint(name = "org.hibernate.cacheable", value ="true") })
     List<Index> findAllByOwnerAndParentIsNull(TenantId owner);
 
     List<Index> findAllByOwnerAndParentIsNullAndGroup(TenantId owner,String group);

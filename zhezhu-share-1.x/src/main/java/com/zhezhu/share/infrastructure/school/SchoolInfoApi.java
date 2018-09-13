@@ -3,6 +3,7 @@ package com.zhezhu.share.infrastructure.school;
 import com.zhezhu.share.domain.common.Period;
 import com.zhezhu.share.domain.id.PersonId;
 import com.zhezhu.share.domain.id.identityaccess.TenantId;
+import com.zhezhu.share.domain.id.school.ClazzId;
 import com.zhezhu.share.domain.id.school.SchoolId;
 import com.zhezhu.share.domain.school.Term;
 
@@ -26,7 +27,13 @@ public interface SchoolInfoApi {
 
     SchoolData getSchool(SchoolId schoolId);
 
+    ClazzData getClazz(ClazzId clazzId);
+
     StudentData getStudent(PersonId personId);
 
     TeacherData getTeacher(PersonId personId,SchoolId schoolId);
+
+    List<StudentData> getClazzStudents(ClazzId clazzId);
+
+    List<ClazzData> getSchoolClazzs(SchoolId schoolId);
 }

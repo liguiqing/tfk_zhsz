@@ -183,7 +183,7 @@ public class CommonsConfiguration {
         jpaProperties.setProperty("hibernate.jdbc.batch_size",batchSize);
         jpaProperties.setProperty("hibernate.jdbc.fetch_size",fetchSize);
         jpaProperties.setProperty("hibernate.max_fetch_depth",fetchDepth);
-        jpaProperties.setProperty("hibernate.cache.region.factory_class","org.hibernate.cache.ehcache.EhCacheRegionFactory");
+        //jpaProperties.setProperty("hibernate.cache.region.factory_class","org.hibernate.cache.ehcache.EhCacheRegionFactory");
         return jpaProperties;
     }
 

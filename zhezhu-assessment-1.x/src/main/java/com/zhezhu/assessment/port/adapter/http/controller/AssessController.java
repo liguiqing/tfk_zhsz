@@ -5,7 +5,6 @@ import com.zhezhu.assessment.application.collaborator.CollaboratorData;
 import com.zhezhu.assessment.application.collaborator.CollaboratorQueryService;
 import com.zhezhu.assessment.application.index.IndexData;
 import com.zhezhu.assessment.application.index.IndexQueryService;
-import com.zhezhu.assessment.domain.model.assesse.AssessRank;
 import com.zhezhu.assessment.domain.model.assesse.RankCategory;
 import com.zhezhu.assessment.domain.model.assesse.RankScope;
 import com.zhezhu.assessment.domain.model.collaborator.CollaboratorRole;
@@ -182,25 +181,62 @@ public class AssessController extends AbstractHttpController {
     }
 
     /**
-     * 取评价排名
+     * 进行排名计算
+     *
+     * @param teamId value of shcoolId or clazzId
+     * @return
+     */
+    @RequestMapping(value="/rank/{teamId}",method = RequestMethod.POST)
+    public ModelAndView onAssessRankOf(@PathVariable String teamId){
+        logger.debug("URL /assess/rank/{} method=POST ",teamId);
+
+        assessApplicationService.rank(teamId);
+        return newModelAndViewBuilder("/assess/assessRankList").creat();
+    }
+
+    /**
+     * 取校内评价排名
      *
      * @param schoolId
      * @param personId
      * @param category @link com.zhezhu.assessment.domain.model.assesse.RankCategory
      * @return
      */
-    @RequestMapping(value="/list/rank/{schoolId}/{personId}",method = RequestMethod.GET)
-    public ModelAndView onGetAssessRankOfClazz(@PathVariable String schoolId,
+    @RequestMapping(value="/rank/list/{schoolId}/{personId}",method = RequestMethod.GET)
+    public ModelAndView onGetAssessRankOf(@PathVariable String schoolId,
                                           @PathVariable String personId,
                                           @RequestParam String category){
-        logger.debug("URL /assess/list/rank/{}/{} method=GET ",schoolId,personId);
+        logger.debug("URL /assess/rank/list/{}/{} method=GET ",schoolId,personId);
 
         RankCategory category1 = RankCategory.valueOf(category);
         AssertionConcerns.assertArgumentNotNull(category1,"as-03-004");
 
         Date from = rankCategoryService.from(category1);
         Date to = rankCategoryService.to(category1);
-        List<AssessRankData> data = assessQueryService.getRanks(schoolId,personId,category1, RankScope.Clazz,from,to);
+        List<SchoolAssessRankData> data = assessQueryService.getSchoolRanks(schoolId,personId,category1, RankScope.School,from,to);
+        return newModelAndViewBuilder("/assess/assessRankList").withData("ranks",data).creat();
+    }
+
+    /**
+     * 取班级内评价排名
+     *
+     * @param clazzId
+     * @param personId
+     * @param category @link com.zhezhu.assessment.domain.model.assesse.RankCategory
+     * @return
+     */
+    @RequestMapping(value="/rank/list/{clazzId}/{personId}",method = RequestMethod.GET)
+    public ModelAndView onGetAssessRankOfClazz(@PathVariable String clazzId,
+                                                @PathVariable String personId,
+                                                @RequestParam String category){
+        logger.debug("URL /assess/rank/list/{}/{} method=GET ",clazzId,personId);
+
+        RankCategory category1 = RankCategory.valueOf(category);
+        AssertionConcerns.assertArgumentNotNull(category1,"as-03-004");
+
+        Date from = rankCategoryService.from(category1);
+        Date to = rankCategoryService.to(category1);
+        List<SchoolAssessRankData> data = assessQueryService.getClazzRanks(clazzId,personId,category1, RankScope.Clazz,from,to);
         return newModelAndViewBuilder("/assess/assessRankList").withData("ranks",data).creat();
     }
 

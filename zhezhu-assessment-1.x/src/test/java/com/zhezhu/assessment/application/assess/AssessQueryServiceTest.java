@@ -9,7 +9,10 @@ import com.zhezhu.commons.util.DateUtilWrapper;
 import com.zhezhu.share.domain.id.PersonId;
 import com.zhezhu.share.domain.id.assessment.AssesseeId;
 import com.zhezhu.share.domain.id.index.IndexId;
+import com.zhezhu.share.domain.id.school.ClazzId;
 import com.zhezhu.share.domain.id.school.SchoolId;
+import com.zhezhu.share.infrastructure.school.SchoolService;
+import com.zhezhu.share.infrastructure.school.StudentData;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -38,6 +41,12 @@ public class AssessQueryServiceTest {
     @Mock
     private AssessRankRepository rankRepository;
 
+    @Mock
+    private AssessTeamRepository teamRepository;
+
+    @Mock
+    private SchoolService schoolService;
+
     @Before
     public void before(){
         MockitoAnnotations.initMocks(this);
@@ -49,18 +58,24 @@ public class AssessQueryServiceTest {
         FieldUtils.writeField(service,"indexRepository",indexRepository,true);
         FieldUtils.writeField(service,"assessRepository",assessRepository,true);
         FieldUtils.writeField(service,"rankRepository",rankRepository,true);
+        FieldUtils.writeField(service,"teamRepository",teamRepository,true);
+        FieldUtils.writeField(service,"schoolService",schoolService,true);
         return spy(service);
     }
 
     @Test
-    public void getRanks() throws Exception{
+    public void getRanks()throws Exception{
+
+    }
+
+    @Test
+    public void getSchoolRanks() throws Exception{
         AssessQueryService service = getService();
         SchoolId schoolId = new SchoolId();
         PersonId personId = new PersonId();
 
         List<AssessRank> assessRanks = Lists.newArrayList();
         assessRanks.add(AssessRank.builder()
-                .schoolId(schoolId)
                 .personId(personId)
                 .rankCategory(RankCategory.Weekend)
                 .rankScope(RankScope.Clazz)
@@ -71,7 +86,6 @@ public class AssessQueryServiceTest {
                 .promote(2)
                 .build());
         assessRanks.add(AssessRank.builder()
-                .schoolId(schoolId)
                 .personId(personId)
                 .rankCategory(RankCategory.Weekend)
                 .rankScope(RankScope.Clazz)
@@ -84,16 +98,24 @@ public class AssessQueryServiceTest {
 
         Date from  = DateUtilWrapper.toDate("2018-09-01","yyyy-MM-dd");
         Date to  = DateUtilWrapper.toDate("2018-09-30","yyyy-MM-dd");
-
-        when(rankRepository.findAllBySchoolIdAndPersonIdAndRankCategoryAndRankScopeAndRankDateBetween(any(SchoolId.class)
+        StudentData student = mock(StudentData.class);
+        when(student.getManagedClazzId()).thenReturn(new ClazzId().id());
+        when(student.getSchoolId()).thenReturn(schoolId.id());
+        when(schoolService.getStudentBy(any(PersonId.class))).thenReturn(student);
+        when(rankRepository.findAllByAssessTeamIdAndPersonIdAndRankCategoryAndRankScopeAndRankDateBetween(any(String.class)
                 , any(PersonId.class), any(RankCategory.class), any(RankScope.class), eq(from), eq(to))).thenReturn(assessRanks);
 
-        List<AssessRankData> ranks = service.getRanks(schoolId.id(), personId.id(), RankCategory.Weekend,
+        List<SchoolAssessRankData> ranks = service.getSchoolRanks(schoolId.id(), personId.id(), RankCategory.Weekend,
                 RankScope.Clazz, from, to);
         assertEquals(assessRanks.size(),ranks.size());
         assertEquals(assessRanks.get(0).getRankDate(),ranks.get(1).getRankDate());
-        verify(rankRepository,times(1)).findAllBySchoolIdAndPersonIdAndRankCategoryAndRankScopeAndRankDateBetween(any(SchoolId.class)
+        verify(rankRepository,times(1)).findAllByAssessTeamIdAndPersonIdAndRankCategoryAndRankScopeAndRankDateBetween(any(String.class)
                 , any(PersonId.class), any(RankCategory.class), any(RankScope.class), eq(from), eq(to));
+
+        when(rankRepository.findAllByAssessTeamIdAndRankCategoryAndRankScopeAndRankNodeAndRankDateBetween(any(String.class)
+                ,any(RankCategory.class), any(RankScope.class),any(String.class), eq(from), eq(to))).thenReturn(assessRanks);
+        ranks = service.getRanks(schoolId.id(), RankCategory.Weekend,
+                RankScope.Clazz,"", from, to);
     }
 
     @Test

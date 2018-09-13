@@ -69,6 +69,12 @@ public class AssessApplicationServiceTest {
     @Mock
     private SchoolService schoolService;
 
+    @Mock
+    private RankService rankService;
+
+    @Mock
+    private AssessRankRepository rankRepository;
+
     @Before
     public void before(){
         MockitoAnnotations.initMocks(this);
@@ -86,6 +92,8 @@ public class AssessApplicationServiceTest {
         FieldUtils.writeField(service,"messageListener",messageListener,true);
         FieldUtils.writeField(service,"schoolService",schoolService,true);
         FieldUtils.writeField(service,"assessTeamRepository",assessTeamRepository,true);
+        FieldUtils.writeField(service,"rankService",rankService,true);
+        FieldUtils.writeField(service,"rankRepository",rankRepository,true);
         return spy(service);
     }
 
@@ -229,5 +237,43 @@ public class AssessApplicationServiceTest {
         verify(assessRepository,times(4)).save(any());
         verify(indexRepository,times(3)).loadOf(any(IndexId.class));
         verify(messageListener,times(4)).addEvent(any());
+    }
+
+    @Test
+    public void rank()throws Exception{
+        AssessApplicationService service = getService();
+        String teamId = new ClazzId().id();
+        PersonId personId = new PersonId();
+        List<AssessRank> ranks = Lists.newArrayList();
+        ranks.add(AssessRank.builder()
+                .assessTeamId(teamId)
+                .personId(personId)
+                .rankCategory(RankCategory.Weekend)
+                .rankScope(RankScope.Clazz)
+                .yearStarts(2018)
+                .yearEnds(2019)
+                .rankNode("36")
+                .rankDate(DateUtilWrapper.now())
+                .rank(1)
+                .promote(1)
+                .score(1)
+                .promoteScore(1)
+                .build());
+        ranks.add(AssessRank.builder()
+                .assessTeamId(teamId)
+                .personId(personId)
+                .rankCategory(RankCategory.Weekend)
+                .rankScope(RankScope.Clazz)
+                .yearStarts(2018)
+                .yearEnds(2019)
+                .rankNode("36")
+                .rankDate(DateUtilWrapper.now())
+                .rank(1)
+                .promote(1)
+                .score(1)
+                .promoteScore(1)
+                .build());
+        when(rankService.rank(any(String.class),any(RankCategory.class),any(RankScope.class))).thenReturn(ranks);
+        service.rank(teamId,RankCategory.Weekend.name(),RankScope.Clazz.name());
     }
 }

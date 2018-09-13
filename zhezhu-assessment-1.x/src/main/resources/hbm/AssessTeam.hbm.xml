@@ -4,7 +4,6 @@
 <hibernate-mapping default-access="field" default-cascade="all" >
 
     <class name="com.zhezhu.assessment.domain.model.assesse.AssessTeam" table="as_AssessTeam" lazy="true">
-        <cache usage="read-write" region="asCache"></cache>
         <id name="id" type="long" column="id" unsaved-value="-1">
             <generator class="native" />
         </id>

@@ -2,7 +2,6 @@ package com.zhezhu.assessment.domain.model.assesse;
 
 import com.zhezhu.commons.domain.EntityRepository;
 import com.zhezhu.share.domain.id.PersonId;
-import com.zhezhu.share.domain.id.school.SchoolId;
 import org.springframework.stereotype.Repository;
 
 import java.util.Date;
@@ -20,10 +19,19 @@ public interface AssessRankRepository extends EntityRepository<AssessRank, Perso
 
     void save(AssessRank rank);
 
-    AssessRank findByPersonIdAndRankNodeAndRankCategoryAndRankScopeAndYearStartsAndYearEnds(PersonId personId,String node,
-                                                                                            RankCategory category,RankScope scope,
-                                                                                            int yearStarts,int yearEnds);
+    void deleteByPersonIdAndAssessTeamIdAndRankCategoryAndRankScopeAndRankNodeAndYearStartsAndYearEnds(
+            PersonId personId,String assessTeamId,RankCategory category,RankScope scope,String node, int yearStarts,int yearEnds
+    );
 
-    List<AssessRank> findAllBySchoolIdAndPersonIdAndRankCategoryAndRankScopeAndRankDateBetween(
-            SchoolId schoolId,PersonId personId, RankCategory category,RankScope scope, Date from, Date to);
+    AssessRank findByPersonIdAndRankNodeAndRankCategoryAndRankScopeAndYearStartsAndYearEnds(
+            PersonId personId,String node,RankCategory category,RankScope scope,int yearStarts,int yearEnds);
+
+    List<AssessRank> findAllByAssessTeamIdAndPersonIdAndRankCategoryAndRankScopeAndRankDateBetween(
+            String teamId,PersonId personId, RankCategory category,RankScope scope, Date from, Date to);
+
+    List<AssessRank> findAllByPersonIdAndAssessTeamIdAndRankCategoryAndRankScopeAndRankNodeAndYearStartsAndYearEnds(
+            PersonId personId,String assessTeamId,RankCategory category,RankScope scope,String node, int yearStarts,int yearEnds);
+
+    List<AssessRank> findAllByAssessTeamIdAndRankCategoryAndRankScopeAndRankNodeAndRankDateBetween(
+            String assessTeamId,RankCategory category,RankScope scope,String node, Date from, Date to);
 }

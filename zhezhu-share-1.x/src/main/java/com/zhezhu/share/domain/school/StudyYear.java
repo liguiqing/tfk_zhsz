@@ -44,6 +44,14 @@ public class StudyYear extends ValueObject {
         return newYearsOf(now);
     }
 
+    public StudyYear next(){
+        return new StudyYear(this.yearEnds, this.yearEnds + 1);
+    }
+
+    public StudyYear prev(){
+        return new StudyYear(this.yearStarts - 1, this.yearStarts);
+    }
+
     public static StudyYear newYearsOf(Date date){
         AssertionConcerns.assertArgumentNotNull(date ,"无效的学年起始年度");
 

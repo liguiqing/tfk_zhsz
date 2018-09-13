@@ -14,6 +14,7 @@ import com.zhezhu.share.domain.id.school.StudentId;
 import com.zhezhu.share.domain.id.school.TeacherId;
 import com.zhezhu.share.domain.person.Gender;
 import com.zhezhu.share.domain.school.SchoolScope;
+import com.zhezhu.share.domain.school.StudyYear;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -51,6 +52,7 @@ public class JdbcSchoolInfoApiTest extends AbstractTransactionalJUnit4SpringCont
         TenantId tenantId1 = api.getSchoolTenantId(schoolId);
         assertEquals(tenantId,tenantId1);
     }
+
 
     @Test
     public void getAllStudentPersonIds() {
@@ -163,5 +165,120 @@ public class JdbcSchoolInfoApiTest extends AbstractTransactionalJUnit4SpringCont
         assertEquals(1,teacher.getClazzes().size());
         assertEquals("六年级",teacher.getClazzes().get(0).getGradeName());
         assertEquals(6,teacher.getClazzes().get(0).getGradeLevel());
+    }
+
+    @Test
+    public void getClazz(){
+        ClazzId clazzId = new ClazzId();
+        SchoolId schoolId = new SchoolId();
+        StudyYear year = StudyYear.now();
+        jdbc.update("INSERT INTO `sm_clazz`(`clazzId`,`schoolId`,`openedTime`,`closedTime`,`clazzType`,`removed`) VALUES(?,?,?,?,?,?)",
+                new Object[]{clazzId.id(),schoolId.id(),"2017-09-01",null,"United",0}
+                );
+        jdbc.update("INSERT INTO `sm_clazz_history`(`clazzId`,`clazzName`,`gradeName`,`gradeLevel`,`yearStarts`,`yearEnds`) VALUES (?,?,?,?,?,?)",
+                new Object[]{clazzId.id(),"一班","五年级",5,year.getYearStarts()-1,year.getYearEnds()-1});
+        jdbc.update("INSERT INTO `sm_clazz_history`(`clazzId`,`clazzName`,`gradeName`,`gradeLevel`,`yearStarts`,`yearEnds`) VALUES (?,?,?,?,?,?)",
+                new Object[]{clazzId.id(),"一班","六年级",6,year.getYearStarts(),year.getYearEnds()});
+
+        ClazzData clazzData = api.getClazz(clazzId);
+        assertEquals("六年级",clazzData.getGradeName());
+        assertEquals("一班",clazzData.getClazzName());
+        assertEquals(6,clazzData.getGradeLevel());
+        assertEquals(clazzId.id(),clazzData.getClazzId());
+        assertEquals(schoolId.id(),clazzData.getSchoolId());
+        assertEquals("United",clazzData.getType());
+    }
+
+    @Test
+    public void getClazzStudents(){
+        ClazzId clazzId = new ClazzId();
+        SchoolId schoolId = new SchoolId();
+        StudyYear year = StudyYear.now();
+        jdbc.update("INSERT INTO `sm_clazz`(`clazzId`,`schoolId`,`openedTime`,`closedTime`,`clazzType`,`removed`) VALUES(?,?,?,?,?,?)",
+                new Object[]{clazzId.id(),schoolId.id(),(year.getYearStarts()-2)+ "-09-01",null,"United",0}
+        );
+        jdbc.update("INSERT INTO `sm_clazz_history`(`clazzId`,`clazzName`,`gradeName`,`gradeLevel`,`yearStarts`,`yearEnds`) VALUES (?,?,?,?,?,?)",
+                new Object[]{clazzId.id(),"一班","四年级",4,year.getYearStarts()-2,year.getYearEnds()-2});
+        jdbc.update("INSERT INTO `sm_clazz_history`(`clazzId`,`clazzName`,`gradeName`,`gradeLevel`,`yearStarts`,`yearEnds`) VALUES (?,?,?,?,?,?)",
+                new Object[]{clazzId.id(),"一班","五年级",5,year.getYearStarts()-1,year.getYearEnds()-1});
+        jdbc.update("INSERT INTO `sm_clazz_history`(`clazzId`,`clazzName`,`gradeName`,`gradeLevel`,`yearStarts`,`yearEnds`) VALUES (?,?,?,?,?,?)",
+                new Object[]{clazzId.id(),"一班","六年级",6,year.getYearStarts(),year.getYearEnds()});
+
+        for(int i=0;i<10;i++){
+            StudentId studentId = new StudentId();
+            jdbc.update("INSERT INTO `sm_student`(`studentId`,`schoolId`,`personId`,`name`,`gender`,`birthday`,`joinDate`,`offDate`,`removed`) VALUES (?,?,?,?,?,?,?,?,?)",
+                    new Object[]{studentId.id(),schoolId.id(),new PersonId().id(),"Name"+i,
+                            Gender.Female.name(), DateUtilWrapper.now(),DateUtilWrapper.now(),null,0});
+            jdbc.update("INSERT INTO `sm_student_managed`(`studentId`,`schoolId`,`clazzId`,`job`,`gradeName`,`gradeLevel`,`yearStarts`,`yearEnds`,`dateStarts`,`dateEnds`) VALUES (?,?,?,?,?,?,?,?,?,?)",
+                    new Object[]{studentId.id(),schoolId.id(),clazzId.id(),"a","四年级",4,year.getYearStarts()-2,year.getYearEnds()-2,"2016-09-01","2017-06-30"});
+            jdbc.update("INSERT INTO `sm_student_managed`(`studentId`,`schoolId`,`clazzId`,`job`,`gradeName`,`gradeLevel`,`yearStarts`,`yearEnds`,`dateStarts`,`dateEnds`) VALUES (?,?,?,?,?,?,?,?,?,?)",
+                    new Object[]{studentId.id(),schoolId.id(),clazzId.id(),"a","五年级",5,year.getYearStarts()-1,year.getYearEnds()-1,"2017-09-01","2018-06-30"});
+            jdbc.update("INSERT INTO `sm_student_managed`(`studentId`,`schoolId`,`clazzId`,`job`,`gradeName`,`gradeLevel`,`yearStarts`,`yearEnds`,`dateStarts`,`dateEnds`) VALUES (?,?,?,?,?,?,?,?,?,?)",
+                    new Object[]{studentId.id(),schoolId.id(),clazzId.id(),"a","六年级",6,year.getYearStarts(),year.getYearEnds(),"2018-09-01",null});
+        }
+
+        List<StudentData> students = api.getClazzStudents(clazzId);
+        assertEquals(10,students.size());
+        assertEquals("Name0",students.get(0).getName());
+        assertEquals(schoolId.id(),students.get(0).getSchoolId());
+
+        assertEquals("Name9",students.get(9).getName());
+        assertEquals(schoolId.id(),students.get(9).getSchoolId());
+    }
+
+
+    @Test
+    public void getAllTeacherPersonIds() {
+        SchoolId schoolId = new SchoolId();
+        String sql = "INSERT INTO `sm_teacher`(`teacherId`,`personId`,`schoolId`,`name`,`gender`,`birthday`,`joinDate`,`offDate`,`removed`) VALUES(?,?,?,?,?,?,?,?,?)";
+        List<Object[]> args = Lists.newArrayList();
+        for (int i = 0; i < 10; i++) {
+            args.add(new Object[]{new TeacherId().id(),new PersonId().id(),schoolId.id(),"T"+i,Gender.Female.name(),null,"2015-09-01",null,0});
+        }
+        jdbc.batchUpdate(sql, args);
+        List<PersonId> teacherPersonIds = api.getAllTeacherPersonIds(schoolId);
+        assertEquals(10,teacherPersonIds.size());
+        assertEquals(args.get(0)[1],teacherPersonIds.get(0).id());
+        assertEquals(args.get(5)[1],teacherPersonIds.get(5).id());
+        assertEquals(args.get(9)[1],teacherPersonIds.get(9).id());
+    }
+
+    @Test
+    public void getSchool() {
+        String sql = "INSERT INTO `sm_school`(`schoolId`,`tenantId`,`name`,`alias`,`scope`,`removed`) VALUES (?,?,?,?,?,?)";
+        List<Object[]> args = Lists.newArrayList();
+        for (int i = 0; i < 10; i++) {
+            args.add(new Object[]{new SchoolId().id(),new TenantId().id(),"TTT"+i,"T"+i,SchoolScope.Primary.name(),0});
+        }
+        jdbc.batchUpdate(sql, args);
+        SchoolData school = api.getSchool(new SchoolId(args.get(5)[0]+""));
+        assertEquals(args.get(5)[0],school.getSchoolId());
+        school = api.getSchool(new SchoolId(args.get(0)[0]+""));
+        assertEquals(args.get(0)[0],school.getSchoolId());
+        school = api.getSchool(new SchoolId(args.get(8)[0]+""));
+        assertEquals(args.get(8)[0],school.getSchoolId());
+    }
+
+    @Test
+    public void getSchoolClazzs() {
+        SchoolId schoolId = new SchoolId();
+        StudyYear year = StudyYear.now();
+
+        for (int i = 1; i <=5; i++) {
+            ClazzId clazzId = new ClazzId();
+            jdbc.update("INSERT INTO `sm_clazz`(`clazzId`,`schoolId`,`openedTime`,`closedTime`,`clazzType`,`removed`) VALUES(?,?,?,?,?,?)",
+                    new Object[]{clazzId.id(), schoolId.id(), (year.getYearStarts()-1)+ "-09-01", null, "United", 0}
+            );
+            jdbc.update("INSERT INTO `sm_clazz_history`(`clazzId`,`clazzName`,`gradeName`,`gradeLevel`,`yearStarts`,`yearEnds`) VALUES (?,?,?,?,?,?)",
+                    new Object[]{clazzId.id(), i+"班", "五年级", 5, year.getYearStarts() - 1, year.getYearEnds() - 1});
+            jdbc.update("INSERT INTO `sm_clazz_history`(`clazzId`,`clazzName`,`gradeName`,`gradeLevel`,`yearStarts`,`yearEnds`) VALUES (?,?,?,?,?,?)",
+                    new Object[]{clazzId.id(), i+"班", "六年级", 6, year.getYearStarts(), year.getYearEnds()});
+        }
+
+        List<ClazzData> clazzData = api.getSchoolClazzs(schoolId);
+        assertEquals(5,clazzData.size());
+
+        clazzData = api.getSchoolClazzs(new SchoolId());
+        assertEquals(0,clazzData.size());
     }
 }

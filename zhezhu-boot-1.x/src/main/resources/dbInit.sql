@@ -75,8 +75,8 @@ CREATE TABLE `sm_clazz` (
   `id` BIGINT(20)  NOT NULL AUTO_INCREMENT ,
   `clazzId` varchar(36) NOT NULL COMMENT '班级唯一标识',
   `schoolId` varchar(36) NOT NULL COMMENT '学校唯一标识',
-  `openedTime` TIMESTAMP  COMMENT '开班时间',
-  `closedTime` TIMESTAMP  COMMENT '结束时间',
+  `openedTime` DATE  COMMENT '开班时间',
+  `closedTime` DATE  COMMENT '结束时间',
   `clazzType` varchar(16) NOT NULL COMMENT '班级类型:Supervise-行政政;Learning-教学班;United-不分班级',
   `removed` TINYINT(1) DEFAULT 0 COMMENT '删除标记',
   PRIMARY KEY (`id`),
@@ -463,7 +463,8 @@ CREATE TABLE `as_Assess` (
 DROP TABLE IF EXISTS `as_AssessRank`;
 CREATE TABLE `as_AssessRank` (
   `id` BIGINT(20)  NOT NULL AUTO_INCREMENT ,
-  `schoolId` varchar(36) NOT NULL COMMENT '学校唯一标识,源于as_Assessee.schoolId',
+  `assesseeId` varchar(36) NOT NULL COMMENT '被评唯一标识',
+  `assessTeamId` varchar(36) COMMENT '评价所属组唯一标识',
   `personId` varchar(36) NOT NULL COMMENT '人员唯一标识,源于as_Assessee.personId',
   `yearStarts` SMALLINT(4)  COMMENT '学年开始年度',
   `yearEnds` SMALLINT(4)  COMMENT '学年结束年度',
@@ -471,10 +472,12 @@ CREATE TABLE `as_AssessRank` (
   `rankCategory` varchar(16) NOT NULL COMMENT '排名类型:Year-学年;Term-学期;Month-月;Weekend-周',
   `rankDate` DATE COMMENT '排名日期',
   `rankNode` varchar(16)  COMMENT '排名节点:Year(yearStarts+yearEnds,如2018-2019);Term(1,2);Moth(1-12);Weekend(1-52);',
+  `score` DOUBLE(5,2)  COMMENT '评价得分',
+  `promoteScore` DOUBLE(5,2)  COMMENT '评价得分进退步',
   `rank` SMALLINT(4)  COMMENT '排名',
   `promote` SMALLINT(4)  COMMENT '与前期排名进退步名次',
   PRIMARY KEY (`id`),
-  INDEX `x_as_AssessRank_schoolId` (`schoolId`),
+  INDEX `x_as_AssessRank_assessTeamId` (`assessTeamId`),
   INDEX `x_as_AssessRank_personId` (`personId`)
 )ENGINE=INNODB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='评价排名';
 

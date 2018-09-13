@@ -4,7 +4,9 @@ import com.zhezhu.commons.lang.Throwables;
 import com.zhezhu.share.domain.common.Period;
 import com.zhezhu.share.domain.id.PersonId;
 import com.zhezhu.share.domain.id.identityaccess.TenantId;
+import com.zhezhu.share.domain.id.school.ClazzId;
 import com.zhezhu.share.domain.id.school.SchoolId;
+import com.zhezhu.share.domain.school.StudyYear;
 import com.zhezhu.share.domain.school.Term;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +39,12 @@ public class JdbcSchoolInfoApi implements SchoolInfoApi {
         return null;
     }
 
+
+    @Override
+    public Period getSchoolTermPeriod(SchoolId schoolId) {
+        return Term.defaultPeriodOfThisTerm();
+    }
+
     @Override
     public List<PersonId> getAllStudentPersonIds(SchoolId schoolId) {
         String sql = "select personId from sm_student where schoolId = ? and removed=0";
@@ -67,6 +75,28 @@ public class JdbcSchoolInfoApi implements SchoolInfoApi {
         return null;
     }
 
+    @Override
+    public ClazzData getClazz(ClazzId clazzId) {
+        StudyYear year = StudyYear.now();
+        String sql = "select a.schoolId, a.clazzId,a.clazzType,b.gradeName,b.gradeLevel,b.clazzName ,a.clazzType " +
+                "from sm_clazz a inner join sm_clazz_history b on b.clazzId=a.clazzId " +
+                "where a.clazzId=? and a.removed=0 and b.yearStarts=? and b.yearEnds=?";
+        try{
+            return jdbc.queryForObject(sql,(rs,rowNum) ->
+                        ClazzData.builder()
+                                .schoolId(rs.getString("schoolId"))
+                                .clazzName(rs.getString("clazzName"))
+                                .clazzId(rs.getString("clazzId"))
+                                .gradeName(rs.getString("gradeName"))
+                                .gradeLevel(rs.getInt("gradeLevel"))
+                                .type(rs.getString("clazzType"))
+                                .build()
+                ,clazzId.id(),year.getYearStarts(),year.getYearEnds());
+        }catch (Exception e){
+            log.debug(Throwables.toString(e));
+        }
+        return null;
+    }
 
     @Override
     public StudentData getStudent(PersonId personId) {
@@ -89,10 +119,6 @@ public class JdbcSchoolInfoApi implements SchoolInfoApi {
         return null;
     }
 
-    @Override
-    public Period getSchoolTermPeriod(SchoolId schoolId) {
-        return Term.defaultPeriodOfThisTerm();
-    }
 
     @Override
     public TeacherData getTeacher(PersonId personId, SchoolId schoolId) {
@@ -113,6 +139,46 @@ public class JdbcSchoolInfoApi implements SchoolInfoApi {
             log.debug(Throwables.toString(e));
         }
         return null;
+    }
+
+    @Override
+    public List<StudentData> getClazzStudents(ClazzId clazzId) {
+        ClazzData clazz = getClazz(clazzId);
+        StudyYear year = StudyYear.now();
+        String sql = "select a.personId,a.studentId,a.name,gender from sm_student a inner join sm_student_managed b on b.studentId=a.studentId  " +
+                "where b.clazzId=? and b.yearStarts=? and b.yearEnds=?";
+        if(!"United".equals(clazz.getType())){
+            sql = "select a.personId,a.studentId,a.name,gender from sm_student a inner join sm_student_study b on b.studentId=a.studentId  " +
+                    "where b.clazzId=? and b.yearStarts=? and b.yearEnds=?";
+        }
+        return jdbc.query(sql,(rs,rn) ->
+                        StudentData.builder()
+                                .name(rs.getString("name"))
+                                .schoolId(clazz.getSchoolId())
+                                .studentId(rs.getString("studentId"))
+                                .personId(rs.getString("personId"))
+                                .gender(rs.getString("gender"))
+                                .contacts(getStudentContacts(rs.getString("studentId")))
+                                .build()
+                ,clazzId.id(),year.getYearStarts(),year.getYearEnds());
+    }
+
+    @Override
+    public List<ClazzData> getSchoolClazzs(SchoolId schoolId) {
+        //目前只查询了管理班级
+        StudyYear year = StudyYear.now();
+        String sql = "select a.clazzId,a.clazzType,b.gradeName,b.gradeLevel,b.clazzName,a.clazzType " +
+                "from sm_clazz a inner join sm_clazz_history b on b.clazzId=a.clazzId " +
+                "where a.schoolId=? and a.removed=0 and a.closedTime is null and b.yearStarts=? and b.yearEnds=?";
+        return jdbc.query(sql,(rs,rowNum) ->
+                        ClazzData.builder()
+                                .clazzName(rs.getString("clazzName"))
+                                .clazzId(rs.getString("clazzId"))
+                                .gradeName(rs.getString("gradeName"))
+                                .gradeLevel(rs.getInt("gradeLevel"))
+                                .type(rs.getString("clazzType"))
+                                .build()
+                ,schoolId.id(),year.getYearStarts(),year.getYearEnds());
     }
 
     private List<ClazzData> getStudentClazzes(String studentId){

@@ -11,6 +11,7 @@ import com.zhezhu.share.domain.id.assessment.AssessorId;
 import com.zhezhu.share.domain.id.index.IndexId;
 import com.zhezhu.share.domain.id.school.ClazzId;
 import com.zhezhu.share.domain.id.school.SchoolId;
+import com.zhezhu.share.domain.school.Term;
 import com.zhezhu.share.infrastructure.school.ClazzData;
 import com.zhezhu.share.infrastructure.school.SchoolService;
 import org.apache.commons.lang3.reflect.FieldUtils;
@@ -76,14 +77,16 @@ public class RankServiceTest {
         for(int i=0;i<10;i++){
             AssesseeId assesseeId = new AssesseeId();
             for(int j=0;j<5;j++){
-                assesses.add(Assess.builder().assessorId(assessorId).assesseeId(assesseeId).indexId(new IndexId()).score(i).build());
+                assesses.add(Assess.builder().assessTeamId(team.getAssessTeamId()).assessorId(assessorId).assesseeId(assesseeId).indexId(new IndexId()).score(i).build());
             }
             Assessee assessee = Assessee.builder().role("Student").personId(new PersonId()).assesseeId(assesseeId).build();
             when(assesseeRepository.loadOf(eq(assesseeId))).thenReturn(assessee);
         }
 
         when(teamRepository.findByTeamId(eq(clazzId.id()))).thenReturn(team);
+        when(teamRepository.loadOf(any(AssessTeamId.class))).thenReturn(team);
         when(schoolService.getClazz(eq(clazzId))).thenReturn(clazz);
+        when(schoolService.getSchoolTermOfNow(any(SchoolId.class))).thenReturn(Term.First());
         when(assessRepository.findByAssessTeamIdAndDoneDateBetween(any(AssessTeamId.class), any(Date.class), any(Date.class))).thenReturn(assesses);
         List<AssessRank> ranks = service.rank(clazzId.id(), RankCategory.Day, RankScope.Clazz);
         assertEquals(10,ranks.size());

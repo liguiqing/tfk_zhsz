@@ -7,18 +7,13 @@
         <id name="id" type="long" column="id" unsaved-value="-1">
             <generator class="native" />
         </id>
-        <component name="schoolId" class="com.zhezhu.share.domain.id.school.SchoolId">
-            <property name="id" column="schoolId" type="java.lang.String"/>
+        <component name="assesseeId" class="com.zhezhu.share.domain.id.assessment.AssesseeId">
+            <property name="id" column="assesseeId" type="java.lang.String"/>
         </component>
-
-        <component name="clazzId" class="com.zhezhu.share.domain.id.school.ClazzId">
-            <property name="id" column="clazzId" type="java.lang.String"/>
-        </component>
-
+        <property name="assessTeamId" column="assessTeamId" type="java.lang.String"/>
         <component name="personId" class="com.zhezhu.share.domain.id.PersonId">
             <property name="id" column="personId" type="java.lang.String"/>
         </component>
-
 
         <property name="rankScope" column="rankScope" >
             <type name="org.hibernate.type.EnumType">

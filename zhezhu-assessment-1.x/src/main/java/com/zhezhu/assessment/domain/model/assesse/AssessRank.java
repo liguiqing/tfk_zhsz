@@ -20,30 +20,37 @@ import java.util.Date;
 @AllArgsConstructor
 @Builder
 @Getter
-@EqualsAndHashCode(exclude ={"rankDate","rank","promote"},callSuper = false)
+@EqualsAndHashCode(of ={"personId","yearStarts","yearEnds","rankNode"},callSuper = false)
 @ToString
 public class AssessRank extends IdentifiedValueObject {
-    private SchoolId schoolId;
-
-    private ClazzId clazzId;
-
-    private AssessTeamId assessTeamId;
 
     private AssesseeId assesseeId;
 
+    //Value from AssessTeam.teamId;
+    private String assessTeamId;
+
+    //Value from Assessee.collaborator.personId
     private PersonId personId;
 
     private int yearStarts;
 
     private int yearEnds;
 
-    private RankScope rankScope;  //排名范围
+    //排名范围
+    private RankScope rankScope;
 
-    private RankCategory rankCategory; //排名类型
+    //排名类型
+    private RankCategory rankCategory;
 
     private Date rankDate;
 
-    private String rankNode; //排名节点:Year(yearStarts+yearEnds,如2018-2019);Term(1,2);Moth(1-12);Weekend(1-52)
+    // If rankCategory'value of:
+    // Year(yearStarts+yearEnds,ex:2018-2019);
+    // Term(1,2);
+    // Moth(1-12);
+    // Weekend(1-52)
+    // Day(date.toString("yyyy-MM-dd"))
+    private String rankNode;
 
     private double score;
 

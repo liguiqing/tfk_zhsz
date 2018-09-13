@@ -17,7 +17,7 @@ import java.util.List;
 @Getter
 @Setter
 @ToString(exclude = "children")
-public class AssessRankData {
+public class SchoolAssessRankData {
 
     private String schoolId;
 
@@ -35,10 +35,12 @@ public class AssessRankData {
     @JsonFormat(pattern="yyyy-MM-dd",timezone = "GMT+8")
     private Date rankDate;
 
+    private double score;
+
+    private double promoteScore; //进退步分数
+
     private int rank;
 
     private int promote;  //进退步
-
-    private List<AssessRankData> chidren;
 
 }

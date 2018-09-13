@@ -5,10 +5,8 @@ import com.zhezhu.share.domain.id.assessment.AssessTeamId;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.jpa.repository.QueryHints;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.QueryHint;
 import java.util.List;
 
 /**
@@ -30,10 +28,8 @@ public interface AssessTeamRepository extends EntityRepository<AssessTeam, Asses
     AssessTeam loadOf(AssessTeamId teamId);
 
     @Query("From AssessTeam where teamId=?1 and removed=0")
-    @QueryHints({ @QueryHint(name = "org.hibernate.cacheable", value ="true") })
     AssessTeam findByTeamId(String teamId);
 
     @Query("From AssessTeam where parentAssessTeamId=?1 and removed=0")
-    @QueryHints({ @QueryHint(name = "org.hibernate.cacheable", value ="true") })
     List<AssessTeam> findAllByParentAssessTeamId(AssessTeamId parentTeamId);
 }

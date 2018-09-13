@@ -7,6 +7,7 @@ import com.zhezhu.assessment.domain.model.collaborator.AssesseeRepository;
 import com.zhezhu.commons.util.DateUtilWrapper;
 import com.zhezhu.share.domain.common.Period;
 import com.zhezhu.share.domain.id.PersonId;
+import com.zhezhu.share.domain.id.assessment.AssessTeamId;
 import com.zhezhu.share.domain.id.assessment.AssesseeId;
 import com.zhezhu.share.domain.id.school.ClazzId;
 import com.zhezhu.share.domain.id.school.SchoolId;
@@ -76,7 +77,7 @@ public class RankService {
                         e -> transToPersonId(e.getKey()),
                         e -> e.getValue()
                 ));
-        return ranks(personGroup, query.node, category, scope);
+        return ranks(personGroup,category, scope,query);
     }
 
     private PersonId transToPersonId(AssesseeId assesseeId){
@@ -84,7 +85,8 @@ public class RankService {
         return assessee.getCollaborator().getPersonId();
     }
 
-    private List<AssessRank> ranks(Map<PersonId,List<Assess>> assessList,String node,RankCategory category, RankScope scope){
+    private List<AssessRank> ranks(Map<PersonId,List<Assess>> assessList,RankCategory category,
+                                   RankScope scope,RankQuery query){
         List<AssessRank> ranks = Lists.newArrayList();
         HashMap<PersonId, Double> personScores = new HashMap<>(assessList.size());
         Set<PersonId> personIds = assessList.keySet();
@@ -103,31 +105,35 @@ public class RankService {
         for(PersonId personId:personIds){
             double score = finalMap.get(personId);
             int rank = rankStrategy.getRank(score);
-            StudyYear year = StudyYear.now();
-
-            AssessRank prevRank = assessRankRepository.findByPersonIdAndRankNodeAndRankCategoryAndRankScopeAndYearStartsAndYearEnds(
-                    personId,node,category,scope,year.getYearStarts(),year.getYearEnds());
-            if(prevRank == null)
-                prevRank = AssessRank.builder().score(score).promoteScore(score).rank(rank).promote(rank).build();
-
-            AssesseeId assesseeId = assessList.get(personId).get(0).getAssesseeId();
+            AssessRank prevRank = getPrevRank(personId, category, scope, query, score, rank);
+            AssessTeamId teamId = assessList.get(personId).get(0).getAssessTeamId();
+            AssessTeam team = this.teamRepository.loadOf(teamId);
             AssessRank assessRank = AssessRank.builder()
-                    .assesseeId(assesseeId)
+                    .assessTeamId(team.getTeamId())
                     .personId(personId)
-                    .rankNode(node)
+                    .rankCategory(category)
+                    .rankScope(scope)
+                    .yearStarts(query.yearStarts)
+                    .yearEnds(query.yearEnds)
+                    .rankNode(query.node)
                     .rankDate(DateUtilWrapper.now())
                     .rank(rank)
                     .promote(prevRank.getPromote()-rank)
                     .score(score)
                     .promoteScore(prevRank.getScore() - score)
-                    .rankCategory(category)
-                    .rankScope(scope)
                     .build();
             ranks.add(assessRank);
         }
         return ranks;
     }
 
+    private AssessRank getPrevRank(PersonId personId,RankCategory category,RankScope scope,RankQuery query,double score,int rank){
+        AssessRank prevRank = assessRankRepository.findByPersonIdAndRankNodeAndRankCategoryAndRankScopeAndYearStartsAndYearEnds(
+                personId,query.prevNode,category,scope,query.yearStarts,query.yearEnds);
+        if(prevRank == null)
+            prevRank = AssessRank.builder().score(score).promoteScore(score).rank(rank).promote(rank).build();
+        return prevRank;
+    }
 
     private RankStrategy rankStrategy(){
         if(this.rankStrategy != null)
@@ -143,14 +149,30 @@ public class RankService {
 
         String node;
 
+        String prevNode;
+
+        int yearStarts;
+
+        int yearEnds;
+
+        RankQuery(){
+            StudyYear year = StudyYear.now();
+            this.yearStarts = year.getYearStarts();
+            this.yearEnds = year.getYearEnds();
+        }
+
         void newRankQuery(String teamId,RankCategory category, RankScope scope){
             switch (scope){
                 case Clazz:
                     ClazzData clazz = schoolService.getClazz(new ClazzId(teamId));
-                    this.node = getNode(category, new SchoolId(clazz.getSchoolId()));
+                    SchoolId schoolId = new SchoolId(clazz.getSchoolId());
+                    this.node = getNode(category,schoolId );
+                    this.prevNode = getPreNode(category,schoolId);
                     break;
                 default:
-                    this.node = getNode(category, new SchoolId(teamId));
+                    schoolId = new SchoolId(teamId);
+                    this.node = getNode(category, schoolId);
+                    this.prevNode = getPreNode(category,schoolId);
                     break;
             }
             fromTo(category);
@@ -193,6 +215,20 @@ public class RankService {
                 default: return LocalDate.now().toString();
             }
         }
+
+        private String getPreNode(RankCategory category,SchoolId schoolId){
+            LocalDate now = LocalDate.now();
+            switch (category){
+                case Weekend:
+                    TemporalField fieldISO = WeekFields.of(Locale.CHINA).weekOfYear();
+                    return now.minusWeeks(1).get(fieldISO) + "";
+                case Month:return now.getMonth().minus(1).getValue() + "";
+                case Term:return schoolService.getSchoolTermOfNow(schoolId).seq()==1?2 + "":1 + "";
+                case Year:return StudyYear.now().prev().toString();
+                default: return now.minusDays(1).toString();
+            }
+        }
+
     }
 
 }

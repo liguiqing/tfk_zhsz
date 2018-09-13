@@ -42,8 +42,7 @@ public class SchoolService {
     }
 
     public ClazzData getClazz(ClazzId clazzId){
-        //TODO
-        return null;
+        return api().getClazz(clazzId);
     }
 
     public Term getSchoolTermOfNow(SchoolId schoolId){
@@ -86,12 +85,10 @@ public class SchoolService {
     }
 
     public List<StudentData> getClazzStudents(ClazzId clazzId){
-        //TODO
-        return null;
+        return api().getClazzStudents(clazzId);
     }
 
     public List<ClazzData> getClazzs(SchoolId schoolId){
-        //TODO
-        return null;
+        return api().getSchoolClazzs(schoolId);
     }
 }

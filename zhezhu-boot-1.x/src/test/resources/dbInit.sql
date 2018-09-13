@@ -89,8 +89,9 @@ CREATE TABLE `as_AssessTeam` (
 DROP TABLE IF EXISTS `as_AssessRank`;
 CREATE TABLE `as_AssessRank` (
   `id` BIGINT(20)  NOT NULL AUTO_INCREMENT ,
-  `schoolId` varchar(36) NOT NULL COMMENT '学校唯一标识,源于as_Assessee.schoolId',
+  `assesseeId` varchar(36) NOT NULL COMMENT '被评唯一标识',
   `personId` varchar(36) NOT NULL COMMENT '人员唯一标识,源于as_Assessee.personId',
+  `assessTeamId` varchar(36)  COMMENT '评价组唯一标识,源于as_AssesseeTeam.teamId',
   `clazzId` varchar(36)  COMMENT '班级唯一标识',
   `yearStarts` SMALLINT(4)  COMMENT '学年开始年度',
   `yearEnds` SMALLINT(4)  COMMENT '学年结束年度',
@@ -103,7 +104,8 @@ CREATE TABLE `as_AssessRank` (
   `rank` SMALLINT(4)  COMMENT '当期排名',
   `promote` SMALLINT(4)  COMMENT '当期与前期排名进退步名次',
   PRIMARY KEY (`id`),
-  INDEX `x_as_AssessRank_schoolId` (`schoolId`),
+  KEY `x_as_AssessRank_assesseeId` (`assesseeId`),
+  INDEX `x_as_AssessRank_assessTeamId` (`assessTeamId`),
   INDEX `x_as_AssessRank_personId` (`personId`)
 )ENGINE=INNODB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='评价排名';
 

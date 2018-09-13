@@ -172,12 +172,32 @@ public class AssessApplicationService {
         return assessIds;
     }
 
+    @Transactional(rollbackFor = Exception.class)
+    public void rank(String teamId){
+        log.debug("Rank all for {}",teamId);
+        for(RankCategory category:RankCategory.values()){
+            for(RankScope scope:RankScope.values()){
+                rank(teamId, category, scope);
+            }
+        }
+    }
+
+    @Transactional(rollbackFor = Exception.class)
     public void rank(String teamId,String category,String scope){
         log.debug("Rank for {} {} {}",teamId,category,scope);
+
         RankCategory category1 = RankCategory.valueOf(category);
         RankScope scope1 = RankScope.valueOf(scope);
-        List<AssessRank> ranks = rankService.rank(teamId, category1, scope1);
+        rank(teamId,category1,scope1);
+    }
+
+    private void rank(String teamId,RankCategory category,RankScope scope){
+        List<AssessRank> ranks = rankService.rank(teamId, category, scope);
         for(AssessRank rank:ranks){
+            rankRepository.deleteByPersonIdAndAssessTeamIdAndRankCategoryAndRankScopeAndRankNodeAndYearStartsAndYearEnds(
+                    rank.getPersonId(),rank.getAssessTeamId(),rank.getRankCategory(),rank.getRankScope(),rank.getRankNode(),
+                    rank.getYearStarts(),rank.getYearEnds()
+            );
             rankRepository.save(rank);
         }
     }

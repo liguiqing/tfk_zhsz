@@ -6,7 +6,6 @@ import com.zhezhu.assessment.application.collaborator.CollaboratorData;
 import com.zhezhu.assessment.application.collaborator.CollaboratorQueryService;
 import com.zhezhu.assessment.application.index.IndexData;
 import com.zhezhu.assessment.application.index.IndexQueryService;
-import com.zhezhu.assessment.domain.model.assesse.AssessRank;
 import com.zhezhu.assessment.domain.model.assesse.RankCategory;
 import com.zhezhu.assessment.domain.model.assesse.RankCategoryService;
 import com.zhezhu.assessment.domain.model.assesse.RankScope;
@@ -20,8 +19,6 @@ import com.zhezhu.share.domain.id.assessment.AssessorId;
 import com.zhezhu.share.domain.id.index.IndexId;
 import com.zhezhu.share.domain.id.school.ClazzId;
 import com.zhezhu.share.domain.id.school.SchoolId;
-import com.zhezhu.share.domain.id.school.StudentId;
-import com.zhezhu.share.domain.id.school.TeacherId;
 import com.zhezhu.share.infrastructure.school.StudentData;
 import com.zhezhu.share.infrastructure.school.TeacherData;
 import com.zhezhu.zhezhu.controller.AbstractControllerTest;
@@ -302,16 +299,16 @@ public class AssessControllerTest extends AbstractControllerTest {
         when(rankCategoryService.from(eq(dayCategory))).thenReturn(from);
         when(rankCategoryService.to(eq(dayCategory))).thenReturn(to);
 
-        List<AssessRankData> data = Lists.newArrayList();
-        data.add(AssessRankData.builder().promote(1).rank(10).rankNode("2018-09-01").rankDate(from).rankCategory(dayCategory.name()).rankScope(RankScope.Clazz.name()).personId(studentId.id()).schoolId(schoolId.id()).build());
-        data.add(AssessRankData.builder().promote(1).rank(9).rankNode("2018-09-02").rankDate(from).rankCategory(dayCategory.name()).rankScope(RankScope.Clazz.name()).personId(studentId.id()).schoolId(schoolId.id()).build());
-        data.add(AssessRankData.builder().promote(2).rank(7).rankNode("2018-09-03").rankDate(from).rankCategory(dayCategory.name()).rankScope(RankScope.Clazz.name()).personId(studentId.id()).schoolId(schoolId.id()).build());
-        data.add(AssessRankData.builder().promote(1).rank(6).rankNode("2018-09-04").rankDate(from).rankCategory(dayCategory.name()).rankScope(RankScope.Clazz.name()).personId(studentId.id()).schoolId(schoolId.id()).build());
-        data.add(AssessRankData.builder().promote(3).rank(3).rankNode("2018-09-05").rankDate(from).rankCategory(dayCategory.name()).rankScope(RankScope.Clazz.name()).personId(studentId.id()).schoolId(schoolId.id()).build());
+        List<SchoolAssessRankData> data = Lists.newArrayList();
+        data.add(SchoolAssessRankData.builder().promote(1).rank(10).rankNode("2018-09-01").rankDate(from).rankCategory(dayCategory.name()).rankScope(RankScope.Clazz.name()).personId(studentId.id()).schoolId(schoolId.id()).build());
+        data.add(SchoolAssessRankData.builder().promote(1).rank(9).rankNode("2018-09-02").rankDate(from).rankCategory(dayCategory.name()).rankScope(RankScope.Clazz.name()).personId(studentId.id()).schoolId(schoolId.id()).build());
+        data.add(SchoolAssessRankData.builder().promote(2).rank(7).rankNode("2018-09-03").rankDate(from).rankCategory(dayCategory.name()).rankScope(RankScope.Clazz.name()).personId(studentId.id()).schoolId(schoolId.id()).build());
+        data.add(SchoolAssessRankData.builder().promote(1).rank(6).rankNode("2018-09-04").rankDate(from).rankCategory(dayCategory.name()).rankScope(RankScope.Clazz.name()).personId(studentId.id()).schoolId(schoolId.id()).build());
+        data.add(SchoolAssessRankData.builder().promote(3).rank(3).rankNode("2018-09-05").rankDate(from).rankCategory(dayCategory.name()).rankScope(RankScope.Clazz.name()).personId(studentId.id()).schoolId(schoolId.id()).build());
 
-        when(assessQueryService.getRanks(eq(schoolId.id()),eq(studentId.id()),eq(RankCategory.Day), eq(RankScope.Clazz),eq(from),eq(to))).thenReturn(data);
+        when(assessQueryService.getSchoolRanks(eq(schoolId.id()),eq(studentId.id()),eq(RankCategory.Day), eq(RankScope.Clazz),eq(from),eq(to))).thenReturn(data);
 
-        this.mvc.perform(get("/assess/list/rank/"+schoolId.id()+"/"+studentId.id())
+        this.mvc.perform(get("/assess/rank/list/"+schoolId.id()+"/"+studentId.id())
         .contentType(MediaType.APPLICATION_JSON)
         .accept(MediaType.APPLICATION_JSON)
         .param("category",dayCategory.name()))
@@ -320,7 +317,7 @@ public class AssessControllerTest extends AbstractControllerTest {
                 .andExpect(jsonPath("$.ranks[0].rankDate", equalTo("2018-09-01")))
         .andExpect(view().name("/assess/assessRankList"));
 
-        verify(assessQueryService,times(1)).getRanks(eq(schoolId.id()),eq(studentId.id()),eq(RankCategory.Day), eq(RankScope.Clazz),eq(from),eq(to));
+        verify(assessQueryService,times(1)).getSchoolRanks(eq(schoolId.id()),eq(studentId.id()),eq(RankCategory.Day), eq(RankScope.Clazz),eq(from),eq(to));
     }
 
 }
