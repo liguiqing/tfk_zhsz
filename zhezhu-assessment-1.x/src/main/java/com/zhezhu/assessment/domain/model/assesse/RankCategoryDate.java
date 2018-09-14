@@ -1,7 +1,5 @@
 package com.zhezhu.assessment.domain.model.assesse;
 
-import com.zhezhu.assessment.domain.model.assesse.RankCategory;
-
 import java.util.Date;
 
 /**
@@ -15,4 +13,6 @@ public interface RankCategoryDate {
     Date from();
 
     Date to();
+
+    String node();
 }

@@ -2,8 +2,8 @@ package com.zhezhu.access.domain.model.wechat.xml;
 
 
 import com.google.common.collect.Maps;
-import com.zhezhu.access.domain.model.wechat.message.*;
 import com.thoughtworks.xstream.XStream;
+import com.zhezhu.access.domain.model.wechat.message.*;
 
 import java.util.Map;
 

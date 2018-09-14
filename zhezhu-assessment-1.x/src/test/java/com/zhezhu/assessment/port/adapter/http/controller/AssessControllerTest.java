@@ -30,12 +30,15 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.ContextHierarchy;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
-import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -228,7 +231,7 @@ public class AssessControllerTest extends AbstractControllerTest {
         data.add(AssessData.builder().indexScore(-6).clazzId(clazzId.id()).indexName("I4").assesseeId(new AssesseeId().id()).doneDate(new Date()).assesseeName("S1").build());
 
         when(collaboratorQueryService.getAssesseeBy(eq(schoolId.id()),eq(studentId.id()),eq(role),eq(Boolean.FALSE))).thenReturn(student);
-        when(assessQueryService.getAssessOf(any(String.class),any(Date.class),any(Date.class))).thenReturn(data);
+        when(assessQueryService.getAssessBetween(any(String.class),any(Date.class),any(Date.class))).thenReturn(data);
 
         this.mvc.perform(get("/assess/list/all/"+schoolId.id()+"/"+role.name()+"/"+studentId.id())
                 .contentType(MediaType.APPLICATION_JSON)
@@ -239,7 +242,7 @@ public class AssessControllerTest extends AbstractControllerTest {
                 .andExpect(jsonPath("$.assesses[0].indexName", equalTo(data.get(0).getIndexName())))
                 .andExpect(jsonPath("$.assesses[1].indexName", equalTo(data.get(1).getIndexName())))
                 .andExpect(view().name("/assess/assessList"));
-        when(assessQueryService.getAssessOf(any(String.class),any(),any())).thenReturn(data);
+        when(assessQueryService.getAssessBetween(any(String.class),any(),any())).thenReturn(data);
         this.mvc.perform(get("/assess/list/all/"+schoolId.id()+"/"+role.name()+"/"+studentId.id())
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
@@ -251,7 +254,7 @@ public class AssessControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    public void onGetAssessOfNode()throws Exception{
+    public void onGetAssessOfCategory()throws Exception{
         CollaboratorRole role = CollaboratorRole.Student;
         PersonId studentId = new PersonId();
         ClazzId clazzId = new ClazzId();
@@ -269,7 +272,7 @@ public class AssessControllerTest extends AbstractControllerTest {
         data.add(AssessData.builder().indexScore(-6).clazzId(clazzId.id()).indexName("I4").assesseeId(new AssesseeId().id()).doneDate(new Date()).assesseeName("S1").build());
 
         when(collaboratorQueryService.getAssesseeBy(eq(schoolId.id()),eq(studentId.id()),eq(role),eq(Boolean.FALSE))).thenReturn(student);
-        when(assessQueryService.getAssessOf(any(String.class),any(Date.class),any(Date.class))).thenReturn(data);
+        when(assessQueryService.getAssessBetween(any(String.class),any(Date.class),any(Date.class))).thenReturn(data);
 
         RankCategory dayCategory = RankCategory.Day;
         Date from = DateUtilWrapper.toDate("2018-09-01","yyyy-MM-dd");
@@ -277,47 +280,179 @@ public class AssessControllerTest extends AbstractControllerTest {
         when(rankCategoryService.from(eq(dayCategory))).thenReturn(from);
         when(rankCategoryService.to(eq(dayCategory))).thenReturn(to);
 
-        this.mvc.perform(get("/assess/list/category/"+dayCategory.name()+"/"+role.name())
+        this.mvc.perform(get("/assess/list/category/"+schoolId.getId()+"/"+studentId.getId())
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .param("schoolId",schoolId.getId())
-                .param("personId",studentId.getId()))
+                .param("category",dayCategory.name())
+                .param("role",CollaboratorRole.Student.name()))
                 .andExpect(jsonPath("$.status.success", is(Boolean.TRUE)))
                 .andExpect(jsonPath("$.assesses[0].indexName", equalTo(data.get(0).getIndexName())))
                 .andExpect(jsonPath("$.assesses[1].indexName", equalTo(data.get(1).getIndexName())))
                 .andExpect(view().name("/assess/assessList"));
-        verify(collaboratorQueryService,times(1)).getAssesseeBy(eq(schoolId.id()),eq(studentId.id()),eq(role),eq(Boolean.FALSE));
+
+        this.mvc.perform(get("/assess/list/category/"+schoolId.getId()+"/"+studentId.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.status.success", is(Boolean.TRUE)))
+                .andExpect(jsonPath("$.assesses[0].indexName", equalTo(data.get(0).getIndexName())))
+                .andExpect(jsonPath("$.assesses[1].indexName", equalTo(data.get(1).getIndexName())))
+                .andExpect(view().name("/assess/assessList"));
+        verify(collaboratorQueryService,times(2)).getAssesseeBy(eq(schoolId.id()),eq(studentId.id()),eq(role),eq(Boolean.FALSE));
     }
 
     @Test
-    public void onGetAssessRankOfClazz()throws Exception{
+    public void onAssessRankOf()throws Exception{
+        doNothing().when(assessApplicationService).rank(any(String.class));
+        this.mvc.perform(post("/assess/rank/"+new SchoolId().getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.status.success", is(Boolean.TRUE)))
+                .andExpect(view().name("/assess/assessRankList"));
+        verify(assessApplicationService,times(1)).rank(any(String.class));
+    }
+
+    @Test
+    public void onGetPersonalAssessRankInClazz()throws Exception{
+        RankCategory category = RankCategory.Day;
         PersonId studentId = new PersonId();
         SchoolId schoolId = new SchoolId();
-        RankCategory dayCategory = RankCategory.Day;
-        Date from = DateUtilWrapper.toDate("2018-09-01","yyyy-MM-dd");
-        Date to = DateUtilWrapper.toDate("2018-09-01","yyyy-MM-dd");
-        when(rankCategoryService.from(eq(dayCategory))).thenReturn(from);
-        when(rankCategoryService.to(eq(dayCategory))).thenReturn(to);
+        ClazzId clazzId = new ClazzId();
+        List<SchoolAssessRankData> data = mockRankData(category,RankScope.Clazz,RankScope.Clazz,studentId,clazzId,schoolId,"");
+
+        this.mvc.perform(get("/assess/rank/personal/clazz/"+clazzId.id()+"/"+studentId.id())
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .param("category",category.name()))
+                .andExpect(jsonPath("$.status.success", is(Boolean.TRUE)))
+                .andExpect(jsonPath("$.ranks[0].rank", equalTo(data.get(0).getRank())))
+                .andExpect(jsonPath("$.ranks[0].rankNode", equalTo("2018-09-01")))
+                .andExpect(view().name("/assess/assessRankList"));
+
+        this.mvc.perform(get("/assess/rank/personal/clazz/"+clazzId.id()+"/"+studentId.id())
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .param("category",category.name()))
+                .andExpect(jsonPath("$.status.success", is(Boolean.TRUE)))
+                .andExpect(jsonPath("$.ranks[0].rank", equalTo(data.get(4).getRank())))
+                .andExpect(jsonPath("$.ranks[0].rankNode", equalTo("2018-09-05")))
+                .andExpect(view().name("/assess/assessRankList"));
+
+        this.mvc.perform(get("/assess/rank/personal/clazz/"+clazzId.id()+"/"+studentId.id())
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.status.success", is(Boolean.TRUE)))
+                .andExpect(jsonPath("$.ranks[0].rank", equalTo(data.get(4).getRank())))
+                .andExpect(jsonPath("$.ranks[0].rankNode", equalTo("2018-09-05")))
+                .andExpect(view().name("/assess/assessRankList"));
+        verify(assessQueryService,times(3)).getPersonalRanks(eq(clazzId.id()),eq(studentId.id()),eq(RankCategory.Day), eq(RankScope.Clazz),any(Date.class),any(Date.class));
+        verify(assessQueryService,times(2)).getPersonalLastRanksThisYear(eq(studentId.id()));
+    }
+
+    @Test
+    public void onGetPersonalAssessRankInSchool()throws Exception{
+        RankCategory category = RankCategory.Day;
+        PersonId studentId = new PersonId();
+        SchoolId schoolId = new SchoolId();
+        ClazzId clazzId = new ClazzId();
+        List<SchoolAssessRankData> data = mockRankData(category,RankScope.Clazz,RankScope.School,studentId,clazzId,schoolId,"");
+
+        this.mvc.perform(get("/assess/rank/personal/grade/"+schoolId.id()+"/"+studentId.id())
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .param("category",category.name()))
+                .andExpect(jsonPath("$.status.success", is(Boolean.TRUE)))
+                .andExpect(jsonPath("$.ranks[0].rank", equalTo(data.get(0).getRank())))
+                .andExpect(jsonPath("$.ranks[0].rankNode", equalTo("2018-09-01")))
+                .andExpect(view().name("/assess/assessRankList"));
+
+        this.mvc.perform(get("/assess/rank/personal/grade/"+schoolId.id()+"/"+studentId.id())
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .param("category",category.name()))
+                .andExpect(jsonPath("$.status.success", is(Boolean.TRUE)))
+                .andExpect(jsonPath("$.ranks[0].rank", equalTo(data.get(4).getRank())))
+                .andExpect(jsonPath("$.ranks[0].rankNode", equalTo("2018-09-05")))
+                .andExpect(view().name("/assess/assessRankList"));
+
+        this.mvc.perform(get("/assess/rank/personal/grade/"+schoolId.id()+"/"+studentId.id())
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.status.success", is(Boolean.TRUE)))
+                .andExpect(jsonPath("$.ranks[0].rank", equalTo(data.get(4).getRank())))
+                .andExpect(jsonPath("$.ranks[0].rankNode", equalTo("2018-09-05")))
+                .andExpect(view().name("/assess/assessRankList"));
+        verify(assessQueryService,times(3)).getPersonalRanks(eq(schoolId.id()),eq(studentId.id()),eq(RankCategory.Day), eq(RankScope.School),any(Date.class),any(Date.class));
+        verify(assessQueryService,times(2)).getPersonalLastRanksThisYear(eq(studentId.id()));
+    }
+
+    @Test
+    public void onGetAssessRankCategoryOfClazz()throws Exception{
+        PersonId studentId = new PersonId();
+        SchoolId schoolId = new SchoolId();
+        ClazzId clazzId = new ClazzId();
+
+        for(RankCategory category:RankCategory.values()){
+            List<SchoolAssessRankData> data = mockRankData(category,RankScope.Clazz,RankScope.Clazz,studentId,clazzId,schoolId, LocalDate.now().toString());
+            testClazz(clazzId.id(),"clazz",category.name().toLowerCase(),data);
+        }
+    }
+
+    @Test
+    public void onGetAssessRankCategoryOfGrade()throws Exception{
+        PersonId studentId = new PersonId();
+        SchoolId schoolId = new SchoolId();
+        ClazzId clazzId = new ClazzId();
+
+        for(RankCategory category:RankCategory.values()){
+            List<SchoolAssessRankData> data = mockRankData(category,RankScope.School,RankScope.School,studentId,clazzId,schoolId, LocalDate.now().toString());
+            testClazz(clazzId.id(),"grade",category.name().toLowerCase(),data);
+        }
+    }
+
+    private void testClazz(String id,String scope,String node,List<SchoolAssessRankData> data) throws Exception{
+        this.mvc.perform(get("/assess/rank/"+scope+"/"+node+"/"+id)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .param("showLastIfNone","false"))
+                .andExpect(jsonPath("$.status.success", is(Boolean.TRUE)))
+                .andExpect(jsonPath("$.ranks[0].rank", equalTo(data.get(0).getRank())))
+                .andExpect(jsonPath("$.ranks[0].rankNode", equalTo("2018-09-01")))
+                .andExpect(view().name("/assess/assessRankList"));
+        this.mvc.perform(get("/assess/rank/"+scope+"/"+node+"/"+id)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .param("showLastIfNone","true"))
+                .andExpect(jsonPath("$.status.success", is(Boolean.TRUE)))
+                .andExpect(jsonPath("$.ranks[0].rank", equalTo(data.get(4).getRank())))
+                .andExpect(jsonPath("$.ranks[0].rankNode", equalTo("2018-09-05")))
+                .andExpect(view().name("/assess/assessRankList"));
+    }
+
+
+    private List<SchoolAssessRankData> mockRankData(RankCategory category,RankScope scope,
+                                                    RankScope queryScope,PersonId studentId,
+                                                    ClazzId clazzId,SchoolId schoolId,
+                                                    String node){
+        Date from = DateUtilWrapper.now();
+        Date to = from;
+        when(rankCategoryService.from(eq(category))).thenReturn(from,to);
+        when(rankCategoryService.to(eq(category))).thenReturn(from,to);
+        when(rankCategoryService.node(category)).thenReturn(node);
 
         List<SchoolAssessRankData> data = Lists.newArrayList();
-        data.add(SchoolAssessRankData.builder().promote(1).rank(10).rankNode("2018-09-01").rankDate(from).rankCategory(dayCategory.name()).rankScope(RankScope.Clazz.name()).personId(studentId.id()).schoolId(schoolId.id()).build());
-        data.add(SchoolAssessRankData.builder().promote(1).rank(9).rankNode("2018-09-02").rankDate(from).rankCategory(dayCategory.name()).rankScope(RankScope.Clazz.name()).personId(studentId.id()).schoolId(schoolId.id()).build());
-        data.add(SchoolAssessRankData.builder().promote(2).rank(7).rankNode("2018-09-03").rankDate(from).rankCategory(dayCategory.name()).rankScope(RankScope.Clazz.name()).personId(studentId.id()).schoolId(schoolId.id()).build());
-        data.add(SchoolAssessRankData.builder().promote(1).rank(6).rankNode("2018-09-04").rankDate(from).rankCategory(dayCategory.name()).rankScope(RankScope.Clazz.name()).personId(studentId.id()).schoolId(schoolId.id()).build());
-        data.add(SchoolAssessRankData.builder().promote(3).rank(3).rankNode("2018-09-05").rankDate(from).rankCategory(dayCategory.name()).rankScope(RankScope.Clazz.name()).personId(studentId.id()).schoolId(schoolId.id()).build());
+        data.add(SchoolAssessRankData.builder().promote(1).rank(10).rankNode("2018-09-01").rankDate(from).rankCategory(category.name()).rankScope(scope.name()).personId(studentId.id()).schoolId(schoolId.id()).clazzId(clazzId.id()).build());
+        data.add(SchoolAssessRankData.builder().promote(1).rank(9).rankNode("2018-09-02").rankDate(from).rankCategory(category.name()).rankScope(scope.name()).personId(studentId.id()).schoolId(schoolId.id()).clazzId(clazzId.id()).build());
+        data.add(SchoolAssessRankData.builder().promote(2).rank(7).rankNode("2018-09-03").rankDate(from).rankCategory(category.name()).rankScope(scope.name()).personId(studentId.id()).schoolId(schoolId.id()).clazzId(clazzId.id()).build());
+        data.add(SchoolAssessRankData.builder().promote(1).rank(6).rankNode("2018-09-04").rankDate(from).rankCategory(category.name()).rankScope(scope.name()).personId(studentId.id()).schoolId(schoolId.id()).clazzId(clazzId.id()).build());
+        data.add(SchoolAssessRankData.builder().promote(3).rank(3).rankNode("2018-09-05").rankDate(from).rankCategory(category.name()).rankScope(scope.name()).personId(studentId.id()).schoolId(schoolId.id()).clazzId(clazzId.id()).build());
 
-        when(assessQueryService.getSchoolRanks(eq(schoolId.id()),eq(studentId.id()),eq(RankCategory.Day), eq(RankScope.Clazz),eq(from),eq(to))).thenReturn(data);
+        when(assessQueryService.getPersonalRanks(any(String.class),any(String.class),eq(category), eq(queryScope),eq(from),eq(to))).thenReturn(data).thenReturn(null);
+        when(assessQueryService.getPersonalLastRanksThisYear(eq(studentId.id()))).thenReturn(data.get(4));
+        when(assessQueryService.getTeamRanks(any(String.class),eq(category), eq(queryScope),eq(node),eq(from),eq(to))).thenReturn(data).thenReturn(null);
+        List<SchoolAssessRankData> data2 = data.stream().sorted(Comparator.comparing(SchoolAssessRankData::getRankNode).reversed()).collect(Collectors.toList());
+        when(assessQueryService.getTeamLastRanks(any(String.class),eq(category), eq(queryScope),eq(node))).thenReturn(data2);
 
-        this.mvc.perform(get("/assess/rank/list/"+schoolId.id()+"/"+studentId.id())
-        .contentType(MediaType.APPLICATION_JSON)
-        .accept(MediaType.APPLICATION_JSON)
-        .param("category",dayCategory.name()))
-        .andExpect(jsonPath("$.status.success", is(Boolean.TRUE)))
-        .andExpect(jsonPath("$.ranks[0].rank", equalTo(data.get(0).getRank())))
-                .andExpect(jsonPath("$.ranks[0].rankDate", equalTo("2018-09-01")))
-        .andExpect(view().name("/assess/assessRankList"));
-
-        verify(assessQueryService,times(1)).getSchoolRanks(eq(schoolId.id()),eq(studentId.id()),eq(RankCategory.Day), eq(RankScope.Clazz),eq(from),eq(to));
+        return data;
     }
 
 }

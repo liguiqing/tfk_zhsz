@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Copyright (c) 2016,$today.year, 深圳市易考试乐学测评有限公司
@@ -61,6 +61,17 @@ public class AssessRankRepositoryTest extends AbstractTransactionalJUnit4SpringC
         ranks = new int[]{3};
         promotes = new int[]{1};
         save(RankCategory.Term,rankDate,nodes,ranks,promotes,schoolId,personId,assesseeId);
+
+        AssessRank rank1 = repository.findByAssessTeamIdAndRankCategoryAndRankScopeAndRankNode(schoolId.id(),RankCategory.Day,RankScope.Clazz,"2018-09-04");
+        assertEquals(schoolId.id(),rank1.getAssessTeamId());
+        assertEquals("2018-09-04",rank1.getRankNode());
+        rank1 = repository.findByAssessTeamIdAndRankCategoryAndRankScopeAndRankNode(schoolId.id(),RankCategory.Weekend,RankScope.Clazz,"37");
+        assertEquals(rank1.getAssessTeamId(),schoolId.id());
+        assertEquals("37",rank1.getRankNode());
+        rank1 = repository.findByPersonIdAndRankCategoryAndRankScopeAndRankNode(personId,RankCategory.Weekend,RankScope.Clazz,"37");
+        assertEquals(rank1.getPersonId(),personId);
+        assertEquals("37",rank1.getRankNode());
+
 
         List<AssessRank> dayRanks = repository.findAllByAssessTeamIdAndPersonIdAndRankCategoryAndRankScopeAndRankDateBetween(schoolId.id(),
                 personId,RankCategory.Day,RankScope.Clazz,

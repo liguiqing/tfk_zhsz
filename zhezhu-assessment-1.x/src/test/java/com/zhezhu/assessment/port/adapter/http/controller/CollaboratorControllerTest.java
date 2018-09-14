@@ -3,7 +3,6 @@ package com.zhezhu.assessment.port.adapter.http.controller;
 import com.zhezhu.assessment.application.collaborator.CollaboratorApplicationService;
 import com.zhezhu.assessment.application.collaborator.CollaboratorData;
 import com.zhezhu.assessment.application.collaborator.CollaboratorQueryService;
-import com.zhezhu.assessment.domain.model.collaborator.Assessor;
 import com.zhezhu.assessment.domain.model.collaborator.CollaboratorRole;
 import com.zhezhu.share.domain.id.PersonId;
 import com.zhezhu.share.domain.id.assessment.AssesseeId;
@@ -20,12 +19,13 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.ContextHierarchy;
 
-import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 

@@ -2,7 +2,6 @@ package com.zhezhu.sm.domain.model.clazz;
 
 import com.zhezhu.commons.domain.IdentifiedDomainObject;
 import com.zhezhu.share.domain.id.school.ClazzId;
-import com.zhezhu.share.domain.id.school.SchoolId;
 import com.zhezhu.share.domain.school.Grade;
 import com.zhezhu.share.domain.school.StudyYear;
 import lombok.EqualsAndHashCode;

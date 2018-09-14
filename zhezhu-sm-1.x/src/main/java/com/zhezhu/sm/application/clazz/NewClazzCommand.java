@@ -4,7 +4,6 @@ import com.zhezhu.share.domain.id.school.ClazzId;
 import com.zhezhu.share.domain.id.school.SchoolId;
 import com.zhezhu.share.domain.school.Grade;
 import com.zhezhu.sm.domain.model.clazz.Clazz;
-import com.zhezhu.sm.domain.model.clazz.ClazzHistory;
 import com.zhezhu.sm.domain.model.clazz.UnitedClazz;
 import lombok.*;
 

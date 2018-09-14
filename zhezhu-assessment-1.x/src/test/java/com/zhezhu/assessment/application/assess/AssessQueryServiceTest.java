@@ -2,6 +2,7 @@ package com.zhezhu.assessment.application.assess;
 
 import com.google.common.collect.Lists;
 import com.zhezhu.assessment.domain.model.assesse.*;
+import com.zhezhu.assessment.domain.model.collaborator.AssesseeRepository;
 import com.zhezhu.assessment.domain.model.index.Index;
 import com.zhezhu.assessment.domain.model.index.IndexRepository;
 import com.zhezhu.assessment.domain.model.index.IndexScore;
@@ -13,7 +14,6 @@ import com.zhezhu.share.domain.id.school.ClazzId;
 import com.zhezhu.share.domain.id.school.SchoolId;
 import com.zhezhu.share.infrastructure.school.SchoolService;
 import com.zhezhu.share.infrastructure.school.StudentData;
-import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -42,10 +42,11 @@ public class AssessQueryServiceTest {
     private AssessRankRepository rankRepository;
 
     @Mock
-    private AssessTeamRepository teamRepository;
-
-    @Mock
     private SchoolService schoolService;
+
+    private AssesseeRepository assesseeRepository;
+
+
 
     @Before
     public void before(){
@@ -53,23 +54,18 @@ public class AssessQueryServiceTest {
     }
 
 
-    private AssessQueryService getService()throws Exception{
-        AssessQueryService service = new AssessQueryService();
-        FieldUtils.writeField(service,"indexRepository",indexRepository,true);
-        FieldUtils.writeField(service,"assessRepository",assessRepository,true);
-        FieldUtils.writeField(service,"rankRepository",rankRepository,true);
-        FieldUtils.writeField(service,"teamRepository",teamRepository,true);
-        FieldUtils.writeField(service,"schoolService",schoolService,true);
+    private AssessQueryService getService(){
+        AssessQueryService service = new AssessQueryService(indexRepository,assesseeRepository,assessRepository,rankRepository,schoolService);
         return spy(service);
     }
 
     @Test
-    public void getRanks()throws Exception{
+    public void getRanks(){
 
     }
 
     @Test
-    public void getSchoolRanks() throws Exception{
+    public void getSchoolRanks() {
         AssessQueryService service = getService();
         SchoolId schoolId = new SchoolId();
         PersonId personId = new PersonId();
@@ -105,7 +101,7 @@ public class AssessQueryServiceTest {
         when(rankRepository.findAllByAssessTeamIdAndPersonIdAndRankCategoryAndRankScopeAndRankDateBetween(any(String.class)
                 , any(PersonId.class), any(RankCategory.class), any(RankScope.class), eq(from), eq(to))).thenReturn(assessRanks);
 
-        List<SchoolAssessRankData> ranks = service.getSchoolRanks(schoolId.id(), personId.id(), RankCategory.Weekend,
+        List<SchoolAssessRankData> ranks = service.getPersonalRanks(schoolId.id(), personId.id(), RankCategory.Weekend,
                 RankScope.Clazz, from, to);
         assertEquals(assessRanks.size(),ranks.size());
         assertEquals(assessRanks.get(0).getRankDate(),ranks.get(1).getRankDate());
@@ -114,12 +110,14 @@ public class AssessQueryServiceTest {
 
         when(rankRepository.findAllByAssessTeamIdAndRankCategoryAndRankScopeAndRankNodeAndRankDateBetween(any(String.class)
                 ,any(RankCategory.class), any(RankScope.class),any(String.class), eq(from), eq(to))).thenReturn(assessRanks);
-        ranks = service.getRanks(schoolId.id(), RankCategory.Weekend,
+        ranks = service.getTeamRanks(schoolId.id(), RankCategory.Weekend,
                 RankScope.Clazz,"", from, to);
+        assertEquals(assessRanks.size(),ranks.size());
+        assertEquals(assessRanks.get(0).getRankDate(),ranks.get(1).getRankDate());
     }
 
     @Test
-    public void getAssessOf() throws Exception{
+    public void getAssessOf() {
         AssessQueryService service = getService();
 
         List<Assess> assesses = Lists.newArrayList();
@@ -137,14 +135,14 @@ public class AssessQueryServiceTest {
         when(indexRepository.loadOf(any(IndexId.class))).thenReturn(index);
         when(assessRepository.findByAssesseeIdAndDoneDateBetween(any(AssesseeId.class), any(Date.class), any(Date.class))).thenReturn(null).thenReturn(assesses);
 
-        List<AssessData> data = service.getAssessOf(new AssesseeId().id(),null,null);
+        List<AssessData> data = service.getAssessBetween(new AssesseeId().id(),null,null);
         assertEquals(0,data.size());
-        data = service.getAssessOf(new AssesseeId().id(),null,null);
+        data = service.getAssessBetween(new AssesseeId().id(),null,null);
         assertEquals(6,data.size());
         assertEquals(data.get(0).getDoneDate(),assesses.get(1).getDoneDate());
         assertEquals(data.get(3).getDoneDate(),assesses.get(2).getDoneDate());
         assertEquals(data.get(5).getDoneDate(),assesses.get(0).getDoneDate());
-        data = service.getAssessOf(new AssesseeId().id(),DateUtilWrapper.toDate("2018-09-01","yyyy-MM-dd"),DateUtilWrapper.toDate("2018-09-10","yyyy-MM-dd"));
+        data = service.getAssessBetween(new AssesseeId().id(),DateUtilWrapper.toDate("2018-09-01","yyyy-MM-dd"),DateUtilWrapper.toDate("2018-09-10","yyyy-MM-dd"));
         assertEquals(data.get(0).getDoneDate(),assesses.get(1).getDoneDate());
         assertEquals(data.get(3).getDoneDate(),assesses.get(2).getDoneDate());
         assertEquals(data.get(5).getDoneDate(),assesses.get(0).getDoneDate());

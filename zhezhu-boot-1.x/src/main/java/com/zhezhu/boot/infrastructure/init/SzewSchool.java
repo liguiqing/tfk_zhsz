@@ -1,31 +1,17 @@
 package com.zhezhu.boot.infrastructure.init;
 
 import com.zhezhu.commons.util.DateUtilWrapper;
-import com.zhezhu.share.domain.id.SubjectId;
 import com.zhezhu.share.domain.id.school.ClazzId;
-import com.zhezhu.share.domain.id.school.SchoolId;
 import com.zhezhu.share.domain.school.SchoolScope;
 import com.zhezhu.share.domain.school.StudyYear;
-import com.zhezhu.sm.application.clazz.ClazzApplicationService;
 import com.zhezhu.sm.application.clazz.NewClazzCommand;
 import com.zhezhu.sm.application.data.Contacts;
 import com.zhezhu.sm.application.data.CourseData;
 import com.zhezhu.sm.application.data.CredentialsData;
 import com.zhezhu.sm.application.data.StudyData;
-import com.zhezhu.sm.application.student.ArrangeStudentCommand;
-import com.zhezhu.sm.application.student.NewStudentCommand;
-import com.zhezhu.sm.application.student.StudentApplicationService;
-import com.zhezhu.sm.application.teacher.ArrangeTeacherCommand;
-import com.zhezhu.sm.application.teacher.NewTeacherCommand;
-import com.zhezhu.sm.application.teacher.TeacherApplicationService;
 import com.zhezhu.sm.domain.model.school.School;
-import com.zhezhu.sm.domain.model.school.SchoolRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import java.util.Arrays;
-import java.util.stream.Collectors;
 
 /**
  * 深圳二外

@@ -5,7 +5,6 @@ import com.zhezhu.share.domain.id.PersonId;
 import com.zhezhu.share.domain.id.identityaccess.TenantId;
 import com.zhezhu.share.domain.id.school.ClazzId;
 import com.zhezhu.share.domain.id.school.SchoolId;
-import com.zhezhu.share.domain.school.Term;
 
 import java.util.List;
 

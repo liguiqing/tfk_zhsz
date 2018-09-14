@@ -1,13 +1,9 @@
 package com.zhezhu.assessment.application.collaborator;
 
-import com.zhezhu.assessment.domain.model.collaborator.Assessee;
-import com.zhezhu.assessment.domain.model.collaborator.AssesseeRepository;
-import com.zhezhu.assessment.domain.model.collaborator.Assessor;
-import com.zhezhu.assessment.domain.model.collaborator.AssessorRepository;
-import com.zhezhu.assessment.domain.model.collaborator.CollaboratorRole;
-import com.zhezhu.share.infrastructure.school.SchoolService;
+import com.zhezhu.assessment.domain.model.collaborator.*;
 import com.zhezhu.share.domain.id.PersonId;
 import com.zhezhu.share.domain.id.school.SchoolId;
+import com.zhezhu.share.infrastructure.school.SchoolService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -1,8 +1,5 @@
 package com.zhezhu.boot.port.adapter.http.controller;
 
-import com.zhezhu.boot.config.CorsConfiguation;
-import com.zhezhu.boot.config.FreemarkerConfig;
-import com.zhezhu.boot.config.SpringMvcConfiguration;
 import com.zhezhu.boot.infrastructure.init.DbInitService;
 import com.zhezhu.zhezhu.controller.AbstractControllerTest;
 import org.junit.Test;
@@ -15,18 +12,12 @@ import org.springframework.test.context.ContextHierarchy;
 
 import java.util.UUID;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.*;
-import static org.hamcrest.Matchers.*;
-import static org.hamcrest.Matchers.startsWith;
 import static org.junit.Assert.assertNotNull;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
  * Copyright (c) 2016,$today.year, 深圳市易考试乐学测评有限公司

@@ -5,21 +5,18 @@ import com.zhezhu.assessment.domain.model.assesse.rank.SameScoreSamRankStrategy;
 import com.zhezhu.assessment.domain.model.collaborator.Assessee;
 import com.zhezhu.assessment.domain.model.collaborator.AssesseeRepository;
 import com.zhezhu.commons.util.DateUtilWrapper;
-import com.zhezhu.share.domain.common.Period;
 import com.zhezhu.share.domain.id.PersonId;
 import com.zhezhu.share.domain.id.assessment.AssessTeamId;
 import com.zhezhu.share.domain.id.assessment.AssesseeId;
 import com.zhezhu.share.domain.id.school.ClazzId;
 import com.zhezhu.share.domain.id.school.SchoolId;
 import com.zhezhu.share.domain.school.StudyYear;
-import com.zhezhu.share.domain.school.Term;
 import com.zhezhu.share.infrastructure.school.ClazzData;
 import com.zhezhu.share.infrastructure.school.SchoolService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
-import java.time.temporal.TemporalAdjusters;
 import java.time.temporal.TemporalField;
 import java.time.temporal.WeekFields;
 import java.util.*;
@@ -45,6 +42,8 @@ public class RankService {
 
     private SchoolService schoolService;
 
+    private RankCategoryService rankCategoryService;
+
     public RankService(){
 
     }
@@ -55,13 +54,15 @@ public class RankService {
                        AssessRankRepository assessRankRepository,
                        AssessTeamRepository teamRepository,
                        Optional<RankStrategy> rankStrategy,
-                       SchoolService schoolService) {
+                       SchoolService schoolService,
+                       RankCategoryService rankCategoryService) {
         this.assessRepository = assessRepository;
         this.assesseeRepository = assesseeRepository;
         this.assessRankRepository = assessRankRepository;
         this.teamRepository = teamRepository;
         rankStrategy.ifPresent(strategy->this.rankStrategy=strategy);
         this.schoolService = schoolService;
+        this.rankCategoryService = rankCategoryService;
     }
 
     public List<AssessRank> rank(String teamId, RankCategory category, RankScope scope){
@@ -179,41 +180,12 @@ public class RankService {
         }
 
         private void fromTo(RankCategory category){
-            LocalDate now = LocalDate.now();
-            switch (category){
-                case Day:
-                    from = DateUtilWrapper.now();
-                    to = from;
-                    break;
-                case Weekend:
-                    TemporalField fieldISO = WeekFields.of(Locale.CHINA).dayOfWeek();
-                    from = DateUtilWrapper.fromLocalDate(now.with(fieldISO, 1));
-                    to = DateUtilWrapper.fromLocalDate(now.with(fieldISO, 5));
-                    break;
-                case Month:
-                    from = DateUtilWrapper.fromLocalDate(now.with(TemporalAdjusters.firstDayOfMonth()));
-                    to = DateUtilWrapper.fromLocalDate(now.with(TemporalAdjusters.lastDayOfMonth()));
-                    break;
-                case Term:
-                    Period term = Term.defaultPeriodOfThisTerm();
-                    from = term.starts();
-                    to = term.ends();
-                    break;
-                default:
-                    StudyYear year = StudyYear.now();
-                    from = year.getDefaultDateEnds();
-                    to = year.getDefaultDateEnds();
-            }
+            this.from = rankCategoryService.from(category);
+            this.to = rankCategoryService.to(category);
         }
 
         private String getNode(RankCategory category,SchoolId schoolId){
-            switch (category){
-                case Weekend:return DateUtilWrapper.weekOfYear(DateUtilWrapper.now())+"";
-                case Month:return LocalDate.now().getMonth().getValue() + "";
-                case Term:return schoolService.getSchoolTermOfNow(schoolId)+"";
-                case Year:return StudyYear.now().toString();
-                default: return LocalDate.now().toString();
-            }
+            return rankCategoryService.node(category);
         }
 
         private String getPreNode(RankCategory category,SchoolId schoolId){

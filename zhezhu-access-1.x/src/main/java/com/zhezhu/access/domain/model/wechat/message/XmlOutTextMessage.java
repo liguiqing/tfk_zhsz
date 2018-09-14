@@ -1,9 +1,9 @@
 package com.zhezhu.access.domain.model.wechat.message;
 
-import com.zhezhu.access.domain.model.wechat.WeChatContant;
-import com.zhezhu.access.domain.model.wechat.xml.XStreamCDataConverter;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamConverter;
+import com.zhezhu.access.domain.model.wechat.WeChatContant;
+import com.zhezhu.access.domain.model.wechat.xml.XStreamCDataConverter;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;

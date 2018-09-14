@@ -8,10 +8,8 @@ import org.junit.Test;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.temporal.WeekFields;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Locale;
 
 import static org.junit.Assert.*;
 

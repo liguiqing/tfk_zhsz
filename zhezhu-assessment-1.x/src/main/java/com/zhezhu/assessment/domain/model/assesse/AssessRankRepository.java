@@ -26,6 +26,12 @@ public interface AssessRankRepository extends EntityRepository<AssessRank, Perso
     AssessRank findByPersonIdAndRankNodeAndRankCategoryAndRankScopeAndYearStartsAndYearEnds(
             PersonId personId,String node,RankCategory category,RankScope scope,int yearStarts,int yearEnds);
 
+    AssessRank findByPersonIdAndRankCategoryAndRankScopeAndRankNode(
+            PersonId personId,RankCategory category,RankScope scope,String node);
+
+    AssessRank findByAssessTeamIdAndRankCategoryAndRankScopeAndRankNode(
+            String assessTeamId,RankCategory category,RankScope scope,String node);
+
     List<AssessRank> findAllByAssessTeamIdAndPersonIdAndRankCategoryAndRankScopeAndRankDateBetween(
             String teamId,PersonId personId, RankCategory category,RankScope scope, Date from, Date to);
 

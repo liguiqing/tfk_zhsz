@@ -1,6 +1,5 @@
 package com.zhezhu.access.application.wechat;
 
-import com.google.common.collect.Lists;
 import com.zhezhu.access.domain.model.wechat.Follower;
 import com.zhezhu.access.domain.model.wechat.WeChatCategory;
 import com.zhezhu.share.domain.id.PersonId;

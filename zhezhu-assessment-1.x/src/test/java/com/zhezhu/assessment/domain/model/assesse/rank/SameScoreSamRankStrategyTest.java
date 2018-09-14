@@ -2,7 +2,7 @@ package com.zhezhu.assessment.domain.model.assesse.rank;
 
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Copyright (c) 2016,$today.year, 深圳市易考试乐学测评有限公司

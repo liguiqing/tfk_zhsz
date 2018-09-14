@@ -20,7 +20,6 @@ import com.zhezhu.share.domain.id.assessment.AssessorId;
 import com.zhezhu.share.domain.id.index.IndexId;
 import com.zhezhu.share.domain.id.school.ClazzId;
 import com.zhezhu.share.domain.id.school.SchoolId;
-import com.zhezhu.share.domain.person.Person;
 import com.zhezhu.share.domain.school.SchoolScope;
 import com.zhezhu.share.infrastructure.school.ClazzData;
 import com.zhezhu.share.infrastructure.school.SchoolData;
@@ -35,7 +34,7 @@ import org.mockito.MockitoAnnotations;
 import java.util.Date;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
 /**

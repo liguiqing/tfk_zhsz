@@ -4,6 +4,7 @@ import com.zhezhu.commons.util.DateUtilWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -16,8 +17,16 @@ import java.util.List;
 @Component
 public class RankCategoryService {
 
-    @Autowired
     private List<RankCategoryDate> categoryDates;
+
+    public RankCategoryService(){
+
+    }
+
+    @Autowired
+    public RankCategoryService(List<RankCategoryDate> categoryDates){
+        this.categoryDates = categoryDates;
+    }
 
     public Date from(RankCategory category ){
         for(RankCategoryDate date:categoryDates){
@@ -35,5 +44,14 @@ public class RankCategoryService {
             }
         }
         return DateUtilWrapper.now();
+    }
+
+    public String node(RankCategory category){
+        for(RankCategoryDate date:categoryDates){
+            if(date.supports(category)){
+                return date.node();
+            }
+        }
+        return LocalDate.now().toString();
     }
 }

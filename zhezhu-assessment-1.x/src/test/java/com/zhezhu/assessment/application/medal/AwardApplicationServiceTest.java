@@ -2,12 +2,12 @@ package com.zhezhu.assessment.application.medal;
 
 import com.google.common.collect.Lists;
 import com.zhezhu.assessment.domain.model.medal.*;
-import com.zhezhu.share.infrastructure.school.SchoolService;
 import com.zhezhu.commons.util.DateUtilWrapper;
 import com.zhezhu.share.domain.common.Period;
 import com.zhezhu.share.domain.id.PersonId;
 import com.zhezhu.share.domain.id.medal.MedalId;
 import com.zhezhu.share.domain.id.school.SchoolId;
+import com.zhezhu.share.infrastructure.school.SchoolService;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.Before;
 import org.junit.Test;

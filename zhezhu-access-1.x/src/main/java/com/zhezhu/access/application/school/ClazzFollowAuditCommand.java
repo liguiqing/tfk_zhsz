@@ -3,7 +3,6 @@ package com.zhezhu.access.application.school;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.zhezhu.access.domain.model.school.ClazzFollowAudit;
 import com.zhezhu.commons.util.DateUtilWrapper;
-import com.zhezhu.share.domain.id.PersonId;
 import com.zhezhu.share.domain.id.access.ClazzFollowApplyId;
 import com.zhezhu.share.domain.id.access.ClazzFollowAuditId;
 import lombok.*;

@@ -16,7 +16,6 @@ import com.zhezhu.share.domain.id.school.SchoolId;
 import com.zhezhu.share.domain.id.wechat.FollowApplyId;
 import com.zhezhu.share.domain.id.wechat.FollowAuditId;
 import com.zhezhu.share.domain.id.wechat.WeChatId;
-import com.zhezhu.share.domain.person.Gender;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

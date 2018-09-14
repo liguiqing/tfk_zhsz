@@ -1,8 +1,8 @@
 package com.zhezhu.assessment.port.adapter.http.controller;
 
+import com.zhezhu.assessment.application.collaborator.CollaboratorApplicationService;
 import com.zhezhu.assessment.application.collaborator.CollaboratorData;
 import com.zhezhu.assessment.application.collaborator.CollaboratorQueryService;
-import com.zhezhu.assessment.application.collaborator.CollaboratorApplicationService;
 import com.zhezhu.assessment.domain.model.collaborator.CollaboratorRole;
 import com.zhezhu.commons.port.adaptor.http.controller.AbstractHttpController;
 import org.springframework.beans.factory.annotation.Autowired;

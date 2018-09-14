@@ -2,18 +2,13 @@ package com.zhezhu.access.application.wechat;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import com.zhezhu.access.domain.model.wechat.Follower;
-import com.zhezhu.access.domain.model.wechat.WeChat;
-import com.zhezhu.access.domain.model.wechat.WeChatCategory;
-import com.zhezhu.access.domain.model.wechat.WeChatRepository;
-import com.zhezhu.access.domain.model.wechat.FollowerAudit;
+import com.zhezhu.access.domain.model.wechat.*;
 import com.zhezhu.commons.util.DateUtilWrapper;
 import com.zhezhu.share.domain.id.PersonId;
 import com.zhezhu.share.domain.id.school.ClazzId;
 import com.zhezhu.share.domain.id.school.SchoolId;
 import com.zhezhu.share.domain.id.wechat.WeChatId;
 import com.zhezhu.share.domain.person.Gender;
-import com.zhezhu.share.domain.person.Person;
 import com.zhezhu.share.infrastructure.school.ClazzData;
 import com.zhezhu.share.infrastructure.school.CredentialsData;
 import com.zhezhu.share.infrastructure.school.SchoolService;
@@ -23,14 +18,12 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
 

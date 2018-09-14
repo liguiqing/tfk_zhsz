@@ -1,14 +1,10 @@
 package com.zhezhu.assessment.application.collaborator;
 
-import com.zhezhu.assessment.domain.model.collaborator.AssesseeRepository;
-import com.zhezhu.assessment.domain.model.collaborator.Assessor;
-import com.zhezhu.assessment.domain.model.collaborator.AssessorRepository;
-import com.zhezhu.assessment.domain.model.collaborator.Collaborator;
-import com.zhezhu.assessment.domain.model.collaborator.CollaboratorRole;
-import com.zhezhu.share.domain.id.assessment.AssessorId;
-import com.zhezhu.share.infrastructure.school.SchoolService;
+import com.zhezhu.assessment.domain.model.collaborator.*;
 import com.zhezhu.share.domain.id.PersonId;
+import com.zhezhu.share.domain.id.assessment.AssessorId;
 import com.zhezhu.share.domain.id.school.SchoolId;
+import com.zhezhu.share.infrastructure.school.SchoolService;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,9 +12,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 /**
  * Copyright (c) 2016,$today.year, 深圳市易考试乐学测评有限公司

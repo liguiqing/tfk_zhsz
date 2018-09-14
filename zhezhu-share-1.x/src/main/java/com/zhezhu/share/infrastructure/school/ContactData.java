@@ -1,6 +1,9 @@
 package com.zhezhu.share.infrastructure.school;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 /**
  * @author Liguiqing

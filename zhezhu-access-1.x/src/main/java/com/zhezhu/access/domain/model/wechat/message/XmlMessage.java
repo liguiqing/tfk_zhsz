@@ -1,13 +1,13 @@
 package com.zhezhu.access.domain.model.wechat.message;
 
+import com.thoughtworks.xstream.annotations.XStreamAlias;
+import com.thoughtworks.xstream.annotations.XStreamConverter;
 import com.zhezhu.access.domain.model.wechat.WeChatContant;
 import com.zhezhu.access.domain.model.wechat.config.WeChatConfig;
 import com.zhezhu.access.domain.model.wechat.xml.XStreamCDataConverter;
 import com.zhezhu.access.domain.model.wechat.xml.XStreamTransformer;
 import com.zhezhu.commons.crypto.AesException;
 import com.zhezhu.commons.crypto.WXBizMsgCrypt;
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-import com.thoughtworks.xstream.annotations.XStreamConverter;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

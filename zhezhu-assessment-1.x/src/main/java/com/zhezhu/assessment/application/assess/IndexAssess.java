@@ -1,6 +1,9 @@
 package com.zhezhu.assessment.application.assess;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 /**
  * @author Liguiqing

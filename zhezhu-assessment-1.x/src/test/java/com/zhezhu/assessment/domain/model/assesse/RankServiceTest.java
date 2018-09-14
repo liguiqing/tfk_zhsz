@@ -14,17 +14,19 @@ import com.zhezhu.share.domain.id.school.SchoolId;
 import com.zhezhu.share.domain.school.Term;
 import com.zhezhu.share.infrastructure.school.ClazzData;
 import com.zhezhu.share.infrastructure.school.SchoolService;
-import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.time.LocalDate;
+import java.time.temporal.WeekFields;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.Optional;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
 /**
@@ -49,18 +51,24 @@ public class RankServiceTest {
     @Mock
     private SchoolService schoolService;
 
+    @Mock
+    private RankCategoryService rankCategoryService;
+
     @Before
     public void before(){
         MockitoAnnotations.initMocks(this);
     }
 
     private RankService getService()throws Exception{
-        RankService service = new RankService();
-        FieldUtils.writeField(service,"assessRepository",assessRepository,true);
-        FieldUtils.writeField(service,"assesseeRepository",assesseeRepository,true);
-        FieldUtils.writeField(service,"assessRankRepository",assessRankRepository,true);
-        FieldUtils.writeField(service,"teamRepository",teamRepository,true);
-        FieldUtils.writeField(service,"schoolService",schoolService,true);
+        Optional<RankStrategy> strategyOptional = Optional.empty();
+        RankService service = new RankService(assessRepository,assesseeRepository,assessRankRepository,teamRepository,strategyOptional,schoolService,rankCategoryService);
+//        FieldUtils.writeField(service,"assessRepository",assessRepository,true);
+//        FieldUtils.writeField(service,"assesseeRepository",assesseeRepository,true);
+//        FieldUtils.writeField(service,"assessRankRepository",assessRankRepository,true);
+//        FieldUtils.writeField(service,"teamRepository",teamRepository,true);
+//        FieldUtils.writeField(service,"schoolService",schoolService,true);
+//        FieldUtils.writeField(service,"rankCategoryService",rankCategoryService,true);
+//        FieldUtils.writeField(service,"rankStrategy",rankStrategy,true);
         return spy(service);
     }
 
@@ -88,6 +96,11 @@ public class RankServiceTest {
         when(schoolService.getClazz(eq(clazzId))).thenReturn(clazz);
         when(schoolService.getSchoolTermOfNow(any(SchoolId.class))).thenReturn(Term.First());
         when(assessRepository.findByAssessTeamIdAndDoneDateBetween(any(AssessTeamId.class), any(Date.class), any(Date.class))).thenReturn(assesses);
+        when(rankCategoryService.from(any(RankCategory.class))).thenReturn(new Date());
+        when(rankCategoryService.to(any(RankCategory.class))).thenReturn(new Date());
+        when(rankCategoryService.node(any(RankCategory.class)))
+                .thenReturn(LocalDate.now().toString())
+                .thenReturn(LocalDate.now().get(WeekFields.of(Locale.CHINA).weekOfYear())+"");
         List<AssessRank> ranks = service.rank(clazzId.id(), RankCategory.Day, RankScope.Clazz);
         assertEquals(10,ranks.size());
         assertEquals(0,ranks.get(0).getPromote());

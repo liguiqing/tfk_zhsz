@@ -35,4 +35,12 @@ public class WeekendDateTest {
         WeekendDate weekendDate = new WeekendDate();
         Date to = weekendDate.to();
     }
+
+
+    @Test
+    public void node() {
+        String node = new WeekendDate().node();
+        int week = Integer.valueOf(node);
+        assertTrue(1 <= week && week <= 54);
+    }
 }
