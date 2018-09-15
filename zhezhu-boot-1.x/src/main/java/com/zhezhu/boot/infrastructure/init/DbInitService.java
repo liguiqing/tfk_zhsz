@@ -189,10 +189,19 @@ public class DbInitService {
 
     private void clear()throws Exception{
         String dbInitFile = ResourceUtils.getURL("classpath:").getPath()+"dbInit.sql";
-        List<String> lines = Files.lines(Paths.get(dbInitFile), Charset.defaultCharset())
-                .flatMap(line -> Arrays.stream(line.split("\n")))
-                .collect(Collectors.toList());
-
+        List<String> lines = new ArrayList<>();
+        try {
+            lines = Files.lines(Paths.get(dbInitFile), Charset.defaultCharset())
+                    .flatMap(line -> Arrays.stream(line.split("\n")))
+                    .collect(Collectors.toList());
+        }catch (Exception e){
+            //For windows
+            int i  = dbInitFile.indexOf("/");
+            dbInitFile = dbInitFile.substring(i+1, dbInitFile.length());
+            lines = Files.lines(Paths.get(dbInitFile), Charset.defaultCharset())
+                    .flatMap(line -> Arrays.stream(line.split("\n")))
+                    .collect(Collectors.toList());
+        }
         ArrayList<String> sqls = new ArrayList<>();
         StringBuilder sb = new StringBuilder();
         for(String line:lines){

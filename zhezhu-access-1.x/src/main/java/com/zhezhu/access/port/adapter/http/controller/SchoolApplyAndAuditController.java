@@ -2,6 +2,8 @@ package com.zhezhu.access.port.adapter.http.controller;
 
 import com.zhezhu.access.application.school.*;
 import com.zhezhu.commons.port.adaptor.http.controller.AbstractHttpController;
+import com.zhezhu.share.domain.id.PersonId;
+import com.zhezhu.share.domain.id.access.ClazzFollowApplyId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,8 +31,8 @@ public class SchoolApplyAndAuditController extends AbstractHttpController {
     /**
      * 班级关注申请
      *
-     * @param command
-     * @return
+     * @param command {@link ClazzFollowApplyCommand}
+     * @return {@link ModelAndView}
      */
     @RequestMapping(value = "/apply/school",method = RequestMethod.POST)
     public ModelAndView onClazzFollowApply(@RequestBody ClazzFollowApplyCommand command){
@@ -43,8 +45,8 @@ public class SchoolApplyAndAuditController extends AbstractHttpController {
     /**
      * 取消班级关注申请
      *
-     * @param applyId
-     * @return
+     * @param applyId {@link ClazzFollowApplyId}
+     * @return {@link ModelAndView}
      */
     @RequestMapping(value = "/apply/school/{applyId}",method = RequestMethod.DELETE)
     public ModelAndView onClazzFollowApplyCancel(@PathVariable String applyId){
@@ -57,8 +59,8 @@ public class SchoolApplyAndAuditController extends AbstractHttpController {
     /**
      * 查询申请人已经通过审核的班级关注申请
      *
-     * @param applierId
-     * @return
+     * @param applierId {@link PersonId}
+     * @return {@link ModelAndView}
      */
     @RequestMapping(value = "/apply/audited/{applierId}",method = RequestMethod.GET)
     public ModelAndView onGetClazzFollowApplyAudited(@PathVariable String applierId){
@@ -71,8 +73,8 @@ public class SchoolApplyAndAuditController extends AbstractHttpController {
     /**
      * 班级关注申请审核
      *
-     * @param command
-     * @return
+     * @param command {@link ClazzFollowAuditCommand}
+     * @return {@link ModelAndView}
      */
     @RequestMapping(value = "/audit/school",method = RequestMethod.POST)
     public ModelAndView onFollowClazzAudit(@RequestBody ClazzFollowAuditCommand command){
@@ -86,8 +88,8 @@ public class SchoolApplyAndAuditController extends AbstractHttpController {
     /**
      * 取消班级关注申请审核
      *
-     * @param auditId
-     * @return
+     * @param auditId {@link com.zhezhu.share.domain.id.access.ClazzFollowAuditId}
+     * @return  {@link ModelAndView}
      */
     @RequestMapping(value = "/audit/school/{auditId}",method = RequestMethod.DELETE)
     public ModelAndView onFollowClazzAuditCancel(@PathVariable String auditId){

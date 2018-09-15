@@ -18,6 +18,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
+ * 微信小程序或者公众号查询服务
+ *
  * @author Liguiqing
  * @since V3.0
  */
@@ -35,6 +37,12 @@ public class WeChatQueryService {
     @Autowired
     private SchoolService schoolService;
 
+    /**
+     * 查询微信OpenId与系统的绑定关系
+     *
+     * @param weChatOpenId 微信OpenId
+     * @return list of {@link WeChatData}
+     */
     public List<WeChatData> getWeChats(String weChatOpenId) {
         log.debug("Get Wechats by OpenId {}", weChatOpenId);
 
@@ -52,9 +60,9 @@ public class WeChatQueryService {
     /**
      * 取得已经通过审核的关注者
      *
-     * @param weChatOpenId
-     * @param category
-     * @return
+     * @param weChatOpenId 微信OpenId
+     * @param category {@link WeChatCategory}
+     * @return list of {@link FollowerData}
      */
     public List<FollowerData> getFollowers(String weChatOpenId, WeChatCategory category) {
         log.debug("Get Followers by OpenId {}", weChatOpenId);
@@ -68,6 +76,16 @@ public class WeChatQueryService {
         ).collect(Collectors.toList());
     }
 
+    /**
+     * 查询可申请的关注者<br>
+     *
+     * @param name 被查询人姓名
+     * @param clazzId 被查询人班级ID
+     * @param credentialsName 被查询人证件名称
+     * @param credentialsValue 被查询人证件号码
+     * @param gender 被查询人姓名
+     * @return Array of 被查询人personId {@link com.zhezhu.share.domain.id.PersonId}
+     */
     public String[] findFollowerBy(String name, String clazzId, String credentialsName, String credentialsValue, Gender gender) {
         log.debug("Get Follower  by {} and clazzId {}", name, clazzId);
 
