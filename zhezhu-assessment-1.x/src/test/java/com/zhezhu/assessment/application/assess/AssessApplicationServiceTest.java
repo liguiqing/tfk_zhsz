@@ -118,7 +118,7 @@ public class AssessApplicationServiceTest {
         when(assessTeamRepository.findByTeamId(any(String.class))).thenReturn(team_).thenReturn(null);
 
         AssessApplicationService service = getService();
-        service.genAsseeTeamsOf(schoolId.id());
+        service.genAssessTeamsOf(schoolId.id());
         verify(team_,times(2)).getAssessTeamId();
     }
 

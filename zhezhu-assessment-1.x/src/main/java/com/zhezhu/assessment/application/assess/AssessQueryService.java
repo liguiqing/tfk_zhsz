@@ -86,16 +86,7 @@ public class AssessQueryService {
         return rankRepository.findAllByAssessTeamIdAndRankCategoryAndRankScopeAndRankNodeAndRankDateBetween(
                 teamId,category,scope,node,from,to).stream()
                 .sorted(Comparator.comparing(AssessRank::getRankDate).reversed())
-                .map(rank -> SchoolAssessRankData.builder()
-                        .score(rank.getScore())
-                        .promoteScore(rank.getPromoteScore())
-                        .promote(rank.getPromote())
-                        .rank(rank.getRank())
-                        .rankDate(rank.getRankDate())
-                        .rankCategory(rank.getRankCategory().name())
-                        .rankScope(rank.getRankScope().name())
-                        .rankNode(rank.getRankNode())
-                        .build())
+                .map(rank -> toRankData(rank,null))
                 .collect(Collectors.toList());
     }
 
@@ -138,7 +129,11 @@ public class AssessQueryService {
 
         PersonId personId1 = new PersonId(personId);
         StudentData student = schoolService.getStudentBy(personId1);
-        return getRanksOfTeam(teamId,personId1,category,scope,student.getSchoolId(),student.getManagedClazzId(),from,to);
+        return rankRepository.findAllByAssessTeamIdAndPersonIdAndRankCategoryAndRankScopeAndRankDateBetween(
+                teamId, personId1,category, scope, from, to).stream()
+                .sorted(Comparator.comparing(AssessRank::getRankDate).reversed())
+                .map(rank -> toRankData(rank,student))
+                .collect(Collectors.toList());
     }
 
     /**
@@ -176,42 +171,7 @@ public class AssessQueryService {
             return null;
         }
 
-        return SchoolAssessRankData.builder()
-                .schoolId(student.getSchoolId())
-                .clazzId(student.getManagedClazzId())
-                .personId(student.getPersonId())
-                .score(lastRank.getScore())
-                .promoteScore(lastRank.getPromoteScore())
-                .promote(lastRank.getPromote())
-                .rank(lastRank.getRank())
-                .rankDate(lastRank.getRankDate())
-                .rankCategory(lastRank.getRankCategory().name())
-                .rankScope(lastRank.getRankScope().name())
-                .rankNode(lastRank.getRankNode())
-                .build();
-    }
-
-    private List<SchoolAssessRankData> getRanksOfTeam(String teamId,PersonId personId,
-                                                      RankCategory category,RankScope scope,
-                                                      String schoolId,String clazzId,
-                                                      Date from, Date to) {
-        return rankRepository.findAllByAssessTeamIdAndPersonIdAndRankCategoryAndRankScopeAndRankDateBetween(
-                teamId, personId,category, scope, from, to).stream()
-                .sorted(Comparator.comparing(AssessRank::getRankDate).reversed())
-                .map(rank -> SchoolAssessRankData.builder()
-                                .schoolId(schoolId)
-                                .clazzId(clazzId)
-                                .personId(personId.id())
-                                .score(rank.getScore())
-                                .promoteScore(rank.getPromoteScore())
-                                .promote(rank.getPromote())
-                                .rank(rank.getRank())
-                                .rankDate(rank.getRankDate())
-                                .rankCategory(rank.getRankCategory().name())
-                                .rankScope(rank.getRankScope().name())
-                                .rankNode(rank.getRankNode())
-                                .build())
-                .collect(Collectors.toList());
+        return toRankData(lastRank,student);
     }
 
     /**
@@ -253,6 +213,27 @@ public class AssessQueryService {
                 .indexScore(index.getMaxScore())
                 .assesseeId(assesseeId)
                 .score(assess.getScore())
+                .build();
+    }
+
+    private SchoolAssessRankData toRankData(AssessRank rank,StudentData student){
+        if(student == null){
+            student = schoolService.getStudentBy(rank.getPersonId());
+        }
+
+        return SchoolAssessRankData.builder()
+                .schoolId(student.getSchoolId())
+                .clazzId(student.getManagedClazzId())
+                .personId(student.getPersonId())
+                .assesseeName(student.getName())
+                .score(rank.getScore())
+                .promoteScore(rank.getPromoteScore())
+                .promote(rank.getPromote())
+                .rank(rank.getRank())
+                .rankDate(rank.getRankDate())
+                .rankCategory(rank.getRankCategory().name())
+                .rankScope(rank.getRankScope().name())
+                .rankNode(rank.getRankNode())
                 .build();
     }
 

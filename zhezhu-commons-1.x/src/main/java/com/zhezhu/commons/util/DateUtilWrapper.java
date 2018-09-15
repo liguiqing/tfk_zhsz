@@ -120,6 +120,9 @@ public class DateUtilWrapper {
      * @return
      */
     public static int year(Date date){
+        if(date == null)
+            return LocalDate.now().getYear();
+
         Calendar c = Calendar.getInstance();
         c.setTime(date);
         return c.get(Calendar.YEAR);

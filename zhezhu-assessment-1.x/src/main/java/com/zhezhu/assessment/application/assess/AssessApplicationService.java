@@ -70,7 +70,7 @@ public class AssessApplicationService {
     private MessageListener messageListener;
 
     @Transactional(rollbackFor = Exception.class)
-    public void genAsseeTeamsOf(String schoolId){
+    public void genAssessTeamsOf(String schoolId){
         log.debug("Gen assess teams for {}",schoolId);
 
         AssessTeamService teamService = new AssessTeamService();

@@ -62,7 +62,7 @@ public class AssessController extends AbstractHttpController {
     public ModelAndView onGenAssessTeamOf(@PathVariable String schoolId){
         logger.debug("URL /assess/team/gen/{} method=POST",schoolId);
 
-        assessApplicationService.genAsseeTeamsOf(schoolId);
+        assessApplicationService.genAssessTeamsOf(schoolId);
         return newModelAndViewBuilder("/assess/newAssessTeamSuccess").creat();
     }
 
@@ -139,7 +139,7 @@ public class AssessController extends AbstractHttpController {
      * 查询人员某个时段的全部评价
      *
      * @param schoolId {@link com.zhezhu.share.domain.id.school.SchoolId}
-     * @param role value is one of Teacher;Student;Parent;
+     * @param role value is one of Teacher;Student;Parent; {@link CollaboratorRole}
      * @param personId {@link com.zhezhu.share.domain.id.PersonId}
      * @param from 为null时为本周第一天
      * @param to   为null时为本周最后一天

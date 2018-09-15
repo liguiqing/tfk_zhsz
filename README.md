@@ -15,18 +15,22 @@
 >rootpath /ysyp
 ##  1.教师用户访问
 ### 1.1 微信小程序登录微信成功
-        调用接口 /wechat/oauth2/{model}
-        http  method  GET
-             path params:
-                 model  string 默认值m1
-                       
+        调用接口 /wechat/oauth2
+        http  method  GET 
              request  params:
                  code    string required
                  status  string
         return 
             {
-                "accessToken": "", //微信授权令
-                "openId": ""       //微信openId
+                "accessToken": "",  //微信授权令,访问需要鉴权接口时用
+                "openId": "",       //微信openId
+                "wechats":[{         //微信与系统关联信息,未来关联时为空
+                    "openId": "",    //微信openId
+                    "role": "",      //用户角色[Teacher,Student,Parent],多值以,分隔
+                    "personId": "",  //用户唯一标识
+                    "name": "", 
+                    "phone": ""
+                }]
             }
      
 ### 1.2 微信查询用户注册信息
@@ -38,7 +42,7 @@
              {"wechats":
                 [{
                     "openId": "",    //微信openId
-                    "role": "",      //用户角色[Teacher,Student,Parent],多值以,分隔
+                    "role": "",      //用户角色[Teacher,Student,Parent]
                     "personId": "",  //用户唯一标识
                     "name": "", 
                     "phone": ""
@@ -75,7 +79,7 @@
                     "ok": true
                 }
             }
-        如果返回为空,表示没有关注班级,界面进入班级关注流程
+        如果返回为空,表示没有关注班级
 
 ### 1.4 查询学校信息
         调用接口 /school/{page}/{size}
@@ -350,7 +354,7 @@
             
 ### 1.12 查询人员某个时段的全部评价
         调用接口 /assess/list/all/{schoolId}/{role}/{personId}
-        http  method  POST  
+        http  method  GET  
               path params:
                   schoolId    string 
                       role    string value:Teacher;Student;Parent;
@@ -375,28 +379,153 @@
                 ]
             }
             
-### 1.13 查询人员取评价排名
-        调用接口 /assess/list/rank/{schoolId}/{personId}
-        http  method  POST  
+### 1.13 查询人员某个时段某category全部评价,时段通过category进行自动计算
+        调用接口 /assess/list/category/{schoolId}/{personId}
+        http  method  GET  
               path params:
                   schoolId    string 
                   personId    string
                   
             request params:
-                  category    string required  values:Year:学年;Term:学期;Month:月;,Weekend:周;Day:天;
+                  category    string values of: Year:学年;Term:学期;Month:月;,Weekend:周;Day:天; 默认值Day
+                      role    string values of: Student:学生;Teacher:教师;Parent:家长; 默认值Student 
         return   //按doneDate倒序排列
             {
-                "ranks": [
-                     {
-                         "schoolId": "", 
-                         "clazzId": "", 
-                         "personId": "", 
-                         "rankScope": "Clazz",// Clazz:班级;Grade:年级;School:学校;
-                         "rankCategory": "Day", //Year:学年;Term:学期;Month:月;Weekend:周;Day:天;
-                         "rankNode": "2018-09-01", 
-                         "rankDate": "2018-09-01", 
-                         "rank": 10, 
-                         "promote": 1, 
-                         "chidren": [] same as this
-                }]
-            }                                                                                                       
+                "assesses": [
+                    {
+                        "indexName": "",
+                        "doneDate": "yyyy-MM-dd",
+                        "indexScore": 0.0,
+                        "score": 0.0,
+                        "word": "",
+                        "assesseeName": "", //被评价者姓名
+                        "assesseeId": "", //被评价者ID
+                        "clazzId": ""     //被评价者clazzId
+                    }
+                ]
+            }
+            
+### 1.14 询个人的班级评价排名
+        调用接口 /assess/rank/personal/grade/{schoolId}/{personId}
+        http  method  GET  
+              path params:
+                  schoolId    string 
+                  personId    string
+                  
+            request params:
+                  category    string values of: Year:学年;Term:学期;Month:月;,Weekend:周;Day:天; 默认值Day
+                     
+        return   //按doneDate倒序排列
+            {
+                "ranks": [{
+                	"schoolId": "",
+                	"clazzId": "",
+                	"personId": "",
+                	"assesseeName","" //学生姓名                	
+                	"rankScope": "School", //values of Clazz/Grade/School
+                	"rankCategory": "Day", //values of Day/Weekend/Month/Term/Year
+                	"rankNode": "2018-09-01",
+                	"rankDate": "2018-09-01",
+                	"score": 0.0,
+                	"promoteScore": 0.0,
+                	"rank": 10,
+                	"promote": 1
+                }]                   
+            }
+            
+### 1.15 询个人的年级评价排名
+        调用接口 /assess/rank/personal/clazz/{clazzId}/{personId}
+        http  method  GET  
+              path params:
+                   clazzId    string 
+                  personId    string
+                  
+            request params:
+                  category    string values of: Year:学年;Term:学期;Month:月;,Weekend:周;Day:天; 默认值Day
+                     
+        return   //按doneDate倒序排列
+            {
+                "ranks": [{
+                	"schoolId": "",
+                	"clazzId": "",
+                	"personId": "",
+                	"assesseeName","" //学生姓名                	
+                	"rankScope": "Clazz", //values of Clazz/Grade/School
+                	"rankCategory": "Day", //values of Day/Weekend/Month/Term/Year
+                	"rankNode": "2018-09-01",
+                	"rankDate": "2018-09-01",
+                	"score": 0.0,
+                	"promoteScore": 0.0,
+                	"rank": 10,
+                	"promote": 1
+                }]                   
+            } 
+            
+### 1.16 查询当天/本周/本月/本学期/本学年班级所有学生评价排名
+        当天调用接口   /assess/rank/clazz/day/{clazzId}
+        本周调用接口   /assess/rank/clazz/weekend/{clazzId}
+        本月期调用接口 /assess/rank/clazz/month/{clazzId}
+        本学期调用接口 /assess/rank/clazz/term/{clazzId}
+        本学年调用接口 /assess/rank/clazz/year/{clazzId}
+        
+        http  method  GET  
+              path params:
+                   clazzId    string 
+                  
+            request params:
+            showLastIfNone    boolean 如果此值为true,当期无排名时,会返回本年度最后一次排名
+                     
+        return   //按doneDate倒序排列
+            {
+                "ranks": [{
+                	"schoolId": "",
+                	"clazzId": "",
+                	"personId": "",
+                	"assesseeName","" //学生姓名
+                	"rankScope": "Clazz", //values of Clazz/Grade/School
+                	"rankCategory": "Day", //values of Day/Weekend/Month/Term/Year
+                	"rankNode": "2018-09-01",
+                	"rankDate": "2018-09-01",
+                	"score": 0.0,
+                	"promoteScore": 0.0,
+                	"rank": 10,
+                	"promote": 1
+                }]                   
+            }               
+            
+### 1.17 查询当天/本周/本月/本学期/本学年年级所有学生评价排名
+        当天调用接口   /assess/rank/grade/day/{schoolId}
+        本周调用接口   /assess/rank/grade/weekend/{schoolId}
+        本月期调用接口 /assess/rank/grade/month/{schoolId}
+        本学期调用接口 /assess/rank/grade/term/{schoolId}
+        本学年调用接口 /assess/rank/grade/year/{schoolId}
+        
+        http  method  GET  
+              path params:
+                  schoolId    string 
+                  
+            request params:
+            showLastIfNone    boolean 如果此值为true,当期无排名时,会返回本年度最后一次排名
+                     
+        return   //按doneDate倒序排列
+            {
+                "ranks": [{
+                	"schoolId": "",
+                	"clazzId": "",
+                	"personId": "",
+                	"rankScope": "Clazz", //values of Clazz/Grade/School
+                	"rankCategory": "Day", //values of Day/Weekend/Month/Term/Year
+                	"rankNode": "2018-09-01",
+                	"rankDate": "2018-09-01",
+                	"score": 0.0,        //得分
+                	"promoteScore": 0.0, //与上期进退步分数
+                	"rank": 10,          //排名
+                	"promote": 1         //与上期进退步排名
+                }]                   
+            }
+            
+### 1.18 生成学校评价组
+        当天调用接口   /assess/team/gen/{schoolId}     
+        http  method  GET  
+              path params:
+                  schoolId    string                                                                                                                                                        

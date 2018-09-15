@@ -38,8 +38,8 @@ public class WeChatController extends AbstractHttpController {
      * 微信关注成功后欢迎信息
      * 只在关注成功的首次调用
      *
-     * @param request
-     * @param response
+     * @param request {@link HttpServletRequest}
+     * @param response {@link HttpServletResponse}
      * @throws Exception
      */
     @RequestMapping(value ="/follow",method = RequestMethod.GET)
@@ -54,8 +54,9 @@ public class WeChatController extends AbstractHttpController {
     /**
      * 微信公众号对话信息反馈
      *
-     * @param request
-     * @param response
+     * @param request {@link HttpServletRequest}
+     * @param response {@link HttpServletResponse}
+     *
      */
     @RequestMapping(value ="/follow",method = RequestMethod.POST)
     public void onDialog(HttpServletRequest request,HttpServletResponse response)throws Exception{
@@ -66,24 +67,36 @@ public class WeChatController extends AbstractHttpController {
         output(xml,response);
     }
 
-    @RequestMapping(value = "/oauth2/{model}")
-    public ModelAndView onOauth2(@PathVariable String model, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        String code = request.getParameter("code");
-        String state = request.getParameter("state");
-        logger.debug(" URL /wechat/oauth2/{} Method=GET  code:{},state:{}",model, code, state);
+    /**
+     * 查询微信授权信息
+     *
+     * @param code 微信授权码
+     * @param state 微信授权状态
+     *
+     * @return {@link ModelAndView}
+     */
+    @RequestMapping(value = "/oauth2")
+    public ModelAndView onOauth2(@RequestParam String code,
+                                 @RequestParam(required = false,defaultValue = "000000") String state){
+        logger.debug(" URL /wechat/oauth2 Method=GET  code:{},state:{}", code, state);
 
         WebAccessToken accessToken = wechatApplicationService.getWeChatAccessToken(code);
-        return newModelAndViewBuilder("/menu/model/" + model)
+        List<WeChatData> data = weChatQueryService.getWeChats(accessToken.getOpenId());
+        return newModelAndViewBuilder("/wechat/wechatList")
                 .withData("openId", accessToken.getOpenId())
                 .withData("token",accessToken.getAccessToken())
+                .withData("weChats",data)
                 .creat();
     }
 
     /**
-     * 查询微信用户注册信息
-     * 微信用户可以注册为系统中的三种角色:Teacher,Student,Parent,三种角色可以同时存在,但一个角色只能注册一个
-     * @param openId
-     * @return
+     * 查询微信用户注册信息,微信用户可以注册为系统中的三种角色:<br>
+     *     {@link WeChatCategory#Teacher};<br>
+     *     {@link WeChatCategory#Student};<br>
+     *     {@link WeChatCategory#Parent};<br>
+     * 三种角色可以同时存在,但一个角色只能注册一个
+     * @param openId 微信openId
+     * @return {@link ModelAndView}
      */
     @RequestMapping(value = "/join/{openId}")
     public ModelAndView onGetJoined(@PathVariable String openId){
@@ -96,8 +109,8 @@ public class WeChatController extends AbstractHttpController {
     /**
      * 微信信息与系统绑定
      *
-     * @param command
-     * @return
+     * @param command {@link BindCommand}
+     * @return {@link ModelAndView}
      */
     @RequestMapping(value ="/bind",method = RequestMethod.POST)
     public ModelAndView onBind(@RequestBody BindCommand command){
@@ -108,10 +121,10 @@ public class WeChatController extends AbstractHttpController {
     }
 
     /**
-     * 添加微信号的被关注者申请
+     * 微信号被关注者申请
      *
-     * @param command
-     * @return
+     * @param command {@link BindCommand}
+     * @return {@link ModelAndView}
      */
     @RequestMapping(value ="/apply/follower",method = RequestMethod.POST)
     public ModelAndView onFollower(@RequestBody BindCommand command){
@@ -124,8 +137,8 @@ public class WeChatController extends AbstractHttpController {
     /**
      * 取消微信号的被关注者
      *
-     * @param applyId
-     * @return
+     * @param applyId value of {@link com.zhezhu.share.domain.id.wechat.FollowApplyId}
+     * @return {@link ModelAndView}
      */
     @RequestMapping(value ="/apply/follower/{applyId}",method = RequestMethod.DELETE)
     public ModelAndView onCancelFollower(@PathVariable String applyId){
@@ -138,8 +151,8 @@ public class WeChatController extends AbstractHttpController {
     /**
      * 审核关注申请
      *
-     * @param command
-     * @return
+     * @param command {@link ApplyAuditCommand}
+     * @return {@link ModelAndView}
      */
     @RequestMapping(value ="/audit/follower",method = RequestMethod.POST)
     public ModelAndView onAuditFollower(@RequestBody ApplyAuditCommand command){
@@ -152,8 +165,8 @@ public class WeChatController extends AbstractHttpController {
     /**
      * 取消关注审核
      *
-     * @param command
-     * @return
+     * @param command {@link ApplyAuditCommand}
+     * @return {@link ModelAndView}
      */
     @RequestMapping(value ="/audit/follower",method = RequestMethod.DELETE)
     public ModelAndView onCancelAuditFollower(@RequestBody ApplyAuditCommand command){
@@ -166,26 +179,26 @@ public class WeChatController extends AbstractHttpController {
     /**
      * 查询微信号的关注者(学生)
      *
-     * @param weChatOpenId
-     * @return
+     * @param openId  微信openId
+     * @return {@link ModelAndView}
      */
-    @RequestMapping(value ="/query/followers/{weChatOpenId}",method = RequestMethod.GET)
-    public ModelAndView onGetFollowerOfStudent(@PathVariable String weChatOpenId){
-        logger.debug("URL /wechat/query/followers/{} Method=GET ",weChatOpenId);
+    @RequestMapping(value ="/query/followers/{openId}",method = RequestMethod.GET)
+    public ModelAndView onGetFollowerOfStudent(@PathVariable String openId){
+        logger.debug("URL /wechat/query/followers/{} Method=GET ",openId);
 
-        List<FollowerData> followers = weChatQueryService.getFollowers(weChatOpenId, WeChatCategory.Student);
+        List<FollowerData> followers = weChatQueryService.getFollowers(openId, WeChatCategory.Student);
         return newModelAndViewBuilder("/wechat/followerList").withData("followers",followers).creat();
     }
 
     /**
      * 查询可申请的关注者
      *
-     * @param name
-     * @param clazzId
-     * @param credentialsName
-     * @param credentialsValue
-     * @param gender
-     * @return
+     * @param name 姓名
+     * @param clazzId 班级id {@link com.zhezhu.share.domain.id.school.ClazzId}
+     * @param credentialsName 证件名称 如身份证
+     * @param credentialsValue 证件号
+     * @param gender 性别 {@link Gender}
+     * @return {@link ModelAndView}
      */
     @RequestMapping(value ="/apply/query/followers",method = RequestMethod.GET)
     public ModelAndView onQueryFollowerCanBeApplied(@RequestParam String name,

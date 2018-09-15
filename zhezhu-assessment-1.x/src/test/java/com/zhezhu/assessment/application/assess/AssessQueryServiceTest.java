@@ -113,6 +113,13 @@ public class AssessQueryServiceTest {
                 .thenReturn(now.minusDays(8).toString())
                 .thenReturn(now.minusDays(9).toString())
                 .thenReturn(now.minusDays(10).toString());
+
+        StudentData student = mock(StudentData.class);
+        when(student.getSchoolId()).thenReturn(new SchoolId().id());
+        when(student.getManagedClazzId()).thenReturn(teamId.id());
+        when(student.getName()).thenReturn("S1");
+        when(schoolService.getStudentBy(any(PersonId.class))).thenReturn(student);
+
         List<AssessRank> ranks = getAssessRanks(category,scope,personId,teamId.id(),assesseeId,10);
         AssessQueryService service = getService();
         Date from = DateUtilWrapper.fromLocalDate(now.minusDays(11));
@@ -127,6 +134,8 @@ public class AssessQueryServiceTest {
 
         when(rankRepository.findByAssessTeamIdAndRankCategoryAndRankScopeAndRankNode(
                 eq(teamId.id()), eq(category), eq(scope), eq(now.minusDays(1).toString()))).thenReturn(null).thenReturn(ranks.get(5));
+
+
         rankData = service.getTeamLastRanks(teamId.id(), category, scope, now.minusDays(5).toString());
         assertEquals(0,rankData.size());
 
@@ -159,6 +168,7 @@ public class AssessQueryServiceTest {
         StudentData student = mock(StudentData.class);
         when(student.getSchoolId()).thenReturn(schoolId.id());
         when(student.getManagedClazzId()).thenReturn(teamId.id());
+        when(student.getName()).thenReturn("S1");
         when(schoolService.getStudentBy(eq(personId))).thenReturn(student);
         when(rankRepository.findAllByAssessTeamIdAndPersonIdAndRankCategoryAndRankScopeAndRankDateBetween(
                 eq(teamId.id()),eq(personId),eq(category),eq(scope),eq(from),eq(to))
@@ -198,6 +208,7 @@ public class AssessQueryServiceTest {
         when(student.getSchoolId()).thenReturn(schoolId.id());
         when(student.getManagedClazzId()).thenReturn(teamId.id());
         when(student.getPersonId()).thenReturn(personId.id());
+        when(student.getName()).thenReturn("S1");
         when(schoolService.getStudentBy(eq(personId))).thenReturn(student);
 
         Assessee assessee = mock(Assessee.class);
@@ -252,6 +263,7 @@ public class AssessQueryServiceTest {
         StudentData student = mock(StudentData.class);
         when(student.getManagedClazzId()).thenReturn(new ClazzId().id());
         when(student.getSchoolId()).thenReturn(schoolId.id());
+        when(student.getName()).thenReturn("S1");
         when(schoolService.getStudentBy(any(PersonId.class))).thenReturn(student);
         when(rankRepository.findAllByAssessTeamIdAndPersonIdAndRankCategoryAndRankScopeAndRankDateBetween(any(String.class)
                 , any(PersonId.class), any(RankCategory.class), any(RankScope.class), eq(from), eq(to))).thenReturn(assessRanks);

@@ -167,7 +167,7 @@ public class JdbcSchoolInfoApi implements SchoolInfoApi {
     public List<ClazzData> getSchoolClazzs(SchoolId schoolId) {
         //目前只查询了管理班级
         StudyYear year = StudyYear.now();
-        String sql = "select a.clazzId,a.clazzType,b.gradeName,b.gradeLevel,b.clazzName,a.clazzType " +
+        String sql = "select a.clazzId,a.clazzType,b.gradeName,b.gradeLevel,b.clazzName,a.clazzType,a.openedTime " +
                 "from sm_clazz a inner join sm_clazz_history b on b.clazzId=a.clazzId " +
                 "where a.schoolId=? and a.removed=0 and a.closedTime is null and b.yearStarts=? and b.yearEnds=?";
         return jdbc.query(sql,(rs,rowNum) ->
@@ -176,6 +176,7 @@ public class JdbcSchoolInfoApi implements SchoolInfoApi {
                                 .clazzId(rs.getString("clazzId"))
                                 .gradeName(rs.getString("gradeName"))
                                 .gradeLevel(rs.getInt("gradeLevel"))
+                                .openedTime(rs.getDate("openedTime"))
                                 .type(rs.getString("clazzType"))
                                 .build()
                 ,schoolId.id(),year.getYearStarts(),year.getYearEnds());

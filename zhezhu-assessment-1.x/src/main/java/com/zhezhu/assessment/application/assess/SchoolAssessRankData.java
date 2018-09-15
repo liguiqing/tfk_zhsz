@@ -24,6 +24,8 @@ public class SchoolAssessRankData {
 
     private String personId;//
 
+    private String assesseeName;
+
     private String rankScope; // RankScope
 
     private String rankCategory; //RankCategory

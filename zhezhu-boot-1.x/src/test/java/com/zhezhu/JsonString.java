@@ -2,6 +2,7 @@ package com.zhezhu;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
+import com.zhezhu.assessment.application.assess.AssessData;
 import com.zhezhu.assessment.application.assess.SchoolAssessRankData;
 import com.zhezhu.assessment.domain.model.assesse.RankCategory;
 import com.zhezhu.assessment.domain.model.assesse.RankScope;
