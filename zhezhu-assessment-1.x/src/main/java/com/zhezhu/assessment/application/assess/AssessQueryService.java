@@ -149,7 +149,7 @@ public class AssessQueryService {
      * @return list of SchoolAssessRankData
      */
     public SchoolAssessRankData getPersonalLastRanksThisYear(String personId) {
-        log.debug("Get Person  {} Last Ranks of {}",personId);
+        log.debug("Get last rank of person:{} ",personId);
 
         PersonId personId1 = new PersonId(personId);
         StudentData student = schoolService.getStudentBy(personId1);
@@ -168,11 +168,9 @@ public class AssessQueryService {
         lastAssessList.sort(Comparator.comparing(Assess::getDoneDate));
         Assess lastAssess = lastAssessList.get(0);
         String node = DateUtilWrapper.toLocalDate(lastAssess.getDoneDate()).toString();
-        RankCategory category = RankCategory.Day;
-        RankScope scope = RankScope.Clazz;
 
         AssessRank lastRank = rankRepository.findByPersonIdAndRankNodeAndRankCategoryAndRankScopeAndYearStartsAndYearEnds(
-                personId1,node,category,scope,period.yearStarts(),period.yearEnds());
+                personId1,node,RankCategory.Day,RankScope.Clazz,period.yearStarts(),period.yearEnds());
 
         if(lastRank == null) {
             return null;
@@ -199,7 +197,7 @@ public class AssessQueryService {
                                                       Date from, Date to) {
         return rankRepository.findAllByAssessTeamIdAndPersonIdAndRankCategoryAndRankScopeAndRankDateBetween(
                 teamId, personId,category, scope, from, to).stream()
-                .sorted((a,b)->DateUtilWrapper.lessThan(a.getRankDate(),b.getRankDate())?1:-1)
+                .sorted(Comparator.comparing(AssessRank::getRankDate).reversed())
                 .map(rank -> SchoolAssessRankData.builder()
                                 .schoolId(schoolId)
                                 .clazzId(clazzId)
@@ -242,7 +240,7 @@ public class AssessQueryService {
             return new ArrayList<>();
 
         return assesses.stream().map(assess ->toData(assesseeId,assess))
-                .sorted((a,b)->DateUtilWrapper.lessThan(a.getDoneDate(),b.getDoneDate())?1:-1)
+                .sorted(Comparator.comparing(AssessData::getDoneDate).reversed())
                 .collect(Collectors.toList());
     }
 
