@@ -25,8 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 /**
  * Copyright (c) 2016,$today.year, 深圳市易考试乐学测评有限公司
@@ -41,6 +40,23 @@ public class JdbcSchoolInfoApiTest extends AbstractTransactionalJUnit4SpringCont
 
     @Autowired
     private JdbcTemplate jdbc;
+
+    @Test
+    public void getAllSchool(){
+        List<Object[]> args = Lists.newArrayList();
+        for(int i=0;i<10;i++){
+            SchoolScope schoolScope = SchoolScope.Primary;
+            if(i%3 == 0)
+                schoolScope = SchoolScope.High;
+            else if(i%4==0)
+                schoolScope = SchoolScope.Middle;
+
+            args.add(new Object[]{new SchoolId().id(),new TenantId().id(),"SC"+i,"S"+i, schoolScope.name(),0});
+        }
+        jdbc.batchUpdate(" INSERT INTO `sm_school`(`schoolId`,`tenantId`,`name`,`alias`,`scope`,`removed`) VALUES (?,?,?,?,?,?)", args);
+        List<SchoolData> schoolData = api.getAllSchool();
+        assertTrue(schoolData.size() >= 10);
+    }
 
     @Test
     public void getSchoolTenantId() {
@@ -163,8 +179,8 @@ public class JdbcSchoolInfoApiTest extends AbstractTransactionalJUnit4SpringCont
         assertEquals(2,teacher.getContacts().size());
         assertEquals("1235689874",teacher.getContacts().get(0).getValue());
         assertEquals(1,teacher.getClazzes().size());
-        assertEquals("六年级",teacher.getClazzes().get(0).getGradeName());
-        assertEquals(6,teacher.getClazzes().get(0).getGradeLevel());
+        assertEquals("六年级",teacher.getClazzes().get(0).getClazz().getGradeName());
+        assertEquals(6,teacher.getClazzes().get(0).getClazz().getGradeLevel());
     }
 
     @Test

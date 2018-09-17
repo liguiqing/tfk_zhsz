@@ -1,5 +1,6 @@
 package com.zhezhu.assessment.application.index;
 
+import com.zhezhu.commons.util.NumberUtilWrapper;
 import lombok.*;
 
 import java.util.List;
@@ -36,4 +37,8 @@ public class IndexData {
 
     private List<IndexData> children;
 
+    public double randamScore(){
+        double d = this.plus ? 1 : -1;
+        return NumberUtilWrapper.randomBetween(0,this.score) * d;
+    }
 }

@@ -59,21 +59,14 @@ public class RankServiceTest {
         MockitoAnnotations.initMocks(this);
     }
 
-    private RankService getService()throws Exception{
+    private RankService getService(){
         Optional<RankStrategy> strategyOptional = Optional.empty();
         RankService service = new RankService(assessRepository,assesseeRepository,assessRankRepository,teamRepository,strategyOptional,schoolService,rankCategoryService);
-//        FieldUtils.writeField(service,"assessRepository",assessRepository,true);
-//        FieldUtils.writeField(service,"assesseeRepository",assesseeRepository,true);
-//        FieldUtils.writeField(service,"assessRankRepository",assessRankRepository,true);
-//        FieldUtils.writeField(service,"teamRepository",teamRepository,true);
-//        FieldUtils.writeField(service,"schoolService",schoolService,true);
-//        FieldUtils.writeField(service,"rankCategoryService",rankCategoryService,true);
-//        FieldUtils.writeField(service,"rankStrategy",rankStrategy,true);
         return spy(service);
     }
 
     @Test
-    public void rank() throws Exception{
+    public void rank(){
         RankService service = getService();
         ClazzId clazzId = new ClazzId();
         SchoolId schoolId = new SchoolId();
@@ -106,6 +99,8 @@ public class RankServiceTest {
         assertEquals(0,ranks.get(0).getPromote());
         assertEquals(1,ranks.get(0).getRank());
         assertEquals(10,ranks.get(9).getRank());
+        assertEquals(assesses.get(0).getAssesseeId(),ranks.get(9).getAssesseeId());
+        assertEquals(assesses.get(46).getAssesseeId(),ranks.get(0).getAssesseeId());
         assertEquals(LocalDate.now().toString(),ranks.get(9).getRankNode());
 
         ranks = service.rank(clazzId.id(), RankCategory.Weekend, RankScope.Clazz);
@@ -113,6 +108,8 @@ public class RankServiceTest {
         assertEquals(0,ranks.get(0).getPromote());
         assertEquals(1,ranks.get(0).getRank());
         assertEquals(10,ranks.get(9).getRank());
+        assertEquals(assesses.get(0).getAssesseeId(),ranks.get(9).getAssesseeId());
+        assertEquals(assesses.get(46).getAssesseeId(),ranks.get(0).getAssesseeId());
         assertEquals(DateUtilWrapper.weekOfYear(DateUtilWrapper.now())+"",ranks.get(9).getRankNode());
 
         ranks = service.rank(clazzId.id(), RankCategory.Month, RankScope.Clazz);
@@ -120,23 +117,31 @@ public class RankServiceTest {
         assertEquals(0,ranks.get(0).getPromote());
         assertEquals(1,ranks.get(0).getRank());
         assertEquals(10,ranks.get(9).getRank());
+        assertEquals(assesses.get(0).getAssesseeId(),ranks.get(9).getAssesseeId());
+        assertEquals(assesses.get(46).getAssesseeId(),ranks.get(0).getAssesseeId());
 
         ranks = service.rank(clazzId.id(), RankCategory.Term, RankScope.Clazz);
         assertEquals(10,ranks.size());
         assertEquals(0,ranks.get(0).getPromote());
         assertEquals(1,ranks.get(0).getRank());
         assertEquals(10,ranks.get(9).getRank());
+        assertEquals(assesses.get(0).getAssesseeId(),ranks.get(9).getAssesseeId());
+        assertEquals(assesses.get(46).getAssesseeId(),ranks.get(0).getAssesseeId());
 
         ranks = service.rank(clazzId.id(), RankCategory.Year, RankScope.Clazz);
         assertEquals(10,ranks.size());
         assertEquals(0,ranks.get(0).getPromote());
         assertEquals(1,ranks.get(0).getRank());
         assertEquals(10,ranks.get(9).getRank());
+        assertEquals(assesses.get(0).getAssesseeId(),ranks.get(9).getAssesseeId());
+        assertEquals(assesses.get(46).getAssesseeId(),ranks.get(0).getAssesseeId());
 
         ranks = service.rank(clazzId.id(), RankCategory.Weekend, RankScope.School);
         assertEquals(10,ranks.size());
         assertEquals(0,ranks.get(0).getPromote());
         assertEquals(1,ranks.get(0).getRank());
         assertEquals(10,ranks.get(9).getRank());
+        assertEquals(assesses.get(0).getAssesseeId(),ranks.get(9).getAssesseeId());
+        assertEquals(assesses.get(46).getAssesseeId(),ranks.get(0).getAssesseeId());
     }
 }

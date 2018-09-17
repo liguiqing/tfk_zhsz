@@ -228,6 +228,12 @@ public class AssessApplicationServiceTest {
                 .thenReturn(index)
                 .thenReturn(null);
 
+        StudentData student = spy(StudentData.builder().personId(new PersonId().id()).build());
+        when(student.getManagedClazzId()).thenReturn(new ClazzId().id());
+        when(schoolService.getStudentBy(any(PersonId.class))).thenReturn(student);
+        AssessTeam team = AssessTeam.builder().assessTeamId(new AssessTeamId()).build();
+        when(assessTeamRepository.findByTeamId(any(String.class))).thenReturn(team);
+
         ids = service.teacherAssessStudent(command);
 
         assertEquals(4,ids.length);

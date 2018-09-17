@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.*;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Configuration
 @EnableCaching
+@EnableScheduling
 @EnableJpaRepositories(value = "com.zhezhu.assessment.domain.model.**.*",
         includeFilters = {@ComponentScan.Filter(type=FilterType.ANNOTATION,value=Repository.class)})
 @ComponentScan(value = "com.zhezhu.assessment.**",

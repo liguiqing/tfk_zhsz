@@ -19,15 +19,15 @@ public class UpdateIndexCommand extends NewIndexCommand {
     private String indexId;
 
     public UpdateIndexCommand(String parentIndexId, String categoryName, String ownerId,
-                              String name,String alias,boolean plus, double score, double weight, String description, String indexId,String group) {
-        super(parentIndexId, categoryName, ownerId, name,alias,plus, score, weight, description,group);
+                              String name,String alias,boolean plus, double score, double weight, String description, String indexId,String group,String icon) {
+        super(parentIndexId, categoryName, ownerId, name,alias,plus, score, weight, description,group,icon);
         this.indexId = indexId;
     }
 
     public UpdateIndexCommand build(NewIndexCommand command){
         return new UpdateIndexCommand(command.getParentIndexId(), command.getCategoryName(),
                 command.getOwnerId(), command.getName(),command.getName(),true, command.getScore(), command.getWeight(),
-                command.getDescription(),this.indexId,command.getGroup());
+                command.getDescription(),this.indexId,command.getGroup(),command.getIcon());
 
     }
 

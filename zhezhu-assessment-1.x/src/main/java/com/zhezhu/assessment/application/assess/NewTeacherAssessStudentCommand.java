@@ -1,6 +1,7 @@
 package com.zhezhu.assessment.application.assess;
 
 import com.google.common.collect.Lists;
+import com.zhezhu.commons.util.CollectionsUtilWrapper;
 import lombok.*;
 
 import java.util.List;
@@ -30,4 +31,5 @@ public class NewTeacherAssessStudentCommand {
         this.assesses.add(indexAssess);
         return this;
     }
+
 }

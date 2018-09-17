@@ -5,7 +5,7 @@ import com.zhezhu.assessment.domain.model.assesse.RankCategoryDate;
 import com.zhezhu.commons.util.DateUtilWrapper;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
+import java.time.*;
 import java.util.Date;
 
 /**
@@ -23,14 +23,12 @@ public class DayDate implements RankCategoryDate {
 
     @Override
     public Date from() {
-        Date now = DateUtilWrapper.now();
-        return DateUtilWrapper.getStartDayOfWeek(now);
+        return Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant());
     }
 
     @Override
     public Date to() {
-        Date now = DateUtilWrapper.now();
-        return DateUtilWrapper.getEndDayOfWeek(now);
+        return Date.from(LocalDateTime.now().toInstant(ZoneOffset.ofTotalSeconds(0)));
     }
 
     @Override

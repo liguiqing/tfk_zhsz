@@ -37,6 +37,10 @@ public class SchoolService {
         return this.schoolInfoApi;
     }
 
+    public List<SchoolData> getAllSchool(){
+        return api().getAllSchool();
+    }
+
     public SchoolData getSchool(SchoolId schoolId){
         return api().getSchool(schoolId);
     }
@@ -86,6 +90,10 @@ public class SchoolService {
 
     public List<StudentData> getClazzStudents(ClazzId clazzId){
         return api().getClazzStudents(clazzId);
+    }
+
+    public List<TeacherData> getClazzTeachers(ClazzId clazzId) {
+        return api().getClazzTeachers(clazzId);
     }
 
     public List<ClazzData> getClazzs(SchoolId schoolId){

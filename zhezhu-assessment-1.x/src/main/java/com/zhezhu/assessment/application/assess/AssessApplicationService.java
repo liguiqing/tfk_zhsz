@@ -13,6 +13,7 @@ import com.zhezhu.commons.message.Messagingable;
 import com.zhezhu.commons.util.ArraysUtilWrapper;
 import com.zhezhu.commons.util.CollectionsUtilWrapper;
 import com.zhezhu.share.domain.id.PersonId;
+import com.zhezhu.share.domain.id.assessment.AssessId;
 import com.zhezhu.share.domain.id.assessment.AssesseeId;
 import com.zhezhu.share.domain.id.assessment.AssessorId;
 import com.zhezhu.share.domain.id.index.IndexId;
@@ -28,6 +29,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * 评价应用服务
+ *
  * @author Liguiqing
  * @since V3.0
  */
@@ -69,6 +72,11 @@ public class AssessApplicationService {
     @Autowired(required = false)
     private MessageListener messageListener;
 
+    /**
+     * 按学校生成评价组
+     *
+     * @param schoolId Value of {@link SchoolId}
+     */
     @Transactional(rollbackFor = Exception.class)
     public void genAssessTeamsOf(String schoolId){
         log.debug("Gen assess teams for {}",schoolId);
@@ -100,6 +108,11 @@ public class AssessApplicationService {
         }
     }
 
+    /**
+     * 进行一次评价
+     *
+     * @param command {@link NewAssessCommand}
+     */
     @Transactional(rollbackFor = Exception.class)
     public void assess(NewAssessCommand command){
         log.debug("New assess for {}",command);
@@ -122,6 +135,11 @@ public class AssessApplicationService {
         sendMessage(new AssessMessage(index,assessee,command.getScore()));
     }
 
+    /**
+     * 进行一组评价
+     *
+     * @param commands array of {@link NewAssessCommand}
+     */
     @Transactional(rollbackFor = Exception.class)
     public void assesses(NewAssessCommand[] commands){
         if(ArraysUtilWrapper.isNotNullAndNotEmpty(commands)){
@@ -137,8 +155,8 @@ public class AssessApplicationService {
     /**
      * 老师评价学生
      *
-     * @param command
-     * @return
+     * @param command {@link NewTeacherAssessStudentCommand}
+     * @return array of {@link AssessId}
      */
     @Transactional(rollbackFor = Exception.class)
     public String[] teacherAssessStudent(NewTeacherAssessStudentCommand command){
@@ -153,6 +171,10 @@ public class AssessApplicationService {
         Assessor assessor = teacherAsAssessor(teacherPersonId, schoolId);
         Assessee assessee = studentAsAssessee(studentPersonId, schoolId);
 
+        StudentData student = schoolService.getStudentBy(studentPersonId);
+        String clazzId = student.getManagedClazzId();
+        AssessTeam team = assessTeamRepository.findByTeamId(clazzId);
+
         String[] assessIds = new String[assesses.size()];
         int i= 0;
         for(IndexAssess assess:assesses){
@@ -166,12 +188,18 @@ public class AssessApplicationService {
             }else{
                 sendMessage(new AssessMessage(assessee,assess.getWord()));
             }
+            assess_.associateTo(team);
             assessRepository.save(assess_);
             assessIds[i++] = assess_.getAssessId().id();
         }
         return assessIds;
     }
 
+    /**
+     * 按评价组进行一次全排名:即计算{@link RankCategory#values()}及{@link RankScope#values()}排名
+     *
+     * @param teamId value of {@link SchoolId} or {@link com.zhezhu.share.domain.id.school.ClazzId}
+     */
     @Transactional(rollbackFor = Exception.class)
     public void rank(String teamId){
         log.debug("Rank all for {}",teamId);
@@ -182,6 +210,13 @@ public class AssessApplicationService {
         }
     }
 
+    /**
+     * 按评价组Id进行一次分类分范围排名
+     *
+     * @param teamId value of {@link SchoolId} or {@link com.zhezhu.share.domain.id.school.ClazzId}
+     * @param category name() of {@link RankCategory}
+     * @param scope name() of {@link RankScope}
+     */
     @Transactional(rollbackFor = Exception.class)
     public void rank(String teamId,String category,String scope){
         log.debug("Rank for {} {} {}",teamId,category,scope);
@@ -191,7 +226,15 @@ public class AssessApplicationService {
         rank(teamId,category1,scope1);
     }
 
-    private void rank(String teamId,RankCategory category,RankScope scope){
+    /**
+     * 按评价组Id进行一次分类分范围排名
+     *
+     * @param teamId value of {@link SchoolId} or {@link com.zhezhu.share.domain.id.school.ClazzId}
+     * @param category {@link RankCategory}
+     * @param scope {@link RankScope}
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public void rank(String teamId,RankCategory category,RankScope scope){
         List<AssessRank> ranks = rankService.rank(teamId, category, scope);
         for(AssessRank rank:ranks){
             rankRepository.deleteByPersonIdAndAssessTeamIdAndRankCategoryAndRankScopeAndRankNodeAndYearStartsAndYearEnds(

@@ -1,6 +1,8 @@
 package com.zhezhu.share.infrastructure.school;
 
+import com.google.common.collect.Lists;
 import com.zhezhu.commons.lang.Throwables;
+import com.zhezhu.commons.util.CollectionsUtilWrapper;
 import com.zhezhu.share.domain.common.Period;
 import com.zhezhu.share.domain.id.PersonId;
 import com.zhezhu.share.domain.id.identityaccess.TenantId;
@@ -13,7 +15,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 /**
  * 通过JDBC实现的学校信息API
@@ -27,6 +34,18 @@ public class JdbcSchoolInfoApi implements SchoolInfoApi {
 
     @Autowired
     private JdbcTemplate jdbc ;
+
+    public List<SchoolData> getAllSchool(){
+        String sql = "select * from sm_school where removed = 0";
+        return jdbc.query(sql,(rs,rowNum) ->
+                        SchoolData.builder()
+                                .tenantId(rs.getString("tenantId"))
+                                .schoolId(rs.getString("schoolId"))
+                                .name(rs.getString("name"))
+                                .alias(rs.getString("alias"))
+                                .scope(rs.getString("scope"))
+                                .build());
+    }
 
     @Override
     public TenantId getSchoolTenantId(SchoolId schoolId) {
@@ -131,7 +150,7 @@ public class JdbcSchoolInfoApi implements SchoolInfoApi {
                             .teacherId(rs.getString("teacherId"))
                             .name(rs.getString("name"))
                             .personId(personId.id())
-                            .clazzes(getTeacherClazzes(rs.getString("teacherId")))
+                            .clazzes(getTeacherMgrClazzs(rs.getString("teacherId")))
                             .contacts(getTeacherContacts(personId.id()))
                             .build()
                 , personId.id(), schoolId.id());
@@ -139,6 +158,60 @@ public class JdbcSchoolInfoApi implements SchoolInfoApi {
             log.debug(Throwables.toString(e));
         }
         return null;
+    }
+
+    public List<TeacherData> getClazzTeachers(ClazzId clazzId){
+        ClazzData clazz = getClazz(clazzId);
+        StudyYear year = StudyYear.now();
+        String sqlManaged = "select a.gradeName,a.gradeLevel,b.name,b.personId,b.teacherId " +
+                "from sm_teacher_management a inner join sm_teacher b on b.teacherId = a.teacherId " +
+                "where a.dateEnds is null and a.clazzId=? and a.yearStarts=? and a.yearEnds=?";
+        String sqlTeach = "select a.courseAlias,a.courseName,a.gradeName,a.gradeLevel,b.name,b.personId,b.teacherId " +
+                "from sm_teacher_teaching a inner join sm_teacher b on b.teacherId = a.teacherId" +
+                " where a.dateEnds is null and a.clazzId=? and a.yearStarts=? and a.yearEnds=?" ;
+        List<TeacherData> teachers = jdbc.query(sqlManaged,(rs,rn) ->
+                    TeacherData.builder()
+                            .name(rs.getString("name"))
+                            .personId(rs.getString("personId"))
+                            .teacherId(rs.getString("teacherId"))
+                            .schoolId(clazz.getSchoolId())
+                            .build().asMaster(clazz),
+                new Object[]{clazz.getClazzId(),year.getYearStarts(),year.getYearEnds()});
+
+        List<TeacherData> teachers2 = jdbc.query(sqlTeach,(rs,rn) ->
+                        TeacherData.builder()
+                                .name(rs.getString("name"))
+                                .personId(rs.getString("personId"))
+                                .teacherId(rs.getString("teacherId"))
+                                .schoolId(clazz.getSchoolId())
+                                .build().asTeacher(clazz,rs.getString("courseName")),
+                new Object[]{clazz.getClazzId(),year.getYearStarts(),year.getYearEnds()});
+
+        if(CollectionsUtilWrapper.isNullOrEmpty(teachers))
+            return teachers2;
+
+        if(CollectionsUtilWrapper.isNullOrEmpty(teachers))
+            return teachers2;
+
+        Map<String, List<TeacherData>> mgrs = this.grouping(teachers);
+        Map<String,List<TeacherData>> teachings = this.grouping(teachers2);
+        teachings.entrySet().stream().map(v->mgrs.merge(v.getKey(),v.getValue(),this::merge)).count();
+        ArrayList<TeacherData> tss = new ArrayList<>();
+        mgrs.values().forEach(ts->tss.addAll(ts));
+        return tss;
+    }
+
+    private Map<String,List<TeacherData>> grouping(List<TeacherData> teachers){
+        return teachers.stream().collect(Collectors.groupingBy(TeacherData::getPersonId))
+                .entrySet().stream().collect(Collectors.toMap(
+                e -> e.getKey(),
+                e -> e.getValue()
+        ));
+    }
+
+    private List<TeacherData> merge(List<TeacherData> dest,List<TeacherData> src){
+        src.forEach(teacher -> teacher.getClazzes().forEach(clazz->dest.forEach(teacher2->teacher2.addClazz(clazz))));
+        return dest;
     }
 
     @Override
@@ -206,18 +279,26 @@ public class JdbcSchoolInfoApi implements SchoolInfoApi {
                 ,personId);
     }
 
-    private List<ClazzData> getTeacherClazzes(String teacherId){
+    /**
+     * 查询老师为班主任的班级
+     *
+     * @param teacherId
+     * @return
+     */
+    private List<TeachClazzData> getTeacherMgrClazzs(String teacherId){
         String sql = "select a.clazzId,b.clazzName,a.gradeName,a.gradeLevel,a.job " +
                 "from sm_teacher_management a " +
                 "inner join sm_clazz_history b on b.clazzId = a.clazzId and a.yearEnds=b.yearEnds " +
                 "where  a.dateEnds is null and a.teacherId=?";
         return jdbc.query(sql,(rs,rowNum) ->
-                        ClazzData.builder()
-                                .clazzName(rs.getString("clazzName"))
-                                .clazzId(rs.getString("clazzId"))
-                                .gradeName(rs.getString("gradeName"))
-                                .gradeLevel(rs.getInt("gradeLevel"))
-                                .type("United")
+                        TeachClazzData.builder()
+                                .clazz(ClazzData.builder()
+                                    .clazzName(rs.getString("clazzName"))
+                                    .clazzId(rs.getString("clazzId"))
+                                    .gradeName(rs.getString("gradeName"))
+                                    .gradeLevel(rs.getInt("gradeLevel"))
+                                    .type("United").build())
+                                .job("Header")
                                 .build()
                 ,teacherId);
     }

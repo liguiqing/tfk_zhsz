@@ -72,45 +72,42 @@ public class RankService {
         query.newRankQuery(teamId,category,scope);
         List<Assess> assesses = assessRepository.findByAssessTeamIdAndDoneDateBetween(
                 team.getAssessTeamId(), query.from, query.to);
-        Map<PersonId,List<Assess>> personGroup = assesses.stream()
+        Map<Assessee,List<Assess>> personGroup = assesses.stream()
                 .collect(Collectors.groupingBy(Assess::getAssesseeId))
                 .entrySet().stream().collect(Collectors.toMap(
-                        e -> transToPersonId(e.getKey()),
+                        e -> assesseeRepository.loadOf(e.getKey()),
                         e -> e.getValue()
                 ));
         return ranks(personGroup,category, scope,query);
     }
 
-    private PersonId transToPersonId(AssesseeId assesseeId){
-        Assessee assessee = assesseeRepository.loadOf(assesseeId);
-        return assessee.getCollaborator().getPersonId();
-    }
-
-    private List<AssessRank> ranks(Map<PersonId,List<Assess>> assessList,RankCategory category,
+    private List<AssessRank> ranks(Map<Assessee,List<Assess>> assessList,RankCategory category,
                                    RankScope scope,RankQuery query){
         List<AssessRank> ranks = Lists.newArrayList();
-        HashMap<PersonId, Double> personScores = new HashMap<>(assessList.size());
-        Set<PersonId> personIds = assessList.keySet();
-        for(PersonId personId:personIds){
-            List<Assess> assesses = assessList.get(personId);
+        HashMap<Assessee, Double> personScores = new HashMap<>(assessList.size());
+        Set<Assessee> as = assessList.keySet();
+        for(Assessee a:as){
+            List<Assess> assesses = assessList.get(a);
             double sum = assesses.stream().mapToDouble(Assess::getScore).sum();
-            personScores.put(personId, sum);
+            personScores.put(a, sum);
         }
-        LinkedHashMap<PersonId, Double> finalMap = new LinkedHashMap<>();
-        personScores.entrySet().stream().sorted(Map.Entry.<PersonId, Double>comparingByValue()
+        LinkedHashMap<Assessee, Double> finalMap = new LinkedHashMap<>();
+        personScores.entrySet().stream().sorted(Map.Entry.<Assessee, Double>comparingByValue()
                 .reversed()).forEachOrdered(e -> finalMap.put(e.getKey(), e.getValue()));
-        personIds = finalMap.keySet();
+        as = finalMap.keySet();
 
         RankStrategy rankStrategy = rankStrategy();
 
-        for(PersonId personId:personIds){
-            double score = finalMap.get(personId);
+        for(Assessee a:as){
+            PersonId personId = a.getCollaborator().getPersonId();
+            double score = finalMap.get(a);
             int rank = rankStrategy.getRank(score);
             AssessRank prevRank = getPrevRank(personId, category, scope, query, score, rank);
-            AssessTeamId teamId = assessList.get(personId).get(0).getAssessTeamId();
+            AssessTeamId teamId = assessList.get(a).get(0).getAssessTeamId();
             AssessTeam team = this.teamRepository.loadOf(teamId);
             AssessRank assessRank = AssessRank.builder()
                     .assessTeamId(team.getTeamId())
+                    .assesseeId(a.getAssesseeId())
                     .personId(personId)
                     .rankCategory(category)
                     .rankScope(scope)

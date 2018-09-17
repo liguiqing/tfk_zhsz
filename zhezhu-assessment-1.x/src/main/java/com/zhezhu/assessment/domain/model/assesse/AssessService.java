@@ -28,6 +28,9 @@ public class AssessService {
     @Autowired
     private IndexRepository indexRepository;
 
+    @Autowired
+    private AssessTeamRepository assessTeamRepository;
+
 
     public Assess newAssess(Index index, Assessor assessor, Assessee assessee, double score,String word){
         if(index == null)
@@ -41,6 +44,7 @@ public class AssessService {
                 .indexId(index.getIndexId())
                 .assessorId(assessor.getAssessorId())
                 .assesseeId(assessee.getAssesseeId())
+                //.assessTeamId()
                 .category(index.getCategory())
                 .doneDate(DateUtilWrapper.now())
                 .score(score)

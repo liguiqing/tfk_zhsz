@@ -38,6 +38,8 @@ public class NewIndexCommand {
 
     private String group;
 
+    private String icon;
+
     public Index toStIndex(IndexId indexId){
         return Index.builder()
                 .indexId(indexId)

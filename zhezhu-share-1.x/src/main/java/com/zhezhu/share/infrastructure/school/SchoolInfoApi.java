@@ -35,4 +35,8 @@ public interface SchoolInfoApi {
     List<StudentData> getClazzStudents(ClazzId clazzId);
 
     List<ClazzData> getSchoolClazzs(SchoolId schoolId);
+
+    List<SchoolData> getAllSchool();
+
+    List<TeacherData> getClazzTeachers(ClazzId clazzId);
 }

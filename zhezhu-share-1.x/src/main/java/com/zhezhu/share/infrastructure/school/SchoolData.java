@@ -1,5 +1,6 @@
 package com.zhezhu.share.infrastructure.school;
 
+import com.zhezhu.share.domain.school.SchoolScope;
 import lombok.*;
 
 /**
@@ -16,9 +17,15 @@ public class SchoolData {
 
     private String schoolId;
 
+    private String tenantId;
+
     private String name;
 
     private String alias;
 
     private String scope;
+
+    public boolean scopeOf(SchoolScope scope){
+        return scope.name().equalsIgnoreCase(this.scope);
+    }
 }
