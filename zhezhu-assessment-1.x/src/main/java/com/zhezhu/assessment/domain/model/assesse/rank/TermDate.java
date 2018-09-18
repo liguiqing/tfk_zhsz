@@ -26,13 +26,13 @@ public class TermDate implements RankCategoryDate {
     @Override
     public Date from() {
         Period period = Term.defaultPeriodOfThisTerm();
-        return period.starts();
+        return DateUtilWrapper.startOfDay(period.starts());
     }
 
     @Override
     public Date to() {
         Period period = Term.defaultPeriodOfThisTerm();
-        return period.ends();
+        return DateUtilWrapper.endOfDay(period.ends());
     }
 
     @Override

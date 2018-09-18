@@ -2,6 +2,7 @@ package com.zhezhu.assessment.domain.model.assesse.rank;
 
 import com.zhezhu.assessment.domain.model.assesse.RankCategory;
 import com.zhezhu.assessment.domain.model.assesse.RankCategoryDate;
+import com.zhezhu.commons.util.DateUtilWrapper;
 import com.zhezhu.share.domain.school.StudyYear;
 import org.springframework.stereotype.Component;
 
@@ -23,17 +24,19 @@ public class YearDate implements RankCategoryDate {
     @Override
     public Date from() {
         StudyYear year = StudyYear.now();
-        return year.getDefaultDateStarts();
+        return DateUtilWrapper.startOfDay(year.getDefaultDateStarts());
     }
 
     @Override
     public Date to() {
         StudyYear year = StudyYear.now();
-        return year.getDefaultDateEnds();
+        return DateUtilWrapper.endOfDay(year.getDefaultDateEnds());
     }
 
     @Override
     public String node() {
-        return  StudyYear.now().toString();
+
+        StudyYear year = StudyYear.now();
+        return  year.getYearStarts()+"-"+year.getYearEnds();
     }
 }

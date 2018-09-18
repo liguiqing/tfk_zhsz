@@ -193,7 +193,9 @@ public class RankService {
                     return now.minusWeeks(1).get(fieldISO) + "";
                 case Month:return now.getMonth().minus(1).getValue() + "";
                 case Term:return schoolService.getSchoolTermOfNow(schoolId).seq()==1?2 + "":1 + "";
-                case Year:return StudyYear.now().prev().toString();
+                case Year:
+                    StudyYear year = StudyYear.now().prev();
+                    return year.getYearStarts()+"-"+year.getYearEnds();
                 default: return now.minusDays(1).toString();
             }
         }

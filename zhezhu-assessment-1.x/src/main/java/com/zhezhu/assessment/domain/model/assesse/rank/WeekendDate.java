@@ -28,14 +28,14 @@ public class WeekendDate implements RankCategoryDate {
     public Date from() {
         LocalDate now = LocalDate.now();
         TemporalField fieldISO = WeekFields.of(Locale.CHINA).dayOfWeek();
-        return DateUtilWrapper.fromLocalDate(now.with(fieldISO, 1));
+        return DateUtilWrapper.startOfDay(DateUtilWrapper.fromLocalDate(now.with(fieldISO, 2)));
     }
 
     @Override
     public Date to() {
         LocalDate now = LocalDate.now();
         TemporalField fieldISO = WeekFields.of(Locale.CHINA).dayOfWeek();
-        return DateUtilWrapper.fromLocalDate(now.with(fieldISO, 1));
+        return DateUtilWrapper.endOfDay(DateUtilWrapper.fromLocalDate(now.with(fieldISO, 6)));
     }
 
     @Override

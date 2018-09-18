@@ -21,6 +21,7 @@ public class DayDateTest {
         assertFalse(dayDate.supports(RankCategory.Weekend));
         assertFalse(dayDate.supports(RankCategory.Month));
         assertFalse(dayDate.supports(RankCategory.Year));
+
         LocalDate now = LocalDate.now();
         assertEquals(now.toString(),dayDate.node());
         String time = now.toString()+" 00:00:00";

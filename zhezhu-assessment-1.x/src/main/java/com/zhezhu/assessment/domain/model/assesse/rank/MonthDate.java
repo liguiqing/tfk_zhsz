@@ -24,14 +24,14 @@ public class MonthDate implements RankCategoryDate {
 
     @Override
     public Date from() {
-        LocalDate now = LocalDate.now().with(TemporalAdjusters.lastDayOfMonth());
-        return DateUtilWrapper.fromLocalDate(now);
+        LocalDate now = LocalDate.now().with(TemporalAdjusters.firstDayOfMonth());
+        return DateUtilWrapper.startOfDay(DateUtilWrapper.fromLocalDate(now));
     }
 
     @Override
     public Date to() {
         LocalDate now = LocalDate.now().with(TemporalAdjusters.lastDayOfMonth());
-        return DateUtilWrapper.fromLocalDate(now);
+        return DateUtilWrapper.endOfDay(DateUtilWrapper.fromLocalDate(now));
     }
 
     @Override
