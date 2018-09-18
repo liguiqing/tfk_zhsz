@@ -23,12 +23,12 @@ public class DayDate implements RankCategoryDate {
 
     @Override
     public Date from() {
-        return Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant());
+        return DateUtilWrapper.startOfDay(new Date());
     }
 
     @Override
     public Date to() {
-        return Date.from(LocalDateTime.now().toInstant(ZoneOffset.ofTotalSeconds(0)));
+        return DateUtilWrapper.endOfDay(new Date());
     }
 
     @Override

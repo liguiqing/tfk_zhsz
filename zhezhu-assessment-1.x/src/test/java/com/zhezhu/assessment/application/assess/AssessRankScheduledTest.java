@@ -31,6 +31,8 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.time.temporal.TemporalAdjusters;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import static org.junit.Assert.*;
 
@@ -96,12 +98,25 @@ public class AssessRankScheduledTest extends AbstractTransactionalJUnit4SpringCo
         verifyClazzDayRank(clazz);
     }
 
-    private void verifyClazzDayRank(ClazzData clazz){
+    private void verifyClazzDayRank(ClazzData clazz) {
         RankCategory category = RankCategory.Day;
         RankScope rankScope = RankScope.Clazz;
-        List<SchoolAssessRankData> rankData = assessQueryService.getTeamRanks(clazz.getClazzId(), category, rankScope, dayDate.node(),dayDate.from(), dayDate.to());
+        List<SchoolAssessRankData> rankData = assessQueryService.getTeamRanks(clazz.getClazzId(), category, rankScope, dayDate.node(), dayDate.from(), dayDate.to());
         assertNotNull(rankData);
-        List<StudentData> students = null;
+        ClazzId clazzId = new ClazzId(clazz.getClazzId());
+        List<StudentData> students = schoolService.getClazzStudents(clazzId);
+        assertEquals(rankData.size(), students.size());
+        Map<String, SchoolAssessRankData> rankDataMap = rankData.stream().collect(Collectors.toMap(SchoolAssessRankData::getPersonId, a -> a, (k1, k2) -> k1));
+        Map<String, StudentData> studentDataMap = students.stream().collect(Collectors.toMap(StudentData::getPersonId, a -> a, (k1, k2) -> k1));
+        studentDataMap.entrySet().forEach(entry->verifyStudent(rankDataMap.get(entry.getKey()),entry.getValue(),category,rankScope));
+    }
+
+    private void verifyStudent(SchoolAssessRankData rank,StudentData student,RankCategory category,RankScope rankScope ){
+        assertEquals(rank.getPersonId(),student.getPersonId());
+        assertEquals(rank.getAssesseeName(),student.getName());
+        assertEquals(category.name(),rank.getRankCategory());
+        assertEquals(rankScope.name(),rank.getRankScope());
+
     }
 
     private void genAssess(SchoolData school){
