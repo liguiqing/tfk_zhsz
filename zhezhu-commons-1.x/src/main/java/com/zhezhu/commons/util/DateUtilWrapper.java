@@ -6,6 +6,7 @@ package com.zhezhu.commons.util;
 
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.commons.lang3.time.DateUtils;
+import sun.util.resources.zh.TimeZoneNames_zh_CN;
 
 import java.time.*;
 import java.time.temporal.ChronoField;
@@ -418,8 +419,7 @@ public class DateUtilWrapper {
      */
     public static Date fromLocalTime(LocalDateTime time){
         ZoneId zoneId = ZoneId.systemDefault();
-        LocalDateTime localDateTime = LocalDateTime.now();
-        ZonedDateTime zdt = localDateTime.atZone(zoneId);
+        ZonedDateTime zdt = time.atZone(zoneId);
         Date date = Date.from(zdt.toInstant());
         return date;
     }
@@ -429,5 +429,28 @@ public class DateUtilWrapper {
         Instant instant1 = zonedDateTime.toInstant();
         Date from = Date.from(instant1);
         return  from;
+    }
+
+
+    /**
+     * 获得某天最大时间 2018-10-15 23:59:59
+     * @param date {@link Date}
+     * @return
+     */
+    public static Date endOfDay(Date date) {
+        LocalDateTime localDateTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(date.getTime()), ZoneId.systemDefault());;
+        LocalDateTime endOfDay = localDateTime.with(LocalTime.MAX);
+        return Date.from(endOfDay.atZone(ZoneId.systemDefault()).toInstant());
+    }
+
+    /**
+     * 获得某天最小时间 2018-10-15 00:00:00
+     * @param date
+     * @return
+     */
+    public static Date startOfDay(Date date) {
+        LocalDateTime localDateTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(date.getTime()), ZoneId.systemDefault());
+        LocalDateTime startOfDay = localDateTime.with(LocalTime.MIN);
+        return Date.from(startOfDay.atZone(ZoneId.systemDefault()).toInstant());
     }
 }
