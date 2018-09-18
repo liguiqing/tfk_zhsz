@@ -3,6 +3,7 @@ package com.zhezhu.commons.port.adaptor.http.controller;
 import com.zhezhu.commons.lang.Throwables;
 import com.zhezhu.commons.security.UserFace;
 import com.zhezhu.commons.security.UserFaceService;
+import com.zhezhu.commons.util.ClientType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Collection;
 
 /**
  * @author Liguiqing
@@ -87,6 +89,16 @@ public abstract class AbstractHttpController {
         if(size<0)
             size = 100;
         return page * size - size;
+    }
+
+    protected ClientType getClientType(){
+        HttpServletRequest request = getRequest();
+        //TODO
+        return ClientType.WeChatApp;
+    }
+
+    protected <T extends DataFilter> void filte(Collection<T> ts){
+        ts.forEach(t -> t.filter(getClientType()));
     }
 
 }
