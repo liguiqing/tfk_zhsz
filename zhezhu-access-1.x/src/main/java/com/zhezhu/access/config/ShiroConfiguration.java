@@ -46,6 +46,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.servlet.Filter;
@@ -64,7 +65,10 @@ import java.util.*;
 @EnableCaching
 @PropertySource("classpath:/META-INF/spring/shiroConfig.properties")
 public class ShiroConfiguration {
-
+    @Bean("shiroPlaceholder")
+    public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
+        return new PropertySourcesPlaceholderConfigurer();
+    }
 
     @Bean("shiroCacheMgr")
     public org.apache.shiro.cache.CacheManager ehCacheManager(CacheManager cacheManager){
@@ -146,7 +150,7 @@ public class ShiroConfiguration {
     }
 
     @Bean("sessionIdCookie")
-    public Cookie sessionIdCookie(@Value("${shiro.session.id:zhezhu}") String sessionId,
+    public static Cookie sessionIdCookie(@Value("${shiro.session.id:zhezhu}") String sessionId,
                                   @Value("${shiro.cookie.maxAge:-1}") int maxAge,
                                   @Value("${shiro.cookie.domain:}") String domain,
                                   @Value("${shiro.cookie.path:/}") String path){
@@ -159,7 +163,7 @@ public class ShiroConfiguration {
     }
 
     @Bean("sessionDAO")
-    public SessionDAO sessionDAO(@Value("${shiro.activeSessionCache:shiro-activeSessionCache}") String activeSessionCache,
+    public static SessionDAO sessionDAO(@Value("${shiro.activeSessionCache:shiro-activeSessionCache}") String activeSessionCache,
                                  SessionIdGeneratorIterator sessionIdGenerator){
         EnterpriseCacheSessionDAO sessionDAO = new EnterpriseCacheSessionDAO();
         sessionDAO.setActiveSessionsCacheName(activeSessionCache);
@@ -168,7 +172,7 @@ public class ShiroConfiguration {
     }
 
     @Bean("sessionValidationScheduler")
-    public SessionValidationScheduler QuartzSessionValidationScheduler(@Value("${shiro.scheduler.validationInterval:1800000}") long interval){
+    public static SessionValidationScheduler QuartzSessionValidationScheduler(@Value("${shiro.scheduler.validationInterval:1800000}") long interval){
         QuartzSessionValidationScheduler scheduler = new QuartzSessionValidationScheduler();
         scheduler.setSessionValidationInterval(interval);
         return scheduler;
@@ -180,7 +184,7 @@ public class ShiroConfiguration {
     }
 
     @Bean("sessionManager")
-    public SessionManager sessionManager(@Value("${shiro.session.globalSessionTimeout:1800000}") long globalSessionTimeout,
+    public static SessionManager sessionManager(@Value("${shiro.session.globalSessionTimeout:1800000}") long globalSessionTimeout,
                                          SessionValidationScheduler sessionValidationScheduler,
                                          SessionDAO sessionDAO,
                                          Cookie cookie,
@@ -198,7 +202,7 @@ public class ShiroConfiguration {
     }
 
     @Bean
-    public Realm dbUserRealm(JdbcTemplate jdbcTemplate,
+    public  Realm dbUserRealm(JdbcTemplate jdbcTemplate,
                              @Value("${shiro.user.querysql:}") String sql){
         DbUserRealm realm =  new DbUserRealm(sql,jdbcTemplate);
         realm.setCredentialsMatcher(new PasswordCredentialsMatcher());
@@ -225,15 +229,8 @@ public class ShiroConfiguration {
         return securityManager;
     }
 
-    @Bean
-    public AuthorizationAttributeSourceAdvisor advisor(SecurityManager securityManager){
-        AuthorizationAttributeSourceAdvisor advisor = new AuthorizationAttributeSourceAdvisor();
-        advisor.setSecurityManager(securityManager);
-        return advisor;
-    }
-
     @Bean("formAuthc")
-    public Filter formAuthenticationFilter(@Value("${shiro.authc.form.success.url:/home}") String successUrl,
+    public  Filter formAuthenticationFilter(@Value("${shiro.authc.form.success.url:/home}") String successUrl,
                                            @Value("${shiro.authc.form.login.url:/login}") String loginUrl,
                                            @Value("${shiro.authc.form.password.param:password}") String passwordParam,
                                            @Value("${shiro.authc.form.username.param:username}") String userNameParam){
@@ -251,27 +248,15 @@ public class ShiroConfiguration {
     }
 
     @Bean("logout")
-    public Filter logoutFilter(@Value("${shiro.logout.redirect.url:/logout}") String logoutUrl){
+    public static Filter logoutFilter(@Value("${shiro.logout.redirect.url:/index}") String logoutUrl){
         LogoutFilter logoutFilter = new LogoutFilter();
         logoutFilter.setRedirectUrl(logoutUrl);
         return logoutFilter;
     }
 
-    @Bean("shiroBeanPostProcessor")
-    public LifecycleBeanPostProcessor shiroBeanPostProcessor(){
-        return  new LifecycleBeanPostProcessor();
-    }
-
-    @Bean("shiroAutoProxyCreator")
-    @DependsOn("shiroBeanPostProcessor")
-    public DefaultAdvisorAutoProxyCreator shiroAutoProxyCreator(){
-        DefaultAdvisorAutoProxyCreator autoProxyCreator = new DefaultAdvisorAutoProxyCreator();
-        autoProxyCreator.setProxyTargetClass(true);
-        return autoProxyCreator;
-    }
 
     @Bean
-    public FactoryBean shiroFilterFactoryBean(@Value("${shiro.filter.success.url:/home}") String successUrl,
+    public ShiroFilterFactoryBean shiroFilter(@Value("${shiro.filter.success.url:/home}") String successUrl,
                                               @Value("${shiro.filter.login.url:/login}") String loginUrl,
                                               @Value("${shiro.filter.unauthorized.url:/unauthorized}") String unauthorizedUrl,
                                               SecurityManager securityManager,
@@ -282,12 +267,38 @@ public class ShiroConfiguration {
         filterFactory.setLoginUrl(loginUrl);
         filterFactory.setUnauthorizedUrl(unauthorizedUrl);
         filterFactory.setFilters(filters);
+        Map<String,String> filterMap = new HashMap<>();
+        filterMap.put("/statics/**", "anon");
+        filterMap.put("/ysyp/index", "anon");
+        filterMap.put("/logout", "logout");
+        //filterFactory.setFilterChainDefinitionMap(filterMap);
         filterFactory.setFilterChainDefinitions(filterChainDefinitions());
         return  filterFactory;
     }
 
+    @Bean(name = "lifecycleBeanPostProcessor")
+    public static LifecycleBeanPostProcessor shiroBeanPostProcessor(){
+        return  new LifecycleBeanPostProcessor();
+    }
+
+    @Bean("shiroAutoProxyCreator")
+    @DependsOn("lifecycleBeanPostProcessor")
+    public DefaultAdvisorAutoProxyCreator shiroAutoProxyCreator(){
+        DefaultAdvisorAutoProxyCreator autoProxyCreator = new DefaultAdvisorAutoProxyCreator();
+        autoProxyCreator.setProxyTargetClass(true);
+        return autoProxyCreator;
+    }
+
+
+    @Bean
+    public AuthorizationAttributeSourceAdvisor advisor(SecurityManager securityManager){
+        AuthorizationAttributeSourceAdvisor advisor = new AuthorizationAttributeSourceAdvisor();
+        advisor.setSecurityManager(securityManager);
+        return advisor;
+    }
+
     private String filterChainDefinitions(){
-        return "/logout=logout\n /login=formAuthc\n /**=anno";
+        return "/statics/** = anon\n /index=anon\n /logout=logout\n /login=formAuthc\n /** = user";
     }
 
     public interface MyCache extends org.apache.shiro.cache.Cache{
@@ -312,7 +323,6 @@ public class ShiroConfiguration {
                     }
                 }
             }
-
             return defaultSessionIdGenerator.generateId(session);
         }
     }
@@ -370,7 +380,5 @@ public class ShiroConfiguration {
         public  String encode(String salt, String password) {
             return new SimpleHash(this.algorithmName, password, ByteSource.Util.bytes(salt), this.hashIterations).toHex();
         }
-
     }
-
 }

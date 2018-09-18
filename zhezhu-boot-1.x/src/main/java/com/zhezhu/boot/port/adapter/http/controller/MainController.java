@@ -25,6 +25,13 @@ public class MainController extends AbstractHttpController {
         return newModelAndViewBuilder("/index").creat();
     }
 
+    @RequestMapping("/login")
+    public ModelAndView onLogin(){
+        logger.debug("URL /login Method=GET");
+
+        return newModelAndViewBuilder("/index").creat();
+    }
+
     @RequestMapping(value = "/init/db")
     public ModelAndView onShowInit(){
         logger.debug("URL /init/db Method=GET");

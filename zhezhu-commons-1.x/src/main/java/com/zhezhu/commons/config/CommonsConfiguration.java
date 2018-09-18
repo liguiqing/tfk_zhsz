@@ -12,7 +12,6 @@ import org.springframework.cache.support.CompositeCacheManager;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.DependsOn;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.lookup.JndiDataSourceLookup;
@@ -103,7 +102,6 @@ public class CommonsConfiguration {
     }
 
     @Bean("jdbcTemplate")
-    @DependsOn("dataSource")
     public JdbcTemplate jdbcTemplate(DataSource dataSource) {
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
         return jdbcTemplate;
@@ -152,13 +150,6 @@ public class CommonsConfiguration {
         return entityManagerFactoryBean;
     }
 
-//    @Bean("transactionManager")
-//    public PlatformTransactionManager transactionManager(DataSource dataSource){
-//        DataSourceTransactionManager transactionManager = new DataSourceTransactionManager(dataSource);
-//        //JpaTransactionManager transactionManager = new JpaTransactionManager(emf);
-//        return transactionManager;
-//    }
-
     @Bean("transactionManager")
     public PlatformTransactionManager transactionManager(EntityManagerFactory emf){
         JpaTransactionManager transactionManager = new JpaTransactionManager(emf);
@@ -172,8 +163,7 @@ public class CommonsConfiguration {
                                     @Value("${hibernate.format_sql:true}") String formatSql,
                                     @Value("${hibernate.jdbc.batch_size:100}") String batchSize,
                                     @Value("${hibernate.jdbc.fetch_size:50}") String fetchSize,
-                                    @Value("${hibernate.max_fetch_depth:10}") String fetchDepth
-    ){
+                                    @Value("${hibernate.max_fetch_depth:10}") String fetchDepth){
         Properties jpaProperties  = new Properties();
         jpaProperties.setProperty("hibernate.dialect",dialect);
         jpaProperties.setProperty("hibernate.hbm2ddl.auto",auto);
