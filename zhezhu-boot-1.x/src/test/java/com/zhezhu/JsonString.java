@@ -38,6 +38,7 @@ public class JsonString {
 
         log.debug(toJsonString(data));
 
+
         Map<Integer,List<Integer>> m1 = new HashMap<>();
         m1.put(1, Lists.newArrayList(1, 2, 3));
         m1.put(2, Lists.newArrayList(1, 2, 3));

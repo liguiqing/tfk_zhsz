@@ -394,11 +394,23 @@ CREATE TABLE `as_Index` (
   `score` DOUBLE(5,2)  COMMENT '评价指标分值',
   `weight` DOUBLE(3,2) COMMENT '评价指标得分计算权重,取值范围0-1',
   `description` VARCHAR(128)   COMMENT '评价指标说明',
-  `groups` VARCHAR(16)   COMMENT '指标组',
+  `groups` VARCHAR(16)   COMMENT '指标分组标记',
+  `icon` VARCHAR(16)   COMMENT '指标分组标记',
   `removed` TINYINT(1) DEFAULT 0 COMMENT '删除标记',
   PRIMARY KEY (`id`),
   KEY `x_as_Index_indexId` (`indexId`)
 )ENGINE=INNODB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='评价指标';
+
+DROP TABLE IF EXISTS `as_Index_WebResource`;
+CREATE TABLE `as_Index_WebResource` (
+  `id` BIGINT(20)  NOT NULL AUTO_INCREMENT ,
+  `indexId` VARCHAR(36) NOT NULL  COMMENT '评价指标唯一标识',
+  `category` VARCHAR(16) NOT NULL  COMMENT '分类:Common-通用;PC-PCweb页面;MobileApp-移动APP;WeChatApp-微信小程序;WebChatPublic-微信公众号',
+  `name` VARCHAR(16)  COMMENT '评价指标名称',
+  `value` VARCHAR(64)  COMMENT '评价指标简称',
+  PRIMARY KEY (`id`),
+  KEY `x_as_Index_WebResource` (`indexId`)
+)ENGINE=INNODB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='评价指标的web资源';
 
 DROP TABLE IF EXISTS `as_Index_Mapping`;
 CREATE TABLE `as_Index_Mapping` (
@@ -459,6 +471,18 @@ CREATE TABLE `as_Assess` (
   INDEX `x_as_Assess_assessTeamId` (`assessTeamId`),
   INDEX `x_as_Assess_indexId` (`indexId`)
 )ENGINE=INNODB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='评价信息表';
+
+DROP TABLE IF EXISTS `as_Assessteam`;
+CREATE TABLE `as_Assessteam` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `assessTeamId` varchar(36) NOT NULL COMMENT '评价组唯一标识',
+  `parentTeamId` varchar(36) DEFAULT NULL COMMENT '评价组上级唯一标识',
+  `teamId` varchar(36) NOT NULL COMMENT '评价组外部唯一标识,如schoolid,clazzId',
+  `teamName` varchar(36) DEFAULT NULL COMMENT '评价组名称',
+  `removed` tinyint(1) DEFAULT '0' COMMENT '删除标记',
+  PRIMARY KEY (`id`),
+  KEY `x_as_AssessTeam_assessTeamId` (`assessTeamId`)
+) ENGINE=InnoDB AUTO_INCREMENT=50 DEFAULT CHARSET=utf8 COMMENT='评价组信息表';
 
 DROP TABLE IF EXISTS `as_AssessRank`;
 CREATE TABLE `as_AssessRank` (

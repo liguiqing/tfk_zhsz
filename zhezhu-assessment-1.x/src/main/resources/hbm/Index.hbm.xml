@@ -41,20 +41,39 @@
             <key column="indexId" property-ref="indexId" update="false"/>
             <one-to-many entity-name="indexMapping"/>
         </set>
-
-        <many-to-one name="parent" class="com.zhezhu.assessment.domain.model.index.Index" column="parentId" property-ref="indexId" />
+        <set name="webResources"  cascade="all" fetch="join" lazy="true" order-by="id" >
+            <key column="indexId" property-ref="indexId" update="false"/>
+            <one-to-many entity-name="indexWebResource"/>
+        </set>
+        <many-to-one name="parent" class="com.zhezhu.assessment.domain.model.index.Index" column="parentId" />
     </class>
     <class name="com.zhezhu.assessment.domain.model.index.IndexMapping" entity-name="indexMapping" table="as_Index_Mapping"
            lazy="true" >
         <id name="id" type="long" column="id" unsaved-value="-1">
             <generator class="native" />
         </id>
-        <many-to-one name="mapper" class="com.zhezhu.assessment.domain.model.index.Index" column="indexId" property-ref="indexId" />
-        <many-to-one name="mapped" class="com.zhezhu.assessment.domain.model.index.Index" column="mappedId" property-ref="indexId" />
+        <many-to-one name="mapper" class="com.zhezhu.assessment.domain.model.index.Index" column="indexId" property-ref="indexId"/>
+        <many-to-one name="mapped" class="com.zhezhu.assessment.domain.model.index.Index" column="mappedId" property-ref="indexId"/>
         <component name="score" class="com.zhezhu.assessment.domain.model.index.IndexScore">
             <property name="score" column="score" type="java.lang.Double"/>
             <property name="weight" column="weight" type="java.lang.Double"/>
         </component>
+    </class>
+
+    <class name="com.zhezhu.assessment.domain.model.index.IndexWebResource" entity-name="indexWebResource" table="as_Index_WebResource"
+           lazy="true" >
+        <id name="id" type="long" column="id" unsaved-value="-1">
+            <generator class="native" />
+        </id>
+        <many-to-one name="index" class="com.zhezhu.assessment.domain.model.index.Index" column="indexId" property-ref="indexId"/>
+        <property name="category" column="category" >
+            <type name="org.hibernate.type.EnumType">
+                <param name="enumClass">com.zhezhu.commons.util.ClientType</param>
+                <param name="useNamed">true</param>
+            </type>
+        </property>
+        <property name="name" column="name" type="java.lang.String"/>
+        <property name="value" column="value" type="java.lang.String"/>
     </class>
 
 </hibernate-mapping>

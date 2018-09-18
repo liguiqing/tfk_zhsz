@@ -250,7 +250,13 @@
                         "name": "积极举手发言", 
                         "plus": true, 
                         "score": 10, //最高得分
-                        "weight": 0  //权重
+                        "weight": 0,  //权重
+                        "recommendIcon":"jjjsfy", //根据客户端类型推荐使用的ICON
+                        "webResources":[{ //web资源列表
+                            "category":"",//客户端类型:Common("通用"),PC("PC web端"),MobileApp("手机移动端APP"),PadApp("平板移动端"),WeChatApp("微信小程序"),WeChatPublic("微信公众号");
+                            "name":"icon",//资源名称
+                            "value":"jjjsfy"//资源值
+                        }]
                     },
                     {
                         "alias": "未提交作业", 
@@ -262,7 +268,13 @@
                         "name": "未提交作业", 
                         "plus": false, 
                         "score": 10, 
-                        "weight": 0
+                        "weight": 0,
+                        "recommendIcon":"wtjzy", //根据客户端类型推荐使用的ICON
+                        "webResources":[{ //web资源列表
+                            "category":"",//客户端类型:Common("通用"),PC("PC web端"),MobileApp("手机移动端APP"),PadApp("平板移动端"),WeChatApp("微信小程序"),WeChatPublic("微信公众号");
+                            "name":"icon",//资源名称
+                            "value":"wtjzy"//资源值
+                        }]                        
                     }
                 ], 
                 "assessee": { //被评价者,学生

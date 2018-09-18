@@ -1,10 +1,15 @@
 package com.zhezhu.assessment.application.index;
 
+import com.google.common.collect.Lists;
 import com.zhezhu.assessment.domain.model.index.Index;
 import com.zhezhu.assessment.domain.model.index.IndexCategory;
+import com.zhezhu.commons.util.ClientType;
+import com.zhezhu.commons.util.CollectionsUtilWrapper;
 import com.zhezhu.share.domain.id.identityaccess.TenantId;
 import com.zhezhu.share.domain.id.index.IndexId;
 import lombok.*;
+
+import java.util.List;
 
 /**
  * @author Liguiqing
@@ -38,10 +43,17 @@ public class NewIndexCommand {
 
     private String group;
 
-    private String icon;
+    private List<IndexWebResource> webResources;
+
+    public NewIndexCommand iconToWeChatApp(String icon){
+        if(this.webResources == null)
+            this.webResources = Lists.newArrayList();
+        this.webResources.add(new IndexWebResource("icon", icon,ClientType.WeChatApp.name()));
+        return this;
+    }
 
     public Index toStIndex(IndexId indexId){
-        return Index.builder()
+        Index index =  Index.builder()
                 .indexId(indexId)
                 .name(name)
                 .plus(plus)
@@ -52,10 +64,22 @@ public class NewIndexCommand {
                 .description(description)
                 .group(this.group)
                 .build();
+        return addWebResource(index);
+    }
+
+    private Index addWebResource(Index index){
+        if(CollectionsUtilWrapper.isNotNullAndNotEmpty(webResources)){
+            webResources.forEach(wr->index.addWebResource(toClientType(wr.getCategory()),wr.getName(),wr.getValue()));
+        }
+        return index;
+    }
+
+    private ClientType toClientType(String categoryName){
+        return ClientType.valueOf(categoryName);
     }
 
     public Index toOwnerIndex(IndexId indexId){
-        return Index.builder()
+        Index index = Index.builder()
                 .indexId(indexId)
                 .owner(new TenantId(ownerId))
                 .name(name)
@@ -67,6 +91,7 @@ public class NewIndexCommand {
                 .description(description)
                 .group(this.group)
                 .build();
+        return addWebResource(index);
     }
 
 }

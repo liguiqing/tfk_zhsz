@@ -113,6 +113,7 @@ public class AssessController extends AbstractHttpController {
         CollaboratorData student = collaboratorQueryService.getAssesseeBy(schoolId, studentPersonId, CollaboratorRole.Student);
         int grade = student.getStudent().getGradeLevel();
         List<IndexData> indexes = indexQueryService.getOwnerIndexes(schoolId,grade+"",false);
+        filte(indexes);
         return newModelAndViewBuilder("/assess/newAssessList")
                 .withData("assessor",teacher)
                 .withData("assessee",student)

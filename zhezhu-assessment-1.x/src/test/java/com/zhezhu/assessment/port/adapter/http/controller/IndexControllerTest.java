@@ -2,6 +2,7 @@ package com.zhezhu.assessment.port.adapter.http.controller;
 
 import com.google.common.collect.Lists;
 import com.zhezhu.assessment.application.index.*;
+import com.zhezhu.commons.util.ClientType;
 import com.zhezhu.share.domain.id.identityaccess.TenantId;
 import com.zhezhu.share.domain.id.index.IndexId;
 import com.zhezhu.share.domain.id.school.SchoolId;
@@ -72,7 +73,7 @@ public class IndexControllerTest extends AbstractControllerTest {
                 .score(10.0d)
                 .ownerId(new TenantId().id())
                 .weight(0.5d)
-                .build();
+                .build().iconToWeChatApp("icon");
         String content = toJsonString(command);
         IndexId indexId = new IndexId();
         when(indexApplicationService.newTenantIndex(any(NewIndexCommand.class))).thenReturn(indexId.getId());
@@ -92,7 +93,7 @@ public class IndexControllerTest extends AbstractControllerTest {
                 .score(10.0d)
                 .ownerId(new TenantId().id())
                 .weight(0.5d)
-                .build();
+                .build().iconToWeChatApp("icon");
         IndexId stIndexId1 = new IndexId();
         String content = toJsonString(new UpdateIndexCommand(stIndexId1.id()).build(command));
         doNothing().when(indexApplicationService).updateIndex(any(UpdateIndexCommand.class));
@@ -105,8 +106,8 @@ public class IndexControllerTest extends AbstractControllerTest {
     @Test
     public void onGetOwnerIndexes()throws Exception{
         ArrayList<IndexData> data = Lists.newArrayList();
-        data.add(IndexData.builder().name("Name").build());
-        data.add(IndexData.builder().group("Group").build());
+        data.add(IndexData.builder().name("Name").build().addWebResource("icon","icon", ClientType.WeChatApp));
+        data.add(IndexData.builder().group("Group").build().addWebResource("icon","icon", ClientType.WeChatApp));
 
         when(indexQueryService.getOwnerIndexes(any(String.class), any(String.class), any(Boolean.class))).thenReturn(data);
 
@@ -117,6 +118,9 @@ public class IndexControllerTest extends AbstractControllerTest {
                 .andExpect(jsonPath("$.status.success", is(Boolean.TRUE)))
                 .andExpect(jsonPath("$.indexes[0].name", equalTo("Name")))
                 .andExpect(jsonPath("$.indexes[1].group", equalTo("Group")))
+                .andExpect(jsonPath("$.indexes[1].webResources[0].name", equalTo("icon")))
+                .andExpect(jsonPath("$.indexes[1].webResources[0].value", equalTo("icon")))
+                .andExpect(jsonPath("$.indexes[1].webResources[0].category", equalTo(ClientType.WeChatApp.name())))
                 .andExpect(view().name("/index/updateIndexSuccess"));
 
         this.mvc.perform(get("/index/owner/"+new SchoolId().id()+"/1")

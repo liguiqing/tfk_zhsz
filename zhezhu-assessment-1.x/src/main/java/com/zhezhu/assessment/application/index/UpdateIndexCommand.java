@@ -5,6 +5,8 @@ import com.zhezhu.assessment.domain.model.index.IndexCategory;
 import com.zhezhu.assessment.domain.model.index.IndexScore;
 import lombok.*;
 
+import java.util.List;
+
 /**
  * @author Liguiqing
  * @since V3.0
@@ -19,15 +21,16 @@ public class UpdateIndexCommand extends NewIndexCommand {
     private String indexId;
 
     public UpdateIndexCommand(String parentIndexId, String categoryName, String ownerId,
-                              String name,String alias,boolean plus, double score, double weight, String description, String indexId,String group,String icon) {
-        super(parentIndexId, categoryName, ownerId, name,alias,plus, score, weight, description,group,icon);
+                              String name, String alias, boolean plus, double score, double weight,
+                              String description, String indexId, String group, List<IndexWebResource> webResources) {
+        super(parentIndexId, categoryName, ownerId, name,alias,plus, score, weight, description,group,webResources);
         this.indexId = indexId;
     }
 
     public UpdateIndexCommand build(NewIndexCommand command){
         return new UpdateIndexCommand(command.getParentIndexId(), command.getCategoryName(),
                 command.getOwnerId(), command.getName(),command.getName(),true, command.getScore(), command.getWeight(),
-                command.getDescription(),this.indexId,command.getGroup(),command.getIcon());
+                command.getDescription(),this.indexId,command.getGroup(),command.getWebResources());
 
     }
 

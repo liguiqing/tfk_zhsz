@@ -3,6 +3,7 @@ package com.zhezhu.assessment.domain.model.index;
 import com.zhezhu.assessment.AssessmentTestConfiguration;
 import com.zhezhu.assessment.config.AssessmentApplicationConfiguration;
 import com.zhezhu.commons.config.CommonsConfiguration;
+import com.zhezhu.commons.util.ClientType;
 import com.zhezhu.share.domain.id.identityaccess.TenantId;
 import com.zhezhu.share.domain.id.index.IndexId;
 import org.junit.Test;
@@ -73,6 +74,10 @@ public class IndexRepositoryTest extends AbstractTransactionalJUnit4SpringContex
         mIndex.mappedTo(mIndex6,1.0,0.5);
         assertEquals(2,mIndex.mappedSize());
 
+        mIndex5.addIconWebResource(ClientType.WeChatApp,"m6");
+        mIndex5.addIconWebResource(ClientType.WeChatApp,"m6_wechatapp");
+        mIndex5.addIconWebResource(ClientType.PC,"m6_pc");
+
         indexRepository.save(lIndex);
         indexRepository.save(dIndex);
         indexRepository.save(zIndex);
@@ -111,6 +116,8 @@ public class IndexRepositoryTest extends AbstractTransactionalJUnit4SpringContex
         indexes = indexRepository.findAllByNameAndCategoryAndOwnerIsNull("M5 Index",IndexCategory.Esthetics);
         assertEquals(1,indexes.size());
         assertTrue(indexes.contains(mIndex5));
+        assertEquals(2,indexes.get(0).getWebResources().size());
+        assertEquals("m6_wechatapp",indexes.get(0).getIconWebResource(ClientType.WeChatApp));
 
         indexes = indexRepository.findAllByNameAndCategoryAndOwnerIsNullAndParentIsNull("M5 Index",IndexCategory.Esthetics);
         assertEquals(1,indexes.size());

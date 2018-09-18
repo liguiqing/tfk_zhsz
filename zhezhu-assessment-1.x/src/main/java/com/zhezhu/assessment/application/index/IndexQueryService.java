@@ -63,6 +63,6 @@ public class IndexQueryService {
                 .weight(index.getScore().getWeight())
                 .description(index.getDescription())
                 .group(index.getGroup())
-                .build();
+                .build().addWeResources(index.getWebResources());
     }
 }

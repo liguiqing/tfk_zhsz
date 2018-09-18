@@ -63,142 +63,133 @@ public class DbInitService {
         indexApplicationService.newStIndex(NewIndexCommand.builder()
                 .name("积极举手发言")
                 .alias("积极举手发言")
-                .icon("jjjsfy")
                 .categoryName(IndexCategory.Intelligence.name())
                 .plus(true)
                 .score(10.0)
                 .weight(0.0)
-                .build());
+                .build().iconToWeChatApp("jjjsfy"));
 
         indexApplicationService.newStIndex(NewIndexCommand.builder()
                 .name("作业完成优秀")
                 .alias("作业完成优秀")
-                .icon("zywcyx")
                 .categoryName(IndexCategory.Intelligence.name())
                 .plus(true)
                 .score(10.0)
                 .weight(0.0)
-                .build());
+                .build().iconToWeChatApp("zywcyx"));
 
         indexApplicationService.newStIndex(NewIndexCommand.builder()
                 .name("课堂安静听讲")
                 .alias("课堂安静听讲")
-                .icon("ktajtj")
                 .categoryName(IndexCategory.Intelligence.name())
                 .plus(true)
                 .score(10.0)
                 .weight(0.0)
-                .build());
+                .build().iconToWeChatApp("ktajtj"));
 
         indexApplicationService.newStIndex(NewIndexCommand.builder()
                 .name("成绩优良")
                 .alias("成绩优良")
-                .icon("cjyl")
                 .categoryName(IndexCategory.Intelligence.name())
                 .plus(true)
                 .score(10.0)
                 .weight(0.0)
-                .build());
+                .build().iconToWeChatApp("cjyl"));
+
 
         indexApplicationService.newStIndex(NewIndexCommand.builder()
                 .name("进步明显")
                 .alias("进步明显")
-                .icon("jbmx")
                 .categoryName(IndexCategory.Intelligence.name())
                 .plus(true)
                 .score(10.0)
                 .weight(0.0)
-                .build());
+                .build().iconToWeChatApp("jbmx")
+        );
 
         indexApplicationService.newStIndex(NewIndexCommand.builder()
                 .name("认真做操")
                 .alias("认真做操")
-                .icon("rzzc")
                 .categoryName(IndexCategory.Sports.name())
                 .plus(true)
                 .score(10.0)
                 .weight(0.0)
-                .build());
+                .build().iconToWeChatApp("rzzc"));
+
 
         indexApplicationService.newStIndex(NewIndexCommand.builder()
                 .name("帮助同学")
                 .alias("帮助同学")
-                .icon("bztx")
                 .categoryName(IndexCategory.Morals.name())
                 .plus(true)
                 .score(10.0)
                 .weight(0.0)
-                .build());
+                .build().iconToWeChatApp("bztx"));
+
 
         indexApplicationService.newStIndex(NewIndexCommand.builder()
                 .name("课前准备好")
                 .alias("课前准备好")
-                .icon("kqjbh")
                 .categoryName(IndexCategory.Morals.name())
                 .plus(true)
                 .score(10.0)
                 .weight(0.0)
-                .build());
+                .build().iconToWeChatApp("kqjbh"));
+
 
         indexApplicationService.newStIndex(NewIndexCommand.builder()
                 .name("热爱活动")
                 .alias("热爱活动")
-                .icon("rahd")
                 .categoryName(IndexCategory.Morals.name())
                 .plus(true)
                 .score(10.0)
                 .weight(0.0)
-                .build());
+                .build().iconToWeChatApp("rahd"));
+
         indexApplicationService.newStIndex(NewIndexCommand.builder()
                 .name("课堂讲小话")
                 .alias("课堂讲小话")
-                .icon("ktjxh")
                 .categoryName(IndexCategory.Intelligence.name())
                 .plus(false)
                 .score(10.0)
                 .weight(0.0)
-                .build());
+                .build().iconToWeChatApp("ktjxh"));
 
         indexApplicationService.newStIndex(NewIndexCommand.builder()
                 .name("未提交作业")
                 .alias("未提交作业")
-                .icon("wtjzy")
                 .categoryName(IndexCategory.Intelligence.name())
                 .plus(false)
                 .score(10.0)
                 .weight(0.0)
-                .build());
+                .build().iconToWeChatApp("wtjzy"));
 
         indexApplicationService.newStIndex(NewIndexCommand.builder()
                 .name("成绩退步")
                 .alias("成绩退步")
-                .icon("cjtb")
                 .categoryName(IndexCategory.Intelligence.name())
                 .plus(false)
                 .score(10.0)
                 .weight(0.0)
-                .build());
+                .build().iconToWeChatApp("cjtb"));
 
         indexApplicationService.newStIndex(NewIndexCommand.builder()
                 .name("追逐打闹")
                 .alias("追逐打闹")
-                .icon("zzdn")
                 .categoryName(IndexCategory.Morals.name())
                 .plus(false)
                 .score(10.0)
                 .weight(0.0)
-                .build());
+                .build().iconToWeChatApp("zzdn"));
 
         indexApplicationService.newStIndex(NewIndexCommand.builder()
                 .name("行为不文明")
                 .alias("行为不文明")
-                .icon("xwbwm")
                 .categoryName(IndexCategory.Morals.name())
                 .plus(false)
                 .score(10.0)
                 .weight(0.0)
-                .build());
-
+                .build().iconToWeChatApp("xwbwm"));
     }
 
     private void clear()throws Exception{

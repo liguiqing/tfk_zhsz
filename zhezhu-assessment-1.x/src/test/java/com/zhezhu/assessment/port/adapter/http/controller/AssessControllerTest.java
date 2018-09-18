@@ -11,6 +11,7 @@ import com.zhezhu.assessment.domain.model.assesse.RankCategoryService;
 import com.zhezhu.assessment.domain.model.assesse.RankScope;
 import com.zhezhu.assessment.domain.model.collaborator.CollaboratorRole;
 import com.zhezhu.assessment.domain.model.index.IndexCategory;
+import com.zhezhu.commons.util.ClientType;
 import com.zhezhu.commons.util.DateUtilWrapper;
 import com.zhezhu.share.domain.id.PersonId;
 import com.zhezhu.share.domain.id.assessment.AssessId;
@@ -143,7 +144,9 @@ public class AssessControllerTest extends AbstractControllerTest {
                 .group("1")
                 .description("desc1")
                 .categoryName(IndexCategory.Intelligence.name())
-                .build());
+                .build()
+                .addWebResource("icon","icon11", ClientType.WeChatApp)
+                .addWebResource("icon","icon12", ClientType.PC));
         indexData.add(IndexData.builder()
                 .plus(false)
                 .alias("Index2")
@@ -152,7 +155,8 @@ public class AssessControllerTest extends AbstractControllerTest {
                 .group("1")
                 .description("desc2")
                 .categoryName(IndexCategory.Morals.name())
-                .build());
+                .build().addWebResource("icon","icon21", ClientType.WeChatApp)
+                .addWebResource("icon","icon22", ClientType.PC));
 
         when(indexQueryService.getOwnerIndexes(any(String.class),any(String.class),any(Boolean.class))).thenReturn(indexData);
 
@@ -173,6 +177,7 @@ public class AssessControllerTest extends AbstractControllerTest {
                 .andExpect(jsonPath("$.indexes[0].alias", equalTo("Index")))
                 .andExpect(jsonPath("$.indexes[0].plus", is(Boolean.TRUE)))
                 .andExpect(jsonPath("$.indexes[0].categoryName", equalTo(IndexCategory.Intelligence.name())))
+                .andExpect(jsonPath("$.indexes[0].recommendIcon", equalTo("icon11")))
                 .andExpect(jsonPath("$.indexes[1].alias", equalTo("Index2")))
                 .andExpect(jsonPath("$.indexes[1].plus", is(Boolean.FALSE)))
                 .andExpect(jsonPath("$.indexes[1].categoryName", equalTo(IndexCategory.Morals.name())))

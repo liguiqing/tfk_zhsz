@@ -3,11 +3,16 @@ package com.zhezhu.assessment.domain.model.index;
 import com.google.common.collect.Sets;
 import com.zhezhu.commons.AssertionConcerns;
 import com.zhezhu.commons.domain.Entity;
+import com.zhezhu.commons.util.ClientType;
+import com.zhezhu.commons.util.CollectionsUtilWrapper;
 import com.zhezhu.share.domain.id.identityaccess.TenantId;
 import com.zhezhu.share.domain.id.index.IndexId;
 import lombok.*;
 
 import java.util.Set;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 /**
  * 评价指标
@@ -49,6 +54,8 @@ public class Index extends Entity {
     private Set<Index> children;
 
     private Set<IndexMapping> mappings; //映射到标准指标
+
+    private Set<IndexWebResource> webResources;
 
     @Builder
     private Index(IndexId indexId, Index parent, IndexCategory category,
@@ -99,6 +106,41 @@ public class Index extends Entity {
             return this;
         this.children.remove(child);
         return this;
+    }
+
+    public Index addWebResource(ClientType category, String name, String value){
+        if(this.webResources == null)
+            this.webResources = Sets.newHashSet();
+        IndexWebResource iwr = IndexWebResource.builder()
+                .index(this)
+                .category(category)
+                .name(name)
+                .value(value)
+                .build();
+        this.webResources.remove(iwr);
+        this.webResources.add(iwr);
+        return this;
+    }
+
+    public Index addIconWebResource(ClientType category,String value){
+        return this.addWebResource(category, "iconToWeChatApp", value);
+    }
+
+    public String getIconWebResource(ClientType category){
+        return getWebResource(category, "iconToWeChatApp");
+    }
+
+    public String getWebResource(ClientType category,String name){
+        String webResourceValue = getNonWebResource(category);
+        if(CollectionsUtilWrapper.isNotNullAndNotEmpty(this.webResources)){
+            for(IndexWebResource wr:this.webResources){
+                if(wr.sameAs(category,name)){
+                    webResourceValue=wr.getValue();
+                    break;
+                }
+            }
+        }
+        return webResourceValue;
     }
 
     public boolean isTop(){
@@ -157,5 +199,14 @@ public class Index extends Entity {
     }
 
     protected Index(){}
+
+    private  String getNonWebResource(ClientType category){
+        switch (category){
+            case WeChatApp:
+                return "wechat_none";
+            default:
+                return "none";
+        }
+    }
 
 }
