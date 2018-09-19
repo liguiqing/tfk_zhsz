@@ -25,9 +25,30 @@ public class MainController extends AbstractHttpController {
         return newModelAndViewBuilder("/index").creat();
     }
 
+    @RequestMapping("/unauthorized")
+    public ModelAndView onUnauthorized(){
+        logger.debug("URL /unauthorized Method=*");
+
+        return newModelAndViewBuilder("/index").creat();
+    }
+
+    @RequestMapping("/authorized")
+    public ModelAndView onAuthorized(){
+        logger.debug("URL /authorized Method=*");
+
+        return newModelAndViewBuilder("/index").creat();
+    }
+
     @RequestMapping("/login")
     public ModelAndView onLogin(){
-        logger.debug("URL /login Method=GET");
+        logger.debug("URL /login Method=*");
+
+        return newModelAndViewBuilder("/index").creat();
+    }
+
+    @RequestMapping("/home")
+    public ModelAndView onHome(){
+        logger.debug("URL /home Method=*");
 
         return newModelAndViewBuilder("/index").creat();
     }

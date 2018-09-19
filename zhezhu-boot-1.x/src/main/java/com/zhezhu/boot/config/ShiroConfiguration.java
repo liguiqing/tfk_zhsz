@@ -1,10 +1,10 @@
-package com.zhezhu.access.config;
+package com.zhezhu.boot.config;
 
 import com.google.common.collect.Lists;
+import com.zhezhu.access.infrastructure.shiro.DbUserRealm;
 import com.zhezhu.access.infrastructure.shiro.WeChatAuthenticationFilter;
 import com.zhezhu.access.infrastructure.shiro.WeChatUserRealm;
 import com.zhezhu.commons.security.UserFace;
-import com.zhezhu.access.infrastructure.shiro.DbUserRealm;
 import com.zhezhu.commons.util.CollectionsUtilWrapper;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationInfo;
@@ -38,8 +38,8 @@ import org.apache.shiro.web.servlet.Cookie;
 import org.apache.shiro.web.servlet.SimpleCookie;
 import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
-import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
@@ -47,8 +47,11 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
+import org.springframework.core.annotation.Order;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.web.filter.DelegatingFilterProxy;
 
+import javax.servlet.DispatcherType;
 import javax.servlet.Filter;
 import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
@@ -62,6 +65,7 @@ import java.util.*;
  */
 
 @Configuration
+@Order(1)
 @EnableCaching
 @PropertySource("classpath:/META-INF/spring/shiroConfig.properties")
 public class ShiroConfiguration {
@@ -235,8 +239,8 @@ public class ShiroConfiguration {
                                            @Value("${shiro.authc.form.password.param:password}") String passwordParam,
                                            @Value("${shiro.authc.form.username.param:username}") String userNameParam){
         FormAuthenticationFilter formAuthenticationFilter = new FormAuthenticationFilter();
-        formAuthenticationFilter.setLoginUrl(loginUrl);
-        formAuthenticationFilter.setSuccessUrl(successUrl);
+        //formAuthenticationFilter.setLoginUrl(loginUrl);
+        //formAuthenticationFilter.setSuccessUrl(successUrl);
         formAuthenticationFilter.setPasswordParam(passwordParam);
         formAuthenticationFilter.setUsernameParam(userNameParam);
         return formAuthenticationFilter;
@@ -251,6 +255,7 @@ public class ShiroConfiguration {
     public static Filter logoutFilter(@Value("${shiro.logout.redirect.url:/index}") String logoutUrl){
         LogoutFilter logoutFilter = new LogoutFilter();
         logoutFilter.setRedirectUrl(logoutUrl);
+        logoutFilter.setPostOnlyLogout(true);
         return logoutFilter;
     }
 
@@ -268,12 +273,24 @@ public class ShiroConfiguration {
         filterFactory.setUnauthorizedUrl(unauthorizedUrl);
         filterFactory.setFilters(filters);
         Map<String,String> filterMap = new HashMap<>();
-        filterMap.put("/statics/**", "anon");
-        filterMap.put("/ysyp/index", "anon");
-        filterMap.put("/logout", "logout");
-        //filterFactory.setFilterChainDefinitionMap(filterMap);
-        filterFactory.setFilterChainDefinitions(filterChainDefinitions());
+        //filterMap.put("/favicon.ico", "anon");
+        //filterMap.put("/static/**", "anon");
+        //filterMap.put("/ysyp/index", "anon");
+        //filterMap.put("/logout", "logout");
+        filterMap.put("/**", "anon");
+        filterFactory.setFilterChainDefinitionMap(filterMap);
+        //filterFactory.setFilterChainDefinitions(filterChainDefinitions());
         return  filterFactory;
+    }
+
+    @Bean
+    public FilterRegistrationBean filterRegistrationBean() {
+        FilterRegistrationBean filterRegistration = new FilterRegistrationBean();
+        filterRegistration.setFilter(new DelegatingFilterProxy("shiroFilter"));
+        filterRegistration.setEnabled(true);
+        filterRegistration.addUrlPatterns("/*");
+        filterRegistration.setDispatcherTypes(DispatcherType.REQUEST);
+        return filterRegistration;
     }
 
     @Bean(name = "lifecycleBeanPostProcessor")
@@ -297,8 +314,10 @@ public class ShiroConfiguration {
         return advisor;
     }
 
+
     private String filterChainDefinitions(){
-        return "/statics/** = anon\n /index=anon\n /logout=logout\n /login=formAuthc\n /** = user";
+        //return "/statics/** = anon\n /index=anon\n /logout=logout\n /login=formAuthc\n /** = user";
+        return "/** = user";
     }
 
     public interface MyCache extends org.apache.shiro.cache.Cache{
