@@ -25,23 +25,42 @@ import java.util.Locale;
  */
 
 public class DateUtilWrapper {
+    public final static Date Now = now();
+
+    public final static Date Today = today();
+
+    public final static Date Yesterday = yestoday();
+
+    public final static Date Tomorrow = tomorrow();
+
+    public final static int ThisWeek = LocalDate.now().getDayOfWeek().getValue();
+
+    public final static int LastWeek = LocalDate.now().getDayOfWeek().minus(1).getValue();
+
+    public final static int NextWeek = LocalDate.now().getDayOfWeek().plus(1).getValue();
+
+    public final static int ThisYear = LocalDate.now().getYear();
+
+    public final static int LastYear = LocalDate.now().getYear()-1;
+
+    public final static int NextYear = LocalDate.now().getYear()+1;
 
     /**
-     * 现在
+     * 现在 yyyy-MM-dd HH:mm:sss
      *
-     * @return
+     * @return {@link Date}
      */
     public static Date now() {
-        return Calendar.getInstance().getTime();
+        return  Calendar.getInstance().getTime();
     }
 
     /**
-     * 今天
+     * 今天 yyyy-MM-dd
      *
      * @return
      */
     public static Date today() {
-        return Calendar.getInstance().getTime();
+        return fromLocalDate(LocalDate.now());
     }
 
     /**
@@ -60,8 +79,7 @@ public class DateUtilWrapper {
      * @return
      */
     public static Date tomorrow() {
-        Date now = DateUtilWrapper.today();
-        return DateUtilWrapper.nextDay(now);
+        return fromLocalDate(LocalDate.now().plusDays(1));
     }
 
     /**
@@ -438,7 +456,7 @@ public class DateUtilWrapper {
      * @return
      */
     public static Date endOfDay(Date date) {
-        LocalDateTime localDateTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(date.getTime()), ZoneId.systemDefault());;
+        LocalDateTime localDateTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(date.getTime()), ZoneId.systemDefault());
         LocalDateTime endOfDay = localDateTime.with(LocalTime.MAX);
         return Date.from(endOfDay.atZone(ZoneId.systemDefault()).toInstant());
     }

@@ -4,10 +4,10 @@
 
 package com.zhezhu.commons.util;
 
+import org.apache.commons.lang3.time.DateFormatUtils;
 import org.junit.Test;
 
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -24,11 +24,61 @@ public class DateUtilWrapperTest {
 
     @Test
     public void test(){
+        Date now = DateUtilWrapper.Now;
+        String s = DateFormatUtils.format(now,"yyyy-MM-dd HH:mm:sss");
+        String[] s1 = s.split(" ");
+        assertEquals(2,s1.length);
+        String[] s11 = s1[0].split("-");
+        assertEquals(3,s11.length);
+        assertEquals(4,s11[0].length());
+        String[] s12 = s1[1].split(":");
+        assertEquals(3,s12[2].length());
+        assertTrue(Integer.valueOf(s12[2].length())<1000);
 
-        String s = LocalDate.now().toString();
-        System.out.println(s);
-        s = LocalDate.now().getMonth().getValue()+"";
-        System.out.println(s);
+        Date today = DateUtilWrapper.Today;
+        s = DateFormatUtils.format(today,"yyyy-MM-dd HH:mm:sss");
+        s1 = s.split(" ");
+        s11 = s1[0].split("-");
+        s12 = s1[1].split(":");
+        assertEquals("000",s12[2]);
+        assertEquals("00",s12[1]);
+        assertEquals("00",s12[0]);
+
+        Date yesterday = DateUtilWrapper.Yesterday;
+        s = DateFormatUtils.format(yesterday,"yyyy-MM-dd HH:mm:sss");
+        s1 = s.split(" ");
+        s11 = s1[0].split("-");
+        s12 = s1[1].split(":");
+        assertEquals("000",s12[2]);
+        assertEquals("00",s12[1]);
+        assertEquals("00",s12[0]);
+
+        Date tomorrow = DateUtilWrapper.Tomorrow;
+        assertEquals(1000*60*60*24,tomorrow.getTime()-today.getTime());
+        s = DateFormatUtils.format(tomorrow,"yyyy-MM-dd HH:mm:sss");
+        s1 = s.split(" ");
+        s11 = s1[0].split("-");
+        s12 = s1[1].split(":");
+        assertEquals("000",s12[2]);
+        assertEquals("00",s12[1]);
+        assertEquals("00",s12[0]);
+
+        int thisWeek = DateUtilWrapper.ThisWeek;
+        int lastWeek = DateUtilWrapper.LastWeek;
+        int nextWeek = DateUtilWrapper.NextWeek;
+        assertEquals(1,thisWeek-lastWeek);
+        assertEquals(1,nextWeek-thisWeek);
+
+        int thisYear = DateUtilWrapper.ThisYear;
+        int lastYear = DateUtilWrapper.LastYear;
+        int nextYear = DateUtilWrapper.NextYear;
+        assertEquals(1,thisYear-lastYear);
+        assertEquals(1,nextYear-thisYear);
+    }
+
+    @Test
+    public void now(){
+        Date now = DateUtilWrapper.Now;
 
     }
 
