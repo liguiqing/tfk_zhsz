@@ -1,6 +1,7 @@
 package com.zhezhu.access;
 
 import com.zhezhu.access.config.AccessApplicationConfiguration;
+import com.zhezhu.access.config.ShiroConfiguration;
 import com.zhezhu.commons.config.CommonsConfiguration;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,8 @@ import static junit.framework.TestCase.assertNotNull;
 
 @ContextHierarchy({
         @ContextConfiguration(
-                classes = {AccessTestConfiguration.class,CommonsConfiguration.class,AccessApplicationConfiguration.class}
+                classes = {AccessTestConfiguration.class,CommonsConfiguration.class,
+                        AccessApplicationConfiguration.class, ShiroConfiguration.class}
         )
 })
 
