@@ -26,7 +26,7 @@ public class InnerUser implements UserFace{
     private String password;
 
     /**
-     * 此方法只能调用一次
+     * 为了安全,此方法只允许调用一次,即在登录验证密码的时候调用
      *
      * @return
      */
@@ -47,7 +47,7 @@ public class InnerUser implements UserFace{
     }
 
     @Override
-    public String getUserRealName() {
+    public String getRealName() {
         return this.userRealName;
     }
 

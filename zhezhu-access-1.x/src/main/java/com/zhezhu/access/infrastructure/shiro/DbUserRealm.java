@@ -20,7 +20,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 @Slf4j
 public class DbUserRealm extends AuthorizingRealm {
 
-    private String sql = "select 'xx' as userName,'oo' as pwd,'xx' as userId,'oo' as userRealName,'xxoo' as userPersonId from dual";
+    private String sql = "select 'xxoxx' as userId, 'xx' as userName,'oxoxooxxoox' as pwd,'xx' as userId,'oo' as realName,'xxoo' as personId from dual";
 
     private JdbcTemplate jdbc;
 
@@ -50,8 +50,8 @@ public class DbUserRealm extends AuthorizingRealm {
         }
         log.debug(user.toString());
 
-        SimplePrincipalCollection principalCollection = new SimplePrincipalCollection(userName, getName());
-        principalCollection.add(user,userName);
+        SimplePrincipalCollection principalCollection = new SimplePrincipalCollection(user, getName());
+        //principalCollection.add(user,userName);
         SimpleAuthenticationInfo simpleAuthenticationInfo = new SimpleAuthenticationInfo();
         simpleAuthenticationInfo.setCredentials(user.pwd());
         simpleAuthenticationInfo.setPrincipals(principalCollection);
@@ -63,8 +63,8 @@ public class DbUserRealm extends AuthorizingRealm {
             return jdbc.queryForObject(sql,(rs,rn)->InnerUser.builder()
                     .userId(rs.getString("userId"))
                     .userName(rs.getString("userName"))
-                    .userRealName(rs.getString("userRealName"))
-                    .userPersonId(rs.getString("userPersonId"))
+                    .userRealName(rs.getString("realName"))
+                    .userPersonId(rs.getString("personId"))
                     .password(rs.getString("pwd"))
                     .build(),userName);
         }catch (Exception e){

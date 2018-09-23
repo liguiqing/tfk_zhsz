@@ -174,7 +174,7 @@ public class TFKApplictionTest {
         this.mvc.perform(get("/authorized").contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(view().name("/index"))
+                .andExpect(view().name("/home"))
                 .andExpect(jsonPath("$.status.success", is(Boolean.TRUE)));
     }
 }

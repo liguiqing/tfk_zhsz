@@ -14,6 +14,7 @@ import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.test.web.servlet.setup.StandaloneMockMvcBuilder;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
@@ -50,5 +51,6 @@ public abstract class AbstractControllerTest extends AbstractJUnit4SpringContext
 		String content = mapper.writeValueAsString(o);
 		return content;
 	}
+
 }
 

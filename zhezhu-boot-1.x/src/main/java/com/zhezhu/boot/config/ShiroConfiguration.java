@@ -6,6 +6,7 @@ import com.zhezhu.access.infrastructure.shiro.WeChatAuthenticationFilter;
 import com.zhezhu.access.infrastructure.shiro.WeChatUserRealm;
 import com.zhezhu.commons.security.UserFace;
 import com.zhezhu.commons.util.CollectionsUtilWrapper;
+import com.zhezhu.share.infrastructure.security.MD5PasswordEncoder;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -94,10 +95,13 @@ public class ShiroConfiguration {
         filterFactory.setFilters(filters);
         Map<String,String> chains  = new HashMap<>();
         //chains.put("/favicon.ico", "anon");
-        //chains.put("/static/**", "anon");
-        //chains.put("/ysyp/index", "anon");
-        //chains.put("/logout", "logout");
-        chains.put("/**", "anon");
+        chains.put("/static/**", "anon");
+        chains.put("/index", "anon");
+        chains.put("/", "anon");
+        chains.put("/unauthorized", "anon");
+        chains.put("/login", "formAuthc");
+        chains.put("/logout", "logout");
+        chains.put("/**", "user");
         filterFactory.setFilterChainDefinitionMap(chains);
         //filterFactory.setFilterChainDefinitions(filterChainDefinitions());
         return  filterFactory;
@@ -129,7 +133,8 @@ public class ShiroConfiguration {
     }
 
     @Bean
-    public static Cookie sessionIdCookie(@Value("${shiro.session.id:zhezhu}") String sessionId,
+    public static Cookie sessionIdCookie(@Value("${shiro.session.id:SHIROSESSION}") String name,
+                                         @Value("${shiro.session.id:zhezhu}") String sessionId,
                                          @Value("${shiro.cookie.maxAge:-1}") int maxAge,
                                          @Value("${shiro.cookie.domain:}") String domain,
                                          @Value("${shiro.cookie.path:/}") String path){
@@ -137,6 +142,7 @@ public class ShiroConfiguration {
         cookie.setHttpOnly(true);
         cookie.setDomain(domain);
         cookie.setPath(path);
+        cookie.setName(name);
         cookie.setMaxAge(maxAge);
         return  cookie;
     }
@@ -181,10 +187,11 @@ public class ShiroConfiguration {
     }
 
     @Bean
-    public  Realm dbUserRealm(JdbcTemplate jdbcTemplate,
-                              @Value("${shiro.user.querysql:}") String sql){
+    public  Realm dbUserRealm(@Value("${shiro.user.querysql:}") String sql,
+                              MD5PasswordEncoder passwordEncoder,
+                              JdbcTemplate jdbcTemplate){
         DbUserRealm realm =  new DbUserRealm(sql,jdbcTemplate);
-        realm.setCredentialsMatcher(new PasswordCredentialsMatcher());
+        realm.setCredentialsMatcher(new PasswordCredentialsMatcher(passwordEncoder));
         return realm;
     }
 
@@ -343,6 +350,12 @@ public class ShiroConfiguration {
     }
 
     public class PasswordCredentialsMatcher implements CredentialsMatcher {
+        private MD5PasswordEncoder passwordEncoder;
+
+        public PasswordCredentialsMatcher(MD5PasswordEncoder passwordEncoder) {
+            this.passwordEncoder = passwordEncoder;
+        }
+
         @Override
         public boolean doCredentialsMatch(AuthenticationToken token, AuthenticationInfo info) {
             String tokenHashedCredentials = tokenHashedCredentials(token, info);
@@ -356,18 +369,8 @@ public class ShiroConfiguration {
             UserFace user = (UserFace) pc.getPrimaryPrincipal();
             UsernamePasswordToken userToken = (UsernamePasswordToken) token;
             String originalPassword = new String(userToken.getPassword());
-            return new MD5PasswordEncoder().encode(user.getUserId(), originalPassword);
+            return this.passwordEncoder.encode(user.getUserId(), originalPassword);
         }
     }
 
-    public class MD5PasswordEncoder {
-
-        private String algorithmName = "md5";
-
-        private int hashIterations = 2;
-
-        public  String encode(String salt, String password) {
-            return new SimpleHash(this.algorithmName, password, ByteSource.Util.bytes(salt), this.hashIterations).toHex();
-        }
-    }
 }

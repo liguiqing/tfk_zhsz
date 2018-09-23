@@ -15,6 +15,9 @@ package com.zhezhu.share.domain.id;
  */
 
 public class IdPrefixes {
+    //用户唯一标识
+    public static final String UserIdPrefix = "USR";
+
     //微信用户唯一标识
     public static final String WeChatIdPrefix = "WCH";
 

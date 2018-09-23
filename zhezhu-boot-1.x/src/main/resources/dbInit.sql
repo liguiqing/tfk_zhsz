@@ -30,7 +30,11 @@ VALUES  ('00-00-000','系统未定义消息',1,'zh_cn',NULL),
         ('ac-01-005','无效的关注申请',3,'zh_cn',"AC"),
         ('ac-01-006','关注申请已经完成审核',3,'zh_cn',"AC"),
         ('ac-01-007','无效的微信用户类型',3,'zh_cn',"AC"),
-        ('ac-01-008','相同类型的微信用户不能复制数据',3,'zh_cn',"AC");
+        ('ac-01-008','相同类型的微信用户不能复制数据',3,'zh_cn',"AC"),
+        ('ac-01-009','用户已存在',3,'zh_cn',"AC"),
+        ('ac-01-010','密码长度不在允许范围内',3,'zh_cn',"AC"),
+        ('ac-01-011','原密码输入有误',3,'zh_cn',"AC"),
+        ('ac-01-012','新密码与原密码不能相同',3,'zh_cn',"AC");
 
 DROP TABLE IF EXISTS `cm_course`;
 CREATE TABLE `cm_course` (
@@ -261,6 +265,32 @@ CREATE TABLE `sm_student_managed` (
   KEY `x_sm_student_managed_clazzId` (`clazzId`),
   KEY `x_sm_student_managed_schoolId` (`schoolId`)
 )ENGINE=INNODB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='学生受管班级信息表';
+
+DROP TABLE IF EXISTS `ac_User`;
+CREATE TABLE `ac_User` (
+  `id` BIGINT(20)  NOT NULL AUTO_INCREMENT ,
+  `userId` varchar(36) NOT NULL COMMENT '用户唯一标识',
+  `userName` varchar(16) NOT NULL COMMENT '用户名',
+  `pwd` varchar(128) NOT NULL  COMMENT '用户密码',
+  `createTime` TIMESTAMP DEFAULT now() COMMENT '创建时间',
+  `ok` TINYINT(1)  COMMENT '删除标记',
+  PRIMARY KEY (`id`),
+  KEY `x_ac_User_userId` (`userId`)
+)ENGINE=INNODB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='用户信息';
+INSERT INTO `ac_User`(`userId`,`userName`,`pwd`,`createTime`,`ok`) VALUES('USR997afbb4014a4fdc90dbd695416c8b88','admin','17a3c6e3e74fa24463820725a42b8bfc',now(),1);
+
+DROP TABLE IF EXISTS `ac_UserDetail`;
+CREATE TABLE `ac_UserDetail` (
+  `id` BIGINT(20)  NOT NULL AUTO_INCREMENT ,
+  `userId` varchar(36) NOT NULL COMMENT '用户唯一标识',
+  `personId` varchar(36) NOT NULL COMMENT '用户个人唯一标识',
+  `realName` varchar(16) NOT NULL  COMMENT '用户姓名',
+  `email` varchar(36)  COMMENT '用户邮箱',
+  `mobile` varchar(16)  COMMENT '用户手机',
+  PRIMARY KEY (`id`),
+  KEY `x_ac_UserDetail_userId` (`userId`),
+  INDEX `x_ac_UserDetail_personId` (`personId`)
+)ENGINE=INNODB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='用户详细信息';
 
 DROP TABLE IF EXISTS `ac_WeChat`;
 CREATE TABLE `ac_WeChat` (

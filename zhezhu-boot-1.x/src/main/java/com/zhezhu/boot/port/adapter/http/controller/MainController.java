@@ -36,21 +36,14 @@ public class MainController extends AbstractHttpController {
     public ModelAndView onAuthorized(){
         logger.debug("URL /authorized Method=*");
 
-        return newModelAndViewBuilder("/index").creat();
-    }
-
-    @RequestMapping("/login")
-    public ModelAndView onLogin(){
-        logger.debug("URL /login Method=*");
-
-        return newModelAndViewBuilder("/index").creat();
+        return newModelAndViewBuilder("/home").creat();
     }
 
     @RequestMapping("/home")
     public ModelAndView onHome(){
         logger.debug("URL /home Method=*");
 
-        return newModelAndViewBuilder("/index").creat();
+        return newModelAndViewBuilder("/home").creat();
     }
 
     @RequestMapping(value = "/init/db")

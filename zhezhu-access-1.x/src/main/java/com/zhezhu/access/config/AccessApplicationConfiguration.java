@@ -1,8 +1,10 @@
 package com.zhezhu.access.config;
 
+import com.zhezhu.access.domain.model.user.PasswordService;
 import com.zhezhu.access.domain.model.wechat.WebAccessTokenFactory;
 import com.zhezhu.access.domain.model.wechat.config.WeChatConfig;
 import com.zhezhu.commons.config.MappingResource;
+import com.zhezhu.share.infrastructure.security.MD5PasswordEncoder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.EnableCaching;
@@ -58,10 +60,24 @@ public class AccessApplicationConfiguration {
     @Bean("AccessMapping")
     MappingResource mappingResource(){
         return ()->new String[]{
+                "/hbm/User.hbm.xml",
                 "/hbm/WeChat.hbm.xml",
                 "/hbm/FollowApply.hbm.xml",
                 "/hbm/FollowAudit.hbm.xml",
                 "/hbm/ClazzFollowApply.hbm.xml",
                 "/hbm/ClazzFollowAudit.hbm.xml"};
+    }
+
+    @Bean
+    public MD5PasswordEncoder passwordEncoder(){
+        return new MD5PasswordEncoder();
+    }
+
+    @Bean
+    public PasswordService passwordService(MD5PasswordEncoder passwordEncoder,
+                            @Value("${shiro.password.minLength:4}") int minLength,
+                            @Value("${shiro.password.maxLength:4}") int maxLength,
+                            @Value("${shiro.password.default:123456}") String defaultPassword){
+        return new PasswordService(passwordEncoder, minLength, maxLength, defaultPassword);
     }
 }

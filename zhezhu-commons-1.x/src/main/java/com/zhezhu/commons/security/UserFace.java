@@ -11,7 +11,7 @@ public interface UserFace {
 
     String getUserName();
 
-    String getUserRealName();
+    String getRealName();
 
     String getUserPersonId();
 }

@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping/hibernate-mapping-3.0.dtd">
+<hibernate-mapping default-access="field" default-cascade="all" >
+
+    <class name="com.zhezhu.access.domain.model.user.User" table="ac_User" lazy="true">
+        <id name="id" type="long" column="id" unsaved-value="-1">
+            <generator class="native" />
+        </id>
+        <component name="userId" class="com.zhezhu.share.domain.id.UserId">
+            <property name="id" column="userId" type="java.lang.String"/>
+        </component>
+
+        <property name="userName" column="userName" type="java.lang.String"/>
+        <property name="password" column="pwd" type="java.lang.String"/>
+        <property name="ok" column="ok" type="java.lang.Boolean"/>
+        <property name="createTime" column="createTime" type="java.util.Date"/>
+        <one-to-one name="detail" property-ref="user" cascade="all" outer-join="false" lazy="proxy"></one-to-one>
+    </class>
+
+    <class name="com.zhezhu.access.domain.model.user.UserDetail" table="ac_UserDetail" lazy="true" >
+        <id name="id" type="long" column="id" unsaved-value="-1">
+            <generator class="native" />
+        </id>
+        <many-to-one name="user"  column="userId" property-ref="userId" unique="true"/>
+        <component name="personId" class="com.zhezhu.share.domain.id.PersonId">
+            <property name="id" column="personId" type="java.lang.String"/>
+        </component>
+        <property name="realName" column="realName" type="java.lang.String"/>
+        <property name="email" column="email" type="java.lang.String"/>
+        <property name="mobile" column="mobile" type="java.lang.String"/>
+    </class>
+</hibernate-mapping>
+
