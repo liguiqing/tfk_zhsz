@@ -24,7 +24,8 @@ public class IndexScore extends ValueObject {
     private double weight;
 
     public boolean isOutOfBounds(double score){
-        return Doubles.compare(this.score,score) > 0;
+        return false;
+        //return Doubles.compare(this.score,score) > 0;
     }
 
     public double convert(double score){

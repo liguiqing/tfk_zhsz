@@ -59,7 +59,7 @@ public class NewIndexCommand {
                 .plus(plus)
                 .alias(alias)
                 .category(IndexCategory.valueOf(this.categoryName))
-                .score(score)
+                .score(transScore())
                 .weight(weight)
                 .description(description)
                 .group(this.group)
@@ -86,12 +86,20 @@ public class NewIndexCommand {
                 .plus(plus)
                 .alias(alias)
                 .category(IndexCategory.valueOf(this.categoryName))
-                .score(score)
+                .score(transScore())
                 .weight(weight)
                 .description(description)
                 .group(this.group)
                 .build();
         return addWebResource(index);
+    }
+
+    private double transScore(){
+        double thisScore = score;
+        if(thisScore > 0 && !plus){
+            thisScore = thisScore * -1;
+        }
+        return thisScore;
     }
 
 }

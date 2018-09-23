@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
 /**
@@ -32,10 +33,14 @@ public class IndexApplicationServiceTest {
                 .categoryName("Morals")
                 .description("Desc")
                 .name("name")
+                .plus(true)
                 .score(10.0d)
                 .weight(0.5d)
                 .build();
         IndexId stIndexId1 = new IndexId();
+        Index index = command.toStIndex(stIndexId1);
+        assertEquals(10.0d,index.getScore().getScore(),0);
+
         when(indexRepository.nextIdentity()).thenReturn(stIndexId1);
         doNothing().when(indexRepository).save(any(Index.class));
         indexApplicationService.newStIndex(command);
@@ -43,6 +48,17 @@ public class IndexApplicationServiceTest {
         verify(indexRepository,times(1)).nextIdentity();
         verify(indexRepository,times(1)).save(any(Index.class));
 
+        command = NewIndexCommand.builder()
+                .categoryName("Morals")
+                .description("Desc")
+                .name("name")
+                .plus(false)
+                .score(10.0d)
+                .weight(0.5d)
+                .build();
+
+        index = command.toStIndex(stIndexId1);
+        assertEquals(-10.0d,index.getScore().getScore(),0);
     }
 
     @Test

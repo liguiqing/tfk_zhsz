@@ -213,6 +213,7 @@ public class AssessQueryService {
                 .indexScore(index.getMaxScore())
                 .assesseeId(assesseeId)
                 .score(assess.getScore())
+                .plus(index.isPlus())
                 .build();
     }
 

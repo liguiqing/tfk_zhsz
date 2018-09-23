@@ -36,4 +36,6 @@ public class AssessData {
 
     private String clazzId;
 
+    private boolean plus;
+
 }
