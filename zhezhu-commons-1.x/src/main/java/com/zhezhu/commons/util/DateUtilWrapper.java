@@ -33,11 +33,11 @@ public class DateUtilWrapper {
 
     public final static Date Tomorrow = tomorrow();
 
-    public final static int ThisWeek = LocalDate.now().getDayOfWeek().getValue();
+    public final static int ThisWeek = LocalDate.now().get(WeekFields.ISO.weekOfYear());
 
-    public final static int LastWeek = LocalDate.now().getDayOfWeek().minus(1).getValue();
+    public final static int LastWeek = ThisWeek==1?54:ThisWeek-1;
 
-    public final static int NextWeek = LocalDate.now().getDayOfWeek().plus(1).getValue();
+    public final static int NextWeek = ThisWeek==54?1:ThisWeek+1;
 
     public final static int ThisYear = LocalDate.now().getYear();
 
