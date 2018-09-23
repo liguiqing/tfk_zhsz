@@ -382,6 +382,7 @@
                          "indexName": "", 
                          "doneDate": "2019-01-01", 
                          "indexScore": 10, 
+                         "plus":true //正分或者负分
                          "score": 8, 
                          "word": "亚马爹", 
                          "assesseeName": "张三", 
