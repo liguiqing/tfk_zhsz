@@ -18,7 +18,7 @@ public class MainController extends AbstractHttpController {
     @Autowired(required = false)
     private DbInitService dbInitService;
 
-    @RequestMapping("/index")
+    @RequestMapping(value={"", "/", "index"})
     public ModelAndView onIndex(){
         logger.debug("URL /index Method=GET");
 

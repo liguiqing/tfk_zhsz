@@ -9,12 +9,8 @@ import com.zhezhu.commons.util.CollectionsUtilWrapper;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
-import org.apache.shiro.authc.Authenticator;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authc.credential.CredentialsMatcher;
-import org.apache.shiro.authc.pam.AuthenticationStrategy;
-import org.apache.shiro.authc.pam.FirstSuccessfulStrategy;
-import org.apache.shiro.authc.pam.ModularRealmAuthenticator;
 import org.apache.shiro.cache.CacheException;
 import org.apache.shiro.crypto.hash.SimpleHash;
 import org.apache.shiro.mgt.SecurityManager;
@@ -74,78 +70,57 @@ public class ShiroConfiguration {
         return new PropertySourcesPlaceholderConfigurer();
     }
 
-    @Bean("shiroCacheMgr")
-    public org.apache.shiro.cache.CacheManager ehCacheManager(CacheManager cacheManager){
-        List<MyCache> shiroCaches = Lists.newArrayList();
-        cacheManager.getCacheNames().forEach(name->
-            shiroCaches.add(new MyCache(){
-
-                @Override
-                public Object get(Object o) throws CacheException {
-                    return cacheManager.getCache(name).get(o);
-                }
-
-                @Override
-                public Object put(Object o, Object o2) throws CacheException {
-                    cacheManager.getCache(name).put(o,o2);
-                    return o2;
-                }
-
-                @Override
-                public Object remove(Object o) throws CacheException {
-                    cacheManager.getCache(name).evict(o);
-                    return o;
-                }
-
-                @Override
-                public void clear() throws CacheException {
-                    cacheManager.getCache(name).clear();
-                }
-
-                @Override
-                public int size() {
-                    return 0;
-                }
-
-                @Override
-                public Set keys() {
-                    return null;
-                }
-
-                @Override
-                public Collection values() {
-                    return null;
-                }
-
-                @Override
-                public String getName() {
-                    return name;
-                }
-            })
-        );
-        return new org.apache.shiro.cache.CacheManager(){
-
-            @Override
-            public MyCache getCache(String s) throws CacheException {
-                for(MyCache cache:shiroCaches){
-                    if(cache.getName().equalsIgnoreCase(s))
-                        return cache;
-                }
-                return null;
-            }
-        };
+    @Bean
+    public FilterRegistrationBean filterRegistrationBean() {
+        FilterRegistrationBean filterRegistration = new FilterRegistrationBean();
+        filterRegistration.setFilter(new DelegatingFilterProxy("shiroFilter"));
+        filterRegistration.setEnabled(true);
+        filterRegistration.addUrlPatterns("/*");
+        filterRegistration.setDispatcherTypes(DispatcherType.REQUEST);
+        return filterRegistration;
     }
 
-    @Bean("authenticationStrategy")
-    public AuthenticationStrategy authenticationStrategy(){
-        return new FirstSuccessfulStrategy();
+    @Bean
+    public ShiroFilterFactoryBean shiroFilter(@Value("${shiro.filter.success.url:/home}") String successUrl,
+                                              @Value("${shiro.filter.login.url:/login}") String loginUrl,
+                                              @Value("${shiro.filter.unauthorized.url:/unauthorized}") String unauthorizedUrl,
+                                              SecurityManager securityManager,
+                                              Map<String, Filter> filters){
+        ShiroFilterFactoryBean filterFactory = new ShiroFilterFactoryBean();
+        filterFactory.setSecurityManager(securityManager);
+        filterFactory.setSuccessUrl(successUrl);
+        filterFactory.setLoginUrl(loginUrl);
+        filterFactory.setUnauthorizedUrl(unauthorizedUrl);
+        filterFactory.setFilters(filters);
+        Map<String,String> chains  = new HashMap<>();
+        //chains.put("/favicon.ico", "anon");
+        //chains.put("/static/**", "anon");
+        //chains.put("/ysyp/index", "anon");
+        //chains.put("/logout", "logout");
+        chains.put("/**", "anon");
+        filterFactory.setFilterChainDefinitionMap(chains);
+        //filterFactory.setFilterChainDefinitions(filterChainDefinitions());
+        return  filterFactory;
     }
 
-    @Bean("authenticator")
-    public Authenticator authenticator(AuthenticationStrategy strategy){
-        ModularRealmAuthenticator authenticator = new ModularRealmAuthenticator();
-        authenticator.setAuthenticationStrategy(strategy);
-        return authenticator;
+    @Bean
+    public LifecycleBeanPostProcessor lifecycleBeanPostProcessor() {
+        return new LifecycleBeanPostProcessor();
+    }
+
+    @Bean
+    @DependsOn("lifecycleBeanPostProcessor")
+    public DefaultAdvisorAutoProxyCreator shiroAutoProxyCreator(){
+        DefaultAdvisorAutoProxyCreator autoProxyCreator = new DefaultAdvisorAutoProxyCreator();
+        autoProxyCreator.setProxyTargetClass(true);
+        return autoProxyCreator;
+    }
+
+    @Bean
+    public AuthorizationAttributeSourceAdvisor advisor(SecurityManager securityManager){
+        AuthorizationAttributeSourceAdvisor advisor = new AuthorizationAttributeSourceAdvisor();
+        advisor.setSecurityManager(securityManager);
+        return advisor;
     }
 
     @Bean
@@ -153,11 +128,11 @@ public class ShiroConfiguration {
         return new SessionIdGeneratorIterator(sessionIdGenerators);
     }
 
-    @Bean("sessionIdCookie")
+    @Bean
     public static Cookie sessionIdCookie(@Value("${shiro.session.id:zhezhu}") String sessionId,
-                                  @Value("${shiro.cookie.maxAge:-1}") int maxAge,
-                                  @Value("${shiro.cookie.domain:}") String domain,
-                                  @Value("${shiro.cookie.path:/}") String path){
+                                         @Value("${shiro.cookie.maxAge:-1}") int maxAge,
+                                         @Value("${shiro.cookie.domain:}") String domain,
+                                         @Value("${shiro.cookie.path:/}") String path){
         SimpleCookie cookie = new SimpleCookie(sessionId);
         cookie.setHttpOnly(true);
         cookie.setDomain(domain);
@@ -166,33 +141,33 @@ public class ShiroConfiguration {
         return  cookie;
     }
 
-    @Bean("sessionDAO")
+    @Bean
     public static SessionDAO sessionDAO(@Value("${shiro.activeSessionCache:shiro-activeSessionCache}") String activeSessionCache,
-                                 SessionIdGeneratorIterator sessionIdGenerator){
+                                        SessionIdGeneratorIterator sessionIdGenerator){
         EnterpriseCacheSessionDAO sessionDAO = new EnterpriseCacheSessionDAO();
         sessionDAO.setActiveSessionsCacheName(activeSessionCache);
         sessionDAO.setSessionIdGenerator(sessionIdGenerator);
         return sessionDAO;
     }
 
-    @Bean("sessionValidationScheduler")
-    public static SessionValidationScheduler QuartzSessionValidationScheduler(@Value("${shiro.scheduler.validationInterval:1800000}") long interval){
+    @Bean
+    public static SessionValidationScheduler sessionValidationScheduler(@Value("${shiro.scheduler.validationInterval:1800000}") long interval){
         QuartzSessionValidationScheduler scheduler = new QuartzSessionValidationScheduler();
         scheduler.setSessionValidationInterval(interval);
         return scheduler;
     }
 
-    @Bean("sessionFactory")
+    @Bean
     public SessionFactory sessionFactory(){
         return new RequestSessionFactory();
     }
 
-    @Bean("sessionManager")
+    @Bean
     public static SessionManager sessionManager(@Value("${shiro.session.globalSessionTimeout:1800000}") long globalSessionTimeout,
-                                         SessionValidationScheduler sessionValidationScheduler,
-                                         SessionDAO sessionDAO,
-                                         Cookie cookie,
-                                         SessionFactory sessionFactory){
+                                                SessionValidationScheduler sessionValidationScheduler,
+                                                SessionDAO sessionDAO,
+                                                Cookie cookie,
+                                                SessionFactory sessionFactory){
         DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
         sessionManager.setGlobalSessionTimeout(globalSessionTimeout);
         sessionManager.setDeleteInvalidSessions(true);
@@ -207,25 +182,23 @@ public class ShiroConfiguration {
 
     @Bean
     public  Realm dbUserRealm(JdbcTemplate jdbcTemplate,
-                             @Value("${shiro.user.querysql:}") String sql){
+                              @Value("${shiro.user.querysql:}") String sql){
         DbUserRealm realm =  new DbUserRealm(sql,jdbcTemplate);
         realm.setCredentialsMatcher(new PasswordCredentialsMatcher());
         return realm;
     }
 
-    @Bean("weChatRealm")
-    public Realm weChatAuthc(){
+    @Bean
+    public Realm weChatRealm(){
         return new WeChatUserRealm();
     }
 
     @Bean
     public SecurityManager securityManager(SessionManager sessionManager,
-                                           Authenticator authenticator,
                                            org.apache.shiro.cache.CacheManager cacheManager,
                                            List<Realm> realms){
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
         securityManager.setSessionManager(sessionManager);
-        securityManager.setAuthenticator(authenticator);
         securityManager.setCacheManager(cacheManager);
         securityManager.setRealms(realms);
         SecurityUtils.setSecurityManager(securityManager);
@@ -233,91 +206,88 @@ public class ShiroConfiguration {
         return securityManager;
     }
 
-    @Bean("formAuthc")
-    public  Filter formAuthenticationFilter(@Value("${shiro.authc.form.success.url:/home}") String successUrl,
-                                           @Value("${shiro.authc.form.login.url:/login}") String loginUrl,
-                                           @Value("${shiro.authc.form.password.param:password}") String passwordParam,
-                                           @Value("${shiro.authc.form.username.param:username}") String userNameParam){
+    @Bean
+    public  Filter formAuthc(@Value("${shiro.authc.form.password.param:password}") String passwordParam,
+                             @Value("${shiro.authc.form.username.param:username}") String userNameParam){
         FormAuthenticationFilter formAuthenticationFilter = new FormAuthenticationFilter();
-        //formAuthenticationFilter.setLoginUrl(loginUrl);
-        //formAuthenticationFilter.setSuccessUrl(successUrl);
         formAuthenticationFilter.setPasswordParam(passwordParam);
         formAuthenticationFilter.setUsernameParam(userNameParam);
         return formAuthenticationFilter;
     }
 
-    @Bean("weChatAuthc")
-    public Filter weChatAuthenticationFilter(){
+    @Bean
+    public Filter weChatAuthc(){
         return new WeChatAuthenticationFilter();
     }
 
-    @Bean("logout")
-    public static Filter logoutFilter(@Value("${shiro.logout.redirect.url:/index}") String logoutUrl){
-        LogoutFilter logoutFilter = new LogoutFilter();
-        logoutFilter.setRedirectUrl(logoutUrl);
-        logoutFilter.setPostOnlyLogout(true);
-        return logoutFilter;
-    }
-
-
-    @Bean
-    public ShiroFilterFactoryBean shiroFilter(@Value("${shiro.filter.success.url:/home}") String successUrl,
-                                              @Value("${shiro.filter.login.url:/login}") String loginUrl,
-                                              @Value("${shiro.filter.unauthorized.url:/unauthorized}") String unauthorizedUrl,
-                                              SecurityManager securityManager,
-                                              Map<String, Filter> filters){
-        ShiroFilterFactoryBean filterFactory = new ShiroFilterFactoryBean();
-        filterFactory.setSecurityManager(securityManager);
-        filterFactory.setSuccessUrl(successUrl);
-        filterFactory.setLoginUrl(loginUrl);
-        filterFactory.setUnauthorizedUrl(unauthorizedUrl);
-        filterFactory.setFilters(filters);
-        Map<String,String> filterMap = new HashMap<>();
-        //filterMap.put("/favicon.ico", "anon");
-        //filterMap.put("/static/**", "anon");
-        //filterMap.put("/ysyp/index", "anon");
-        //filterMap.put("/logout", "logout");
-        filterMap.put("/**", "anon");
-        filterFactory.setFilterChainDefinitionMap(filterMap);
-        //filterFactory.setFilterChainDefinitions(filterChainDefinitions());
-        return  filterFactory;
-    }
+//    @Bean("logout")
+//    public static Filter logout(@Value("${shiro.logout.redirect.url:/index}") String logoutUrl){
+//        LogoutFilter logoutFilter = new LogoutFilter();
+//        logoutFilter.setRedirectUrl(logoutUrl);
+//        //logoutFilter.setPostOnlyLogout(true);
+//        return logoutFilter;
+//    }
 
     @Bean
-    public FilterRegistrationBean filterRegistrationBean() {
-        FilterRegistrationBean filterRegistration = new FilterRegistrationBean();
-        filterRegistration.setFilter(new DelegatingFilterProxy("shiroFilter"));
-        filterRegistration.setEnabled(true);
-        filterRegistration.addUrlPatterns("/*");
-        filterRegistration.setDispatcherTypes(DispatcherType.REQUEST);
-        return filterRegistration;
-    }
+    public org.apache.shiro.cache.CacheManager shiroCacheMgr(CacheManager cacheManager){
+        List<MyCache> shiroCaches = Lists.newArrayList();
+        cacheManager.getCacheNames().forEach(name->
+                shiroCaches.add(new MyCache(){
 
-    @Bean(name = "lifecycleBeanPostProcessor")
-    public static LifecycleBeanPostProcessor shiroBeanPostProcessor(){
-        return  new LifecycleBeanPostProcessor();
-    }
+                    @Override
+                    public Object get(Object o) throws CacheException {
+                        return cacheManager.getCache(name).get(o);
+                    }
 
-    @Bean("shiroAutoProxyCreator")
-    @DependsOn("lifecycleBeanPostProcessor")
-    public DefaultAdvisorAutoProxyCreator shiroAutoProxyCreator(){
-        DefaultAdvisorAutoProxyCreator autoProxyCreator = new DefaultAdvisorAutoProxyCreator();
-        autoProxyCreator.setProxyTargetClass(true);
-        return autoProxyCreator;
-    }
+                    @Override
+                    public Object put(Object o, Object o2) throws CacheException {
+                        cacheManager.getCache(name).put(o,o2);
+                        return o2;
+                    }
 
+                    @Override
+                    public Object remove(Object o) throws CacheException {
+                        cacheManager.getCache(name).evict(o);
+                        return o;
+                    }
 
-    @Bean
-    public AuthorizationAttributeSourceAdvisor advisor(SecurityManager securityManager){
-        AuthorizationAttributeSourceAdvisor advisor = new AuthorizationAttributeSourceAdvisor();
-        advisor.setSecurityManager(securityManager);
-        return advisor;
-    }
+                    @Override
+                    public void clear() throws CacheException {
+                        cacheManager.getCache(name).clear();
+                    }
 
+                    @Override
+                    public int size() {
+                        return 0;
+                    }
 
-    private String filterChainDefinitions(){
-        //return "/statics/** = anon\n /index=anon\n /logout=logout\n /login=formAuthc\n /** = user";
-        return "/** = user";
+                    @Override
+                    public Set keys() {
+                        return null;
+                    }
+
+                    @Override
+                    public Collection values() {
+                        return null;
+                    }
+
+                    @Override
+                    public String getName() {
+                        return name;
+                    }
+                })
+        );
+        return new org.apache.shiro.cache.CacheManager(){
+
+            @Override
+            public MyCache getCache(String s) throws CacheException {
+                for(MyCache cache:shiroCaches){
+                    if(cache.getName().equalsIgnoreCase(s))
+                        return cache;
+                }
+                return null;
+            }
+        };
     }
 
     public interface MyCache extends org.apache.shiro.cache.Cache{
