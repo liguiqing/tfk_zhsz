@@ -211,92 +211,92 @@ public class WeChatContant {
 
     /////////////////////////////////// 请求URL常量//////////////////////////////////////////
     // ACCESSTOKEN
-    public static final String URL_GET_ACCESSTOEKN = "https://api.wechat.qq.com/cgi-bin/token?grant_type=client_credential&appid=APPID&secret=APPSECRET";
+    public static final String URL_GET_ACCESSTOEKN = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=APPID&secret=SECRET";
     ///////////////////////
     // 菜单栏
     ///////////////////////
-    public static final String URL_GET_WX_SERVICE_IP = "https://api.wechat.qq.com/cgi-bin/getcallbackip?access_token=ACCESS_TOKEN";
-    public static final String URL_CREATE_MENU = "https://api.wechat.qq.com/cgi-bin/menu/create?access_token=ACCESS_TOKEN";
+    public static final String URL_GET_WX_SERVICE_IP = "https://api.weixin.qq.com/cgi-bin/getcallbackip?access_token=ACCESS_TOKEN";
+    public static final String URL_CREATE_MENU = "https://api.weixin.qq.com/cgi-bin/menu/create?access_token=ACCESS_TOKEN";
     public static final String URL_CREATE_MENU_CONDITIONAL = "https://api.wechat.qq.com/cgi-bin/menu/addconditional?access_token=ACCESS_TOKEN";
-    public static final String URL_DELETE_MENU = "https://api.wechat.qq.com/cgi-bin/menu/delete?access_token=ACCESS_TOKEN";
+    public static final String URL_DELETE_MENU = "https://api.weixin.qq.com/cgi-bin/menu/delete?access_token=ACCESS_TOKEN";
     public static final String URL_DELETE_MENU_CONDITIONAL = "https://api.wechat.qq.com/cgi-bin/menu/delconditional?access_token=ACCESS_TOKEN";
-    public static final String URL_GET_MENU = "https://api.wechat.qq.com/cgi-bin/menu/get?access_token=ACCESS_TOKEN";
+    public static final String URL_GET_MENU = "https://api.weixin.qq.com/cgi-bin/menu/get?access_token=ACCESS_TOKEN";
     public static final String URL_GET_CURRENT_MENU_INFO = "https://api.wechat.qq.com/cgi-bin/get_current_selfmenu_info?access_token=ACCESS_TOKEN";
-    public static final String URL_TRYMATCH_MENU = "https://api.wechat.qq.com/cgi-bin/menu/trymatch?access_token=ACCESS_TOKEN";
+    public static final String URL_TRYMATCH_MENU = "https://api.weixin.qq.com/cgi-bin/menu/trymatch?access_token=ACCESS_TOKEN";
 
     ///////////////////////
     // 多媒体相关
     ///////////////////////
-    public static final String URL_UPLOAD_TEMP_MEDIA = "https://api.wechat.qq.com/cgi-bin/media/upload?access_token=ACCESS_TOKEN&type=TYPE";
-    public static final String URL_DOWNLOAD_TEMP_MEDIA = "https://api.wechat.qq.com/cgi-bin/media/get?access_token=ACCESS_TOKEN&media_id=MEDIA_ID";
-    public static final String URL_UPLOAD_MATERIAL_MEDIA = "https://api.wechat.qq.com/cgi-bin/material/add_material?access_token=ACCESS_TOKEN";
-    public static final String URL_BATCHGET_MATERIAL_MEDIA_LIST = "https://api.wechat.qq.com/cgi-bin/material/batchget_material?access_token=ACCESS_TOKEN";
-    public static final String URL_DOWNLOAD_MATERIAL_MEDIA = "https://api.wechat.qq.com/cgi-bin/material/get_material?access_token=ACCESS_TOKEN";
-    public static final String URL_DELETE_MATERIAL_MEDIA = "https://api.wechat.qq.com/cgi-bin/material/del_material?access_token=ACCESS_TOKEN";
-    public static final String URL_GET_MATERIAL_COUNT = "https://api.wechat.qq.com/cgi-bin/material/get_materialcount?access_token=ACCESS_TOKEN";
-    public static final String URL_ADD_NEWS_MEDIA = "https://api.wechat.qq.com/cgi-bin/material/add_news?access_token=ACCESS_TOKEN";
-    public static final String URL_IMAGE_DOMAIN_CHANGE = "https://api.wechat.qq.com/cgi-bin/media/uploadimg?access_token=ACCESS_TOKEN";
-    public static final String URL_UPDATE_NEWS_MEDIA = "https://api.wechat.qq.com/cgi-bin/material/update_news?access_token=ACCESS_TOKEN";
+    public static final String URL_UPLOAD_TEMP_MEDIA = "https://api.weixin.qq.com/cgi-bin/media/upload?access_token=ACCESS_TOKEN&type=TYPE";
+    public static final String URL_DOWNLOAD_TEMP_MEDIA = "https://api.weixin.qq.com/cgi-bin/media/get?access_token=ACCESS_TOKEN&media_id=MEDIA_ID";
+    public static final String URL_UPLOAD_MATERIAL_MEDIA = "https://api.weixin.qq.com/cgi-bin/material/add_material?access_token=ACCESS_TOKEN";
+    public static final String URL_BATCHGET_MATERIAL_MEDIA_LIST = "https://api.weixin.qq.com/cgi-bin/material/batchget_material?access_token=ACCESS_TOKEN";
+    public static final String URL_DOWNLOAD_MATERIAL_MEDIA = "https://api.weixin.qq.com/cgi-bin/material/get_material?access_token=ACCESS_TOKEN";
+    public static final String URL_DELETE_MATERIAL_MEDIA = "https://api.weixin.qq.com/cgi-bin/material/del_material?access_token=ACCESS_TOKEN";
+    public static final String URL_GET_MATERIAL_COUNT = "https://api.weixin.qq.com/cgi-bin/material/get_materialcount?access_token=ACCESS_TOKEN";
+    public static final String URL_ADD_NEWS_MEDIA = "https://api.weixin.qq.com/cgi-bin/material/add_news?access_token=ACCESS_TOKEN";
+    public static final String URL_IMAGE_DOMAIN_CHANGE = "https://api.weixin.qq.com/cgi-bin/media/uploadimg?access_token=ACCESS_TOKEN";
+    public static final String URL_UPDATE_NEWS_MEDIA = "https://api.weixin.qq.com/cgi-bin/material/update_news?access_token=ACCESS_TOKEN";
 
     ///////////////////////
     // 用户分组管理相关
     ///////////////////////
-    public static final String URL_CREATE_USER_GROUP = "https://api.wechat.qq.com/cgi-bin/groups/create?access_token=ACCESS_TOKEN";
-    public static final String URL_QUERY_ALL_USER_GROUP = "https://api.wechat.qq.com/cgi-bin/groups/get?access_token=ACCESS_TOKEN";
-    public static final String URL_QUERY_USER_GROUP_BY_OPENID = "https://api.wechat.qq.com/cgi-bin/groups/getid?access_token=ACCESS_TOKEN";
-    public static final String URL_UPDATE_USER_GROUP_NAME = "https://api.wechat.qq.com/cgi-bin/groups/update?access_token=ACCESS_TOKEN";
-    public static final String URL_MOVING_USER_GROUP = "https://api.wechat.qq.com/cgi-bin/groups/members/update?access_token=ACCESS_TOKEN";
-    public static final String URL_BATCH_MOVING_USER_GROUP = "https://api.wechat.qq.com/cgi-bin/groups/members/batchupdate?access_token=ACCESS_TOKEN";
-    public static final String URL_DELETE_USER_GROUP = "https://api.wechat.qq.com/cgi-bin/groups/delete?access_token=ACCESS_TOKEN";
+    public static final String URL_CREATE_USER_GROUP = "https://api.weixin.qq.com/cgi-bin/groups/create?access_token=ACCESS_TOKEN";
+    public static final String URL_QUERY_ALL_USER_GROUP = "https://api.weixin.qq.com/cgi-bin/groups/get?access_token=ACCESS_TOKEN";
+    public static final String URL_QUERY_USER_GROUP_BY_OPENID = "https://api.weixin.qq.com/cgi-bin/groups/getid?access_token=ACCESS_TOKEN";
+    public static final String URL_UPDATE_USER_GROUP_NAME = "https://api.weixin.qq.com/cgi-bin/groups/update?access_token=ACCESS_TOKEN";
+    public static final String URL_MOVING_USER_GROUP = "https://api.weixin.qq.com/cgi-bin/groups/members/update?access_token=ACCESS_TOKEN";
+    public static final String URL_BATCH_MOVING_USER_GROUP = "https://api.weixin.qq.com/cgi-bin/groups/members/batchupdate?access_token=ACCESS_TOKEN";
+    public static final String URL_DELETE_USER_GROUP = "https://api.weixin.qq.com/cgi-bin/groups/delete?access_token=ACCESS_TOKEN";
 
     ///////////////////////
     // 用户相关
     ///////////////////////
-    public static final String URL_UPDATE_USER_REMARK = "https://api.wechat.qq.com/cgi-bin/user/info/updateremark?access_token=ACCESS_TOKEN";
-    public static final String URL_GET_USER_INFO = "https://api.wechat.qq.com/cgi-bin/user/info?access_token=ACCESS_TOKEN&openid=OPENID&lang=zh_CN";
-    public static final String URL_BATCH_GET_USER_INFO = "https://api.wechat.qq.com/cgi-bin/user/info/batchget?access_token=ACCESS_TOKEN";
-    public static final String URL_BATCH_GET_USER_OPENID = "https://api.wechat.qq.com/cgi-bin/user/get?access_token=ACCESS_TOKEN&next_openid=NEXT_OPENID";
-    public static final String URL_OAUTH2_GET_CODE = "https://open.wechat.qq.com/connect/oauth2/authorize?appid=APPID&redirect_uri=REDIRECT_URI&response_type=code&scope=SCOPE&state=STATE#wechat_redirect";
-    public static final String URL_OAUTH2_GET_ACCESSTOKEN = "https://api.wechat.qq.com/sns/oauth2/access_token?appid=APPID&secret=SECRET&code=CODE&grant_type=authorization_code";
-    public static final String URL_OAUTH2_GET_REFRESH_ACCESSTOKEN = "https://api.wechat.qq.com/sns/oauth2/refresh_token?appid=APPID&grant_type=refresh_token&refresh_token=REFRESH_TOKEN";
-    public static final String URL_OAUTH2_GET_USER_INFO = "https://api.wechat.qq.com/sns/userinfo?access_token=ACCESS_TOKEN&openid=OPENID&lang=zh_CN";
-    public static final String URL_OAUTH2_CHECK_ACCESSTOKEN = "https://api.wechat.qq.com/sns/auth?access_token=ACCESS_TOKEN&openid=OPENID";
+    public static final String URL_UPDATE_USER_REMARK = "https://api.weixin.qq.com/cgi-bin/user/info/updateremark?access_token=ACCESS_TOKEN";
+    public static final String URL_GET_USER_INFO = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=ACCESS_TOKEN&openid=OPENID&lang=zh_CN";
+    public static final String URL_BATCH_GET_USER_INFO = "https://api.weixin.qq.com/cgi-bin/user/info/batchget?access_token=ACCESS_TOKEN";
+    public static final String URL_BATCH_GET_USER_OPENID = "https://api.weixin.qq.com/cgi-bin/user/get?access_token=ACCESS_TOKEN&next_openid=NEXT_OPENID";
+    public static final String URL_OAUTH2_GET_CODE = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=APPID&redirect_uri=REDIRECT_URI&response_type=code&scope=SCOPE&state=STATE#weixin_redirect";
+    public static final String URL_OAUTH2_GET_ACCESSTOKEN = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=APPID&secret=SECRET&code=CODE&grant_type=authorization_code";
+    public static final String URL_OAUTH2_GET_REFRESH_ACCESSTOKEN = "https://api.weixin.qq.com/sns/oauth2/refresh_token?appid=APPID&grant_type=refresh_token&refresh_token=REFRESH_TOKEN";
+    public static final String URL_OAUTH2_GET_USER_INFO = "https://api.weixin.qq.com/sns/userinfo?access_token=ACCESS_TOKEN&openid=OPENID&lang=zh_CN";
+    public static final String URL_OAUTH2_CHECK_ACCESSTOKEN = "https://api.weixin.qq.com/sns/auth?access_token=ACCESS_TOKEN&openid=OPENID";
 
     ///////////////////////
     // 二维码相关
     ///////////////////////
-    public static final String URL_GET_QR_CODE = "https://api.wechat.qq.com/cgi-bin/qrcode/create?access_token=TOKEN";
-    public static final String URL_DOWNLOAD_QR_CODE = "https://mp.wechat.qq.com/cgi-bin/showqrcode?ticket=TICKET";
-    public static final String URL_LONGURL_TO_SHORTURL = "https://api.wechat.qq.com/cgi-bin/shorturl?access_token=ACCESS_TOKEN";
+    public static final String URL_GET_QR_CODE = "https://api.weixin.qq.com/cgi-bin/qrcode/create?access_token=TOKEN";
+    public static final String URL_DOWNLOAD_QR_CODE = "https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=TICKET";
+    public static final String URL_LONGURL_TO_SHORTURL = "https://api.weixin.qq.com/cgi-bin/shorturl?access_token=ACCESS_TOKEN";
 
     /////////////////////////
     //////JsapiTicket
     /////////////////////////
-    public static final String URL_GET_JS_API_TICKET = "https://api.wechat.qq.com/cgi-bin/ticket/getticket?access_token=ACCESS_TOKEN&type=jsapi";
+    public static final String URL_GET_JS_API_TICKET = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=ACCESS_TOKEN&type=jsapi";
 
     /////////////////////////
     //////群发相关(不支持卡券)
     /////////////////////////
-    public static final String URL_GROUP_SEND_ALL= "https://api.wechat.qq.com/cgi-bin/message/mass/sendall?access_token=ACCESS_TOKEN";
-    public static final String URL_OPENID_SEND_ALL = "https://api.wechat.qq.com/cgi-bin/message/mass/send?access_token=ACCESS_TOKEN";
-    public static final String URL_DELETE_SEND_ALL ="https://api.wechat.qq.com/cgi-bin/message/mass/delete?access_token=ACCESS_TOKEN";
-    public static final String URL_PREVIEW_SEND_ALL ="https://api.wechat.qq.com/cgi-bin/message/mass/preview?access_token=ACCESS_TOKEN";
-    public static final String URL_GET_STATUS_SEND_ALL = "https://api.wechat.qq.com/cgi-bin/message/mass/get?access_token=ACCESS_TOKEN";
+    public static final String URL_GROUP_SEND_ALL= "https://api.weixin.qq.com/cgi-bin/message/mass/sendall?access_token=ACCESS_TOKEN";
+    public static final String URL_OPENID_SEND_ALL = "https://api.weixin.qq.com/cgi-bin/message/mass/send?access_token=ACCESS_TOKEN";
+    public static final String URL_DELETE_SEND_ALL ="https://api.weixin.qq.com/cgi-bin/message/mass/delete?access_token=ACCESS_TOKEN";
+    public static final String URL_PREVIEW_SEND_ALL ="https://api.weixin.qq.com/cgi-bin/message/mass/preview?access_token=ACCESS_TOKEN";
+    public static final String URL_GET_STATUS_SEND_ALL = "https://api.weixin.qq.com/cgi-bin/message/mass/get?access_token=ACCESS_TOKEN";
 
     /////////////////////////
     //////支付相关
     /////////////////////////
-    public static final String URL_PAY_UNIFIEORDER = "https://api.mch.wechat.qq.com/pay/unifiedorder";
+    public static final String URL_PAY_UNIFIEORDER = "https://api.mch.weixin.qq.com/pay/unifiedorder";
 
     /////////////////////////
     //////模板消息
     /////////////////////////
-    public static final String URL_TEMPLATE_SET_INDUSTRY = "https://api.wechat.qq.com/cgi-bin/template/api_set_industry?access_token=ACCESS_TOKEN";
-    public static final String URL_TEMPLATE_GET_INDUSTRY = "https://api.wechat.qq.com/cgi-bin/template/get_industry?access_token=ACCESS_TOKEN";
-    public static final String URL_TEMPLATE_GET_ID = "https://api.wechat.qq.com/cgi-bin/template/api_add_template?access_token=ACCESS_TOKEN";
-    public static final String URL_TEMPLATE_GET_LIST = "https://api.wechat.qq.com/cgi-bin/template/get_all_private_template?access_token=ACCESS_TOKEN";
-    public static final String URL_TEMPLATE_DELETE = "https://api.wechat.qq.com/cgi-bin/template/del_private_template?access_token=ACCESS_TOKEN";
-    public static final String URL_TEMPLATE_SEND = "https://api.wechat.qq.com/cgi-bin/message/template/send?access_token=ACCESS_TOKEN";
+    public static final String URL_TEMPLATE_SET_INDUSTRY = "https://api.weixin.qq.com/cgi-bin/template/api_set_industry?access_token=ACCESS_TOKEN";
+    public static final String URL_TEMPLATE_GET_INDUSTRY = "https://api.weixin.qq.com/cgi-bin/template/get_industry?access_token=ACCESS_TOKEN";
+    public static final String URL_TEMPLATE_GET_ID = "https://api.weixin.qq.com/cgi-bin/template/api_add_template?access_token=ACCESS_TOKEN";
+    public static final String URL_TEMPLATE_GET_LIST = "https://api.weixin.qq.com/cgi-bin/template/get_all_private_template?access_token=ACCESS_TOKEN";
+    public static final String URL_TEMPLATE_DELETE = "https://api.weixin.qq.com/cgi-bin/template/del_private_template?access_token=ACCESS_TOKEN";
+    public static final String URL_TEMPLATE_SEND = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=ACCESS_TOKEN";
 
 
 

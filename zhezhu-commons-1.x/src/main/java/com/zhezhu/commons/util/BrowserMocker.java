@@ -53,7 +53,7 @@ public class BrowserMocker implements  AutoCloseable{
         try {
             printCookie();
             response = client.execute(httpUriRequest, context);
-            AssertionConcerns.assertArgumentEquals(404,response.getStatusLine().getStatusCode(),
+            AssertionConcerns.assertArgumentEquals(200,response.getStatusLine().getStatusCode(),
                     "地址无法访问:" + httpUriRequest.getURI().toString());
             printResponse(response);
             HttpEntity httpEntity = response.getEntity();
@@ -62,7 +62,7 @@ public class BrowserMocker implements  AutoCloseable{
             EntityUtils.consume(httpEntity);
         } catch (Exception e) {
             log.error("地址访问失败:", Throwables.toString(e));
-            throw new RuntimeException("地址访问失败" + httpUriRequest.getURI().toString());
+            throw new RuntimeException(e);
         } finally {
             Closer.close(response);
         }

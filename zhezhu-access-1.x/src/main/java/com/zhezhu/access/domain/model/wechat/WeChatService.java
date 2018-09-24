@@ -42,6 +42,7 @@ public class WeChatService {
         get.addHeader("Content-type", "application/json; charset=utf-8");
         String content = getRequestContent(get);
         WebAccessToken webAccessToken = JsonUtillWrapper.from(content, WebAccessToken.class);
+        webAccessToken.setError();
         return webAccessToken;
     }
 

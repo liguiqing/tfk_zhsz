@@ -1,11 +1,19 @@
 package com.zhezhu.access.infrastructure.shiro;
 
-import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.authc.AuthenticationInfo;
-import org.apache.shiro.authc.AuthenticationToken;
+import com.zhezhu.access.application.wechat.WeChatData;
+import com.zhezhu.access.application.wechat.WeChatQueryService;
+import com.zhezhu.access.domain.model.wechat.WebAccessToken;
+import com.zhezhu.access.domain.model.wechat.WebAccessTokenFactory;
+import com.zhezhu.commons.util.CollectionsUtilWrapper;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
+import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.apache.shiro.subject.SimplePrincipalCollection;
+
+import java.util.List;
 
 /**
  * 来自微信的用户数据
@@ -13,17 +21,47 @@ import org.apache.shiro.subject.PrincipalCollection;
  * @author Liguiqing
  * @since V3.0
  */
-
+@Slf4j
 public class WeChatUserRealm extends AuthorizingRealm {
+    private WebAccessTokenFactory webAccessTokenFactory;
 
+    private WeChatQueryService queryService;
+
+    public WeChatUserRealm(WebAccessTokenFactory webAccessTokenFactory, WeChatQueryService queryService) {
+        this.webAccessTokenFactory = webAccessTokenFactory;
+        this.queryService = queryService;
+    }
+
+    @Override
+    public boolean supports(AuthenticationToken token){
+        return  token instanceof WeChatToken;
+    }
 
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-        return null;
+        return new SimpleAuthorizationInfo();
     }
 
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
-        return null;
+        log.debug("Authentication from WeChat ");
+
+        WeChatToken weChatToken = (WeChatToken) token;
+        WebAccessToken webAccessToken = webAccessTokenFactory.newWebAccessToken(weChatToken.getCode());
+        if(webAccessToken.isError()){
+            log.debug("Authentication from weChat failure: {}",webAccessToken);
+            throw new UnknownAccountException();
+        }
+
+        List<WeChatData> data = queryService.getWeChats(webAccessToken.getOpenId());
+        if(CollectionsUtilWrapper.isNullOrEmpty(data)){
+            log.debug("Authentication from weChat failure: user not join us ");
+            throw new UnknownAccountException();
+        }
+        log.debug("Authentication from WeChat Success");
+        SimplePrincipalCollection principalCollection = new SimplePrincipalCollection(data, webAccessToken.getOpenId());
+        SimpleAuthenticationInfo simpleAuthenticationInfo = new SimpleAuthenticationInfo();
+        simpleAuthenticationInfo.setPrincipals(principalCollection);
+        return simpleAuthenticationInfo;
     }
 }

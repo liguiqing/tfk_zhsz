@@ -27,4 +27,14 @@ public class WebAccessToken {
 
     private String errMsg;
 
+    public void setError(){
+        if(this.errCode >0){
+            this.error = true;
+        }
+    }
+
+    public boolean isSuccess(){
+        return this.openId != null;
+    }
+
 }
