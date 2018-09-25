@@ -8,6 +8,8 @@ import com.zhezhu.commons.util.JsonUtillWrapper;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpUriRequest;
 
+import java.util.UUID;
+
 /**
  * 微信接口调用服务
  *
@@ -19,38 +21,45 @@ public class WeChatService {
 
     private String code;
 
-    private WeChatAccount account;
-
-    private WebAccessToken webAccessToken;
-
     public WeChatService(String code) {
         this.code = code;
     }
 
     public WebAccessToken getWebAccessToken(WeChatConfig config) {
-        if (webAccessToken == null) {
-            webAccessToken = parseWebAccessToken(config);
+        WebAccessToken webAccessToken = fromOauth2(config);
+
+        if(webAccessToken.isError()){
+            webAccessToken = fromCode2Session(config);
         }
         return webAccessToken;
     }
 
-    private WebAccessToken parseWebAccessToken(WeChatConfig config) {
+    public WebAccessToken fromOauth2(WeChatConfig config){
         String url = WeChatContant.URL_OAUTH2_GET_ACCESSTOKEN.replace("APPID", config.getAppId())
                 .replace("SECRET", config.getAppSecret())
                 .replace("CODE", code);
+        return parseWebAccessToken(url);
+    }
+
+    public WebAccessToken fromCode2Session(WeChatConfig config){
+        String url = WeChatContant.URL_CODE2SESSION.replace("APPID", config.getAppId())
+                .replace("SECRET", config.getAppSecret())
+                .replace("CODE", code);
+        return parseWebAccessToken(url);
+    }
+
+    private WebAccessToken parseWebAccessToken(String url) {
         HttpGet get = new HttpGet(url);
         get.addHeader("Content-type", "application/json; charset=utf-8");
         String content = getRequestContent(get);
         WebAccessToken webAccessToken = JsonUtillWrapper.from(content, WebAccessToken.class);
         webAccessToken.setError();
         return webAccessToken;
+        //return WebAccessToken.builder().openId("TestOpenId").sessionKey(UUID.randomUUID().toString()).accessToken(UUID.randomUUID().toString()).expiresIn(7200).build();
     }
 
     public WeChatAccount getWeChatAccount(WeChatConfig config) {
-        if (account == null) {
-            account = parseWeChatAccount(config);
-        }
-        return account;
+        return parseWeChatAccount(config);
     }
 
     public WeChatAccount parseWeChatAccount(WeChatConfig config) {

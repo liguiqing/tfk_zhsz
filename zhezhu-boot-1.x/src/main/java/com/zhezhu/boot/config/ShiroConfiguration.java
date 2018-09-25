@@ -18,7 +18,6 @@ import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authc.credential.CredentialsMatcher;
 import org.apache.shiro.cache.CacheException;
-import org.apache.shiro.crypto.hash.SimpleHash;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.realm.Realm;
 import org.apache.shiro.session.Session;
@@ -32,9 +31,7 @@ import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.subject.PrincipalCollection;
-import org.apache.shiro.util.ByteSource;
 import org.apache.shiro.web.filter.authc.FormAuthenticationFilter;
-import org.apache.shiro.web.filter.authc.LogoutFilter;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.apache.shiro.web.servlet.Cookie;
 import org.apache.shiro.web.servlet.ShiroHttpServletRequest;
@@ -109,7 +106,7 @@ public class ShiroConfiguration {
         chains.put("/", "anon");
         chains.put("/unauthorized", "anon");
         chains.put("/login", "formAuthc");
-        //chains.put("/wechat/oauth2", "weChatAuthc");
+        chains.put("/wechat/oauth2", "weChatAuthc");
         chains.put("/logout", "logout");
         chains.put("/**", "anon");
         filterFactory.setFilterChainDefinitionMap(chains);
@@ -207,7 +204,9 @@ public class ShiroConfiguration {
 
     @Bean
     public Realm weChatRealm(WebAccessTokenFactory webAccessTokenFactory, WeChatQueryService queryService){
-        return new WeChatUserRealm(webAccessTokenFactory,queryService);
+        WeChatUserRealm realm =  new WeChatUserRealm(webAccessTokenFactory,queryService);
+        realm.setCredentialsMatcher(((token, info) -> true));
+        return realm;
     }
 
     @Bean
@@ -383,9 +382,9 @@ public class ShiroConfiguration {
     }
 
     public class StatelessSessionManager extends DefaultWebSessionManager{
-        public final static String HEADER_TOKEN_NAME = "token";
+        public final static String HEADER_TOKEN_NAME = "sessionToken";
 
-        private static final String REFERENCED_SESSION_ID_SOURCE = "Stateless request";
+        public static final String REFERENCED_SESSION_ID_SOURCE = "Stateless request";
 
         @Override
         protected Serializable getSessionId(ServletRequest request, ServletResponse response) {

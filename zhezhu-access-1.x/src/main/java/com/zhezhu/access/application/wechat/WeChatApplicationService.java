@@ -89,15 +89,25 @@ public class WeChatApplicationService {
     @Transactional(rollbackFor = Exception.class)
     public String bind(BindCommand command) {
         log.debug("WeChat Bind {} ",command);
-
+        String openId = command.getWechatOpenId();
+        if(openId == null){
+            openId = webAccessTokenFactory.newWebAccessToken(command.getCode()).getOpenId();
+            command.setWechatOpenId(openId);
+        }
+        AssertionConcerns.assertArgumentNotNull(openId,"ac-01-000");
+        WeChatCategory chatCategory = WeChatCategory.valueOf(command.getCategory());
+        WeChat weChat = weChatRepository.findByWeChatOpenIdAndCategoryEquals(openId,chatCategory);
+        if(weChat != null){
+            return  weChat.getWeChatId().id();
+        }
         WeChatId weChatId = weChatRepository.nextIdentity();
-        WeChat weChat = WeChat.builder()
+        weChat = WeChat.builder()
                 .weChatId(weChatId)
-                .category(WeChatCategory.valueOf(command.getCategory()))
-                .weChatOpenId(command.getWechatOpenId())
+                .category(chatCategory)
+                .weChatOpenId(openId)
                 .phone(command.getPhone())
                 .name(command.getName())
-                .personId(personService.getPersonId(command.getWechatOpenId()))
+                .personId(new PersonId())
                 .build();
         weChatRepository.save(weChat);
         return weChatId.id();

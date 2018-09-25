@@ -18,6 +18,8 @@ import java.util.List;
 @ToString(exclude = {"followers"})
 @Builder
 public class BindCommand {
+    private String code;
+
     private String wechatOpenId;
 
     private String category; //WeChatCategory

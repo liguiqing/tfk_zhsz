@@ -75,10 +75,10 @@ public class WeChatController extends AbstractHttpController {
      *
      * @return {@link ModelAndView}
      */
-    @RequestMapping(value = "/oauth2")
+    @RequestMapping(value = "/info")
     public ModelAndView onOauth2(@RequestParam String code,
                                  @RequestParam(required = false,defaultValue = "000000") String state){
-        logger.debug(" URL /wechat/oauth2 Method=GET  code:{},state:{}", code, state);
+        logger.debug(" URL /wechat/info Method=GET  code:{},state:{}", code, state);
 
         WebAccessToken accessToken = wechatApplicationService.getWeChatAccessToken(code);
         List<WeChatData> data = weChatQueryService.getWeChats(accessToken.getOpenId());
@@ -117,7 +117,8 @@ public class WeChatController extends AbstractHttpController {
         logger.debug("URL /wechat/bind Method=POST {}",command.getWechatOpenId());
 
         String weChatId = wechatApplicationService.bind(command);
-        return newModelAndViewBuilder("/wechat/bindSuccess").withData("weChatId",weChatId).creat();
+        List<WeChatData> data = weChatQueryService.getWeChats(command.getWechatOpenId());
+        return newModelAndViewBuilder("/wechat/bindSuccess").withData("weChatId",weChatId).withData("weChats",data).creat();
     }
 
     /**

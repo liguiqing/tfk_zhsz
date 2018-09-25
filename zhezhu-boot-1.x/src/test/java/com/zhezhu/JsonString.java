@@ -2,6 +2,9 @@ package com.zhezhu;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
+import com.zhezhu.access.application.wechat.BindCommand;
+import com.zhezhu.access.application.wechat.FollowerData;
+import com.zhezhu.access.domain.model.wechat.WeChatCategory;
 import com.zhezhu.assessment.application.assess.AssessData;
 import com.zhezhu.assessment.application.assess.SchoolAssessRankData;
 import com.zhezhu.assessment.domain.model.assesse.RankCategory;
@@ -36,7 +39,14 @@ public class JsonString {
         data.add(SchoolAssessRankData.builder().promote(1).rank(6).rankNode("2018-09-04").rankDate(from).rankCategory(dayCategory.name()).rankScope(RankScope.Clazz.name()).personId(studentId.id()).schoolId(schoolId.id()).build());
         data.add(SchoolAssessRankData.builder().promote(3).rank(3).rankNode("2018-09-05").rankDate(from).rankCategory(dayCategory.name()).rankScope(RankScope.Clazz.name()).personId(studentId.id()).schoolId(schoolId.id()).build());
 
-        log.debug(toJsonString(data));
+        BindCommand command = BindCommand.builder()
+                .wechatOpenId("")
+                .phone("")
+                .name("")
+                .category(WeChatCategory.Teacher.name())
+                .build();
+
+        log.debug(toJsonString(command));
 
 
         Map<Integer,List<Integer>> m1 = new HashMap<>();

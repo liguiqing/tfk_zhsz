@@ -5,6 +5,8 @@ import com.zhezhu.access.domain.model.school.ClazzFollowApply;
 import com.zhezhu.commons.util.DateUtilWrapper;
 import com.zhezhu.share.domain.id.PersonId;
 import com.zhezhu.share.domain.id.access.ClazzFollowApplyId;
+import com.zhezhu.share.domain.id.school.ClazzId;
+import com.zhezhu.share.domain.id.school.SchoolId;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -40,6 +42,8 @@ public class ClazzFollowApplyCommand {
 
     public ClazzFollowApply toApply(ClazzFollowApplyId applyId){
         return ClazzFollowApply.builder()
+                .applyingSchoolId(new SchoolId(applyingSchoolId))
+                .applyingClazzId(new ClazzId(applyingClazzId))
                 .applyId(applyId)
                 .applierId(new PersonId(applierId))
                 .applierName(applierName)

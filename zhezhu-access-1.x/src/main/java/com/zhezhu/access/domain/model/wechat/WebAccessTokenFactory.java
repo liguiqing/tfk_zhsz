@@ -16,7 +16,7 @@ public class WebAccessTokenFactory {
     }
 
     public WebAccessToken newWebAccessToken(String code){
-        return new WeChatService(code).getWebAccessToken(weChatConfig);
+        return new WeChatService(code).fromCode2Session(weChatConfig);
     }
 
 }

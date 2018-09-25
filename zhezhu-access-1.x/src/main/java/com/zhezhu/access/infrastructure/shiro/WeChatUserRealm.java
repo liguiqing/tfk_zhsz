@@ -53,15 +53,10 @@ public class WeChatUserRealm extends AuthorizingRealm {
             throw new UnknownAccountException();
         }
 
-        List<WeChatData> data = queryService.getWeChats(webAccessToken.getOpenId());
-        if(CollectionsUtilWrapper.isNullOrEmpty(data)){
-            log.debug("Authentication from weChat failure: user not join us ");
-            throw new UnknownAccountException();
-        }
         log.debug("Authentication from WeChat Success");
-        SimplePrincipalCollection principalCollection = new SimplePrincipalCollection(data, webAccessToken.getOpenId());
-        SimpleAuthenticationInfo simpleAuthenticationInfo = new SimpleAuthenticationInfo();
-        simpleAuthenticationInfo.setPrincipals(principalCollection);
-        return simpleAuthenticationInfo;
+        SimplePrincipalCollection principalCollection = new SimplePrincipalCollection(webAccessToken, webAccessToken.getOpenId());
+        WeChatAuthenticationInfo authenticationInfo = new WeChatAuthenticationInfo(principalCollection, webAccessToken.getOpenId());
+        authenticationInfo.setCredentials(webAccessToken.getOpenId());
+        return authenticationInfo;
     }
 }

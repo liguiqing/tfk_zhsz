@@ -22,15 +22,17 @@
                  status  string
         return 
             {
-                "accessToken": "",  //微信授权令,访问需要鉴权接口时用
-                "openId": "",       //微信openId
-                "wechats":[{         //微信与系统关联信息,未来关联时为空
-                    "openId": "",    //微信openId
-                    "role": "",      //用户角色[Teacher,Student,Parent],多值以,分隔
-                    "personId": "",  //用户唯一标识
-                    "name": "", 
-                    "phone": ""
-                }]
+            	"accessToken": {
+            		"accessToken": "af54d076-44f4-4903-a0ec-1ab56249009d",//取此值,增加到微信业务请求的header中
+            		"errCode": 0,
+            		"error": false,
+            		"expiresIn": 7200,
+            		"openId": "TestOpenId", //微信OpenId
+            		"success": true
+            	},
+            	"status": {
+            		"success": true
+            	}
             }
      
 ### 1.2 微信查询用户注册信息

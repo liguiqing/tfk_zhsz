@@ -1,6 +1,7 @@
 package com.zhezhu.access.infrastructure.shiro;
 
 import com.zhezhu.access.application.wechat.WeChatData;
+import com.zhezhu.access.domain.model.wechat.WebAccessToken;
 import com.zhezhu.access.domain.model.wechat.WebAccessTokenFactory;
 import com.zhezhu.commons.lang.Closer;
 import com.zhezhu.commons.lang.Throwables;
@@ -9,11 +10,14 @@ import com.zhezhu.commons.port.adaptor.http.controller.MessageSourceFactory;
 import com.zhezhu.commons.port.adaptor.http.controller.ModelAndViewBuilder;
 import com.zhezhu.commons.util.JsonUtillWrapper;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationToken;
+import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.filter.authc.AuthenticatingFilter;
+import org.apache.shiro.web.servlet.ShiroHttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 
@@ -64,10 +68,17 @@ public class WeChatAuthenticationFilter extends AuthenticatingFilter {
         log.debug("WeChat login success ");
 
         PrincipalCollection userPrincipalCollection = subject.getPrincipals();
-        List<WeChatData> data = (List)userPrincipalCollection.getPrimaryPrincipal();
+        WebAccessToken webAccessToken = (WebAccessToken)userPrincipalCollection.getPrimaryPrincipal();
+
+        Session session = subject.getSession();
+        session.setAttribute("WeChatSession",webAccessToken.getSessionKey());
+        request.setAttribute(ShiroHttpServletRequest.REFERENCED_SESSION_ID_SOURCE, "Stateless request");
+        request.setAttribute(ShiroHttpServletRequest.REFERENCED_SESSION_ID, session.getId());
+        request.setAttribute(ShiroHttpServletRequest.REFERENCED_SESSION_ID_IS_VALID, Boolean.TRUE);
+
         MessageSource messageSource = messageSourceFactory.lookup(request.getParameter("local"));
         ModelAndViewBuilder modelAndViewBuilder =  new ModelAndViewBuilder("",messageSource);
-        modelAndViewBuilder.withData("weChats", data);
+        modelAndViewBuilder.withData("accessToken", webAccessToken);
 
         HttpServletResponse httpServletResponse = (HttpServletResponse) response;
         httpServletResponse.setCharacterEncoding("UTF-8");
@@ -83,7 +94,7 @@ public class WeChatAuthenticationFilter extends AuthenticatingFilter {
                                      ServletResponse response) {
         log.debug("WeChat login failure ");
         MessageSource messageSource = messageSourceFactory.lookup(request.getParameter("local"));
-        ModelAndViewBuilder modelAndViewBuilder =  new ModelAndViewBuilder("",messageSource).failure().withCode("000").withData("ex",e.getMessage());
+        ModelAndViewBuilder modelAndViewBuilder =  new ModelAndViewBuilder("",messageSource).failure().withCode("000").withData("error",Throwables.toString(e));
 
         HttpServletResponse httpServletResponse = (HttpServletResponse) response;
         httpServletResponse.setCharacterEncoding("UTF-8");

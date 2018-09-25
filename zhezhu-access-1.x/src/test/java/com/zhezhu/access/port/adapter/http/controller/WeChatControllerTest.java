@@ -86,15 +86,23 @@ public class WeChatControllerTest extends AbstractControllerTest {
 
     @Test
     public void onBind() throws Exception{
-        BindCommand command = BindCommand.builder().category(WeChatCategory.Teacher.name()).build();
+        BindCommand command = BindCommand.builder().wechatOpenId("afad").category(WeChatCategory.Teacher.name()).build();
         WeChatId weChatId = new WeChatId();
         when(wechatApplicationService.bind(any(BindCommand.class))).thenReturn(weChatId.id());
+        ArrayList<WeChatData> data = new ArrayList<>();
+        String personId = new PersonId().id();
+        data.add(WeChatData.builder().name("Name").personId(personId).build());
+        data.add(WeChatData.builder().role(WeChatCategory.Teacher.name()).build());
+        when(weChatQueryService.getWeChats(any(String.class))).thenReturn(data);
 
         String content = toJsonString(command);
         this.mvc.perform(post("/wechat/bind").contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON).content(content))
                 .andExpect(jsonPath("$.status.success", is(Boolean.TRUE)))
                 .andExpect(jsonPath("$.weChatId", equalTo(weChatId.id())))
+                .andExpect(jsonPath("$.weChats[0].name", equalTo("Name")))
+                .andExpect(jsonPath("$.weChats[0].personId", equalTo(personId)))
+                .andExpect(jsonPath("$.weChats[1].role", equalTo(WeChatCategory.Teacher.name())))
                 .andExpect(view().name("/wechat/bindSuccess"));
 
     }
