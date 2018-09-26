@@ -610,6 +610,7 @@
       return 
       {"followers":[{
               "name": "", 
+              "studentNo": "", 
               "schoolId": "", 
               "clazzId": "", 
               "personId": "", 
@@ -637,6 +638,7 @@
                     "followers":[{       //关注学生名单,如果是学生用户,只允许申请一个关注者,即本人
                         {
                             "name": "", 
+                            "studentNo": "", 
                             "schoolId": "", 
                             "clazzId": "", 
                             "personId": "", 
