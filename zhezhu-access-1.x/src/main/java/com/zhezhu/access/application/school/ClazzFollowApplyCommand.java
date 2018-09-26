@@ -34,10 +34,6 @@ public class ClazzFollowApplyCommand {
 
     private String applierPhone;
 
-    @DateTimeFormat(pattern="yyyy-MM-dd")
-    @JsonFormat(pattern="yyyy-MM-dd",timezone = "GMT+8")
-    private Date applyDate;
-
     private String cause;
 
     public ClazzFollowApply toApply(ClazzFollowApplyId applyId){

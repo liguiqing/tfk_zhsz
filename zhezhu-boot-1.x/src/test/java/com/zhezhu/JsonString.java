@@ -47,27 +47,6 @@ public class JsonString {
                 .build();
 
         log.debug(toJsonString(command));
-
-
-        Map<Integer,List<Integer>> m1 = new HashMap<>();
-        m1.put(1, Lists.newArrayList(1, 2, 3));
-        m1.put(2, Lists.newArrayList(1, 2, 3));
-        m1.put(3, Lists.newArrayList(1, 2, 3));
-
-        Map<Integer,List<Integer>> m2 = new HashMap<>();
-        m2.put(1, Lists.newArrayList(1, 2, 3));
-        m2.put(2, Lists.newArrayList(2, 3, 4));
-        m2.put(4, Lists.newArrayList(1, 2, 3));
-        //List ll = m2.keySet().stream().map(i->m1.computeIfPresent(i,(k1,k2)->m2.get(k1))).collect(Collectors.toList());
-        m2.entrySet().stream().map(v->{
-            m1.merge(v.getKey(),v.getValue(),(x,y)-> {
-                x.addAll(y);
-                return x;
-            });
-            return v;
-        }).count();
-        //m1.entrySet().stream().collect(Integer::new,x->x,y->y,(a,b)->a);
-        System.out.println();
     }
 
     protected String toJsonString(Object o)throws Exception{

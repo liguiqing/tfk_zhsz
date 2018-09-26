@@ -41,7 +41,7 @@ public class ApplicationUserController extends AbstractHttpController {
     }
 
     /**
-     * 创建用户
+     * 修改用户密码
      * @param command {@link NewUserCommand}
      */
     @RequestMapping(value="/password",method = RequestMethod.PUT)

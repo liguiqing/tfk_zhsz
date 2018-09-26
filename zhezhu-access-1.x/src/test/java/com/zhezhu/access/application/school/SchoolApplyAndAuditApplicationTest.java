@@ -51,7 +51,6 @@ public class SchoolApplyAndAuditApplicationTest {
                 .applierId(new PersonId().id())
                 .applierName("Applier")
                 .applierPhone("021564789")
-                .applyDate(DateUtilWrapper.now())
                 .applyingClazzId(new ClazzId().id())
                 .applyingSchoolId(new SchoolId().id())
                 .build();

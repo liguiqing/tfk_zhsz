@@ -66,22 +66,16 @@ public class WechatApplicationServiceTest {
         MockitoAnnotations.initMocks(this);
     }
 
-    private WeChatApplicationService getService()throws Exception{
-        WeChatApplicationService service = new WeChatApplicationService();
-        FieldUtils.writeField(service,"messageService",messageService,true);
-        FieldUtils.writeField(service,"applyAuditService",applyAuditService,true);
-        FieldUtils.writeField(service,"auditRepository",auditRepository,true);
-        FieldUtils.writeField(service,"applyRepository",applyRepository,true);
-        FieldUtils.writeField(service,"personService",personService,true);
-        FieldUtils.writeField(service,"weChatRepository",weChatRepository,true);
-        FieldUtils.writeField(service,"weChatConfig",weChatConfig,true);
-        FieldUtils.writeField(service,"messageHandler",messageHandler,true);
-        FieldUtils.writeField(service,"webAccessTokenFactory",webAccessTokenFactory,true);
+    private WeChatApplicationService getService(){
+        WeChatApplicationService service = new WeChatApplicationService(messageHandler,weChatConfig,
+                webAccessTokenFactory,weChatRepository,
+                applyRepository,auditRepository,
+                applyAuditService,messageService);
         return spy(service);
     }
 
     @Test
-    public void follow() throws Exception{
+    public void follow(){
         WeChatApplicationService service = getService();
 
         HashMap<String, String> params = new HashMap<>();
@@ -98,7 +92,7 @@ public class WechatApplicationServiceTest {
     }
 
     @Test
-    public void bind() throws Exception{
+    public void bind(){
         WeChatApplicationService service = getService();
 
         WeChatCategory[] categories = WeChatCategory.values();
@@ -113,7 +107,6 @@ public class WechatApplicationServiceTest {
             WeChatId weChatId = new WeChatId();
             PersonId personId = new PersonId();
             when(weChatRepository.nextIdentity()).thenReturn(weChatId);
-            when(personService.getPersonId(any(String.class))).thenReturn(personId);
             doNothing().when(weChatRepository).save(any(WeChat.class));
 
             String weId = service.bind(command);
@@ -121,12 +114,11 @@ public class WechatApplicationServiceTest {
             assertEquals(weChatId.id(),weId);
         }
         verify(weChatRepository,times(3)).nextIdentity();
-        verify(personService,times(3)).getPersonId(any(String.class));
         verify(weChatRepository,times(3)).save(any(WeChat.class));
     }
 
     @Test
-    public void transferTo()throws Exception{
+    public void transferTo(){
         WeChatApplicationService service = getService();
         WeChat weChat = WeChat.builder()
                 .category(WeChatCategory.Teacher)
@@ -156,7 +148,7 @@ public class WechatApplicationServiceTest {
     }
 
     @Test
-    public void copyFollowers()throws Exception{
+    public void copyFollowers(){
         WeChat weChat = WeChat.builder()
                 .category(WeChatCategory.Teacher)
                 .weChatId(new WeChatId())
@@ -181,7 +173,7 @@ public class WechatApplicationServiceTest {
     }
 
     @Test
-    public void applyFollowers() throws Exception{
+    public void applyFollowers(){
         WeChatApplicationService service = getService();
         String weChatOpenId = UUID.randomUUID().toString();
         BindCommand command = BindCommand.builder()
@@ -214,7 +206,7 @@ public class WechatApplicationServiceTest {
     }
 
     @Test
-    public void applyAudit() throws Exception{
+    public void applyAudit(){
         WeChatApplicationService service = getService();
 
         ApplyAuditCommand command = ApplyAuditCommand.builder()
@@ -247,7 +239,7 @@ public class WechatApplicationServiceTest {
     }
 
     @Test
-    public void cancelApply()throws Exception{
+    public void cancelApply(){
         WeChatApplicationService service = getService();
 
         FollowApply apply = FollowApply.builder().applyId(new FollowApplyId()).build();
@@ -261,7 +253,7 @@ public class WechatApplicationServiceTest {
     }
 
     @Test
-    public void cancelApplyAudit()throws Exception{
+    public void cancelApplyAudit(){
         WeChatApplicationService service = getService();
 
         FollowAudit audit = mock(FollowAudit.class);
@@ -283,7 +275,7 @@ public class WechatApplicationServiceTest {
 
 
     @Test
-    public void bindCancel() throws Exception{
+    public void bindCancel(){
         WeChatApplicationService service = getService();
         BindCommand command = BindCommand.builder().category(WeChatCategory.Teacher.name()).build();
         WeChat weChat = WeChat.builder().weChatId(new WeChatId()).build();
@@ -293,7 +285,7 @@ public class WechatApplicationServiceTest {
     }
 
     @Test
-    public void getWeChatAccessToken()throws Exception{
+    public void getWeChatAccessToken(){
         WeChatApplicationService service = getService();
         WebAccessToken token = mock(WebAccessToken.class);
         when(webAccessTokenFactory.newWebAccessToken(any(String.class))).thenReturn(token);
