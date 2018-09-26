@@ -1,8 +1,8 @@
 package com.zhezhu.access.domain.model.wechat.audit;
 
-import com.zhezhu.access.infrastructure.PersonService;
 import com.zhezhu.commons.util.DateUtilWrapper;
 import com.zhezhu.share.domain.id.PersonId;
+import com.zhezhu.share.infrastructure.person.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

@@ -117,7 +117,6 @@ public class SchoolApplyAndAuditControllerTest extends StandaloneControllerTest 
     public void onFollowClazzAudit() throws Exception{
         ClazzFollowAuditCommand command = ClazzFollowAuditCommand.builder()
                 .applyId(new ClazzFollowApplyId().id())
-                .auditDate(DateUtilWrapper.now())
                 .auditorId(new PersonId().id())
                 .description("Description")
                 .ok(true)
@@ -142,5 +141,22 @@ public class SchoolApplyAndAuditControllerTest extends StandaloneControllerTest 
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.status.success", is(Boolean.TRUE)))
                 .andExpect(view().name("/audit/clazzFollowAuditCancel"));
+    }
+
+    @Test
+    public void onGetAllClazzFollowApplyAuditing() throws Exception{
+        List<ClazzFollowApplyAndAuditData> data = new ArrayList<>();
+        for(int i=0;i<5;i++){
+            data.add(ClazzFollowApplyAndAuditData.builder().clazzId(new ClazzId().id()).clazzName("className"+i).build());
+        }
+
+        when(applyAndAuditQueryService.getAllAuditingClazzApply(anyInt(),anyInt())).thenReturn(data);
+
+        this.mvc.perform(get("/apply/all/auditing/1/5").contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.status.success", is(Boolean.TRUE)))
+                .andExpect(jsonPath("$.clazzs[0].clazzName", equalTo("className0")))
+                .andExpect(jsonPath("$.clazzs[4].clazzName", equalTo("className4")))
+                .andExpect(view().name("/apply/clazzFollowApplyAuditingList"));
     }
 }

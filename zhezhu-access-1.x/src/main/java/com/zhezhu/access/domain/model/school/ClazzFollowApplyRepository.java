@@ -7,6 +7,7 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -38,4 +39,7 @@ public interface ClazzFollowApplyRepository extends EntityRepository<ClazzFollow
     List<ClazzFollowApply> findAllByApplierIdAndAuditIdIsNotNull(PersonId applierId);
 
     List<ClazzFollowApply> findAllByApplierIdAndAuditIdIsNull(PersonId applierId);
+
+    @Query(value = "select * from ac_clazzfollowapply where auditId is null LIMIT :page,:size",nativeQuery = true)
+    List<ClazzFollowApply> findAuditingByLimit(@Param("page")int page, @Param("size")int size);
 }

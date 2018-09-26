@@ -110,5 +110,8 @@ public class WeChatRepositoryTest extends AbstractTransactionalJUnit4SpringConte
         weChatRepository.delete(weChatId);
         weChat_ = weChatRepository.loadOf(weChatId);
         assertNull(weChat_);
+
+        weChatRepository.findAllByFollowersIsAudited(1, 10);
+        weChatRepository.findAllByFollowersIsNotAudited(1, 10);
     }
 }

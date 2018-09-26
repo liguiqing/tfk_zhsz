@@ -1,4 +1,4 @@
-package com.zhezhu.access.infrastructure;
+package com.zhezhu.share.infrastructure.person;
 
 import com.zhezhu.share.domain.id.PersonId;
 import com.zhezhu.share.domain.person.Gender;
@@ -14,11 +14,11 @@ public interface PersonService {
         return new PersonId();
     }
 
-    default PersonId getPersonId(String schoolId, String clazzId, String name, Gender gender,QueryTarget target){
+    default PersonId getPersonId(String schoolId, String clazzId, String name, Gender gender, QueryTarget target){
         return new PersonId();
     }
 
-    String getName(String personId,QueryTarget target);
+    String getName(String personId, QueryTarget target);
 
     enum QueryTarget{
         Teacher,Student,Parent

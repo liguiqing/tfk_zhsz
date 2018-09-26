@@ -21,6 +21,8 @@ public class ClazzFollowApplyAndAuditData {
 
     private String schoolName;
 
+    private String gradeName;
+
     private String clazzId;
 
     private String clazzName;
@@ -44,6 +46,8 @@ public class ClazzFollowApplyAndAuditData {
     private String applierId;
 
     private String applierName;
+
+    private String applierPhone;
 
     private String auditorId;
 

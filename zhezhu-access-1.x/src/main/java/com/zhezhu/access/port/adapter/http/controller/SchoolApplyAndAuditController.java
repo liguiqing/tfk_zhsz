@@ -118,5 +118,19 @@ public class SchoolApplyAndAuditController extends AbstractHttpController {
         return newModelAndViewBuilder("/audit/clazzFollowAuditCancel").creat();
     }
 
+    /**
+     * 查询所有待审核的班级关注申请
+     *
+     * @param page 页码
+     * @param size 页容
+     * @return {@link ModelAndView}
+     */
+    @RequestMapping(value = "/apply/all/auditing/{page}/{size}",method = RequestMethod.GET)
+    public ModelAndView onGetAllClazzFollowApplyAuditing(@PathVariable int page,@PathVariable int size){
+        logger.debug("URL /apply/all/auditing/{}/{} Method=GET ",page,size);
+
+        List<ClazzFollowApplyAndAuditData> auditingClazzs = applyAndAuditQueryService.getAllAuditingClazzApply(pageStart(page,size),size);
+        return newModelAndViewBuilder("/apply/clazzFollowApplyAuditingList").withData("clazzs",auditingClazzs).creat();
+    }
 
 }

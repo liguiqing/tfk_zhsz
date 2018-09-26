@@ -18,6 +18,7 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 import org.springframework.web.servlet.view.ContentNegotiatingViewResolver;
 
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -36,6 +37,7 @@ public class SpringMvcConfiguration extends WebMvcConfigurationSupport {
         log.debug("Configure Message Converters");
         super.configureMessageConverters(converters);
         FastJsonConfig fastJsonConfig = new FastJsonConfig();
+        fastJsonConfig.setCharset(Charset.forName("UTF-8"));
         fastJsonConfig.setSerializerFeatures(SerializerFeature.WriteDateUseDateFormat,
                 SerializerFeature.WriteMapNullValue,
                 SerializerFeature.WriteNullStringAsEmpty,
@@ -44,7 +46,9 @@ public class SpringMvcConfiguration extends WebMvcConfigurationSupport {
                 SerializerFeature.WriteEnumUsingToString);
         FastJsonHttpMessageConverter c1 = new FastJsonHttpMessageConverter();
         List<MediaType> supportedMediaTypes = new ArrayList<>();
+        supportedMediaTypes.add(MediaType.TEXT_HTML);
         supportedMediaTypes.add(MediaType.APPLICATION_JSON);
+        supportedMediaTypes.add(MediaType.APPLICATION_STREAM_JSON);
         supportedMediaTypes.add(MediaType.APPLICATION_JSON_UTF8);
         supportedMediaTypes.add(MediaType.APPLICATION_ATOM_XML);
         supportedMediaTypes.add(MediaType.APPLICATION_FORM_URLENCODED);
@@ -57,7 +61,6 @@ public class SpringMvcConfiguration extends WebMvcConfigurationSupport {
         supportedMediaTypes.add(MediaType.IMAGE_JPEG);
         supportedMediaTypes.add(MediaType.IMAGE_PNG);
         supportedMediaTypes.add(MediaType.TEXT_EVENT_STREAM);
-        supportedMediaTypes.add(MediaType.TEXT_HTML);
         supportedMediaTypes.add(MediaType.TEXT_MARKDOWN);
         supportedMediaTypes.add(MediaType.TEXT_PLAIN);
         supportedMediaTypes.add(MediaType.TEXT_XML);

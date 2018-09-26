@@ -30,6 +30,7 @@ public class FreemarkerConfig {
     public FreemarkerStaticModels freemarkerStaticModels(){
         Map<String,String> maps = Maps.newHashMap();
         maps.put("StringUtils","org.apache.commons.lang3.StringUtils");
+        maps.put("Shiro","com.zhezhu.commons.shiro.ShiroHelper");
         FreemarkerStaticModels staticModels = new FreemarkerStaticModels(maps);
         return staticModels;
     }

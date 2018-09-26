@@ -198,6 +198,21 @@ public class WeChatController extends AbstractHttpController {
     }
 
     /**
+     * 查询微的关注者(学生)
+     *
+     * @param page 页码
+     * @param size 页容
+     * @return {@link ModelAndView}
+     */
+    @RequestMapping(value ="/query/all/followers/{page}/{size}",method = RequestMethod.GET)
+    public ModelAndView onGetAllFollowerOfStudent(@PathVariable int page,@PathVariable int size){
+        logger.debug("URL /wechat/query/all/followers/{}/{} Method=GET ",page,size);
+
+        List<FollowerData> followers = weChatQueryService.getAllFollowers(pageStart(page,size),size,false);
+        return newModelAndViewBuilder("/apply/studentFollowApplyAuditingList").withData("followers",followers).creat();
+    }
+
+    /**
      * 查询可申请的关注者
      *
      * @param name 姓名

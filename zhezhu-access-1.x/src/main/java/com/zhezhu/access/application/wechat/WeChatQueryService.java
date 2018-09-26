@@ -1,5 +1,6 @@
 package com.zhezhu.access.application.wechat;
 
+import com.zhezhu.access.domain.model.wechat.Follower;
 import com.zhezhu.access.domain.model.wechat.WeChat;
 import com.zhezhu.access.domain.model.wechat.WeChatCategory;
 import com.zhezhu.access.domain.model.wechat.WeChatRepository;
@@ -15,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -129,5 +131,29 @@ public class WeChatQueryService {
             return new String[]{};
 
         return namesAnGenderAndCredentials.stream().map(StudentData::getPersonId).collect(Collectors.toList()).toArray(new String[]{});
+    }
+
+    /**
+     * 查询全部学生关注申请
+     *
+     * @param page 页码
+     * @param size 页容
+     * @param isAudited 是否审核
+     * @return
+     */
+    public List<FollowerData> getAllFollowers(int page, int size,boolean isAudited) {
+        List<WeChat> weChats = null;
+        if(!isAudited){
+            weChats = weChatRepository.findAllByFollowersIsNotAudited(page,size);
+        }else {
+            weChats = weChatRepository.findAllByFollowersIsAudited(page,size);
+        }
+        if(CollectionsUtilWrapper.isNullOrEmpty(weChats))
+            return new ArrayList<>();
+
+        return weChats.stream().map(weChat ->weChat.getFollowers().stream()
+                .map(follower -> followerTransferHelper.transTo(follower, WeChatCategory.Student)).collect(Collectors.toList()))
+                .flatMap(List::stream).collect(Collectors.toList());
+
     }
 }

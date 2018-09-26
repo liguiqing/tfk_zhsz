@@ -6,6 +6,7 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -42,4 +43,12 @@ public interface WeChatRepository extends EntityRepository<WeChat,WeChatId> {
 
     @Query("From WeChat where weChatOpenId=?1 and removed=0")
     List<WeChat> findAllByWeChatOpenId(String weChatOpenId);
+
+    @Query(value = "select a.* From ac_WeChat a join ac_wechatfollower b on b.weChatId=a.weChatId where " +
+            "b.auditorId is null LIMIT :page,:size",nativeQuery = true)
+    List<WeChat> findAllByFollowersIsNotAudited(@Param("page")int page, @Param("size")int size);
+
+    @Query(value = "select a.* From ac_WeChat a join ac_wechatfollower b on b.weChatId=a.weChatId where " +
+            "b.auditorId is not null LIMIT :page,:size",nativeQuery = true)
+    List<WeChat> findAllByFollowersIsAudited(@Param("page")int page, @Param("size")int size);
 }

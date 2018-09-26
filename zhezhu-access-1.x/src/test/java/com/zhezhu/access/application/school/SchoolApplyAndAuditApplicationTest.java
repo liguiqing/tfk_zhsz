@@ -79,7 +79,6 @@ public class SchoolApplyAndAuditApplicationTest {
         SchoolApplyAndAuditApplicationService service = getService();
         ClazzFollowAuditCommand command = ClazzFollowAuditCommand.builder()
                 .applyId(new ClazzFollowApplyId().id())
-                .auditDate(DateUtilWrapper.now())
                 .auditorId(new PersonId().id())
                 .description("Description")
                 .ok(true)

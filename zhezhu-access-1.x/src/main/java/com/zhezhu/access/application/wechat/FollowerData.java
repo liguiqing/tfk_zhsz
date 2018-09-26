@@ -16,6 +16,8 @@ public class FollowerData {
 
     private String name;
 
+    private String studentNo;
+
     private String schoolId;
 
     private String clazzId;

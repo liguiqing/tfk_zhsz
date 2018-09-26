@@ -4,12 +4,15 @@ import com.zhezhu.access.domain.model.school.ClazzFollowApply;
 import com.zhezhu.access.domain.model.school.ClazzFollowApplyRepository;
 import com.zhezhu.access.domain.model.school.ClazzFollowAudit;
 import com.zhezhu.access.domain.model.school.ClazzFollowAuditRepository;
-import com.zhezhu.access.infrastructure.SchoolService;
 import com.zhezhu.commons.util.CollectionsUtilWrapper;
 import com.zhezhu.share.domain.id.PersonId;
+import com.zhezhu.share.domain.id.school.ClazzId;
+import com.zhezhu.share.domain.id.school.SchoolId;
+import com.zhezhu.share.infrastructure.school.ClazzData;
+import com.zhezhu.share.infrastructure.school.SchoolData;
+import com.zhezhu.share.infrastructure.school.SchoolService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -34,7 +37,7 @@ public class SchoolApplyAndAuditQueryService {
     @Autowired
     public SchoolApplyAndAuditQueryService(ClazzFollowApplyRepository clazzFollowApplyRepository,
                                            ClazzFollowAuditRepository clazzFollowAuditRepository,
-                                           @Qualifier("localSchoolService")SchoolService schoolService) {
+                                           SchoolService schoolService) {
         this.clazzFollowApplyRepository = clazzFollowApplyRepository;
         this.clazzFollowAuditRepository = clazzFollowAuditRepository;
         this.schoolService = schoolService;
@@ -60,9 +63,23 @@ public class SchoolApplyAndAuditQueryService {
      * @return list of {@link ClazzFollowApplyAndAuditData}
      */
     public List<ClazzFollowApplyAndAuditData> getAuditingClazzs(String applierId){
-        log.debug("Get Auditing Clazzs of {}",applierId);
+        log.debug("Get auditing clazzs of {}",applierId);
 
         List<ClazzFollowApply> applies = clazzFollowApplyRepository.findAllByApplierIdAndAuditIdIsNull(new PersonId(applierId));
+        return toData(applies);
+    }
+
+    /**
+     * 查询申请人的所有待审核的班级关注申请
+     *
+     * @param page 页码
+     * @param size 页容
+     * @return list of {@link ClazzFollowApplyAndAuditData}
+     */
+    public List<ClazzFollowApplyAndAuditData> getAllAuditingClazzApply(int page,int size){
+        log.debug("Get all auditing clazzs of page {} size {}",page,size);
+
+        List<ClazzFollowApply> applies = clazzFollowApplyRepository.findAuditingByLimit(page,size);
         return toData(applies);
     }
 
@@ -72,21 +89,30 @@ public class SchoolApplyAndAuditQueryService {
 
         return applies.stream().map(apply -> {
             String clazzId = apply.getApplyingClazzId().id();
-            String clazzName = schoolService.getClazzName(clazzId);
-            String schoolId = schoolService.getSchoolIdBy(clazzId);
-            String schoolName = schoolService.getSchoolName(schoolId);
+            ClazzData clazz = schoolService.getClazz(new ClazzId(clazzId));
+            String schoolId = clazz.getSchoolId();
+            SchoolData school = schoolService.getSchool(new SchoolId(schoolId));
+            String schoolName = school.getName();
 
             ClazzFollowApplyAndAuditData data =  ClazzFollowApplyAndAuditData.builder()
+                    .applyId(apply.getApplyId().id())
                     .schoolId(schoolId)
                     .schoolName(schoolName)
+                    .gradeName(clazz.getGradeName())
                     .clazzId(clazzId)
-                    .clazzName(clazzName)
+                    .clazzName(clazz.getClazzName())
+                    .applierName(apply.getApplierName())
+                    .applierPhone(apply.getApplierPhone())
+                    .applierId(apply.getApplierId().id())
+                    .applyDesc(apply.getCause())
                     .applyDate(apply.getApplyDate())
                     .build();
             if(apply.isAudited()){
                 ClazzFollowAudit audit = clazzFollowAuditRepository.loadOf(apply.getAuditId());
                 data.setAuditDate(audit.getAuditDate());
                 data.setAuditId(audit.getAuditId().id());
+                data.setAuditCause(audit.getDescription());
+                data.setOk(true);
             }
             return data;
         }).collect(Collectors.toList());

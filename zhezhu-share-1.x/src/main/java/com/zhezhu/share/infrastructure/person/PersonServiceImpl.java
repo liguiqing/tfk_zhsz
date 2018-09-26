@@ -1,4 +1,4 @@
-package com.zhezhu.access.infrastructure;
+package com.zhezhu.share.infrastructure.person;
 
 import com.zhezhu.share.domain.id.PersonId;
 import com.zhezhu.share.domain.person.Gender;

@@ -83,5 +83,34 @@ public class ClazzFollowApplyRepositoryTest extends AbstractTransactionalJUnit4S
         apply = applyRepository.loadOf(applyId);
         assertNull(apply);
 
+        for(int k=1;k<=20;k++){
+            applierId = new PersonId();
+            applyId = applyRepository.nextIdentity();
+            schoolId = new SchoolId();
+            clazzId = new ClazzId();
+            apply = ClazzFollowApply.builder()
+                    .applyId(applyId)
+                    .applierId(applierId)
+                    .applyingSchoolId(schoolId)
+                    .applyingClazzId(clazzId)
+                    .applierName("name"+i)
+                    .applierPhone("138789654"+i)
+                    .applyDate(DateUtilWrapper.now())
+                    .cause("Cause"+i)
+                    .build();
+            if(k%5==0){
+                auditId = new ClazzFollowAuditId();
+                audit = ClazzFollowAudit.builder().auditId(auditId).ok(true).applyId(applyId).build();
+                apply.audit(audit);
+            }
+            applyRepository.save(apply);
+        }
+
+        List<ClazzFollowApply> auditing =  applyRepository.findAuditingByLimit(1,20);
+        assertTrue(15<=auditing.size());
+        auditing =  applyRepository.findAuditingByLimit(1,10);
+        assertEquals(10,auditing.size());
+        auditing =  applyRepository.findAuditingByLimit(1,1);
+        assertEquals(1,auditing.size());
     }
 }
