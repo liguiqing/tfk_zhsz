@@ -13,6 +13,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
+ *
+ * 学校申请及审核服务
+ *
  * @author Liguiqing
  * @since V3.0
  */
@@ -21,12 +24,23 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class SchoolApplyAndAuditApplicationService {
 
-    @Autowired
     private ClazzFollowApplyRepository clazzFollowApplyRepository;
 
-    @Autowired
     private ClazzFollowAuditRepository clazzFollowAuditRepository;
 
+    @Autowired
+    public SchoolApplyAndAuditApplicationService(ClazzFollowApplyRepository clazzFollowApplyRepository,
+                                                 ClazzFollowAuditRepository clazzFollowAuditRepository) {
+        this.clazzFollowApplyRepository = clazzFollowApplyRepository;
+        this.clazzFollowAuditRepository = clazzFollowAuditRepository;
+    }
+
+    /**
+     * 班级关注申请
+     *
+     * @param command {@link ClazzFollowApplyCommand}
+     * @return value of {@link ClazzFollowApplyId}
+     */
     @Transactional(rollbackFor = Exception.class)
     public String followClazzApply(ClazzFollowApplyCommand command){
         log.debug("Clazz follow applay {}",command);
@@ -38,6 +52,11 @@ public class SchoolApplyAndAuditApplicationService {
         return applyId.id();
     }
 
+    /**
+     * 取消班级关注申请
+     *
+     * @param applyId {@link ClazzFollowApplyId}
+     */
     @Transactional(rollbackFor = Exception.class)
     public void followClazzApplyCancel(String applyId){
         log.debug("Cancel clazz follow applay {}",applyId);
@@ -48,6 +67,12 @@ public class SchoolApplyAndAuditApplicationService {
         clazzFollowApplyRepository.delete(applyId1);
     }
 
+    /**
+     * 审核班级关注申请
+     *
+     * @param command {@link ClazzFollowAuditCommand}
+     * @return value of {@link ClazzFollowAuditId}
+     */
     @Transactional(rollbackFor = Exception.class)
     public String followClazzAudit(ClazzFollowAuditCommand command){
         log.debug(" Clazz apply audit {}",command);
@@ -63,6 +88,11 @@ public class SchoolApplyAndAuditApplicationService {
         return auditId.id();
     }
 
+    /**
+     * 取消班级关注申请审核
+     *
+     * @param auditId {@link ClazzFollowAuditId}
+     */
     @Transactional(rollbackFor = Exception.class)
     public void followClazzAuditCancel(String auditId){
         log.debug(" Clazz apply audit cancel {}",auditId);

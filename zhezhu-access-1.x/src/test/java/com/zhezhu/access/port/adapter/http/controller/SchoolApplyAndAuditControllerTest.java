@@ -9,16 +9,14 @@ import com.zhezhu.share.domain.id.access.ClazzFollowApplyId;
 import com.zhezhu.share.domain.id.access.ClazzFollowAuditId;
 import com.zhezhu.share.domain.id.school.ClazzId;
 import com.zhezhu.share.domain.id.school.SchoolId;
-import com.zhezhu.zhezhu.controller.AbstractControllerTest;
+import com.zhezhu.zhezhu.controller.StandaloneControllerTest;
+import org.junit.Before;
 import org.junit.Test;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.ContextHierarchy;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -33,24 +31,25 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * Copyright (c) 2016,$today.year, 深圳市易考试乐学测评有限公司
  **/
 
-@ContextHierarchy({
-        @ContextConfiguration(classes= {SchoolApplyAndAuditController.class}),
-        @ContextConfiguration(locations = {"classpath:servlet-context-test.xml"})
-})
-public class SchoolApplyAndAuditControllerTest extends AbstractControllerTest {
 
-    @Autowired
-    @InjectMocks
-    private SchoolApplyAndAuditController controller;
+public class SchoolApplyAndAuditControllerTest extends StandaloneControllerTest {
 
     @Mock
-    private SchoolApplyAndAuditQueryService applyAndAuditQueryService;;
+    private SchoolApplyAndAuditQueryService applyAndAuditQueryService;
 
     @Mock
     private SchoolApplyAndAuditApplicationService applyAndAuditApplicationService;
 
     @Mock
     private UserFaceService userFaceService;
+
+    @Before
+    public void before(){
+        super.before();
+        SchoolApplyAndAuditController controller =  new SchoolApplyAndAuditController(this.applyAndAuditApplicationService,this.applyAndAuditQueryService);
+        injectNoneFielsInConstructor(controller, Collections.singletonList(new FieldMapping("userFaceService",userFaceService)));
+        applyController(controller);
+    }
 
     @Test
     public void onClazzFollowApply() throws Exception{

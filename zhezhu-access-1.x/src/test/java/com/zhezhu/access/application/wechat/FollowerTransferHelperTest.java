@@ -3,7 +3,6 @@ package com.zhezhu.access.application.wechat;
 import com.google.common.collect.Lists;
 import com.zhezhu.access.domain.model.wechat.Follower;
 import com.zhezhu.access.domain.model.wechat.WeChatCategory;
-import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -34,19 +33,18 @@ public class FollowerTransferHelperTest {
         MockitoAnnotations.initMocks(this);
     }
 
-    private FollowerTransferHelper getService()throws Exception{
+    private FollowerTransferHelper getService(){
         List<FollowerDataTransfer> transfers = Lists.newArrayList();
         transfers.add(transfer1);
         transfers.add(transfer2);
         transfers.add(transfer3);
 
-        FollowerTransferHelper helper = new FollowerTransferHelper();
-        FieldUtils.writeField(helper,"transfers",transfers,true);
+        FollowerTransferHelper helper = new FollowerTransferHelper(transfers);
         return spy(helper);
     }
 
     @Test
-    public void transTo() throws Exception{
+    public void transTo(){
         FollowerTransferHelper helper = getService();
         Follower follower = mock(Follower.class);
         FollowerData data = mock(FollowerData.class);

@@ -28,11 +28,16 @@ import java.util.Map;
 @RequestMapping("/wechat")
 public class WeChatController extends AbstractHttpController {
 
-    @Autowired(required = false)
     private WeChatApplicationService wechatApplicationService;
 
-    @Autowired(required = false)
     private WeChatQueryService weChatQueryService;
+
+    @Autowired
+    public WeChatController(WeChatApplicationService wechatApplicationService,
+                            WeChatQueryService weChatQueryService) {
+        this.wechatApplicationService = wechatApplicationService;
+        this.weChatQueryService = weChatQueryService;
+    }
 
     /**
      * 微信关注成功后欢迎信息

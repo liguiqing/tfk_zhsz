@@ -10,14 +10,11 @@ import com.zhezhu.share.domain.id.wechat.FollowApplyId;
 import com.zhezhu.share.domain.id.wechat.FollowAuditId;
 import com.zhezhu.share.domain.id.wechat.WeChatId;
 import com.zhezhu.share.domain.person.Gender;
-import com.zhezhu.zhezhu.controller.AbstractControllerTest;
+import com.zhezhu.zhezhu.controller.StandaloneControllerTest;
+import org.junit.Before;
 import org.junit.Test;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.ContextHierarchy;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,21 +33,20 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * Copyright (c) 2016,$today.year, 深圳市易考试乐学测评有限公司
  **/
 
-@ContextHierarchy({
-        @ContextConfiguration(classes= {WeChatController.class}),
-        @ContextConfiguration(locations = {"classpath:servlet-context-test.xml"})
-})
-public class WeChatControllerTest extends AbstractControllerTest {
-
-    @Autowired
-    @InjectMocks
-    private  WeChatController controller;
+public class WeChatControllerTest extends StandaloneControllerTest {
 
     @Mock
     private WeChatApplicationService wechatApplicationService;
 
     @Mock
     private WeChatQueryService weChatQueryService;
+
+    @Before
+    public void before(){
+        super.before();
+        WeChatController controller =  new WeChatController(this.wechatApplicationService,this.weChatQueryService);
+        applyController(controller);
+    }
 
     @Test
     public void onGetJoined()throws Exception{

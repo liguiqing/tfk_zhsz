@@ -14,8 +14,12 @@ import org.springframework.stereotype.Component;
 @Component
 public class StudentFollowerTransfer implements FollowerDataTransfer {
 
-    @Autowired
     private SchoolService schoolService;
+
+    @Autowired
+    public StudentFollowerTransfer(SchoolService schoolService) {
+        this.schoolService = schoolService;
+    }
 
     @Override
     public FollowerData trans(Follower follower, WeChatCategory category) {

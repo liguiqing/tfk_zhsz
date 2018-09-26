@@ -33,14 +33,13 @@ public class StudentFollowerTransferTest {
         MockitoAnnotations.initMocks(this);
     }
 
-    private StudentFollowerTransfer getService()throws Exception{
-        StudentFollowerTransfer transfer = new StudentFollowerTransfer();
-        FieldUtils.writeField(transfer,"schoolService",schoolService,true);
+    private StudentFollowerTransfer getService(){
+        StudentFollowerTransfer transfer = new StudentFollowerTransfer(schoolService);
         return spy(transfer);
     }
 
     @Test
-    public void trans() throws Exception{
+    public void trans(){
         StudentFollowerTransfer transfer = getService();
         List<ClazzData> clazzs = mock(List.class);
         ClazzData clazz = ClazzData.builder().clazzId(new ClazzId().id()).build();

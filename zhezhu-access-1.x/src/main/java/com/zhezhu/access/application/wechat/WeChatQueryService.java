@@ -28,14 +28,20 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 public class WeChatQueryService {
 
-    @Autowired
     private WeChatRepository weChatRepository;
 
-    @Autowired
     private FollowerTransferHelper followerTransferHelper;
 
-    @Autowired
     private SchoolService schoolService;
+
+    @Autowired
+    public WeChatQueryService(WeChatRepository weChatRepository,
+                              FollowerTransferHelper followerTransferHelper,
+                              SchoolService schoolService) {
+        this.weChatRepository = weChatRepository;
+        this.followerTransferHelper = followerTransferHelper;
+        this.schoolService = schoolService;
+    }
 
     /**
      * 查询微信OpenId与系统的绑定关系
@@ -113,7 +119,7 @@ public class WeChatQueryService {
         if (namesAnGender.size() == 1)
             return new String[]{namesAnGender.get(0).getPersonId()};
         if (credentialsName == null)
-            return namesAnGender.stream().map(student->student.getPersonId()).collect(Collectors.toList()).toArray(new String[]{});
+            return namesAnGender.stream().map(StudentData::getPersonId).collect(Collectors.toList()).toArray(new String[]{});
 
 
         List<StudentData> namesAnGenderAndCredentials = namesAnGender.stream()
@@ -122,6 +128,6 @@ public class WeChatQueryService {
         if (CollectionsUtilWrapper.isNullOrEmpty(namesAnGenderAndCredentials))
             return new String[]{};
 
-        return namesAnGenderAndCredentials.stream().map(student->student.getPersonId()).collect(Collectors.toList()).toArray(new String[]{});
+        return namesAnGenderAndCredentials.stream().map(StudentData::getPersonId).collect(Collectors.toList()).toArray(new String[]{});
     }
 }

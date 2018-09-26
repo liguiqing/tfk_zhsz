@@ -1,6 +1,5 @@
 package com.zhezhu.access.application.school;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.zhezhu.access.domain.model.school.ClazzFollowApply;
 import com.zhezhu.commons.util.DateUtilWrapper;
 import com.zhezhu.share.domain.id.PersonId;
@@ -8,9 +7,6 @@ import com.zhezhu.share.domain.id.access.ClazzFollowApplyId;
 import com.zhezhu.share.domain.id.school.ClazzId;
 import com.zhezhu.share.domain.id.school.SchoolId;
 import lombok.*;
-import org.springframework.format.annotation.DateTimeFormat;
-
-import java.util.Date;
 
 /**
  * @author Liguiqing

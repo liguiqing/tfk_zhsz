@@ -13,7 +13,6 @@ import com.zhezhu.share.infrastructure.school.ClazzData;
 import com.zhezhu.share.infrastructure.school.CredentialsData;
 import com.zhezhu.share.infrastructure.school.SchoolService;
 import com.zhezhu.share.infrastructure.school.StudentData;
-import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -46,16 +45,13 @@ public class WeChatQueryServiceTest {
         MockitoAnnotations.initMocks(this);
     }
 
-    private WeChatQueryService getService()throws Exception{
-        WeChatQueryService service = new WeChatQueryService();
-        FieldUtils.writeField(service,"weChatRepository",weChatRepository,true);
-        FieldUtils.writeField(service,"followerTransferHelper",followerTransferHelper,true);
-        FieldUtils.writeField(service,"schoolService",schoolService,true);
+    private WeChatQueryService getService(){
+        WeChatQueryService service = new WeChatQueryService(weChatRepository,followerTransferHelper,schoolService);
         return spy(service);
     }
 
     @Test
-    public void getWeChats() throws Exception {
+    public void getWeChats()  {
         WeChatQueryService service = getService();
         List<WeChat> weChats = Lists.newArrayList();
         PersonId personId = new PersonId();
@@ -70,7 +66,7 @@ public class WeChatQueryServiceTest {
     }
 
     @Test
-    public void getFollowers() throws Exception {
+    public void getFollowers()  {
         String weChatOpenId = UUID.randomUUID().toString();
         Set<Follower> followers = Sets.newHashSet();
         followers.add(Follower.builder().personId(new PersonId()).audited(FollowerAudit.builder().build()).build());
@@ -96,7 +92,7 @@ public class WeChatQueryServiceTest {
     }
 
     @Test
-    public void findFollowerBy()throws Exception{
+    public void findFollowerBy(){
         WeChatQueryService service  = getService();
         List<StudentData> studentData = Lists.newArrayList();
         ClazzId clazzId = new ClazzId();

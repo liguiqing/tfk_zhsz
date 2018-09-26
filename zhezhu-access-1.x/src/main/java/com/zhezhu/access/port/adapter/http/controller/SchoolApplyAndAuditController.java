@@ -22,11 +22,16 @@ import java.util.List;
 @Controller
 public class SchoolApplyAndAuditController extends AbstractHttpController {
 
-    @Autowired(required = false)
     private SchoolApplyAndAuditApplicationService applyAndAuditApplicationService;
 
-    @Autowired(required = false)
     private SchoolApplyAndAuditQueryService applyAndAuditQueryService;
+
+    @Autowired
+    public SchoolApplyAndAuditController(SchoolApplyAndAuditApplicationService applyAndAuditApplicationService,
+                                         SchoolApplyAndAuditQueryService applyAndAuditQueryService) {
+        this.applyAndAuditApplicationService = applyAndAuditApplicationService;
+        this.applyAndAuditQueryService = applyAndAuditQueryService;
+    }
 
     /**
      * 班级关注申请

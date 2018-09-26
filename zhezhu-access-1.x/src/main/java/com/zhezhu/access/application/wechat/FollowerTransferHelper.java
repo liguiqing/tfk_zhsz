@@ -14,8 +14,13 @@ import java.util.List;
 
 @Component
 public class FollowerTransferHelper {
-    @Autowired
+
     private List<FollowerDataTransfer> transfers;
+
+    @Autowired
+    public FollowerTransferHelper(List<FollowerDataTransfer> transfers) {
+        this.transfers = transfers;
+    }
 
     public FollowerData transTo(Follower follower, WeChatCategory weChatCategory){
         FollowerData data = null;

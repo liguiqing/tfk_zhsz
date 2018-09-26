@@ -10,7 +10,6 @@ import com.zhezhu.share.domain.id.access.ClazzFollowApplyId;
 import com.zhezhu.share.domain.id.access.ClazzFollowAuditId;
 import com.zhezhu.share.domain.id.school.ClazzId;
 import com.zhezhu.share.domain.id.school.SchoolId;
-import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -34,15 +33,13 @@ public class SchoolApplyAndAuditApplicationTest {
         MockitoAnnotations.initMocks(this);
     }
 
-    private SchoolApplyAndAuditApplicationService  getService()throws Exception{
-        SchoolApplyAndAuditApplicationService service = new SchoolApplyAndAuditApplicationService();
-        FieldUtils.writeField(service,"clazzFollowApplyRepository",clazzFollowApplyRepository,true);
-        FieldUtils.writeField(service,"clazzFollowAuditRepository",clazzFollowAuditRepository,true);
+    private SchoolApplyAndAuditApplicationService  getService(){
+        SchoolApplyAndAuditApplicationService service = new SchoolApplyAndAuditApplicationService(clazzFollowApplyRepository,clazzFollowAuditRepository);
         return spy(service);
     }
 
     @Test
-    public void followClazzApply() throws Exception{
+    public void followClazzApply() {
         SchoolApplyAndAuditApplicationService service = getService();
         ClazzFollowApplyId applyId = new ClazzFollowApplyId();
         when(clazzFollowApplyRepository.nextIdentity()).thenReturn(applyId);
@@ -63,7 +60,7 @@ public class SchoolApplyAndAuditApplicationTest {
     }
 
     @Test
-    public void followClazzApplyCancel() throws Exception{
+    public void followClazzApplyCancel() {
         SchoolApplyAndAuditApplicationService service = getService();
         ClazzFollowApply apply = mock(ClazzFollowApply.class);
 
@@ -78,7 +75,7 @@ public class SchoolApplyAndAuditApplicationTest {
     }
 
     @Test
-    public void followClazzAudit() throws Exception{
+    public void followClazzAudit(){
         SchoolApplyAndAuditApplicationService service = getService();
         ClazzFollowAuditCommand command = ClazzFollowAuditCommand.builder()
                 .applyId(new ClazzFollowApplyId().id())
@@ -106,7 +103,7 @@ public class SchoolApplyAndAuditApplicationTest {
     }
 
     @Test
-    public void followClazzAuditCancel() throws Exception{
+    public void followClazzAuditCancel(){
         SchoolApplyAndAuditApplicationService service = getService();
 
         ClazzFollowAudit audit = mock(ClazzFollowAudit.class);
