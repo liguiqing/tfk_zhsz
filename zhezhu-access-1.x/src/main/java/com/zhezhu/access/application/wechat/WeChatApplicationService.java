@@ -6,7 +6,6 @@ import com.zhezhu.access.domain.model.wechat.config.WeChatConfig;
 import com.zhezhu.access.domain.model.wechat.message.MessageHandler;
 import com.zhezhu.access.domain.model.wechat.message.XmlMessage;
 import com.zhezhu.access.domain.model.wechat.message.XmlOutMessage;
-import com.zhezhu.access.infrastructure.PersonService;
 import com.zhezhu.access.infrastructure.WeChatMessageService;
 import com.zhezhu.commons.AssertionConcerns;
 import com.zhezhu.commons.util.DateUtilWrapper;
@@ -66,8 +65,8 @@ public class WeChatApplicationService {
     /**
      * 公众号关注
      *
-     * @param params
-     * @return
+     * @param params properties of message args
+     * @return welcome message
      */
     public String follow(Map<String, String> params) {
         log.debug("WeChat Follow Success!");
@@ -77,6 +76,12 @@ public class WeChatApplicationService {
         return follow.getContent();
     }
 
+    /**
+     * 公众号对话
+     *
+     * @param message {@link XmlMessage}
+     * @return a xml{@link XmlOutMessage} message
+     */
     public String dialog(XmlMessage message) {
         log.debug("WeChat Query!");
 
@@ -87,8 +92,8 @@ public class WeChatApplicationService {
     /**
      * 公众号/小程序信息绑定
      *
-     * @param command
-     * @return
+     * @param command {@link BindCommand}
+     * @return {@link WeChatId}
      */
     @Transactional(rollbackFor = Exception.class)
     public String bind(BindCommand command) {
@@ -120,10 +125,10 @@ public class WeChatApplicationService {
     /**
      * 微信用户身份转换
      *
-     * @param waChatId
-     * @param other
-     * @param copyFollowers
-     * @return
+     * @param waChatId {@link WeChatId} 转换者
+     * @param other {@link WeChatCategory} 转换类型
+     * @param copyFollowers 是否自制另一个类型的微信用户关注者
+     * @return {@link WeChatId}
      */
     public String transferTo(String waChatId, WeChatCategory other, boolean copyFollowers) {
         log.debug("WeChat {} transfer to other category {} ", waChatId, other);
@@ -141,9 +146,9 @@ public class WeChatApplicationService {
     /**
      * 微信用户复制关注者转换
      *
-     * @param waChatId
-     * @param otherId
-     * @return
+     * @param waChatId waChatId {@link WeChatId} 被转换者
+     * @param otherId  {@link WeChatId} 转换者
+     *
      */
     public void copyFollowers(String waChatId, String otherId) {
         log.debug("WeChat {} copy followers to other {} ", waChatId, otherId);
@@ -160,7 +165,7 @@ public class WeChatApplicationService {
     /**
      * 申请关注者
      *
-     * @param command
+     * @param command {@link BindCommand}
      */
     @Transactional(rollbackFor = Exception.class)
     public void applyFollowers(BindCommand command) {
@@ -170,6 +175,10 @@ public class WeChatApplicationService {
             return;
 
         WeChatCategory chatCategory = WeChatCategory.valueOf(command.getCategory());
+        //学生用户只能申请一个关注者
+        if(chatCategory.equals(WeChatCategory.Student))
+            AssertionConcerns.assertArgumentTrue(command.getFollowers().size()==1, "ac-01-000");
+
         WeChat weChat = weChatRepository.findByWeChatOpenIdAndCategoryEquals(command.getWechatOpenId(), chatCategory);
         List<FollowerData> followers = command.getFollowers();
         for (FollowerData data : followers) {
@@ -195,7 +204,7 @@ public class WeChatApplicationService {
     /**
      * 取消关注申请
      *
-     * @param applyId
+     * @param applyId {@link FollowApplyId} 关注申请唯一标识
      */
     public void cancelApply(String applyId) {
         log.debug("Apply canceled  {} ", applyId);
@@ -210,8 +219,8 @@ public class WeChatApplicationService {
     /**
      * 审核关注申请
      *
-     * @param command
-     * @return
+     * @param command {@link ApplyAuditCommand}
+     * @return value of {@link FollowAuditId}
      */
     @Transactional(rollbackFor = Exception.class)
     public String applyAudit(ApplyAuditCommand command) {
@@ -234,7 +243,7 @@ public class WeChatApplicationService {
     /**
      * 取消关注申请审核
      *
-     * @param command
+     * @param command {@link ApplyAuditCommand}
      */
     @Transactional(rollbackFor = Exception.class)
     public void cancelApplyAudit(ApplyAuditCommand command) {
@@ -260,6 +269,10 @@ public class WeChatApplicationService {
         weChatRepository.save(applyWeChat);
     }
 
+    /**
+     *  取消用户身份绑定
+     * @param command {@link BindCommand}
+     */
     @Transactional(rollbackFor = Exception.class)
     public void bindCancel(BindCommand command) {
         log.debug("WeChat Bind Canceld {} ", command);
@@ -270,6 +283,12 @@ public class WeChatApplicationService {
             weChatRepository.delete(weChat.getWeChatId());
     }
 
+    /**
+     * 获取微信用户访问授权
+     *
+     * @param code 微信用户临时凭证
+     * @return {@link WebAccessToken}
+     */
     @Transactional(readOnly = true)
     public WebAccessToken getWeChatAccessToken(String code) {
         return webAccessTokenFactory.newWebAccessToken(code);

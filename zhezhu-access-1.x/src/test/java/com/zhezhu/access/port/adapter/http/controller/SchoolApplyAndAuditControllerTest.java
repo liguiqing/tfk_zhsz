@@ -98,6 +98,23 @@ public class SchoolApplyAndAuditControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    public void onGetClazzFollowApplyAuditing()throws Exception{
+        List<ClazzFollowApplyAndAuditData> data = new ArrayList<>();
+        for(int i=0;i<5;i++){
+            data.add(ClazzFollowApplyAndAuditData.builder().clazzId(new ClazzId().id()).clazzName("className"+i).build());
+        }
+
+        when(applyAndAuditQueryService.getAuditingClazzs(any(String.class))).thenReturn(data);
+
+        this.mvc.perform(get("/apply/auditing/"+new  PersonId().id()).contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.status.success", is(Boolean.TRUE)))
+                .andExpect(jsonPath("$.clazzs[0].clazzName", equalTo("className0")))
+                .andExpect(jsonPath("$.clazzs[4].clazzName", equalTo("className4")))
+                .andExpect(view().name("/apply/clazzFollowApplyAuditingList"));
+    }
+
+    @Test
     public void onFollowClazzAudit() throws Exception{
         ClazzFollowAuditCommand command = ClazzFollowAuditCommand.builder()
                 .applyId(new ClazzFollowApplyId().id())

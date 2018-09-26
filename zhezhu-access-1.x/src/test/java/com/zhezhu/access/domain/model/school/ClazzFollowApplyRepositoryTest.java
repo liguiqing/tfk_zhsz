@@ -54,6 +54,10 @@ public class ClazzFollowApplyRepositoryTest extends AbstractTransactionalJUnit4S
                 .build();
         applyRepository.save(apply);
 
+        List<ClazzFollowApply> applies = applyRepository.findAllByApplierIdAndAuditIdIsNull(applierId);
+        assertEquals(1,applies.size());
+        assertFalse(applies.get(0).isPassed());
+
         ClazzFollowApply apply_ = applyRepository.loadOf(applyId);
         assertEquals(apply,apply_);
 
@@ -71,12 +75,13 @@ public class ClazzFollowApplyRepositoryTest extends AbstractTransactionalJUnit4S
             i++;
         }
 
-        List<ClazzFollowApply> applies = applyRepository.findAllByApplierIdAndAuditIdIsNotNull(applierId);
+        applies = applyRepository.findAllByApplierIdAndAuditIdIsNotNull(applierId);
         assertEquals(1,applies.size());
         assertTrue(applies.get(0).isPassed());
 
         applyRepository.delete(applyId);
         apply = applyRepository.loadOf(applyId);
         assertNull(apply);
+
     }
 }

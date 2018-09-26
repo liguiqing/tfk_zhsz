@@ -85,11 +85,11 @@ public class WeChatQueryServiceTest {
         when(followerTransferHelper.transTo(any(Follower.class),any(WeChatCategory.class))).thenReturn(student1).thenReturn(student2);
 
         WeChatQueryService service  = getService();
-        List<FollowerData> followerData = service.getFollowers(weChatOpenId, WeChatCategory.Student);
+        List<FollowerData> followerData = service.getFollowers(weChatOpenId, WeChatCategory.Student,true);
         assertEquals(0,followerData.size());
-        followerData = service.getFollowers(weChatOpenId, WeChatCategory.Student);
+        followerData = service.getFollowers(weChatOpenId, WeChatCategory.Student,true);
         assertEquals(0,followerData.size());
-        followerData = service.getFollowers(weChatOpenId, WeChatCategory.Student);
+        followerData = service.getFollowers(weChatOpenId, WeChatCategory.Student,true);
         assertEquals(2,followerData.size());
         assertEquals("S1",followerData.get(0).getName());
         assertEquals("S2",followerData.get(1).getName());

@@ -62,16 +62,17 @@ public class WeChatQueryService {
      *
      * @param weChatOpenId 微信OpenId
      * @param category {@link WeChatCategory}
+     * @param isAudited 审核结果
      * @return list of {@link FollowerData}
      */
-    public List<FollowerData> getFollowers(String weChatOpenId, WeChatCategory category) {
+    public List<FollowerData> getFollowers(String weChatOpenId, WeChatCategory category,boolean isAudited) {
         log.debug("Get Followers by OpenId {}", weChatOpenId);
 
         WeChat weChat = this.weChatRepository.findByWeChatOpenIdAndCategoryEquals(weChatOpenId, category);
         if (weChat == null || CollectionsUtilWrapper.isNullOrEmpty(weChat.getFollowers()))
             return new ArrayList<>();
 
-        return weChat.getFollowers().stream().filter(follower -> follower.isAudited()).map(follower ->
+        return weChat.getFollowers().stream().filter(follower -> follower.isAudited() == isAudited).map(follower ->
                 followerTransferHelper.transTo(follower, category)
         ).collect(Collectors.toList());
     }

@@ -44,7 +44,8 @@ public class JsonString {
                 .phone("")
                 .name("")
                 .category(WeChatCategory.Teacher.name())
-                .build();
+
+                .build().addFollower(FollowerData.builder().build());
 
         log.debug(toJsonString(command));
     }

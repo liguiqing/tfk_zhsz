@@ -71,6 +71,20 @@ public class SchoolApplyAndAuditController extends AbstractHttpController {
     }
 
     /**
+     * 查询申请人待审核的班级关注申请
+     *
+     * @param applierId {@link PersonId}
+     * @return {@link ModelAndView}
+     */
+    @RequestMapping(value = "/apply/auditing/{applierId}",method = RequestMethod.GET)
+    public ModelAndView onGetClazzFollowApplyAuditing(@PathVariable String applierId){
+        logger.debug("URL /apply/auditing/{} Method=GET ",applierId);
+
+        List<ClazzFollowApplyAndAuditData> auditingClazzs = applyAndAuditQueryService.getAuditingClazzs(applierId);
+        return newModelAndViewBuilder("/apply/clazzFollowApplyAuditingList").withData("clazzs",auditingClazzs).creat();
+    }
+
+    /**
      * 班级关注申请审核
      *
      * @param command {@link ClazzFollowAuditCommand}

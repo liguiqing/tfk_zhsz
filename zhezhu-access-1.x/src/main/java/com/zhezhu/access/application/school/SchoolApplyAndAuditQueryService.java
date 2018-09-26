@@ -2,6 +2,7 @@ package com.zhezhu.access.application.school;
 
 import com.zhezhu.access.domain.model.school.ClazzFollowApply;
 import com.zhezhu.access.domain.model.school.ClazzFollowApplyRepository;
+import com.zhezhu.access.domain.model.school.ClazzFollowAudit;
 import com.zhezhu.access.domain.model.school.ClazzFollowAuditRepository;
 import com.zhezhu.access.infrastructure.SchoolService;
 import com.zhezhu.commons.util.CollectionsUtilWrapper;
@@ -24,26 +25,48 @@ import java.util.stream.Collectors;
 @Service
 public class SchoolApplyAndAuditQueryService {
 
-    @Autowired
     private ClazzFollowApplyRepository clazzFollowApplyRepository;
 
-    @Autowired
     private ClazzFollowAuditRepository clazzFollowAuditRepository;
 
-    @Autowired
-    @Qualifier("localSchoolService")
     private SchoolService schoolService;
+
+    @Autowired
+    public SchoolApplyAndAuditQueryService(ClazzFollowApplyRepository clazzFollowApplyRepository,
+                                           ClazzFollowAuditRepository clazzFollowAuditRepository,
+                                           @Qualifier("localSchoolService")SchoolService schoolService) {
+        this.clazzFollowApplyRepository = clazzFollowApplyRepository;
+        this.clazzFollowAuditRepository = clazzFollowAuditRepository;
+        this.schoolService = schoolService;
+    }
 
     /**
      * 查询申请人的所有已经通过审核的班级关注申请
      *
-     * @param applierId
-     * @return
+     * @param applierId {@link PersonId#id()}
+     * @return list of {@link ClazzFollowApplyAndAuditData}
      */
     public List<ClazzFollowApplyAndAuditData> getAuditedClazzs(String applierId){
         log.debug("Get Audited Clazzs of {}",applierId);
 
         List<ClazzFollowApply> applies = clazzFollowApplyRepository.findAllByApplierIdAndAuditIdIsNotNull(new PersonId(applierId));
+        return toData(applies);
+    }
+
+    /**
+     * 查询申请人的所有待审核的班级关注申请
+     *
+     * @param applierId applierId {@link PersonId#id()}
+     * @return list of {@link ClazzFollowApplyAndAuditData}
+     */
+    public List<ClazzFollowApplyAndAuditData> getAuditingClazzs(String applierId){
+        log.debug("Get Auditing Clazzs of {}",applierId);
+
+        List<ClazzFollowApply> applies = clazzFollowApplyRepository.findAllByApplierIdAndAuditIdIsNull(new PersonId(applierId));
+        return toData(applies);
+    }
+
+    private List<ClazzFollowApplyAndAuditData> toData(List<ClazzFollowApply> applies){
         if(CollectionsUtilWrapper.isNullOrEmpty(applies))
             return new ArrayList<>();
 
@@ -52,12 +75,21 @@ public class SchoolApplyAndAuditQueryService {
             String clazzName = schoolService.getClazzName(clazzId);
             String schoolId = schoolService.getSchoolIdBy(clazzId);
             String schoolName = schoolService.getSchoolName(schoolId);
-            return ClazzFollowApplyAndAuditData.builder()
+
+            ClazzFollowApplyAndAuditData data =  ClazzFollowApplyAndAuditData.builder()
                     .schoolId(schoolId)
                     .schoolName(schoolName)
                     .clazzId(clazzId)
                     .clazzName(clazzName)
+                    .applyDate(apply.getApplyDate())
                     .build();
+            if(apply.isAudited()){
+                ClazzFollowAudit audit = clazzFollowAuditRepository.loadOf(apply.getAuditId());
+                data.setAuditDate(audit.getAuditDate());
+                data.setAuditId(audit.getAuditId().id());
+            }
+            return data;
         }).collect(Collectors.toList());
     }
+
 }

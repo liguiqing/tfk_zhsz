@@ -179,7 +179,7 @@ public class WeChatControllerTest extends AbstractControllerTest {
         followers.add(FollowerData.builder().personId(new PersonId().id()).schoolId(new SchoolId().id()).clazzId(new ClazzId().id()).name("S1").gender(Gender.Female.name()).build());
         followers.add(FollowerData.builder().personId(new PersonId().id()).schoolId(new SchoolId().id()).clazzId(new ClazzId().id()).name("S2").gender(Gender.Male.name()).build());
 
-        when(weChatQueryService.getFollowers(eq(weChatOpenId),eq(WeChatCategory.Student))).thenReturn(followers);
+        when(weChatQueryService.getFollowers(eq(weChatOpenId),eq(WeChatCategory.Student),eq(true))).thenReturn(followers);
 
         this.mvc.perform(get("/wechat/query/followers/"+weChatOpenId).contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))

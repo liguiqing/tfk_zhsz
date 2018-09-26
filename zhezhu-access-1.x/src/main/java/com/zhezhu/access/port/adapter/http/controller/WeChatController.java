@@ -184,10 +184,11 @@ public class WeChatController extends AbstractHttpController {
      * @return {@link ModelAndView}
      */
     @RequestMapping(value ="/query/followers/{openId}",method = RequestMethod.GET)
-    public ModelAndView onGetFollowerOfStudent(@PathVariable String openId){
+    public ModelAndView onGetFollowerOfStudent(@PathVariable String openId,
+                                               @RequestParam(required = false,defaultValue = "true") boolean isAudited){
         logger.debug("URL /wechat/query/followers/{} Method=GET ",openId);
 
-        List<FollowerData> followers = weChatQueryService.getFollowers(openId, WeChatCategory.Student);
+        List<FollowerData> followers = weChatQueryService.getFollowers(openId, WeChatCategory.Student,isAudited);
         return newModelAndViewBuilder("/wechat/followerList").withData("followers",followers).creat();
     }
 

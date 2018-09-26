@@ -36,4 +36,6 @@ public interface ClazzFollowApplyRepository extends EntityRepository<ClazzFollow
     void delete(ClazzFollowApplyId applyId);
 
     List<ClazzFollowApply> findAllByApplierIdAndAuditIdIsNotNull(PersonId applierId);
+
+    List<ClazzFollowApply> findAllByApplierIdAndAuditIdIsNull(PersonId applierId);
 }

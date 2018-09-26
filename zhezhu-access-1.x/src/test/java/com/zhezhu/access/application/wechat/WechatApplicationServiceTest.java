@@ -47,9 +47,6 @@ public class WechatApplicationServiceTest {
     private WeChatRepository weChatRepository;
 
     @Mock
-    private PersonService personService;
-
-    @Mock
     private FollowApplyRepository applyRepository;
 
     @Mock
