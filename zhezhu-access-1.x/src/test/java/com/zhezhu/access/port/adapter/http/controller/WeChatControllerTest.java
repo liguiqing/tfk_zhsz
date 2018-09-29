@@ -232,4 +232,26 @@ public class WeChatControllerTest extends StandaloneControllerTest {
                 .andExpect(jsonPath("$.personIds[0]", equalTo(pids3[0])))
                 .andExpect(view().name("/wechat/followerList"));
     }
+
+    @Test
+    public void onGetAllFollowerOfStudent()throws Exception{
+        List<FollowerData> followerData = Lists.newArrayList();
+        for(int i=0;i<10;i++){
+            followerData.add(FollowerData.builder().name("Name"+i).build());
+        }
+        when(weChatQueryService.getAllFollowers(anyInt(), anyInt(), anyBoolean())).thenReturn(followerData);
+
+        this.mvc.perform(get("/wechat/query/all/followers/1/100").contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.status.success", is(Boolean.TRUE)))
+                .andExpect(jsonPath("$.followers[0].name", equalTo(followerData.get(0).getName())))
+                .andExpect(view().name("/apply/studentFollowApplyAuditingList"));
+
+        this.mvc.perform(get("/wechat/query/all/followers/1/100").contentType(MediaType.APPLICATION_JSON)
+                .param("isAudited","true")
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.status.success", is(Boolean.TRUE)))
+                .andExpect(jsonPath("$.followers[0].name", equalTo(followerData.get(0).getName())))
+                .andExpect(view().name("/apply/studentFollowApplyAuditingList"));
+    }
 }

@@ -29,6 +29,7 @@
             <property name="id" column="followerId" type="java.lang.String"/>
         </component>
         <property name="applyDate" column="applyDate" type="java.util.Date"/>
+        <property name="applyCredential" column="applyCredential" type="java.lang.String"/>
         <property name="cause" column="cause" type="java.lang.String"/>
     </class>
 

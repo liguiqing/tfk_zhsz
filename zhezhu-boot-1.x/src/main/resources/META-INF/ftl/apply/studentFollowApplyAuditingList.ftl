@@ -24,20 +24,20 @@
         <div class="container-box">
             <div class="box-tit">待审核的学生申请</div>
             <div class="box-content" id="clazzApply">
-            <#if clazzs??>
-                <#list clazzs as clazz>
-                <div class="item" id="${clazz.applyId!""}">
+            <#if followers??>
+                <#list followers as follower>
+                <div class="item" id="${follower.applyId!""}">
                     <div>
-                        <p class="name">${clazz.applierName!""}
-                            <small>${clazz.schoolName!""}</small>
+                        <p class="name">${follower.applierName!""}
+                            <small>${follower.schoolName!""}</small>
                         </p>
-                        <p class="grads">${clazz.gradeName!""}<span>${clazz.clazzName!""}</span></p>
-                        <p class="phone"><i></i>${clazz.applierPhone!""}</p>
+                        <p class="grads">${follower.gradeName!""}<span>${follower.clazzName!""}</span><span>${follower.name!""}</span<span>${follower.studentNo!""}</span</p>
+                        <p class="phone"><i></i>${follower.applierPhone!""}</p>
                     </div>
                     <div class="btn-group">
-                        <a href="#" class="btn_primary" data-ok="true" data-applyId="${clazz.applyId!""}"
-                           data-applierId="${clazz.applierId!""}">通过</a>
-                        <a href="#" data-ok="false" data-applierId="${clazz.applierId!""}">不通过</a>
+                        <a href="#" class="btn_primary" data-ok="true" data-applyId="${follower.applyId!""}"
+                           data-applierId="${follower.applierId!""}">通过</a>
+                        <a href="#" data-ok="false" data-applierId="${follower.applierId!""}">不通过</a>
                     </div>
                 </div>
                 </#list>

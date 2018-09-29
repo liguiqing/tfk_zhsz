@@ -205,10 +205,12 @@ public class WeChatController extends AbstractHttpController {
      * @return {@link ModelAndView}
      */
     @RequestMapping(value ="/query/all/followers/{page}/{size}",method = RequestMethod.GET)
-    public ModelAndView onGetAllFollowerOfStudent(@PathVariable int page,@PathVariable int size){
-        logger.debug("URL /wechat/query/all/followers/{}/{} Method=GET ",page,size);
+    public ModelAndView onGetAllFollowerOfStudent(@PathVariable int page,
+                                                  @PathVariable int size,
+                                                  @RequestParam(required = false,defaultValue = "false") boolean isAudited){
+        logger.debug("URL /wechat/query/all/followers/{}/{}?isAudited={} Method=GET ",page,size,isAudited);
 
-        List<FollowerData> followers = weChatQueryService.getAllFollowers(pageStart(page,size),size,false);
+        List<FollowerData> followers = weChatQueryService.getAllFollowers(pageStart(page,size),size,isAudited);
         return newModelAndViewBuilder("/apply/studentFollowApplyAuditingList").withData("followers",followers).creat();
     }
 

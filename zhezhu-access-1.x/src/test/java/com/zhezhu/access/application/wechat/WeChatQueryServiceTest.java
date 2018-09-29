@@ -3,10 +3,14 @@ package com.zhezhu.access.application.wechat;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.zhezhu.access.domain.model.wechat.*;
+import com.zhezhu.access.domain.model.wechat.audit.FollowApply;
+import com.zhezhu.access.domain.model.wechat.audit.FollowApplyRepository;
+import com.zhezhu.access.domain.model.wechat.audit.FollowAuditRepository;
 import com.zhezhu.commons.util.DateUtilWrapper;
 import com.zhezhu.share.domain.id.PersonId;
 import com.zhezhu.share.domain.id.school.ClazzId;
 import com.zhezhu.share.domain.id.school.SchoolId;
+import com.zhezhu.share.domain.id.wechat.FollowApplyId;
 import com.zhezhu.share.domain.id.wechat.WeChatId;
 import com.zhezhu.share.domain.person.Gender;
 import com.zhezhu.share.infrastructure.school.ClazzData;
@@ -18,6 +22,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -40,13 +45,22 @@ public class WeChatQueryServiceTest {
     @Mock
     private SchoolService schoolService;
 
+    @Mock
+    private FollowApplyRepository applyRepository;
+
+    @Mock
+    private FollowAuditRepository auditRepository;
+
     @Before
     public void before(){
         MockitoAnnotations.initMocks(this);
     }
 
     private WeChatQueryService getService(){
-        WeChatQueryService service = new WeChatQueryService(weChatRepository,followerTransferHelper,schoolService);
+        WeChatQueryService service = new WeChatQueryService(weChatRepository,
+                followerTransferHelper,schoolService,
+                applyRepository,auditRepository);
+
         return spy(service);
     }
 
@@ -147,6 +161,57 @@ public class WeChatQueryServiceTest {
         assertEquals(1, c.length);
         c = service.findFollowerBy("SS", clazzId.id(), "学号", "9876543217", null);
         assertEquals(1, c.length);
+    }
+
+    @Test
+    public void getAllFollowers(){
+        List<FollowApply> applies1 = new ArrayList<>();
+        List<FollowApply> applies2 = new ArrayList<>();
+        for(int i=0;i<10;i++){
+            FollowApply apply1 = mock(FollowApply.class);
+            when(apply1.getApplierWeChatOpenId()).thenReturn(UUID.randomUUID().toString());
+            when(apply1.getFollowerId()).thenReturn(new PersonId());
+            when(apply1.getApplyId()).thenReturn(new FollowApplyId());
+            when(apply1.getCause()).thenReturn("c"+i);
+            when(apply1.getApplyCredential()).thenReturn("ac"+i);
+            applies1.add(apply1);
+            applies2.add(apply1);
+        }
+        FollowerData data1 = mock(FollowerData.class);
+        FollowerData data2 = mock(FollowerData.class);
+        FollowerData data3 = mock(FollowerData.class);
+        FollowerData data4 = mock(FollowerData.class);
+        FollowerData data5 = mock(FollowerData.class);
+        FollowerData data6 = mock(FollowerData.class);
+        FollowerData data7 = mock(FollowerData.class);
+        FollowerData data8 = mock(FollowerData.class);
+        FollowerData data9 = mock(FollowerData.class);
+        FollowerData data10 = mock(FollowerData.class);
+
+        when(followerTransferHelper.transTo(any(Follower.class),eq(WeChatCategory.Student)))
+                .thenReturn(data1).thenReturn(data2)
+                .thenReturn(data3).thenReturn(data4)
+                .thenReturn(data5).thenReturn(data6)
+                .thenReturn(data7).thenReturn(data8)
+                .thenReturn(data9).thenReturn(data10);
+
+        WeChat weChat = mock(WeChat.class);
+        when(weChat.followerOf(any(PersonId.class))).thenReturn(new Follower());
+        when(weChatRepository.loadOf(any(WeChatId.class))).thenReturn(weChat);
+        when(applyRepository.findAllByAuditIdIsNotNull(anyInt(),anyInt())).thenReturn(applies1).thenReturn(null);
+        when(applyRepository.findAllByAuditIdIsNull(anyInt(),anyInt())).thenReturn(applies2).thenReturn(null);
+
+        WeChatQueryService service  = getService();
+        List<FollowerData> datas1 = service.getAllFollowers(1, 10, true);
+        List<FollowerData> datas2 = service.getAllFollowers(1, 10, false);
+        assertEquals(10,datas1.size());
+        assertEquals(10,datas2.size());
+
+        datas1 = service.getAllFollowers(1, 10, true);
+        datas2 = service.getAllFollowers(1, 10, false);
+        assertEquals(0,datas1.size());
+        assertEquals(0,datas2.size());
+
     }
 
 }

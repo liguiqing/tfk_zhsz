@@ -4,8 +4,12 @@ import com.zhezhu.access.domain.model.wechat.Follower;
 import com.zhezhu.access.domain.model.wechat.WeChat;
 import com.zhezhu.access.domain.model.wechat.WeChatCategory;
 import com.zhezhu.access.domain.model.wechat.WeChatRepository;
+import com.zhezhu.access.domain.model.wechat.audit.FollowApply;
+import com.zhezhu.access.domain.model.wechat.audit.FollowApplyRepository;
+import com.zhezhu.access.domain.model.wechat.audit.FollowAuditRepository;
 import com.zhezhu.commons.util.CollectionsUtilWrapper;
 import com.zhezhu.share.domain.id.school.ClazzId;
+import com.zhezhu.share.domain.id.wechat.WeChatId;
 import com.zhezhu.share.domain.person.Gender;
 import com.zhezhu.share.infrastructure.school.SchoolService;
 import com.zhezhu.share.infrastructure.school.StudentData;
@@ -36,13 +40,21 @@ public class WeChatQueryService {
 
     private SchoolService schoolService;
 
+    private FollowApplyRepository applyRepository;
+
+    private FollowAuditRepository auditRepository;
+
     @Autowired
     public WeChatQueryService(WeChatRepository weChatRepository,
                               FollowerTransferHelper followerTransferHelper,
-                              SchoolService schoolService) {
+                              SchoolService schoolService,
+                              FollowApplyRepository applyRepository,
+                              FollowAuditRepository auditRepository) {
         this.weChatRepository = weChatRepository;
         this.followerTransferHelper = followerTransferHelper;
         this.schoolService = schoolService;
+        this.applyRepository = applyRepository;
+        this.auditRepository = auditRepository;
     }
 
     /**
@@ -142,18 +154,24 @@ public class WeChatQueryService {
      * @return
      */
     public List<FollowerData> getAllFollowers(int page, int size,boolean isAudited) {
-        List<WeChat> weChats = null;
-        if(!isAudited){
-            weChats = weChatRepository.findAllByFollowersIsNotAudited(page,size);
-        }else {
-            weChats = weChatRepository.findAllByFollowersIsAudited(page,size);
+        List<FollowApply> applies = null;
+        if(isAudited){
+            applies = applyRepository.findAllByAuditIdIsNotNull(page, size);
+        }else{
+            applies = applyRepository.findAllByAuditIdIsNull(page, size);
         }
-        if(CollectionsUtilWrapper.isNullOrEmpty(weChats))
+
+        if(CollectionsUtilWrapper.isNullOrEmpty(applies))
             return new ArrayList<>();
 
-        return weChats.stream().map(weChat ->weChat.getFollowers().stream()
-                .map(follower -> followerTransferHelper.transTo(follower, WeChatCategory.Student)).collect(Collectors.toList()))
-                .flatMap(List::stream).collect(Collectors.toList());
-
+        return applies.stream().map(apply -> {
+            WeChat weChat = weChatRepository.loadOf(new WeChatId(apply.getApplierWeChatOpenId()));
+            Follower follower = weChat.followerOf(apply.getFollowerId());
+            FollowerData data =  followerTransferHelper.transTo(follower, WeChatCategory.Student);
+            data.setApplyId(apply.getApplyId().id());
+            data.setCause(apply.getCause());
+            data.setStudentNo(apply.getApplyCredential());
+            return data;
+        }).collect(Collectors.toList());
     }
 }

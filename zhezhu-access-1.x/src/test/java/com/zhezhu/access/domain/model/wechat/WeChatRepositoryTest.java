@@ -19,12 +19,14 @@ import org.springframework.test.context.junit4.AbstractTransactionalJUnit4Spring
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Copyright (c) 2016,$today.year, Liguiqing
@@ -111,7 +113,47 @@ public class WeChatRepositoryTest extends AbstractTransactionalJUnit4SpringConte
         weChat_ = weChatRepository.loadOf(weChatId);
         assertNull(weChat_);
 
-        weChatRepository.findAllByFollowersIsAudited(1, 10);
-        weChatRepository.findAllByFollowersIsNotAudited(1, 10);
+        for(int k=1;k<=13;k++){
+            personId = new PersonId();
+            weChatId = new WeChatId();
+            weChatOpenId = UUID.randomUUID().toString();
+            weChat = WeChat.builder()
+                    .personId(personId)
+                    .category(WeChatCategory.Parent)
+                    .name("name"+1)
+                    .phone((12345689788l+k)+"")
+                    .weChatId(weChatId)
+                    .weChatOpenId(weChatOpenId)
+                    .bindDate(DateUtilWrapper.now()).build();
+            WeChatFollowerId fid1 = new WeChatFollowerId();
+            WeChatFollowerId fid2 = new WeChatFollowerId();
+            PersonId pid1 = new PersonId();
+            PersonId pid2 = new PersonId();
+            weChat.addFollower(Follower.builder().followerId(fid1).followDate(followDate).weChatId(weChatId).personId(pid1).build());
+
+            if(k%5 == 0)
+                weChat.addFollower(Follower.builder().followerId(fid2).followDate(followDate).weChatId(weChatId).personId(pid2).build());
+
+            if(k%2 == 0){
+                audit = FollowAudit.builder()
+                        .auditId(auditId)
+                        .auditDate(DateUtilWrapper.now())
+                        .ok(true)
+                        .description("Desc")
+                        .auditor(Auditor.builder().schoolId(schoolId).clazzId(clazzId).name("Auditor").auditorId(new PersonId()).role(AuditRole.Teacher).build())
+                        .applier(Applier.builder().name("Applier").weChatId(weChatId).weChatOpenId(weChatOpenId).build())
+                        .defendant(Defendant.builder().defendantId(pid1).name("Name").schoolId(schoolId).role(AuditRole.Student).clazzId(clazzId).build())
+                        .build();
+                weChat.followerAudited(audit);
+            }
+            weChatRepository.save(weChat);
+        }
+
+        List<WeChat> weChats1 = weChatRepository.findAllByFollowersIsAudited(1, 10);
+        List<WeChat> weChats2 = weChatRepository.findAllByFollowersIsNotAudited(1, 10);
+        assertEquals(6,weChats1.size());
+        assertEquals(10,weChats2.size());
+        weChats2 = weChatRepository.findAllByFollowersIsNotAudited(1, 15);
+        assertTrue(weChats2.size()>=10);
     }
 }

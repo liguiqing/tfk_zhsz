@@ -4,6 +4,7 @@ import com.google.common.collect.Sets;
 import com.zhezhu.access.domain.model.wechat.audit.FollowAudit;
 import com.zhezhu.commons.AssertionConcerns;
 import com.zhezhu.commons.domain.Entity;
+import com.zhezhu.commons.util.CollectionsUtilWrapper;
 import com.zhezhu.commons.util.DateUtilWrapper;
 import com.zhezhu.share.domain.id.PersonId;
 import com.zhezhu.share.domain.id.wechat.WeChatFollowerId;
@@ -48,7 +49,6 @@ public class WeChat extends Entity {
 
         this.followers.add(follower);
         return this;
-
     }
 
     public WeChat addFollower(PersonId followerId,Date followDateDate){
@@ -63,6 +63,17 @@ public class WeChat extends Entity {
                 .build();
         this.addFollower(follower);
         return this;
+    }
+
+    public Follower followerOf(PersonId personId){
+        if(CollectionsUtilWrapper.isNotNullAndNotEmpty(this.followers)){
+            for(Follower follower:this.followers){
+                if(follower.getPersonId().equals(personId))
+                    follower.weChatOf(this);
+                    return follower;
+            }
+        }
+        return null;
     }
 
     public int followerSize(){

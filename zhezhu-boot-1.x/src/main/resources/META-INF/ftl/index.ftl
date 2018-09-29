@@ -8,22 +8,42 @@
     <link rel="stylesheet" href="https://www.tfkclass.com/wxweb/css/login.css">
 </head>
 <body>
+
 <div class="container">
     <div class="body">
         <div class="panel">
+            <div class="login-type">
+                <i class=""></i>
+                <div class="login-tip">
+                    <div class="poptip">
+                        <div class="poptip-arrow"><em></em><span></span></div>
+                        <div class="poptip-content">扫码登录</div>
+                    </div>
+                </div>
+            </div>
             <div class="title">
                 <img src="https://www.tfkclass.com/wxweb/img/logo.png" alt="logo">
             </div>
-            <div class="from">
-                <div>
-                    <label for="username"><i class="icon-user"></i></label><input type="text" id="username" placeholder="用户名" name="username">
-                </div>
-                <div>
-                    <label for="passwd"><i class="icon-passwd"></i></label><input type="password" id="passwd" placeholder="密码" name="password">
+            <div class="dis_none" id="scan-type">
+                <div class="scan-body">
+                    <div>
+                        <img src="https://www.tfkclass.com/wxweb/img/url_ysyp.png" alt="url">
+                        <p><i class="icon-scan2"></i>扫一扫登录</p>
+                    </div>
                 </div>
             </div>
-            <div class="t_c"><a href="#" class="Btn1">登录</a></div>
+            <form id="passwd-type"  method="post" action="${request.contextPath}/login">
+                <div class="from">
+                    <div>
+                        <label for="username"><i class="icon-user"></i></label><input type="text" name="username" id="username" name="username" placeholder="用户名">
+                    </div>
+                    <div>
+                        <label for="passwd"><i class="icon-passwd"></i></label><input type="password" name="password" id="passwd" name="password" placeholder="密码">
+                    </div>
+                </div>
+                <div class="t_c"><button class="Btn1" type="submit">登录</button></div>
 
+            </form>
         </div>
     </div>
     <div class="footer">

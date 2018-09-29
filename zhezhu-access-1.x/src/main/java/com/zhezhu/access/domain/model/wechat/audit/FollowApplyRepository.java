@@ -6,7 +6,10 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * @author Liguiqing
@@ -31,5 +34,11 @@ public interface FollowApplyRepository extends EntityRepository<FollowApply,Foll
     @Modifying
     @Query(value = "DELETE from FollowApply where applyId=?1")
     void delete(FollowApplyId applyId);
+
+    @Query(value = "select a.* From ac_followapply a where a.auditId  is null LIMIT :page,:size",nativeQuery = true)
+    List<FollowApply> findAllByAuditIdIsNull(@Param("page")int page, @Param("size")int size);
+
+    @Query(value = "select a.* From ac_followapply a where a.auditId  is not null LIMIT :page,:size",nativeQuery = true)
+    List<FollowApply> findAllByAuditIdIsNotNull(@Param("page")int page, @Param("size")int size);
 
 }

@@ -1,12 +1,14 @@
 package com.zhezhu.access.application.wechat;
 
 import com.zhezhu.access.domain.model.wechat.Follower;
+import com.zhezhu.access.domain.model.wechat.WeChat;
 import com.zhezhu.access.domain.model.wechat.WeChatCategory;
 import com.zhezhu.share.domain.id.PersonId;
 import com.zhezhu.share.domain.id.school.ClazzId;
 import com.zhezhu.share.domain.id.school.SchoolId;
 import com.zhezhu.share.domain.person.Gender;
 import com.zhezhu.share.infrastructure.school.ClazzData;
+import com.zhezhu.share.infrastructure.school.SchoolData;
 import com.zhezhu.share.infrastructure.school.SchoolService;
 import com.zhezhu.share.infrastructure.school.StudentData;
 import org.apache.commons.lang3.reflect.FieldUtils;
@@ -43,6 +45,7 @@ public class StudentFollowerTransferTest {
         StudentFollowerTransfer transfer = getService();
         List<ClazzData> clazzs = mock(List.class);
         ClazzData clazz = ClazzData.builder().clazzId(new ClazzId().id()).build();
+        SchoolData school = SchoolData.builder().schoolId(new SchoolId().id()).build();
         when(clazzs.get(0)).thenReturn(clazz).thenReturn(clazz);
         when(clazzs.size()).thenReturn(1);
         StudentData student = StudentData.builder()
@@ -54,9 +57,14 @@ public class StudentFollowerTransferTest {
                 .build();
 
         when(schoolService.getStudentBy(any(PersonId.class))).thenReturn(student);
-
+        when(schoolService.getSchool(any(SchoolId.class))).thenReturn(school);
+        when(schoolService.getClazz(any(ClazzId.class))).thenReturn(clazz);
         Follower follower = mock(Follower.class);
+        WeChat weChat = mock(WeChat.class);
         when(follower.getPersonId()).thenReturn(new PersonId(student.getPersonId()));
+        when(follower.getWeChat()).thenReturn(weChat);
+        when(weChat.getPersonId()).thenReturn(new PersonId());
+
         FollowerData data = transfer.trans(follower, WeChatCategory.Parent);
         assertNull(data);
         data = transfer.trans(follower, WeChatCategory.Parent);

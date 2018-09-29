@@ -42,6 +42,8 @@ public class FollowApply extends Entity {
 
     private PersonId followerId;
 
+    private String applyCredential; //申请的凭证,如学号,电话号码,身份证号等
+
     private String cause;
 
     public boolean isAudited(){

@@ -16,7 +16,7 @@
             </div>
             <ul>
                 <li><a href="#" class="active">审核班级申请</a></li>
-                <li><a href="#">审核学生申请</a></li>
+                <li><a href="${request.contextPath}/wechat/query/all/followers/1/100">审核学生申请</a></li>
             </ul>
         </div>
     </header>

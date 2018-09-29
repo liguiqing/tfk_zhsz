@@ -338,6 +338,7 @@ CREATE TABLE `ac_FollowApply` (
   `followerSchoolId` varchar(36) NOT NULL COMMENT '关注者所在学校唯一标识',
   `followerClazzId` varchar(36) NOT NULL COMMENT '关注者所在班级唯一标识',
   `applyDate` TIMESTAMP DEFAULT now() COMMENT '申请时间',
+  `applyCredential` varchar(32)  COMMENT '申请的凭证,如学号,电话号码,身份证号等',
   `cause` varchar(128)  COMMENT '申请原因',
   PRIMARY KEY (`id`),
   KEY `x_ac_FollowApply_applyId` (`applyId`),

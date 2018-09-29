@@ -20,11 +20,25 @@ public class FollowerData {
 
     private String schoolId;
 
+    private String schoolName;
+
+    private String gradeName;
+
     private String clazzId;
+
+    private String clazzName;
 
     private String personId;
 
     private String gender;
 
     private String cause;
+
+    private String applierName;
+
+    private String applierPhone;
+
+    private String applierId;
+
+    private String applyId;
 }
