@@ -164,14 +164,6 @@ public class WeChatQueryService {
         if(CollectionsUtilWrapper.isNullOrEmpty(applies))
             return new ArrayList<>();
 
-        return applies.stream().map(apply -> {
-            WeChat weChat = weChatRepository.loadOf(new WeChatId(apply.getApplierWeChatOpenId()));
-            Follower follower = weChat.followerOf(apply.getFollowerId());
-            FollowerData data =  followerTransferHelper.transTo(follower, WeChatCategory.Student);
-            data.setApplyId(apply.getApplyId().id());
-            data.setCause(apply.getCause());
-            data.setStudentNo(apply.getApplyCredential());
-            return data;
-        }).collect(Collectors.toList());
+        return applies.stream().map(apply -> followerTransferHelper.transTo(apply, WeChatCategory.Student)).collect(Collectors.toList());
     }
 }

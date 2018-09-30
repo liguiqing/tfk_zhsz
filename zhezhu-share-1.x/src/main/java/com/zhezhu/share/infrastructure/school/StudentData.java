@@ -33,6 +33,16 @@ public class StudentData {
 
     private List<CredentialsData> credentials;
 
+    public boolean hasCredentials(String value){
+        if (CollectionsUtilWrapper.isNullOrEmpty(this.credentials))
+            return false;
+        for(CredentialsData c:credentials){
+            if(c.getValue().equals(value))
+                return true;
+        }
+        return false;
+    }
+
     public int getGradeLevel(){
         if(CollectionsUtilWrapper.isNotNullAndNotEmpty(this.clazzes)){
             return clazzes.get(0).getGradeLevel();
@@ -72,6 +82,14 @@ public class StudentData {
             }
         }
         return false;
+    }
+
+    public boolean sameManagedClazzOf(String clazzId){
+        String mClazzId = this.getManagedClazzId();
+        if(mClazzId.length() < 1)
+            return false;
+
+        return mClazzId.equalsIgnoreCase(clazzId);
     }
 
 }

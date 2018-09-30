@@ -41,4 +41,6 @@ public class FollowerData {
     private String applierId;
 
     private String applyId;
+
+    private boolean canBeOk;
 }

@@ -2,6 +2,7 @@ package com.zhezhu.access.application.school;
 
 import com.zhezhu.access.domain.model.school.ClazzFollowAudit;
 import com.zhezhu.commons.util.DateUtilWrapper;
+import com.zhezhu.share.domain.id.PersonId;
 import com.zhezhu.share.domain.id.access.ClazzFollowApplyId;
 import com.zhezhu.share.domain.id.access.ClazzFollowAuditId;
 import lombok.*;
@@ -29,6 +30,7 @@ public class ClazzFollowAuditCommand {
     public ClazzFollowAudit toAudit(ClazzFollowAuditId auditId){
         return ClazzFollowAudit.builder()
                 .auditId(auditId)
+                .auditorId(new PersonId(this.auditorId))
                 .auditDate(DateUtilWrapper.now())
                 .applyId(new ClazzFollowApplyId(applyId))
                 .ok(ok)

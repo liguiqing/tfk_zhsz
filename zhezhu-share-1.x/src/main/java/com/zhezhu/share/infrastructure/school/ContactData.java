@@ -14,8 +14,13 @@ import lombok.ToString;
 @Setter
 @ToString
 public class ContactData {
+    private String category;
+
     private String name;
 
     private String value;
 
+    public boolean categoryOf(String category) {
+        return this.category.equalsIgnoreCase(category);
+    }
 }

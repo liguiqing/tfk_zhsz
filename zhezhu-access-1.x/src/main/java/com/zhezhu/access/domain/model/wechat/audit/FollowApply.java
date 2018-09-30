@@ -64,4 +64,8 @@ public class FollowApply extends Entity {
         return false;
     }
 
+    public void updateFollowerId(PersonId personId){
+        this.followerId = personId;
+    }
+
 }

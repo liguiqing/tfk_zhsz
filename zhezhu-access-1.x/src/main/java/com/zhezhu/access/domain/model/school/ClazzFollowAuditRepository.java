@@ -20,7 +20,7 @@ public interface ClazzFollowAuditRepository extends EntityRepository<ClazzFollow
     }
 
     @Cacheable(value = "accessCache",key = "#p0.id",unless = "#result == null")
-    @Query("From ClazzFollowAudit where applyId=?1")
+    @Query("From ClazzFollowAudit where auditId=?1")
     ClazzFollowAudit loadOf(ClazzFollowAuditId auditId);
 
     @Override
@@ -29,6 +29,6 @@ public interface ClazzFollowAuditRepository extends EntityRepository<ClazzFollow
 
     @CacheEvict(value = "accessCache",key="#p0.id")
     @Modifying
-    @Query(value = "DELETE from FollowApply where applyId=?1")
+    @Query(value = "DELETE from ClazzFollowAudit where auditId=?1")
     void delete(ClazzFollowAuditId auditId);
 }

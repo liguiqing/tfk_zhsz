@@ -24,9 +24,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * Copyright (c) 2016,$today.year, Liguiqing
@@ -112,7 +110,7 @@ public class WeChatRepositoryTest extends AbstractTransactionalJUnit4SpringConte
         weChatRepository.delete(weChatId);
         weChat_ = weChatRepository.loadOf(weChatId);
         assertNull(weChat_);
-
+        PersonId pid = null;
         for(int k=1;k<=13;k++){
             personId = new PersonId();
             weChatId = new WeChatId();
@@ -131,9 +129,10 @@ public class WeChatRepositoryTest extends AbstractTransactionalJUnit4SpringConte
             PersonId pid2 = new PersonId();
             weChat.addFollower(Follower.builder().followerId(fid1).followDate(followDate).weChatId(weChatId).personId(pid1).build());
 
-            if(k%5 == 0)
+            if(k%5 == 0) {
                 weChat.addFollower(Follower.builder().followerId(fid2).followDate(followDate).weChatId(weChatId).personId(pid2).build());
-
+                pid = personId;
+            }
             if(k%2 == 0){
                 audit = FollowAudit.builder()
                         .auditId(auditId)
@@ -155,5 +154,8 @@ public class WeChatRepositoryTest extends AbstractTransactionalJUnit4SpringConte
         assertEquals(10,weChats2.size());
         weChats2 = weChatRepository.findAllByFollowersIsNotAudited(1, 15);
         assertTrue(weChats2.size()>=10);
+
+        WeChat weChat1 = weChatRepository.findByPersonIdAndCategoryEquals(pid, WeChatCategory.Parent);
+        assertNotNull(weChat1);
     }
 }

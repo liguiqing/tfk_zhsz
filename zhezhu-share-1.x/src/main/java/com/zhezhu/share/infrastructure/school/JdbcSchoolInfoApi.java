@@ -175,6 +175,7 @@ public class JdbcSchoolInfoApi implements SchoolInfoApi {
                             .personId(rs.getString("personId"))
                             .teacherId(rs.getString("teacherId"))
                             .schoolId(clazz.getSchoolId())
+                            .contacts(getTeacherContacts(rs.getString("personId")))
                             .build().asMaster(clazz),
                 new Object[]{clazz.getClazzId(),year.getYearStarts(),year.getYearEnds()});
 
@@ -184,6 +185,7 @@ public class JdbcSchoolInfoApi implements SchoolInfoApi {
                                 .personId(rs.getString("personId"))
                                 .teacherId(rs.getString("teacherId"))
                                 .schoolId(clazz.getSchoolId())
+                                .contacts(getTeacherContacts(rs.getString("personId")))
                                 .build().asTeacher(clazz,rs.getString("courseName")),
                 new Object[]{clazz.getClazzId(),year.getYearStarts(),year.getYearEnds()});
 
@@ -273,9 +275,9 @@ public class JdbcSchoolInfoApi implements SchoolInfoApi {
     }
 
     private List<ContactData> getStudentContacts(String personId){
-        String sql = "select `name`,info from sm_student_contact where personId=? ";
+        String sql = "select `category`,`name`,info from sm_student_contact where personId=? ";
         return jdbc.query(sql,(rs,rowNum) ->
-                        new ContactData(rs.getString("name"),rs.getString("info"))
+                        new ContactData(rs.getString("category"),rs.getString("name"),rs.getString("info"))
                 ,personId);
     }
 
@@ -303,9 +305,9 @@ public class JdbcSchoolInfoApi implements SchoolInfoApi {
                 ,teacherId);
     }
     private List<ContactData> getTeacherContacts(String personId){
-        String sql = "select `name`,info from sm_teacher_contact where personId=? ";
+        String sql = "select `category`,`name`,info from sm_teacher_contact where personId=? ";
         return jdbc.query(sql,(rs,rowNum) ->
-                        new ContactData(rs.getString("name"),rs.getString("info"))
+                        new ContactData(rs.getString("category"),rs.getString("name"),rs.getString("info"))
                 ,personId);
     }
 

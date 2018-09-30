@@ -188,16 +188,13 @@ public class WeChatQueryServiceTest {
         FollowerData data9 = mock(FollowerData.class);
         FollowerData data10 = mock(FollowerData.class);
 
-        when(followerTransferHelper.transTo(any(Follower.class),eq(WeChatCategory.Student)))
+        when(followerTransferHelper.transTo(any(FollowApply.class),eq(WeChatCategory.Student)))
                 .thenReturn(data1).thenReturn(data2)
                 .thenReturn(data3).thenReturn(data4)
                 .thenReturn(data5).thenReturn(data6)
                 .thenReturn(data7).thenReturn(data8)
                 .thenReturn(data9).thenReturn(data10);
 
-        WeChat weChat = mock(WeChat.class);
-        when(weChat.followerOf(any(PersonId.class))).thenReturn(new Follower());
-        when(weChatRepository.loadOf(any(WeChatId.class))).thenReturn(weChat);
         when(applyRepository.findAllByAuditIdIsNotNull(anyInt(),anyInt())).thenReturn(applies1).thenReturn(null);
         when(applyRepository.findAllByAuditIdIsNull(anyInt(),anyInt())).thenReturn(applies2).thenReturn(null);
 

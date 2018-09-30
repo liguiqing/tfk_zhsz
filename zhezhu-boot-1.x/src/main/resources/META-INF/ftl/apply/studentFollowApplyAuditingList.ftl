@@ -29,15 +29,20 @@
                 <div class="item" id="${follower.applyId!""}">
                     <div>
                         <p class="name">${follower.applierName!""}
-                            <small>${follower.schoolName!""}</small>
+                            <small ><i class="icon-phone"></i>${follower.applierPhone!""}</small>
+                            <small >申请</small>
                         </p>
+                        <p class="school">${follower.schoolName!""}</p>
                         <p class="grads">${follower.gradeName!""}<span>${follower.clazzName!""}</span><span>${follower.name!""}</span<span>${follower.studentNo!""}</span</p>
-                        <p class="phone"><i></i>${follower.applierPhone!""}</p>
                     </div>
                     <div class="btn-group">
+                        <#if follower.canBeOk>
                         <a href="#" class="btn_primary" data-ok="true" data-applyId="${follower.applyId!""}"
-                           data-applierId="${follower.applierId!""}">通过</a>
-                        <a href="#" data-ok="false" data-applierId="${follower.applierId!""}">不通过</a>
+                           data-applierId="${follower.applierId!""}" >通过</a>
+                        <#else>
+                        <i class="t_red">学号不匹配</i>
+                        </#if>
+                        <a href="#" data-ok="false" data-applyId="${follower.applyId!""}" data-applierId="${follower.applierId!""}">不通过</a>
                     </div>
                 </div>
                 </#list>

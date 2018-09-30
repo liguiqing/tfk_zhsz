@@ -32,8 +32,6 @@ public class Follower extends IdentifiedValueObject {
 
     private FollowerAudit audited;
 
-    private WeChat weChat;
-
     public void audited(PersonId auditorId,String auditorName,Date auditDate,AuditResult result){
         if(auditDate == null)
             auditDate = DateUtilWrapper.now();
@@ -77,7 +75,4 @@ public class Follower extends IdentifiedValueObject {
         return Objects.hashCode(followerId);
     }
 
-    protected void weChatOf(WeChat weChat){
-        this.weChat = weChat;
-    }
 }

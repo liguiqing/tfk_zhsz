@@ -29,15 +29,22 @@
                 <div class="item" id="${clazz.applyId!""}">
                     <div>
                         <p class="name">${clazz.applierName!""}
-                            <small>${clazz.schoolName!""}</small>
+                            <small ><i class="icon-phone"></i>${clazz.applierPhone!""}</small>
+                            <small >申请</small>
                         </p>
+                        <p class="school">${clazz.schoolName!""}</p>
                         <p class="grads">${clazz.gradeName!""}<span>${clazz.clazzName!""}</span></p>
-                        <p class="phone"><i></i>${clazz.applierPhone!""}</p>
                     </div>
                     <div class="btn-group">
+                        <#if clazz.canBeOk>
                         <a href="#" class="btn_primary" data-ok="true" data-applyId="${clazz.applyId!""}"
                            data-applierId="${clazz.applierId!""}">通过</a>
-                        <a href="#" data-ok="false" data-applierId="${clazz.applierId!""}">不通过</a>
+                        <#else>
+                        <i class="t_red">所在班级查无此申请老师</i>
+                        </#if>
+
+
+                        <a href="#" data-ok="false" data-applyId="${clazz.applyId!""}" data-applierId="${clazz.applierId!""}">不通过</a>
                     </div>
                 </div>
                 </#list>

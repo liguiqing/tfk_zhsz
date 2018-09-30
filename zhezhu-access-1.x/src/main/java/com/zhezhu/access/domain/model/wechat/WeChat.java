@@ -69,7 +69,6 @@ public class WeChat extends Entity {
         if(CollectionsUtilWrapper.isNotNullAndNotEmpty(this.followers)){
             for(Follower follower:this.followers){
                 if(follower.getPersonId().equals(personId))
-                    follower.weChatOf(this);
                     return follower;
             }
         }
@@ -91,6 +90,10 @@ public class WeChat extends Entity {
                 follower.audited(audit.getAuditor().getAuditorId(),audit.getAuditor().getName(),audit.getAuditDate(),result);
             }
         });
+    }
+
+    public void upatePersonId(PersonId personId){
+        this.personId = personId;
     }
 
     public WeChat cloneTo(WeChatCategory other) {

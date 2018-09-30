@@ -110,7 +110,7 @@ public class SchoolApplyAndAuditControllerTest extends StandaloneControllerTest 
                 .andExpect(jsonPath("$.status.success", is(Boolean.TRUE)))
                 .andExpect(jsonPath("$.clazzs[0].clazzName", equalTo("className0")))
                 .andExpect(jsonPath("$.clazzs[4].clazzName", equalTo("className4")))
-                .andExpect(view().name("/apply/clazzFollowApplyAuditingList"));
+                .andExpect(view().name("/apply/clazzFollowApplyPersonalAuditingList"));
     }
 
     @Test

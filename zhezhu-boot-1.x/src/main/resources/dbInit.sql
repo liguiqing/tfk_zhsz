@@ -278,6 +278,7 @@ CREATE TABLE `ac_User` (
   KEY `x_ac_User_userId` (`userId`)
 )ENGINE=INNODB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='用户信息';
 INSERT INTO `ac_User`(`userId`,`userName`,`pwd`,`createTime`,`ok`) VALUES('USR997afbb4014a4fdc90dbd695416c8b88','admin','17a3c6e3e74fa24463820725a42b8bfc',now(),1);
+INSERT INTO `ac_userdetail`(userId,personId,realName,email,mobile) VALUES('USR997afbb4014a4fdc90dbd695416c8b88','PER92d0e551fc1b4da08e291af1c91c815b','admin','liguiking@gmail.com','');
 
 DROP TABLE IF EXISTS `ac_UserDetail`;
 CREATE TABLE `ac_UserDetail` (

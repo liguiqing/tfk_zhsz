@@ -61,4 +61,7 @@ public class ClazzFollowApply extends Entity {
             this.auditId = null;
     }
 
+    public void updateApplierId(PersonId personId){
+        this.applierId = personId;
+    }
 }

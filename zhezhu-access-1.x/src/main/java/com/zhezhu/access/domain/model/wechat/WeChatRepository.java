@@ -1,6 +1,7 @@
 package com.zhezhu.access.domain.model.wechat;
 
 import com.zhezhu.commons.domain.EntityRepository;
+import com.zhezhu.share.domain.id.PersonId;
 import com.zhezhu.share.domain.id.wechat.WeChatId;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -40,6 +41,7 @@ public interface WeChatRepository extends EntityRepository<WeChat,WeChatId> {
     @Query("From WeChat where weChatOpenId=?1 and category=?2 and removed=0")
     WeChat findByWeChatOpenIdAndCategoryEquals(String weChatOpenId,WeChatCategory category);
 
+    WeChat findByPersonIdAndCategoryEquals(PersonId personId,WeChatCategory category);
 
     @Query("From WeChat where weChatOpenId=?1 and removed=0")
     List<WeChat> findAllByWeChatOpenId(String weChatOpenId);

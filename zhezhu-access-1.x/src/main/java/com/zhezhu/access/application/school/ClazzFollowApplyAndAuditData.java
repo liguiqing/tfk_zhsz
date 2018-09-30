@@ -54,4 +54,7 @@ public class ClazzFollowApplyAndAuditData {
     private String auditorName;
 
     private boolean ok;
+
+    private boolean canBeOk;
+
 }

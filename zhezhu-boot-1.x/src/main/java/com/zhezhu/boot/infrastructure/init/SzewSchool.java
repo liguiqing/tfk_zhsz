@@ -71,11 +71,11 @@ public class SzewSchool extends AbstractSchoolData {
 
     private void createTeachers(ClazzId[] clazzIds){
         StudyYear year = StudyYear.now();
-        super.createTeachers("姜典来",new Contacts[]{new Contacts("Phone","1390001234")},
+        super.createTeachers("姜典来",new Contacts[]{new Contacts("Phone","13900012341")},
                 year,new CourseData[]{new CourseData("语文",subjectIds[0].id())},clazzIds,new ClazzId[]{});
-        super.createTeachers("柯海清",new Contacts[]{new Contacts("Phone","1390001235")},
+        super.createTeachers("柯海清",new Contacts[]{new Contacts("Phone","13900012351")},
                 year,new CourseData[]{new CourseData("数学",subjectIds[1].id())},clazzIds,clazzIds);
-        super.createTeachers("徐泓静",new Contacts[]{new Contacts("Phone","1390001236")},
+        super.createTeachers("徐泓静",new Contacts[]{new Contacts("Phone","13900012361")},
                 year,new CourseData[]{new CourseData("英语",subjectIds[2].id())},clazzIds,new ClazzId[]{});
     }
 }

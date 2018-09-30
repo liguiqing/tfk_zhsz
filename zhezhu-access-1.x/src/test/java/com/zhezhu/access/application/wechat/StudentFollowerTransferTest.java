@@ -3,15 +3,18 @@ package com.zhezhu.access.application.wechat;
 import com.zhezhu.access.domain.model.wechat.Follower;
 import com.zhezhu.access.domain.model.wechat.WeChat;
 import com.zhezhu.access.domain.model.wechat.WeChatCategory;
+import com.zhezhu.access.domain.model.wechat.WeChatRepository;
+import com.zhezhu.access.domain.model.wechat.audit.FollowApply;
 import com.zhezhu.share.domain.id.PersonId;
 import com.zhezhu.share.domain.id.school.ClazzId;
 import com.zhezhu.share.domain.id.school.SchoolId;
+import com.zhezhu.share.domain.id.wechat.FollowApplyId;
+import com.zhezhu.share.domain.id.wechat.WeChatId;
 import com.zhezhu.share.domain.person.Gender;
 import com.zhezhu.share.infrastructure.school.ClazzData;
 import com.zhezhu.share.infrastructure.school.SchoolData;
 import com.zhezhu.share.infrastructure.school.SchoolService;
 import com.zhezhu.share.infrastructure.school.StudentData;
-import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -30,13 +33,16 @@ public class StudentFollowerTransferTest {
     @Mock
     private SchoolService schoolService;
 
+    @Mock
+    private WeChatRepository weChatRepository;
+
     @Before
     public void before(){
         MockitoAnnotations.initMocks(this);
     }
 
     private StudentFollowerTransfer getService(){
-        StudentFollowerTransfer transfer = new StudentFollowerTransfer(schoolService);
+        StudentFollowerTransfer transfer = new StudentFollowerTransfer(schoolService,weChatRepository);
         return spy(transfer);
     }
 
@@ -61,8 +67,9 @@ public class StudentFollowerTransferTest {
         when(schoolService.getClazz(any(ClazzId.class))).thenReturn(clazz);
         Follower follower = mock(Follower.class);
         WeChat weChat = mock(WeChat.class);
+        when(weChatRepository.loadOf(any(WeChatId.class))).thenReturn(weChat);
         when(follower.getPersonId()).thenReturn(new PersonId(student.getPersonId()));
-        when(follower.getWeChat()).thenReturn(weChat);
+        when(follower.getWeChatId()).thenReturn(new WeChatId());
         when(weChat.getPersonId()).thenReturn(new PersonId());
 
         FollowerData data = transfer.trans(follower, WeChatCategory.Parent);
@@ -76,5 +83,16 @@ public class StudentFollowerTransferTest {
         assertEquals(student.getClazzes().get(0).getClazzId(),data.getClazzId());
         assertEquals(student.getGender(),data.getGender());
         assertEquals(student.getPersonId(),data.getPersonId());
+
+        FollowApply apply = mock(FollowApply.class);
+        when(apply.getApplierWeChatId()).thenReturn(new WeChatId());
+        when(apply.getApplyId()).thenReturn(new FollowApplyId());
+        data = transfer.trans(apply, WeChatCategory.Parent);
+        assertNull(data);
+        data = transfer.trans(follower, WeChatCategory.Parent);
+        assertNull(data);
+        data = transfer.trans(follower, WeChatCategory.Student);
+        assertNotNull(data);
+
     }
 }

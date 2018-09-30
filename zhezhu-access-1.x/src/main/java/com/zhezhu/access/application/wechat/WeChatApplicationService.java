@@ -8,6 +8,7 @@ import com.zhezhu.access.domain.model.wechat.message.XmlMessage;
 import com.zhezhu.access.domain.model.wechat.message.XmlOutMessage;
 import com.zhezhu.access.infrastructure.WeChatMessageService;
 import com.zhezhu.commons.AssertionConcerns;
+import com.zhezhu.commons.util.CollectionsUtilWrapper;
 import com.zhezhu.commons.util.DateUtilWrapper;
 import com.zhezhu.share.domain.id.PersonId;
 import com.zhezhu.share.domain.id.school.ClazzId;
@@ -15,6 +16,8 @@ import com.zhezhu.share.domain.id.school.SchoolId;
 import com.zhezhu.share.domain.id.wechat.FollowApplyId;
 import com.zhezhu.share.domain.id.wechat.FollowAuditId;
 import com.zhezhu.share.domain.id.wechat.WeChatId;
+import com.zhezhu.share.infrastructure.school.SchoolService;
+import com.zhezhu.share.infrastructure.school.StudentData;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -47,11 +50,14 @@ public class WeChatApplicationService {
 
     private WeChatMessageService messageService;
 
+    private SchoolService schoolService;
+
     @Autowired
     public WeChatApplicationService(MessageHandler messageHandler, WeChatConfig weChatConfig,
                                     WebAccessTokenFactory webAccessTokenFactory, WeChatRepository weChatRepository,
                                     FollowApplyRepository applyRepository, FollowAuditRepository auditRepository,
-                                    ApplyAuditService applyAuditService, WeChatMessageService messageService) {
+                                    ApplyAuditService applyAuditService, WeChatMessageService messageService,
+                                    SchoolService schoolService) {
         this.messageHandler = messageHandler;
         this.weChatConfig = weChatConfig;
         this.webAccessTokenFactory = webAccessTokenFactory;
@@ -60,6 +66,7 @@ public class WeChatApplicationService {
         this.auditRepository = auditRepository;
         this.applyAuditService = applyAuditService;
         this.messageService = messageService;
+        this.schoolService = schoolService;
     }
 
     /**
@@ -90,7 +97,7 @@ public class WeChatApplicationService {
     }
 
     /**
-     * 公众号/小程序信息绑定
+     * 公众号/小程序用户绑定
      *
      * @param command {@link BindCommand}
      * @return {@link WeChatId}
@@ -109,6 +116,11 @@ public class WeChatApplicationService {
         if (weChat != null) {
             return weChat.getWeChatId().id();
         }
+        PersonId personId = new PersonId();
+        List<WeChat> weChats = weChatRepository.findAllByWeChatOpenId(openId);
+        if(CollectionsUtilWrapper.isNotNullAndNotEmpty(weChats)){
+            personId = weChats.get(0).getPersonId();
+        }
         WeChatId weChatId = weChatRepository.nextIdentity();
         weChat = WeChat.builder()
                 .weChatId(weChatId)
@@ -116,7 +128,7 @@ public class WeChatApplicationService {
                 .weChatOpenId(openId)
                 .phone(command.getPhone())
                 .name(command.getName())
-                .personId(new PersonId())
+                .personId(personId)
                 .build();
         weChatRepository.save(weChat);
         return weChatId.id();
@@ -229,6 +241,16 @@ public class WeChatApplicationService {
         FollowApply apply = applyRepository.loadOf(new FollowApplyId(command.getApplyId()));
         if (apply == null || apply.isAudited())
             return "";
+
+        StudentData student = schoolService.getStudentBy(apply.getFollowerId());
+        if(student == null)
+            return "";
+
+        if(!student.sameManagedClazzOf(apply.getFollowerClazzId().id())){
+            return "";
+        }
+
+        apply.updateFollowerId(new PersonId(student.getPersonId()));
 
         FollowAudit audit = applyAuditService.auditFollowStudent(new PersonId(command.getAuditorId()),
                 apply, command.isOk(), command.getDescription());

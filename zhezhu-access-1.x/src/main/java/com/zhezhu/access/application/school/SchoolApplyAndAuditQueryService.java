@@ -6,11 +6,13 @@ import com.zhezhu.access.domain.model.school.ClazzFollowAudit;
 import com.zhezhu.access.domain.model.school.ClazzFollowAuditRepository;
 import com.zhezhu.commons.util.CollectionsUtilWrapper;
 import com.zhezhu.share.domain.id.PersonId;
+import com.zhezhu.share.domain.id.access.ClazzFollowAuditId;
 import com.zhezhu.share.domain.id.school.ClazzId;
 import com.zhezhu.share.domain.id.school.SchoolId;
 import com.zhezhu.share.infrastructure.school.ClazzData;
 import com.zhezhu.share.infrastructure.school.SchoolData;
 import com.zhezhu.share.infrastructure.school.SchoolService;
+import com.zhezhu.share.infrastructure.school.TeacherData;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -93,7 +95,7 @@ public class SchoolApplyAndAuditQueryService {
             String schoolId = clazz.getSchoolId();
             SchoolData school = schoolService.getSchool(new SchoolId(schoolId));
             String schoolName = school.getName();
-
+            boolean canBeOk = applierIsInClazz(apply,apply.getApplyingClazzId());
             ClazzFollowApplyAndAuditData data =  ClazzFollowApplyAndAuditData.builder()
                     .applyId(apply.getApplyId().id())
                     .schoolId(schoolId)
@@ -106,16 +108,32 @@ public class SchoolApplyAndAuditQueryService {
                     .applierId(apply.getApplierId().id())
                     .applyDesc(apply.getCause())
                     .applyDate(apply.getApplyDate())
+                    .canBeOk(canBeOk)
                     .build();
             if(apply.isAudited()){
-                ClazzFollowAudit audit = clazzFollowAuditRepository.loadOf(apply.getAuditId());
+                ClazzFollowAuditId auditId = apply.getAuditId();
+                ClazzFollowAudit audit = clazzFollowAuditRepository.loadOf(auditId);
                 data.setAuditDate(audit.getAuditDate());
                 data.setAuditId(audit.getAuditId().id());
                 data.setAuditCause(audit.getDescription());
-                data.setOk(true);
+                data.setOk(audit.isOk());
             }
             return data;
         }).collect(Collectors.toList());
     }
 
+    private boolean applierIsInClazz(ClazzFollowApply apply,ClazzId clazzId) {
+        List<TeacherData> teachers = schoolService.getClazzTeachers(apply.getApplyingClazzId());
+        if (CollectionsUtilWrapper.isNullOrEmpty(teachers))
+            return false;
+
+        for (TeacherData teacher : teachers) {
+            boolean b1 = teacher.sameNameAs(apply.getApplierName());
+            boolean b2 = teacher.samePhoneAs(apply.getApplierPhone());
+            if(b1 && b2)
+                return true;
+        }
+
+        return false;
+    }
 }

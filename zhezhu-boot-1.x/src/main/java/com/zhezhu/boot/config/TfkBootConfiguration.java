@@ -1,11 +1,9 @@
 package com.zhezhu.boot.config;
 
+import com.zhezhu.commons.security.UserFaceService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.EnableCaching;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.EnableAspectJAutoProxy;
-import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.*;
 
 /**
  * @author Liguiqing
@@ -20,5 +18,8 @@ import org.springframework.context.annotation.PropertySource;
 @PropertySource("classpath:/META-INF/spring/bootConfig.properties")
 public class TfkBootConfiguration {
 
-
+    @Bean
+    public UserFaceService userFaceService(){
+        return new UserFaceService();
+    }
 }

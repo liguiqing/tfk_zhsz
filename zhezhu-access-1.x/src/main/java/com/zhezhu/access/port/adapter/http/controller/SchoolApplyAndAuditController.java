@@ -86,7 +86,7 @@ public class SchoolApplyAndAuditController extends AbstractHttpController {
         logger.debug("URL /apply/auditing/{} Method=GET ",applierId);
 
         List<ClazzFollowApplyAndAuditData> auditingClazzs = applyAndAuditQueryService.getAuditingClazzs(applierId);
-        return newModelAndViewBuilder("/apply/clazzFollowApplyAuditingList").withData("clazzs",auditingClazzs).creat();
+        return newModelAndViewBuilder("/apply/clazzFollowApplyPersonalAuditingList").withData("clazzs",auditingClazzs).creat();
     }
 
     /**

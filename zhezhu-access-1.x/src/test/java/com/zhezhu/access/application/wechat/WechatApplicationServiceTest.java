@@ -12,6 +12,8 @@ import com.zhezhu.share.domain.id.school.SchoolId;
 import com.zhezhu.share.domain.id.wechat.FollowApplyId;
 import com.zhezhu.share.domain.id.wechat.FollowAuditId;
 import com.zhezhu.share.domain.id.wechat.WeChatId;
+import com.zhezhu.share.infrastructure.school.SchoolService;
+import com.zhezhu.share.infrastructure.school.StudentData;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -56,6 +58,9 @@ public class WechatApplicationServiceTest {
     @Mock
     private WeChatMessageService messageService;
 
+    @Mock
+    private SchoolService schoolService;
+
     @Before
     public void before(){
         MockitoAnnotations.initMocks(this);
@@ -65,7 +70,7 @@ public class WechatApplicationServiceTest {
         WeChatApplicationService service = new WeChatApplicationService(messageHandler,weChatConfig,
                 webAccessTokenFactory,weChatRepository,
                 applyRepository,auditRepository,
-                applyAuditService,messageService);
+                applyAuditService,messageService,schoolService);
         return spy(service);
     }
 
@@ -211,9 +216,15 @@ public class WechatApplicationServiceTest {
                 .ok(true)
                 .build();
 
+        StudentData student = mock(StudentData.class);
+        when(student.sameManagedClazzOf(anyString())).thenReturn(true);
+        when(student.getPersonId()).thenReturn(new PersonId().id());
+        when(schoolService.getStudentBy(any(PersonId.class))).thenReturn(student);
+
         FollowApply apply = mock(FollowApply.class);
         when(apply.isAudited()).thenReturn(false).thenReturn(true);
         doNothing().when(apply).audite(any(FollowAudit.class));
+        doNothing().when(apply).updateFollowerId(any(PersonId.class));
         when(applyRepository.loadOf(any(FollowApplyId.class))).thenReturn(null).thenReturn(apply).thenReturn(apply);
 
         FollowAudit audit = mock(FollowAudit.class);
